@@ -4,7 +4,7 @@ import "@/styles/websac3/logos/WebSAC3Logo.css";
 
 const WebSAC3Logo = () => {
     return (
-        <div className="webSAC3Logo">
+        <div className="WebSAC3Logo">
             <Image
             src={LogoWebSAC3}
             alt="Logo WebSAC3"
