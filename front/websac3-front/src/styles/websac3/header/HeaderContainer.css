@@ -1,0 +1,3 @@
+.HeaderContainer {
+    @apply flex w-full h-16 bg-secondary-light items-center justify-between pr-2 pl-2;
+}
