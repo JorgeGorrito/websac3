@@ -1,7 +1,7 @@
 package seeders
 
 import (
-	"websac3/adapter/out/persistence/postgresql/db/postgres"
+	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/models"
 	"websac3/app/port/out/persistence"
 	"websac3/common/decoder"
@@ -18,7 +18,7 @@ func Ownerships() Seeder {
 }
 
 func (o *ownerships) Seed(tx persistence.Transaction) error {
-	var pgTx *postgres.Transaction = tx.(*postgres.Transaction)
+	var pgTx *db.Transaction = tx.(*db.Transaction)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []models.Ownership = make([]models.Ownership, 0)
 
