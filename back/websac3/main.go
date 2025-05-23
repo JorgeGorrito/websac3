@@ -1,23 +1,23 @@
 package main
 
 import (
-	"websac3/config"
-	"websac3/dependencies"
-	"websac3/routing"
+	"websac3/common/dependencies"
+	"websac3/common/dependencies/container"
 
 	"github.com/JorgeGorrito/anise-with-gin/anise"
+	"github.com/JorgeGorrito/anise-with-gin/anise/command"
+	"github.com/JorgeGorrito/anise-with-gin/anise/config"
+	"github.com/JorgeGorrito/anise-with-gin/anise/routing"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	if app, err := anise.NewWebApplication(
+	dependencies.InitDependenciesManager()
+	app := anise.NewWebApplication(
 		gin.Default(),
-		config.GetManager(),
-		routing.GetManager(),
-		dependencies.GetManager(),
-	); err != nil {
-		panic(err)
-	} else {
-		app.Run()
-	}
+		container.Inject[config.Manager](),
+		container.Inject[routing.Manager](),
+		container.Inject[command.Manager](),
+	)
+	app.Run(":8110")
 }
