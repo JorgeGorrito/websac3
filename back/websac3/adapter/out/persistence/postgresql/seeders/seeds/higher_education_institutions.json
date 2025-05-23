@@ -1,0 +1,3504 @@
+[
+    {
+      "snies": "1101",
+      "snies_parent": "1101",
+      "name": "UNIVERSIDAD NACIONAL DE COLOMBIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1102",
+      "snies_parent": "1101",
+      "name": "UNIVERSIDAD NACIONAL DE COLOMBIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1103",
+      "snies_parent": "1101",
+      "name": "UNIVERSIDAD NACIONAL DE COLOMBIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Manizales",
+      "department": "Caldas"
+    },
+    {
+      "snies": "1104",
+      "snies_parent": "1101",
+      "name": "UNIVERSIDAD NACIONAL DE COLOMBIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Palmira",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1105",
+      "snies_parent": "1105",
+      "name": "UNIVERSIDAD PEDAGOGICA NACIONAL",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1106",
+      "snies_parent": "1106",
+      "name": "UNIVERSIDAD PEDAGOGICA Y TECNOLOGICA DE COLOMBIA - UPTC",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Tunja",
+      "department": "Boyacá"
+    },
+    {
+      "snies": "1107",
+      "snies_parent": "1106",
+      "name": "UNIVERSIDAD PEDAGOGICA Y TECNOLOGICA DE COLOMBIA - UPTC",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Duitama",
+      "department": "Boyacá"
+    },
+    {
+      "snies": "1108",
+      "snies_parent": "1106",
+      "name": "UNIVERSIDAD PEDAGOGICA Y TECNOLOGICA DE COLOMBIA - UPTC",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Sogamoso",
+      "department": "Boyacá"
+    },
+    {
+      "snies": "1109",
+      "snies_parent": "1106",
+      "name": "UNIVERSIDAD PEDAGOGICA Y TECNOLOGICA DE COLOMBIA - UPTC",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Chiquinquirá",
+      "department": "Boyacá"
+    },
+    {
+      "snies": "1110",
+      "snies_parent": "1110",
+      "name": "UNIVERSIDAD DEL CAUCA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Popayán",
+      "department": "Cauca"
+    },
+    {
+      "snies": "1111",
+      "snies_parent": "1111",
+      "name": "UNIVERSIDAD TECNOLOGICA DE PEREIRA - UTP",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Pereira",
+      "department": "Risaralda"
+    },
+    {
+      "snies": "1112",
+      "snies_parent": "1112",
+      "name": "UNIVERSIDAD DE CALDAS",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Manizales",
+      "department": "Caldas"
+    },
+    {
+      "snies": "1113",
+      "snies_parent": "1113",
+      "name": "UNIVERSIDAD DE CORDOBA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Montería",
+      "department": "Córdoba"
+    },
+    {
+      "snies": "1114",
+      "snies_parent": "1114",
+      "name": "UNIVERSIDAD SURCOLOMBIANA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Neiva",
+      "department": "Huila"
+    },
+    {
+      "snies": "1115",
+      "snies_parent": "1115",
+      "name": "UNIVERSIDAD DE LA AMAZONIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Florencia",
+      "department": "Caquetá"
+    },
+    {
+      "snies": "1117",
+      "snies_parent": "1117",
+      "name": "UNIVERSIDAD MILITAR-NUEVA GRANADA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1118",
+      "snies_parent": "1118",
+      "name": "UNIVERSIDAD TECNOLOGICA DEL CHOCO-DIEGO LUIS CORDOBA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Quibdó",
+      "department": "Chocó"
+    },
+    {
+      "snies": "1119",
+      "snies_parent": "1119",
+      "name": "UNIVERSIDAD DE LOS LLANOS",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Villavicencio",
+      "department": "Meta"
+    },
+    {
+      "snies": "1120",
+      "snies_parent": "1120",
+      "name": "UNIVERSIDAD POPULAR DEL CESAR",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Valledupar",
+      "department": "Cesar"
+    },
+    {
+      "snies": "1121",
+      "snies_parent": "1121",
+      "name": "UNIVERSIDAD-COLEGIO MAYOR DE CUNDINAMARCA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1122",
+      "snies_parent": "1122",
+      "name": "UNIVERSIDAD DEL PACIFICO",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Buenaventura",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1123",
+      "snies_parent": "1120",
+      "name": "UNIVERSIDAD POPULAR DEL CESAR",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Aguachica",
+      "department": "Cesar"
+    },
+    {
+      "snies": "1124",
+      "snies_parent": "1101",
+      "name": "UNIVERSIDAD NACIONAL DE COLOMBIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Arauca",
+      "department": "Arauca"
+    },
+    {
+      "snies": "1125",
+      "snies_parent": "1101",
+      "name": "UNIVERSIDAD NACIONAL DE COLOMBIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Leticia",
+      "department": "Amazonas"
+    },
+    {
+      "snies": "1126",
+      "snies_parent": "1101",
+      "name": "UNIVERSIDAD NACIONAL DE COLOMBIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "San Andrés",
+      "department": "Archipiélago de San Andrés, Providencia y Santa Catalina"
+    },
+    {
+      "snies": "1201",
+      "snies_parent": "1201",
+      "name": "UNIVERSIDAD DE ANTIOQUIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1202",
+      "snies_parent": "1202",
+      "name": "UNIVERSIDAD DEL ATLANTICO",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Puerto Colombia",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "1203",
+      "snies_parent": "1203",
+      "name": "UNIVERSIDAD DEL VALLE",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1204",
+      "snies_parent": "1204",
+      "name": "UNIVERSIDAD INDUSTRIAL DE SANTANDER",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "1205",
+      "snies_parent": "1205",
+      "name": "UNIVERSIDAD DE CARTAGENA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "1206",
+      "snies_parent": "1206",
+      "name": "UNIVERSIDAD DE NARIÑO",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Pasto",
+      "department": "Nariño"
+    },
+    {
+      "snies": "1207",
+      "snies_parent": "1207",
+      "name": "UNIVERSIDAD DEL TOLIMA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Ibagué",
+      "department": "Tolima"
+    },
+    {
+      "snies": "1208",
+      "snies_parent": "1208",
+      "name": "UNIVERSIDAD DEL QUINDIO",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Armenia",
+      "department": "Quindío"
+    },
+    {
+      "snies": "1209",
+      "snies_parent": "1209",
+      "name": "UNIVERSIDAD FRANCISCO DE PAULA SANTANDER",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "San José de Cúcuta",
+      "department": "Norte de Santander"
+    },
+    {
+      "snies": "1210",
+      "snies_parent": "1209",
+      "name": "UNIVERSIDAD FRANCISCO DE PAULA SANTANDER",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Ocaña",
+      "department": "Norte de Santander"
+    },
+    {
+      "snies": "1212",
+      "snies_parent": "1212",
+      "name": "UNIVERSIDAD DE PAMPLONA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Pamplona",
+      "department": "Norte de Santander"
+    },
+    {
+      "snies": "1213",
+      "snies_parent": "1213",
+      "name": "UNIVERSIDAD DEL MAGDALENA - UNIMAGDALENA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Santa Marta",
+      "department": "Magdalena"
+    },
+    {
+      "snies": "1214",
+      "snies_parent": "1214",
+      "name": "UNIVERSIDAD DE CUNDINAMARCA-UDEC",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Fusagasugá",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "1215",
+      "snies_parent": "1214",
+      "name": "UNIVERSIDAD DE CUNDINAMARCA-UDEC",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Girardot",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "1216",
+      "snies_parent": "1214",
+      "name": "UNIVERSIDAD DE CUNDINAMARCA-UDEC",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Villa de San Diego de Ubaté",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "1217",
+      "snies_parent": "1217",
+      "name": "UNIVERSIDAD DE SUCRE",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Sincelejo",
+      "department": "Sucre"
+    },
+    {
+      "snies": "1218",
+      "snies_parent": "1218",
+      "name": "UNIVERSIDAD DE LA GUAJIRA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Riohacha",
+      "department": "La Guajira"
+    },
+    {
+      "snies": "1219",
+      "snies_parent": "1201",
+      "name": "UNIVERSIDAD DE ANTIOQUIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "El Carmen de Viboral",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1220",
+      "snies_parent": "1201",
+      "name": "UNIVERSIDAD DE ANTIOQUIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Andes",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1221",
+      "snies_parent": "1201",
+      "name": "UNIVERSIDAD DE ANTIOQUIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Caucasia",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1222",
+      "snies_parent": "1201",
+      "name": "UNIVERSIDAD DE ANTIOQUIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Puerto Berrío",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1223",
+      "snies_parent": "1201",
+      "name": "UNIVERSIDAD DE ANTIOQUIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Turbo",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1301",
+      "snies_parent": "1301",
+      "name": "UNIVERSIDAD DISTRITAL-FRANCISCO JOSE DE CALDAS",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1701",
+      "snies_parent": "1701",
+      "name": "PONTIFICIA UNIVERSIDAD JAVERIANA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1702",
+      "snies_parent": "1701",
+      "name": "PONTIFICIA UNIVERSIDAD JAVERIANA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1703",
+      "snies_parent": "1703",
+      "name": "UNIVERSIDAD INCCA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1704",
+      "snies_parent": "1704",
+      "name": "UNIVERSIDAD SANTO TOMAS",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1705",
+      "snies_parent": "1704",
+      "name": "UNIVERSIDAD SANTO TOMAS",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "1706",
+      "snies_parent": "1706",
+      "name": "UNIVERSIDAD EXTERNADO DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1707",
+      "snies_parent": "1707",
+      "name": "FUNDACION UNIVERSIDAD DE BOGOTA - JORGE TADEO LOZANO",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1708",
+      "snies_parent": "1707",
+      "name": "FUNDACION UNIVERSIDAD DE BOGOTA - JORGE TADEO LOZANO",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "1709",
+      "snies_parent": "1709",
+      "name": "UNIVERSIDAD CENTRAL",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1710",
+      "snies_parent": "1710",
+      "name": "UNIVERSIDAD PONTIFICIA BOLIVARIANA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1711",
+      "snies_parent": "1711",
+      "name": "UNIVERSIDAD DE LA SABANA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Chía",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "1712",
+      "snies_parent": "1712",
+      "name": "UNIVERSIDAD EAFIT-",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1713",
+      "snies_parent": "1713",
+      "name": "UNIVERSIDAD DEL NORTE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "1714",
+      "snies_parent": "1714",
+      "name": "COLEGIO MAYOR DE NUESTRA SEÑORA DEL ROSARIO",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1715",
+      "snies_parent": "1715",
+      "name": "FUNDACION UNIVERSIDAD DE AMERICA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1716",
+      "snies_parent": "1718",
+      "name": "UNIVERSIDAD DE SAN BUENAVENTURA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1717",
+      "snies_parent": "1718",
+      "name": "UNIVERSIDAD DE SAN BUENAVENTURA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1718",
+      "snies_parent": "1718",
+      "name": "UNIVERSIDAD DE SAN BUENAVENTURA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1719",
+      "snies_parent": "1719",
+      "name": "UNIVERSIDAD CATOLICA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1720",
+      "snies_parent": "1720",
+      "name": "UNIVERSIDAD MARIANA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Pasto",
+      "department": "Nariño"
+    },
+    {
+      "snies": "1722",
+      "snies_parent": "1722",
+      "name": "UNIVERSIDAD DE MANIZALES",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Manizales",
+      "department": "Caldas"
+    },
+    {
+      "snies": "1723",
+      "snies_parent": "1710",
+      "name": "UNIVERSIDAD PONTIFICIA BOLIVARIANA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "1724",
+      "snies_parent": "1718",
+      "name": "UNIVERSIDAD DE SAN BUENAVENTURA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "1725",
+      "snies_parent": "1725",
+      "name": "FUNDACION UNIVERSIDAD AUTONOMA DE COLOMBIA -FUAC-",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1726",
+      "snies_parent": "1726",
+      "name": "UNIVERSIDAD CATOLICA DE ORIENTE -UCO",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Rionegro",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1727",
+      "snies_parent": "1710",
+      "name": "UNIVERSIDAD PONTIFICIA BOLIVARIANA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Montería",
+      "department": "Córdoba"
+    },
+    {
+      "snies": "1728",
+      "snies_parent": "1728",
+      "name": "UNIVERSIDAD SERGIO ARBOLEDA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1729",
+      "snies_parent": "1729",
+      "name": "UNIVERSIDAD EL BOSQUE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1730",
+      "snies_parent": "1710",
+      "name": "UNIVERSIDAD PONTIFICIA BOLIVARIANA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Palmira",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1731",
+      "snies_parent": "1719",
+      "name": "UNIVERSIDAD CATOLICA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Chía",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "1732",
+      "snies_parent": "1704",
+      "name": "UNIVERSIDAD SANTO TOMAS",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Tunja",
+      "department": "Boyacá"
+    },
+    {
+      "snies": "1733",
+      "snies_parent": "1728",
+      "name": "UNIVERSIDAD SERGIO ARBOLEDA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Santa Marta",
+      "department": "Magdalena"
+    },
+    {
+      "snies": "1734",
+      "snies_parent": "1734",
+      "name": "UNIVERSIDAD DE BOYACA UNIBOYACA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Tunja",
+      "department": "Boyacá"
+    },
+    {
+      "snies": "1735",
+      "snies_parent": "1735",
+      "name": "UNIVERSIDAD MANUELA BELTRAN-UMB-",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1801",
+      "snies_parent": "1801",
+      "name": "UNIVERSIDAD LA GRAN COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1802",
+      "snies_parent": "1801",
+      "name": "UNIVERSIDAD LA GRAN COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Armenia",
+      "department": "Quindío"
+    },
+    {
+      "snies": "1803",
+      "snies_parent": "1803",
+      "name": "UNIVERSIDAD DE LA SALLE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1804",
+      "snies_parent": "1804",
+      "name": "UNIVERSIDAD AUTONOMA DEL CARIBE- UNIAUTONOMA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "1805",
+      "snies_parent": "1805",
+      "name": "UNIVERSIDAD SANTIAGO DE CALI",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1806",
+      "snies_parent": "1806",
+      "name": "UNIVERSIDAD LIBRE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1807",
+      "snies_parent": "1806",
+      "name": "UNIVERSIDAD LIBRE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1808",
+      "snies_parent": "1806",
+      "name": "UNIVERSIDAD LIBRE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "1809",
+      "snies_parent": "1806",
+      "name": "UNIVERSIDAD LIBRE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Pereira",
+      "department": "Risaralda"
+    },
+    {
+      "snies": "1810",
+      "snies_parent": "1806",
+      "name": "UNIVERSIDAD LIBRE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "San José de Cúcuta",
+      "department": "Norte de Santander"
+    },
+    {
+      "snies": "1811",
+      "snies_parent": "1806",
+      "name": "UNIVERSIDAD LIBRE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Socorro",
+      "department": "Santander"
+    },
+    {
+      "snies": "1812",
+      "snies_parent": "1812",
+      "name": "UNIVERSIDAD DE MEDELLIN",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1813",
+      "snies_parent": "1813",
+      "name": "UNIVERSIDAD DE LOS ANDES",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1814",
+      "snies_parent": "1814",
+      "name": "UNIVERSIDAD AUTONOMA LATINOAMERICANA-UNAULA-",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1815",
+      "snies_parent": "1815",
+      "name": "CORPORACION UNIVERSIDAD PILOTO DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1816",
+      "snies_parent": "1818",
+      "name": "UNIVERSIDAD COOPERATIVA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "1817",
+      "snies_parent": "1818",
+      "name": "UNIVERSIDAD COOPERATIVA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "1818",
+      "snies_parent": "1818",
+      "name": "UNIVERSIDAD COOPERATIVA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1819",
+      "snies_parent": "1818",
+      "name": "UNIVERSIDAD COOPERATIVA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Barrancabermeja",
+      "department": "Santander"
+    },
+    {
+      "snies": "1820",
+      "snies_parent": "1818",
+      "name": "UNIVERSIDAD COOPERATIVA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Santa Marta",
+      "department": "Magdalena"
+    },
+    {
+      "snies": "1822",
+      "snies_parent": "1815",
+      "name": "CORPORACION UNIVERSIDAD PILOTO DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Girardot",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "1823",
+      "snies_parent": "1823",
+      "name": "UNIVERSIDAD AUTONOMA DE BUCARAMANGA-UNAB-",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "1824",
+      "snies_parent": "1824",
+      "name": "UNIVERSIDAD METROPOLITANA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "1825",
+      "snies_parent": "1825",
+      "name": "UNIVERSIDAD AUTONOMA DE MANIZALES",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Manizales",
+      "department": "Caldas"
+    },
+    {
+      "snies": "1826",
+      "snies_parent": "1826",
+      "name": "UNIVERSIDAD ANTONIO NARIÑO",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "1827",
+      "snies_parent": "1827",
+      "name": "UNIVERSIDAD CATOLICA DE MANIZALES",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Manizales",
+      "department": "Caldas"
+    },
+    {
+      "snies": "1828",
+      "snies_parent": "1828",
+      "name": "UNIVERSIDAD ICESI",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1829",
+      "snies_parent": "1805",
+      "name": "UNIVERSIDAD SANTIAGO DE CALI",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Palmira",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1830",
+      "snies_parent": "1830",
+      "name": "UNIVERSIDAD AUTONOMA DE OCCIDENTE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "1831",
+      "snies_parent": "1831",
+      "name": "UNIVERSIDAD DE IBAGUE",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Ibagué",
+      "department": "Tolima"
+    },
+    {
+      "snies": "1832",
+      "snies_parent": "1832",
+      "name": "UNIVERSIDAD TECNOLOGICA DE BOLIVAR",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "1833",
+      "snies_parent": "1833",
+      "name": "CORPORACIÓN UNIVERSIDAD DEL SINU - ELIAS BECHARA ZAINUM - UNISINU -",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Montería",
+      "department": "Córdoba"
+    },
+    {
+      "snies": "1834",
+      "snies_parent": "1833",
+      "name": "CORPORACIÓN UNIVERSIDAD DEL SINU - ELIAS BECHARA ZAINUM - UNISINU -",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "1835",
+      "snies_parent": "1835",
+      "name": "UNIVERSIDAD DE CIENCIAS APLICADAS Y AMBIENTALES - UDCA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2102",
+      "snies_parent": "2102",
+      "name": "UNIVERSIDAD NACIONAL ABIERTA Y A DISTANCIA UNAD",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2104",
+      "snies_parent": "2104",
+      "name": "ESCUELA SUPERIOR DE ADMINISTRACION PUBLICA-ESAP-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2106",
+      "snies_parent": "2106",
+      "name": "DIRECCION DE EDUCACION POLICIAL",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2110",
+      "snies_parent": "2110",
+      "name": "COLEGIO MAYOR DE ANTIOQUIA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2111",
+      "snies_parent": "2104",
+      "name": "ESCUELA SUPERIOR DE ADMINISTRACION PUBLICA-ESAP-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2114",
+      "snies_parent": "2114",
+      "name": "ESCUELA NACIONAL DEL DEPORTE",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "2206",
+      "snies_parent": "2206",
+      "name": "INSTITUTO DEPARTAMENTAL DE BELLAS ARTES",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "2207",
+      "snies_parent": "2207",
+      "name": "INSTITUTO UNIVERSITARIO DE LA PAZ",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Barrancabermeja",
+      "department": "Santander"
+    },
+    {
+      "snies": "2208",
+      "snies_parent": "2208",
+      "name": "CONSERVATORIO DEL TOLIMA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Ibagué",
+      "department": "Tolima"
+    },
+    {
+      "snies": "2209",
+      "snies_parent": "2209",
+      "name": "POLITECNICO COLOMBIANO JAIME ISAZA CADAVID",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2211",
+      "snies_parent": "2211",
+      "name": "INSTITUCION UNIVERSITARIA BELLAS ARTES Y CIENCIAS DE BOLIVAR",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "2301",
+      "snies_parent": "2301",
+      "name": "UNIDAD CENTRAL DEL VALLE DEL CAUCA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Tuluá",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "2302",
+      "snies_parent": "2302",
+      "name": "INSTITUCION UNIVERSITARIA DE ENVIGADO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Envigado",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2701",
+      "snies_parent": "2701",
+      "name": "INSTITUCION UNIVERSITARIA COLEGIOS DE COLOMBIA - UNICOC",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2702",
+      "snies_parent": "2702",
+      "name": "FUNDACION UNIVERSITARIA DE CIENCIAS DE LA SALUD",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2704",
+      "snies_parent": "2704",
+      "name": "COLEGIO DE ESTUDIOS SUPERIORES DE ADMINISTRACION-CESA-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2707",
+      "snies_parent": "2707",
+      "name": "FUNDACIÓN UNIVERSITARIA JUAN N. CORPAS",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2708",
+      "snies_parent": "2708",
+      "name": "UNIVERSIDAD CES",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2709",
+      "snies_parent": "2709",
+      "name": "FUNDACION UNIVERSITARIA SAN MARTIN",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2710",
+      "snies_parent": "2710",
+      "name": "FUNDACION UNIVERSITARIA MONSERRATE -UNIMONSERRATE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2711",
+      "snies_parent": "2711",
+      "name": "UNIVERSIDAD CATOLICA DE PEREIRA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Pereira",
+      "department": "Risaralda"
+    },
+    {
+      "snies": "2712",
+      "snies_parent": "2712",
+      "name": "FUNDACION UNIVERSITARIA KONRAD LORENZ",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2713",
+      "snies_parent": "2713",
+      "name": "FUNDACION UNIVERSITARIA LOS LIBERTADORES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2715",
+      "snies_parent": "2715",
+      "name": "FUNDACION UNIVERSITARIA DE POPAYAN",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Popayán",
+      "department": "Cauca"
+    },
+    {
+      "snies": "2716",
+      "snies_parent": "2716",
+      "name": "INSTITUTO UNIVERSITARIO DE HISTORIA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2717",
+      "snies_parent": "2717",
+      "name": "FUNDACION UNIVERSITARIA DE GARCIA ROVIRA,NORTE Y GUTIERREZ",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Málaga",
+      "department": "Santander"
+    },
+    {
+      "snies": "2719",
+      "snies_parent": "2719",
+      "name": "UNIVERSIDAD CATÓLICA LUIS AMIGÓ",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2720",
+      "snies_parent": "2720",
+      "name": "FUNDACION UNIVERSITARIA JUAN DE CASTELLANOS",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Tunja",
+      "department": "Boyacá"
+    },
+    {
+      "snies": "2721",
+      "snies_parent": "2721",
+      "name": "FUNDACION UNIVERSITARIA MARIA CANO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2722",
+      "snies_parent": "2722",
+      "name": "FUNDACION CENTRO UNIVERSITARIO DE BIENESTAR RURAL",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Puerto Tejada",
+      "department": "Cauca"
+    },
+    {
+      "snies": "2723",
+      "snies_parent": "2723",
+      "name": "FUNDACION UNIVERSITARIA AGRARIA DE COLOMBIA -UNIAGRARIA-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2724",
+      "snies_parent": "2724",
+      "name": "FUNDACION UNIVERSITARIA DE SAN GIL - UNISANGIL -",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "San Gil",
+      "department": "Santander"
+    },
+    {
+      "snies": "2725",
+      "snies_parent": "2725",
+      "name": "POLITECNICO GRANCOLOMBIANO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2727",
+      "snies_parent": "2727",
+      "name": "FUNDACION UNIVERSITARIA-CEIPA-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Sabaneta",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2728",
+      "snies_parent": "2728",
+      "name": "FUNDACION UNIVERSITARIA DEL AREA ANDINA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2730",
+      "snies_parent": "2730",
+      "name": "FUNDACION ESCUELA COLOMBIANA DE REHABILITACION",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2731",
+      "snies_parent": "2731",
+      "name": "FUNDACION UNIVERSITARIA CATOLICA LUMEN GENTIUM - UNICATÓLICA - CALI",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "2732",
+      "snies_parent": "2732",
+      "name": "FUNDACION UNIVERSITARIA CATOLICA DEL NORTE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santa Rosa de Osos",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2733",
+      "snies_parent": "2733",
+      "name": "FUNDACIÓN UNIVERSITARIA SAN ALFONSO- FUSA-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2736",
+      "snies_parent": "2736",
+      "name": "FUNDACION UNIVERSITARIA SEMINARIO BIBLICO DE COLOMBIA - FUSBC",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2737",
+      "snies_parent": "2728",
+      "name": "FUNDACION UNIVERSITARIA DEL AREA ANDINA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Pereira",
+      "department": "Risaralda"
+    },
+    {
+      "snies": "2738",
+      "snies_parent": "2738",
+      "name": "FUNDACION UNIVERSITARIA EMPRESARIAL DE LA CAMARA DE COMERCIO DE BOGOTA- UNIEMPRESARIAL",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2739",
+      "snies_parent": "2739",
+      "name": "FUNDACION DE ESTUDIOS SUPERIORES UNIVERSITARIOS DE URABA ANTONIO ROLDAN BETANCUR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Apartadó",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2740",
+      "snies_parent": "2740",
+      "name": "INSTITUCION UNIVERSITARIA COLOMBO AMERICANA - UNICA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2741",
+      "snies_parent": "2741",
+      "name": "FUNDACION DE ESTUDIOS SUPERIORES - MONSEÑOR ABRAHAM ESCUDERO MONTOYA  - FUNDES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Espinal",
+      "department": "Tolima"
+    },
+    {
+      "snies": "2743",
+      "snies_parent": "2743",
+      "name": "UNIVERSIDAD INTERNACIONAL DEL TRÓPICO AMERICANO - UNITRÓPICO",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Yopal",
+      "department": "Casanare"
+    },
+    {
+      "snies": "2744",
+      "snies_parent": "2744",
+      "name": "UNIVERSIDAD CESMAG - UNICESMAG",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Pasto",
+      "department": "Nariño"
+    },
+    {
+      "snies": "2745",
+      "snies_parent": "2745",
+      "name": "FUNDACIÓN UNIVERSITARIA COMPENSAR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2746",
+      "snies_parent": "2746",
+      "name": "FUNDACION UNIVERSITARIA SANITAS",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2747",
+      "snies_parent": "2747",
+      "name": "INSTITUCIÓN UNIVERSITARIA VISIÓN DE LAS AMÉRICAS",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2748",
+      "snies_parent": "2748",
+      "name": "FUNDACION UNIVERSITARIA SEMINARIO TEOLOGICO BAUTISTA INTERNACIONAL",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "2749",
+      "snies_parent": "2749",
+      "name": "INSTITUCION UNIVERSITARIA  SALAZAR Y HERRERA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2805",
+      "snies_parent": "2805",
+      "name": "UNIVERSIDAD SIMON BOLIVAR",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "2810",
+      "snies_parent": "2810",
+      "name": "CORPORACION UNIVERSIDAD DE LA COSTA CUC",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "2811",
+      "snies_parent": "2811",
+      "name": "UNIVERSIDAD ESCUELA COLOMBIANA DE INGENIERIA JULIO GARAVITO",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2812",
+      "snies_parent": "2812",
+      "name": "UNIVERSIDAD EAN",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2813",
+      "snies_parent": "2813",
+      "name": "UNIVERSIDAD EIA",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Envigado",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2815",
+      "snies_parent": "2815",
+      "name": "CORPORACION UNIVERSITARIA ADVENTISTA - UNAC",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2818",
+      "snies_parent": "2818",
+      "name": "CORPORACION UNIVERSITARIA DE SANTA ROSA DE CABAL-UNISARC-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santa Rosa de Cabal",
+      "department": "Risaralda"
+    },
+    {
+      "snies": "2820",
+      "snies_parent": "2820",
+      "name": "CORPORACION UNIVERSITARIA LASALLISTA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Caldas",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2822",
+      "snies_parent": "2822",
+      "name": "ESCUELA SUPERIOR DE OFTALMOLOGIA, INSTITUTO BARRAQUER DE AMERICA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2823",
+      "snies_parent": "2823",
+      "name": "CORPORACION UNIVERSITARIA DEL CARIBE - CECAR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Sincelejo",
+      "department": "Sucre"
+    },
+    {
+      "snies": "2824",
+      "snies_parent": "2824",
+      "name": "CORPORACION UNIVERSITARIA DE COLOMBIA IDEAS",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2825",
+      "snies_parent": "2825",
+      "name": "CORPORACION UNIVERSITARIA RAFAEL NUÑEZ",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "2827",
+      "snies_parent": "2827",
+      "name": "CORPORACION UNIVERSITARIA DEL META - UNIMETA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Villavicencio",
+      "department": "Meta"
+    },
+    {
+      "snies": "2828",
+      "snies_parent": "2828",
+      "name": "CORPORACION UNIVERSITARIA DEL HUILA-CORHUILA-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Neiva",
+      "department": "Huila"
+    },
+    {
+      "snies": "2829",
+      "snies_parent": "2829",
+      "name": "CORPORACION UNIVERSITARIA MINUTO DE DIOS -UNIMINUTO-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2830",
+      "snies_parent": "2830",
+      "name": "CORPORACION UNIVERSITARIA IBEROAMERICANA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2831",
+      "snies_parent": "2831",
+      "name": "CORPORACION UNIVERSITARIA DE CIENCIA Y DESARROLLO - UNICIENCIA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2832",
+      "snies_parent": "2832",
+      "name": "UNIVERSIDAD DE SANTANDER - UDES",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "2833",
+      "snies_parent": "2833",
+      "name": "CORPORACION UNIVERSITARIA REMINGTON",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2834",
+      "snies_parent": "2834",
+      "name": "UNIVERSITARIA AGUSTINIANA- UNIAGUSTINIANA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2835",
+      "snies_parent": "2835",
+      "name": "CORPORACION CRISTIANA UNIVERSITARIA DE SAN ANDRES, PROVIDENCIA Y SANTA CATALINA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "San Andrés",
+      "department": "Archipiélago de San Andrés, Providencia y Santa Catalina"
+    },
+    {
+      "snies": "2836",
+      "snies_parent": "2836",
+      "name": "CORPORACION UNIVERSITARIA EMPRESARIAL DE SALAMANCA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "2837",
+      "snies_parent": "2837",
+      "name": "CORPORACION UNIVERSITARIA REPUBLICANA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2838",
+      "snies_parent": "2838",
+      "name": "CORPORACION COLEGIATURA COLOMBIANA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2840",
+      "snies_parent": "2840",
+      "name": "CORPORACION UNIVERSITARIA EMPRESARIAL ALEXANDER VON HUMBOLDT - CUE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Armenia",
+      "department": "Quindío"
+    },
+    {
+      "snies": "2841",
+      "snies_parent": "2829",
+      "name": "CORPORACION UNIVERSITARIA MINUTO DE DIOS -UNIMINUTO-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bello",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "2842",
+      "snies_parent": "2842",
+      "name": "CORPORACION UNIVERSITARIA REFORMADA - CUR -",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "2847",
+      "snies_parent": "2847",
+      "name": "UNIVERSIDAD DE INVESTIGACION Y DESARROLLO - UDI",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "2848",
+      "snies_parent": "2848",
+      "name": "CORPORACION UNIVERSITARIA  UNITEC",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2849",
+      "snies_parent": "2849",
+      "name": "CORPORACION UNIVERSITARIA AUTONOMA DEL CAUCA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Popayán",
+      "department": "Cauca"
+    },
+    {
+      "snies": "2850",
+      "snies_parent": "2850",
+      "name": "CORPORACION UNIVERSITARIA ANTONIO JOSE DE SUCRE - CORPOSUCRE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Sincelejo",
+      "department": "Sucre"
+    },
+    {
+      "snies": "2901",
+      "snies_parent": "2901",
+      "name": "ESCUELA DE INTELIGENCIA Y CONTRAINTELIGENCIA BRIGADIER GENERAL RICARDO CHARRY SOLANO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2902",
+      "snies_parent": "2902",
+      "name": "ESCUELA DE LOGISTICA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2903",
+      "snies_parent": "2903",
+      "name": "ESCUELA DE COMUNICACIONES",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Facatativá",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "2904",
+      "snies_parent": "2904",
+      "name": "ESCUELA SUPERIOR DE GUERRA GENERAL RAFAEL REYES PRIETO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2905",
+      "snies_parent": "2905",
+      "name": "CENTRO DE EDUCACION MILITAR - CEMIL",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "2906",
+      "snies_parent": "2906",
+      "name": "ESCUELA DE POSTGRADOS DE LA FAC-EPFAC",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3102",
+      "snies_parent": "3102",
+      "name": "INSTITUTO SUPERIOR DE EDUCACION RURAL-ISER-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Pamplona",
+      "department": "Norte de Santander"
+    },
+    {
+      "snies": "3103",
+      "snies_parent": "3103",
+      "name": "INSTITUCIÓN UNIVERSITARIA MAYOR DE CARTAGENA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "3104",
+      "snies_parent": "3104",
+      "name": "COLEGIO MAYOR DEL CAUCA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Popayán",
+      "department": "Cauca"
+    },
+    {
+      "snies": "3107",
+      "snies_parent": "3107",
+      "name": "INSTITUCIÓN UNIVERSITARIA PASCUAL BRAVO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3114",
+      "snies_parent": "3114",
+      "name": "ESCUELA NAVAL DE SUBOFICIALES ARC BARRANQUILLA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "3115",
+      "snies_parent": "3115",
+      "name": "INSTITUTO TECNOLOGICO DEL PUTUMAYO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Mocoa",
+      "department": "Putumayo"
+    },
+    {
+      "snies": "3116",
+      "snies_parent": "3115",
+      "name": "INSTITUTO TECNOLOGICO DEL PUTUMAYO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Sibundoy",
+      "department": "Putumayo"
+    },
+    {
+      "snies": "3117",
+      "snies_parent": "3117",
+      "name": "INSTITUCIÓN UNIVERSITARIA DE BARRANQUILLA - IUB",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "3201",
+      "snies_parent": "3201",
+      "name": "UNIDADES TECNOLOGICAS DE SANTANDER",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "3204",
+      "snies_parent": "3204",
+      "name": "TECNOLOGICO DE ANTIOQUIA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3301",
+      "snies_parent": "3301",
+      "name": "INSTITUCION UNIVERSITARIA ANTONIO JOSE CAMACHO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "3302",
+      "snies_parent": "3302",
+      "name": "INSTITUTO TECNOLOGICO METROPOLITANO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3303",
+      "snies_parent": "3303",
+      "name": "TECNOLÓGICO DE ARTES DÉBORA ARANGO INSTITUCIÓN REDEFINIDA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Envigado",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3702",
+      "snies_parent": "3702",
+      "name": "FUNDACION TECNOLOGICA AUTONOMA DE BOGOTA-FABA-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3703",
+      "snies_parent": "3703",
+      "name": "INSTITUCION UNIVERSITARIA ESCOLME",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3705",
+      "snies_parent": "3705",
+      "name": "FUNDACION UNIVERSITARIA TECNOLOGICO COMFENALCO - CARTAGENA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "3706",
+      "snies_parent": "3706",
+      "name": "FUNDACION CENTRO COLOMBIANO DE ESTUDIOS PROFESIONALES, -F.C.E.C.E.P.",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "3710",
+      "snies_parent": "3710",
+      "name": "FUNDACION UNIVERSITARIA ANTONIO DE AREVALO - UNITECNAR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "3712",
+      "snies_parent": "3712",
+      "name": "FUNDACION CENTRO DE INVESTIGACION DOCENCIA Y CONSULTORIA ADMINISTRATIVA-F-CIDCA-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3713",
+      "snies_parent": "3713",
+      "name": "FUNDACION UNIVERSITARIA PARA EL DESARROLLO HUMANO - UNINPAHU",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3715",
+      "snies_parent": "3715",
+      "name": "FUNDACION TECNOLOGICA AUTONOMA DEL PACIFICO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "3716",
+      "snies_parent": "3716",
+      "name": "TECNOLOGICA FITEC",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "3718",
+      "snies_parent": "3718",
+      "name": "FUNDACION DE ESTUDIOS SUPERIORES COMFANORTE -F.E.S.C.-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "San José de Cúcuta",
+      "department": "Norte de Santander"
+    },
+    {
+      "snies": "3719",
+      "snies_parent": "3719",
+      "name": "INSTITUCION UNIVERSITARIA LATINA - UNILATINA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3720",
+      "snies_parent": "3720",
+      "name": "FUNDACION UNIVERSITARIA ESUMER",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3723",
+      "snies_parent": "3723",
+      "name": "FUNDACIÓN EUROCOLOMBIANA DE EDUCACIÓN SUPERIOR - EUROCOL",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3724",
+      "snies_parent": "3724",
+      "name": "INSTITUCION DE EDUCACION TECNOLOGICA INTERNACIONAL - UNIVERSAE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3725",
+      "snies_parent": "3725",
+      "name": "FUNDACION DE EDUCACION SUPERIOR ALBERTO MERANI",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3801",
+      "snies_parent": "3801",
+      "name": "CORPORACION DE ESTUDIOS TECNOLOGICOS DEL NORTE DEL VALLE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Cartago",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "3802",
+      "snies_parent": "3802",
+      "name": "CORPORACIÓN TECNOLÓGICO SUPERIOR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3803",
+      "snies_parent": "3803",
+      "name": "CORPORACION UNIVERSITARIA CENTRO SUPERIOR - UNICUCES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "3805",
+      "snies_parent": "3805",
+      "name": "INSTITUTO DE EDUCACION EMPRESARIAL-IDEE-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "3806",
+      "snies_parent": "3806",
+      "name": "CORPORACION ESCUELA SUPERIOR DE ADMINISTRACION Y ESTUDIOS TECNOLOGICOS- EAE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "3807",
+      "snies_parent": "3807",
+      "name": "ESCUELA DE TECNOLOGIAS DE ANTIOQUIA -ETA-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3808",
+      "snies_parent": "3808",
+      "name": "CORPORACION TECNOLOGICA DE BOGOTA - CTB",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3809",
+      "snies_parent": "3809",
+      "name": "INSTITUTO SUPERIOR DE CIENCIAS SOCIALES Y ECONOMICO FAMILIARES-ICSEF-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Fusagasugá",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "3810",
+      "snies_parent": "3810",
+      "name": "CORPORACION EDUCATIVA -ITAE-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "3811",
+      "snies_parent": "3811",
+      "name": "CORPORACION DE EDUCACION DEL NORTE DEL TOLIMA - COREDUCACION",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Honda",
+      "department": "Tolima"
+    },
+    {
+      "snies": "3812",
+      "snies_parent": "3812",
+      "name": "INSTITUCION UNIVERSITARIA MARCO FIDEL SUAREZ - IUMAFIS",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bello",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3817",
+      "snies_parent": "3817",
+      "name": "CORPORACION UNIVERSITARIA AUTONOMA DE NARIÑO -AUNAR-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Pasto",
+      "department": "Nariño"
+    },
+    {
+      "snies": "3819",
+      "snies_parent": "3819",
+      "name": "CORPORACION TECNOLOGICA INDUSTRIAL COLOMBIANA - TEINCO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3820",
+      "snies_parent": "3820",
+      "name": "CORPORACION ACADEMIA TECNOLOGICA DE COLOMBIA -ATEC-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3821",
+      "snies_parent": "3821",
+      "name": "CORPORACION POLITECNICO DE LA COSTA ATLANTICA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "3822",
+      "snies_parent": "3822",
+      "name": "POLITECNICO ICAFT",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3823",
+      "snies_parent": "3823",
+      "name": "UNION AMERICANA DE EDUCACION SUPERIOR- UNION AMERICANA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3824",
+      "snies_parent": "3824",
+      "name": "CENTRO DE CONOCIMIENTO ALEJANDRÍA - ALEJANDRÍA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3826",
+      "snies_parent": "3826",
+      "name": "CORPORACION INTERNACIONAL PARA EL DESARROLLO EDUCATIVO -CIDE-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3827",
+      "snies_parent": "3827",
+      "name": "POLITECNICO SANTAFE DE BOGOTA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3828",
+      "snies_parent": "3828",
+      "name": "CORPORACIÓN TECNOLÓGICA DE EDUCACIÓN SUPERIOR SAPIENZA - CTES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3829",
+      "snies_parent": "3829",
+      "name": "CORPORACIÓN JOHN F. KENNEDY",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3830",
+      "snies_parent": "3830",
+      "name": "CORPORACION UNIVERSAL DE INVESTIGACION Y TECNOLOGIA -CORUNIVERSITEC-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "3831",
+      "snies_parent": "3831",
+      "name": "CORPORACION UNIVERSITARIA COMFACAUCA - UNICOMFACAUCA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Popayán",
+      "department": "Cauca"
+    },
+    {
+      "snies": "3832",
+      "snies_parent": "3832",
+      "name": "CORPORACION TECNOLOGICA  SUPERIOR SIGLO  XXI",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Cereté",
+      "department": "Córdoba"
+    },
+    {
+      "snies": "3833",
+      "snies_parent": "3833",
+      "name": "CORPORACION TECNOLOGICO COPACABANA - TECO -",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Copacabana",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3834",
+      "snies_parent": "3834",
+      "name": "CORPORACION TECNOLOGICA CATOLICA DE OCCIDENTE - TECOC -",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Santa Fé de Antioquia",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "3901",
+      "snies_parent": "3901",
+      "name": "ESCUELA DE FORMACION DE INFANTERIA DE MARINA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Coveñas",
+      "department": "Sucre"
+    },
+    {
+      "snies": "3902",
+      "snies_parent": "3902",
+      "name": "ESCUELA  MILITAR DE SUBOFICIALES SARGENTO INOCENCIO CHINCA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Nilo",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "4101",
+      "snies_parent": "4101",
+      "name": "INSTITUTO DE EDUCACION TECNICA PROFESIONAL DE ROLDANILLO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Roldanillo",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "4102",
+      "snies_parent": "4102",
+      "name": "INSTITUTO NACIONAL DE FORMACION TECNICA PROFESIONAL DE SAN JUAN DEL CESAR",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "San Juan del Cesar",
+      "department": "La Guajira"
+    },
+    {
+      "snies": "4106",
+      "snies_parent": "4106",
+      "name": "INSTITUTO NACIONAL DE FORMACION TECNICA PROFESIONAL DE SAN ANDRES Y PROVIDENCIA - INFOTEP",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "San Andrés",
+      "department": "Archipiélago de San Andrés, Providencia y Santa Catalina"
+    },
+    {
+      "snies": "4107",
+      "snies_parent": "4107",
+      "name": "UNIDAD TÉCNICA PARA EL DESARROLLO PROFESIONAL - UTEDÉ",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Guadalajara de Buga",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "4108",
+      "snies_parent": "4108",
+      "name": "ESCUELA TECNOLOGICA INSTITUTO TECNICO CENTRAL",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4109",
+      "snies_parent": "4109",
+      "name": "INSTITUTO TECNICO NACIONAL DE COMERCIO SIMON RODRIGUEZ - INTENALCO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "4110",
+      "snies_parent": "4110",
+      "name": "INSTITUTO TOLIMENSE DE FORMACION TECNICA PROFESIONAL",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Espinal",
+      "department": "Tolima"
+    },
+    {
+      "snies": "4111",
+      "snies_parent": "4111",
+      "name": "INSTITUTO NACIONAL DE FORMACION TECNICA PROFESIONAL - HUMBERTO VELASQUEZ GARCIA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Ciénaga",
+      "department": "Magdalena"
+    },
+    {
+      "snies": "4112",
+      "snies_parent": "4112",
+      "name": "COLEGIO INTEGRADO NACIONAL ORIENTE DE CALDAS - IES CINOC",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Pensilvania",
+      "department": "Caldas"
+    },
+    {
+      "snies": "4301",
+      "snies_parent": "4301",
+      "name": "UNIDAD TECNICA PROFESIONAL DE SEVILLA-UNITEPS-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Sevilla",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "4701",
+      "snies_parent": "4701",
+      "name": "FUNDACION ACADEMIA DE DIBUJO PROFESIONAL",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "4702",
+      "snies_parent": "4702",
+      "name": "FUNDACION DE EDUCACION SUPERIOR SAN JOSE -FESSANJOSE-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4704",
+      "snies_parent": "4704",
+      "name": "FUNDACION PARA LA EDUCACION SUPERIOR REAL DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4705",
+      "snies_parent": "4705",
+      "name": "FUNDACIÓN DE EDUCACIÓN SUPERIOR UPARSISTEM",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Valledupar",
+      "department": "Cesar"
+    },
+    {
+      "snies": "4708",
+      "snies_parent": "4708",
+      "name": "FUNDACION ESCUELA COLOMBIANA DE HOTELERIA Y TURISMO-ECOTET-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4709",
+      "snies_parent": "4709",
+      "name": "INSTITUCION UNIVERSITARIA EAM",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Armenia",
+      "department": "Quindío"
+    },
+    {
+      "snies": "4710",
+      "snies_parent": "4710",
+      "name": "FUNDACIÓN POLITÉCNICO MINUTO DE DIOS - TEC MD",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4711",
+      "snies_parent": "4711",
+      "name": "FUNDACION DE EDUCACION SUPERIOR ESATEC",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4714",
+      "snies_parent": "4714",
+      "name": "FUNDACION INTERAMERICANA TECNICA-FIT-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4716",
+      "snies_parent": "4716",
+      "name": "FUNDACION INSTITUTO DE CARRERAS TECNICAS PROFESIONALES-FIDCI-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "4719",
+      "snies_parent": "4719",
+      "name": "FUNDACION DE EDUCACION SUPERIOR NUEVA AMERICA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4721",
+      "snies_parent": "4721",
+      "name": "FUNDACION UNIVERSITARIA HORIZONTE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4725",
+      "snies_parent": "4725",
+      "name": "FUNDACION DE EDUCACION SUPERIOR SIKUANI - FESI",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4726",
+      "snies_parent": "4726",
+      "name": "FUNDACION UNIVERSITARIA SAN MATEO - SAN MATEO EDUCACION SUPERIOR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4727",
+      "snies_parent": "4727",
+      "name": "POLITECNICO INTERNACIONAL INSTITUCION DE EDUCACION SUPERIOR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4801",
+      "snies_parent": "4801",
+      "name": "CORPORACION ACADEMIA SUPERIOR DE ARTES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "4803",
+      "snies_parent": "4803",
+      "name": "CORPORACION POLITECNICO COLOMBO ANDINO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4804",
+      "snies_parent": "4804",
+      "name": "CORPORACION EDUCATIVA DEL ORIENTE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "San José de Cúcuta",
+      "department": "Norte de Santander"
+    },
+    {
+      "snies": "4805",
+      "snies_parent": "4805",
+      "name": "CORPORACION EDUCATIVA INTERNACIONAL - CEI -",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4806",
+      "snies_parent": "4806",
+      "name": "CORPORACION CENTRO DE ESTUDIOS ARTISTICOS Y TECNICOS-CEART-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4808",
+      "snies_parent": "4808",
+      "name": "CORPORACION REGIONAL DE EDUCACION SUPERIOR-CRES-DE CALI",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "4809",
+      "snies_parent": "4809",
+      "name": "CORPORACION CENTRO TECNICO ARQUITECTONICO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Pereira",
+      "department": "Risaralda"
+    },
+    {
+      "snies": "4810",
+      "snies_parent": "4810",
+      "name": "CORPORACION UNIVERSITARIA CENDA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4811",
+      "snies_parent": "4811",
+      "name": "CORPORACIÓN UNIFICADA HISPANOAMERICANA DE EDUCACIÓN SUPERIOR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "4812",
+      "snies_parent": "4812",
+      "name": "CORPORACION DE EDUCACION SUPERIOR SURAMERICA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4813",
+      "snies_parent": "4813",
+      "name": "CORPORACION UNIFICADA NACIONAL DE EDUCACION SUPERIOR-CUN-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4814",
+      "snies_parent": "4814",
+      "name": "CORPORACION DE EDUCACION SUPERIOR MIGUEL CAMACHO PEREA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "4817",
+      "snies_parent": "4817",
+      "name": "CORPORACION DE EDUCACIÓN SUPERIOR DEL LITORAL",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "4818",
+      "snies_parent": "4818",
+      "name": "CORPORACION UNIVERSITARIA LATINOAMERICANA - CUL",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "4822",
+      "snies_parent": "4822",
+      "name": "CORPORACION ESCUELA DE ARTES Y LETRAS",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4825",
+      "snies_parent": "4825",
+      "name": "CORPORACION INSTITUTO DE ADMINISTRACION Y FINANZAS - CIAF",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Pereira",
+      "department": "Risaralda"
+    },
+    {
+      "snies": "4826",
+      "snies_parent": "4826",
+      "name": "CORPORACION UNIVERSITARIA REGIONAL DEL CARIBE -IAFIC-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "4827",
+      "snies_parent": "4827",
+      "name": "CORPORACION EDUCATIVA INSTITUTO TECNICO SUPERIOR DE ARTES, IDEARTES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "4829",
+      "snies_parent": "4829",
+      "name": "CORPORACION INTERAMERICANA DE EDUCACION SUPERIOR-CORPOCIDES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "4832",
+      "snies_parent": "4832",
+      "name": "CORPORACION INSTITUTO SUPERIOR DE EDUCACION SOCIAL-ISES-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4835",
+      "snies_parent": "4835",
+      "name": "CORPORACION UNIVERSITARIA TALLER CINCO CENTRO DE DISEÑO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "4837",
+      "snies_parent": "4837",
+      "name": "CORPORACION UNIVERSITARIA DE CIENCIAS EMPRESARIALES, EDUCACION Y SALUD -UNICORSALUD-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "4838",
+      "snies_parent": "4838",
+      "name": "CORPORACION BOLIVARIANA DE EDUCACION SUPERIOR - CORBES -",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "San José de Cúcuta",
+      "department": "Norte de Santander"
+    },
+    {
+      "snies": "5801",
+      "snies_parent": "5801",
+      "name": "CORPORACION ESCUELA TECNOLOGICA DEL ORIENTE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "5802",
+      "snies_parent": "5802",
+      "name": "UNIVERSIDAD ECCI",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9101",
+      "snies_parent": "9101",
+      "name": "ESCUELA DE INVESTIGACION CRIMINAL",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9102",
+      "snies_parent": "9102",
+      "name": "ESCUELA DE SUBOFICIALES DE LA FUERZA AEREA COLOMBIANA ANDRES M. DIAZ",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Madrid",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "9103",
+      "snies_parent": "9103",
+      "name": "ESCUELA MILITAR DE AVIACION MARCO FIDEL SUAREZ",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "9104",
+      "snies_parent": "9104",
+      "name": "ESCUELA MILITAR DE CADETES GENERAL JOSE MARIA CORDOVA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9105",
+      "snies_parent": "9105",
+      "name": "ESCUELA NAVAL DE CADETES ALMIRANTE PADILLA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "9107",
+      "snies_parent": "9107",
+      "name": "ESCUELA DE INGENIEROS MILITARES",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9108",
+      "snies_parent": "9108",
+      "name": "INSTITUTO CARO Y CUERVO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9109",
+      "snies_parent": "9109",
+      "name": "INSTITUTO TECNOLOGICO DE ELECTRONICA Y COMUNICACIONES-ITEC-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9110",
+      "snies_parent": "9110",
+      "name": "SERVICIO NACIONAL DE APRENDIZAJE-SENA-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9111",
+      "snies_parent": "9110",
+      "name": "SERVICIO NACIONAL DE APRENDIZAJE-SENA-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "9112",
+      "snies_parent": "9110",
+      "name": "SERVICIO NACIONAL DE APRENDIZAJE-SENA-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "9113",
+      "snies_parent": "9110",
+      "name": "SERVICIO NACIONAL DE APRENDIZAJE-SENA-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Mosquera",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "9114",
+      "snies_parent": "9110",
+      "name": "SERVICIO NACIONAL DE APRENDIZAJE-SENA-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Armenia",
+      "department": "Quindío"
+    },
+    {
+      "snies": "9115",
+      "snies_parent": "9110",
+      "name": "SERVICIO NACIONAL DE APRENDIZAJE-SENA-",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Guadalajara de Buga",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "9116",
+      "snies_parent": "9116",
+      "name": "FUNDACION UNIVERSITARIA CLARETIANA - UNICLARETIANA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Quibdó",
+      "department": "Chocó"
+    },
+    {
+      "snies": "9117",
+      "snies_parent": "9117",
+      "name": "ESCUELA INTERNACIONAL DE ESTUDIOS SUPERIORES - INTER",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9119",
+      "snies_parent": "9119",
+      "name": "CORPORACION UNIVERSITARIA AMERICANA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "9120",
+      "snies_parent": "9120",
+      "name": "FUNDACION UNIVERSITARIA BELLAS ARTES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "9121",
+      "snies_parent": "9121",
+      "name": "FUNDACION UNIVERSITARIA COLOMBO INTERNACIONAL - UNICOLOMBO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Cartagena de Indias",
+      "department": "Bolívar"
+    },
+    {
+      "snies": "9122",
+      "snies_parent": "1735",
+      "name": "UNIVERSIDAD MANUELA BELTRAN-UMB-",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "9123",
+      "snies_parent": "1826",
+      "name": "UNIVERSIDAD ANTONIO NARIÑO",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Neiva",
+      "department": "Huila"
+    },
+    {
+      "snies": "9124",
+      "snies_parent": "9124",
+      "name": "TECNOLOGICO COREDI",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Marinilla",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "9125",
+      "snies_parent": "1201",
+      "name": "UNIVERSIDAD DE ANTIOQUIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Santa Fé de Antioquia",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "9126",
+      "snies_parent": "9126",
+      "name": "CORPORACION TECNOLOGICA INDOAMERICA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "9127",
+      "snies_parent": "9127",
+      "name": "CORPORACION UNIVERSITARIA DE SABANETA - UNISABANETA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Sabaneta",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "9128",
+      "snies_parent": "9128",
+      "name": "LCI - FUNDACION TECNOLOGICA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9129",
+      "snies_parent": "9129",
+      "name": "FUNDACION UNIVERSITARIA CAFAM -UNICAFAM",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9130",
+      "snies_parent": "9130",
+      "name": "INSTITUTO TECNOLOGICO COMFAMILIAR DE PUTUMAYO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Puerto Asís",
+      "department": "Putumayo"
+    },
+    {
+      "snies": "9131",
+      "snies_parent": "9131",
+      "name": "FUNDACIÓN UNIVERSITARIA CERVANTES SAN AGUSTÍN - UNICERVANTES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9132",
+      "snies_parent": "9132",
+      "name": "FUNDACION UNIVERSITARIA CIEO - UNICIEO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9899",
+      "snies_parent": "9899",
+      "name": "INSTITUCION UNIVERSITARIA DE COLOMBIA - UNIVERSITARIA DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9900",
+      "snies_parent": "9900",
+      "name": "CORPORACION UNIVERSITARIA U DE COLOMBIA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "9901",
+      "snies_parent": "9901",
+      "name": "INSTITUCION UNIVERSITARIA CENTRO DE ESTUDIOS SUPERIORES MARIA GORETTI",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Pasto",
+      "department": "Nariño"
+    },
+    {
+      "snies": "9902",
+      "snies_parent": "9902",
+      "name": "FUNDACION UNIVERSITARIA COMFENALCO SANTANDER",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "9903",
+      "snies_parent": "9903",
+      "name": "CORPORACIÓN COLSUBSIDIO EDUCACIÓN TECNOLÓGICA - CET",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9904",
+      "snies_parent": "9904",
+      "name": "FUNDACION UNIVERSITARIA COLOMBO GERMANA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9905",
+      "snies_parent": "9905",
+      "name": "FUNDACION ESCUELA TECNOLOGICA DE NEIVA - JESUS OVIEDO PEREZ -FET",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Rivera",
+      "department": "Huila"
+    },
+    {
+      "snies": "9906",
+      "snies_parent": "9906",
+      "name": "CORPORACIÓN UNIVERSITARIA PARA EL DESARROLLO EMPRESARIAL Y SOCIAL - MISIÓN PAZ.",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "9907",
+      "snies_parent": "9907",
+      "name": "FUNDACION UNIVERSITARIA NAVARRA - UNINAVARRA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Neiva",
+      "department": "Huila"
+    },
+    {
+      "snies": "9908",
+      "snies_parent": "1203",
+      "name": "UNIVERSIDAD DEL VALLE",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Guadalajara de Buga",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "9909",
+      "snies_parent": "1203",
+      "name": "UNIVERSIDAD DEL VALLE",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Zarzal",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "9910",
+      "snies_parent": "9910",
+      "name": "FUNDACION UNIVERSITARIA LUIS G. PAEZ - UNIPAEZ",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9911",
+      "snies_parent": "1203",
+      "name": "UNIVERSIDAD DEL VALLE",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Buenaventura",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "9912",
+      "snies_parent": "1203",
+      "name": "UNIVERSIDAD DEL VALLE",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Palmira",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "9913",
+      "snies_parent": "9913",
+      "name": "CORPORACION UNIVERSITARIA DE ASTURIAS",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9914",
+      "snies_parent": "9914",
+      "name": "ESEIT - ESCUELA SUPERIOR DE EMPRESA, INGENIERÍA Y TECNOLOGÍA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9915",
+      "snies_parent": "9915",
+      "name": "UNIVERSITARIA VIRTUAL INTERNACIONAL",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9918",
+      "snies_parent": "9918",
+      "name": "INSTITUCION UNIVERSITARIA CONOCIMIENTO E INNOVACION PARA LA JUSTICIA - CIJ",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Cota",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "9919",
+      "snies_parent": "9919",
+      "name": "TECNOLOGICO DE ENERGIA E INNOVACION-  E-LERNOVA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Chía",
+      "department": "Cundinamarca"
+    },
+    {
+      "snies": "9920",
+      "snies_parent": "1101",
+      "name": "UNIVERSIDAD NACIONAL DE COLOMBIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "San Andrés de Tumaco",
+      "department": "Nariño"
+    },
+    {
+      "snies": "9921",
+      "snies_parent": "9921",
+      "name": "FUNDACION UNIVERSITARIA CATOLICA DEL SUR - UNICATOLICA DEL SUR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Pasto",
+      "department": "Nariño"
+    },
+    {
+      "snies": "9922",
+      "snies_parent": "9922",
+      "name": "FUNDACION UNIVERSITARIA COMFAMILIAR RISARALDA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Pereira",
+      "department": "Risaralda"
+    },
+    {
+      "snies": "9923",
+      "snies_parent": "9923",
+      "name": "CORPORACION UNIVERSITARIA DE CATALUÑA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9924",
+      "snies_parent": "9924",
+      "name": "FUNDACION UNIVERSITARIA INTERNACIONAL DE COLOMBIA - UNINCOL",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9925",
+      "snies_parent": "9925",
+      "name": "FUNDACION UNIVERSITARIA FCV",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Floridablanca",
+      "department": "Santander"
+    },
+    {
+      "snies": "9926",
+      "snies_parent": "9926",
+      "name": "FUNDACION UNIVERSITARIA INTERNACIONAL DE LA RIOJA - UNIR",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9927",
+      "snies_parent": "9927",
+      "name": "INSTITUCION UNIVERSITARIA DIGITAL DE ANTIOQUIA -IU. DIGITAL",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Medellín",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "9928",
+      "snies_parent": "9928",
+      "name": "FUNDACIÓN UNIVERSITARIA SALESIANA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9929",
+      "snies_parent": "9929",
+      "name": "UNIVERSIDAD AUTÓNOMA INDÍGENA INTERCULTURAL - UAIIN",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "Popayán",
+      "department": "Cauca"
+    },
+    {
+      "snies": "9930",
+      "snies_parent": "9930",
+      "name": "INSTITUCIÓN UNIVERSITARIA COMANDO DE EDUCACIÓN Y DOCTRINA - CEDOC DEL EJÉRCITO NACIONAL",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9931",
+      "snies_parent": "9931",
+      "name": "FUNDACIÓN UNIVERSITARIA PATRICIO SYMES",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9932",
+      "snies_parent": "9932",
+      "name": "FUNDACIÓN UNIVERSITARIA SAN PABLO - UNISANPABLO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9933",
+      "snies_parent": "1101",
+      "name": "UNIVERSIDAD NACIONAL DE COLOMBIA",
+      "ownership": "Oficial",
+      "institutional_category": "Universidad",
+      "municipality": "La Paz",
+      "department": "Cesar"
+    },
+    {
+      "snies": "9934",
+      "snies_parent": "9934",
+      "name": "CENTRO DE ESTUDIOS AERONÁUTICOS - CEA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9935",
+      "snies_parent": "9935",
+      "name": "UNIDAD TECNOLÓGICA DEL MAGDALENA MEDIO - UTEM -",
+      "ownership": "Privado",
+      "institutional_category": "Institución Tecnológica",
+      "municipality": "Barrancabermeja",
+      "department": "Santander"
+    },
+    {
+      "snies": "9936",
+      "snies_parent": "9936",
+      "name": "CORPORACIÓN UNIVERSITARIA AUTÓNOMA DEL NORTE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "San José de Cúcuta",
+      "department": "Norte de Santander"
+    },
+    {
+      "snies": "9937",
+      "snies_parent": "9937",
+      "name": "CORPORACION TECNICA PROFESIONAL CAMINOS DEL SUROCCIDENTE COLOMBIANO",
+      "ownership": "Privado",
+      "institutional_category": "Institución Técnica Profesional",
+      "municipality": "Timbío",
+      "department": "Cauca"
+    },
+    {
+      "snies": "9938",
+      "snies_parent": "9938",
+      "name": "UNIVERSITARIA DEL CHICAMOCHA",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bucaramanga",
+      "department": "Santander"
+    },
+    {
+      "snies": "9939",
+      "snies_parent": "9939",
+      "name": "FUNDACIÓN UNIVERSITARIA CATÓLICA DEL CARIBE",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    },
+    {
+      "snies": "9940",
+      "snies_parent": "9940",
+      "name": "INSTITUCIÓN UNIVERSITARIA DE SANTA MARTA",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santa Marta",
+      "department": "Magdalena"
+    },
+    {
+      "snies": "9941",
+      "snies_parent": "9941",
+      "name": "CORPORACIÓN INSTITUCIÓN UNIVERSITARIA SALUD COLOMBIA - UNISALUD",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Ibagué",
+      "department": "Tolima"
+    },
+    {
+      "snies": "9942",
+      "snies_parent": "9942",
+      "name": "CORPORACIÓN INSTITUCIÓN UNIVERSITARIA SALUD COLOMBIA -UNISALUD-",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Ibagué",
+      "department": "Tolima"
+    },
+    {
+      "snies": "9943",
+      "snies_parent": "1704",
+      "name": "UNIVERSIDAD SANTO TOMAS",
+      "ownership": "Privado",
+      "institutional_category": "Universidad",
+      "municipality": "Villavicencio",
+      "department": "Meta"
+    },
+    {
+      "snies": "9944",
+      "snies_parent": "9944",
+      "name": "INSTITUCIÓN UNIVERSITARIA DE LAS CULTURAS Y LAS ARTES POPULARES IPC",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Santiago de Cali",
+      "department": "Valle del Cauca"
+    },
+    {
+      "snies": "9945",
+      "snies_parent": "9945",
+      "name": "CORPORACIÓN UNIVERSITARIA DE BOGOTA -UNIVERSITARIA DE BOGOTÁ",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bogotá, D.C.",
+      "department": "Bogotá, D.C."
+    },
+    {
+      "snies": "9946",
+      "snies_parent": "9946",
+      "name": "INSTITUCIÓN UNIVERSITARIA PÚBLICA DE BELLO - IUPBELLO",
+      "ownership": "Oficial",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Bello",
+      "department": "Antioquia"
+    },
+    {
+      "snies": "9947",
+      "snies_parent": "9947",
+      "name": "FUNDACIÓN UNIVERSITARIA PARA LA INVESTIGACIÓN, EL DESARROLLO TECNOLÓGICO Y LA INNOVACIÓN - IDITEK",
+      "ownership": "Privado",
+      "institutional_category": "Institución Universitaria/Escuela Tecnológica",
+      "municipality": "Barranquilla",
+      "department": "Atlántico"
+    }
+  ]
+  
