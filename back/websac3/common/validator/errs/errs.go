@@ -2,7 +2,7 @@ package errs
 
 import (
 	"fmt"
-	"websac3/common/errs"
+	"websac3/app/domain/errs"
 )
 
 type FieldIsRequiredError error
