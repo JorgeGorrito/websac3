@@ -1,7 +1,7 @@
 package command
 
 import (
-	"websac3/adapter/out/persistence/postgresql/db/postgres"
+	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/models"
 	"websac3/app/port/out/persistence"
 	"websac3/common/dependencies/container"
@@ -14,7 +14,7 @@ type MigrateAllModels struct {
 	cmdprinter command.CMDPrinter
 	db         *gorm.DB
 	models     []any
-	txManager  *postgres.TransactionManager
+	txManager  *db.TransactionManager
 }
 
 func NewMigrateAllModels(params map[string]string, cmdprinter command.CMDPrinter) command.Command {
@@ -28,8 +28,8 @@ func NewMigrateAllModels(params map[string]string, cmdprinter command.CMDPrinter
 			}
 			return modelsToMigrate
 		}(),
-		txManager: func() *postgres.TransactionManager {
-			var txm *postgres.TransactionManager = container.Inject[persistence.TransactionManager]().(*postgres.TransactionManager)
+		txManager: func() *db.TransactionManager {
+			var txm *db.TransactionManager = container.Inject[persistence.TransactionManager]().(*db.TransactionManager)
 			return txm
 		}(),
 	}
@@ -37,7 +37,7 @@ func NewMigrateAllModels(params map[string]string, cmdprinter command.CMDPrinter
 
 func (m *MigrateAllModels) Execute() error {
 	var err error = m.txManager.ExecuteInTransaction(func(tx persistence.Transaction) error {
-		var pgTx *postgres.Transaction = tx.(*postgres.Transaction)
+		var pgTx *db.Transaction = tx.(*db.Transaction)
 		if err := pgTx.Tx().AutoMigrate(m.models...); err != nil {
 			return err
 		}

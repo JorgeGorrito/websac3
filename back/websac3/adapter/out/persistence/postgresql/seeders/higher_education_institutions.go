@@ -2,7 +2,7 @@ package seeders
 
 import (
 	"strconv"
-	"websac3/adapter/out/persistence/postgresql/db/postgres"
+	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/dto"
 	models2 "websac3/adapter/out/persistence/postgresql/models"
 	"websac3/app/port/out/persistence"
@@ -58,7 +58,7 @@ func (h *higherEducationInstitutions) getMunicipalityId(transaction *gorm.DB, mu
 }
 
 func (h *higherEducationInstitutions) Seed(tx persistence.Transaction) error {
-	var pgTx *postgres.Transaction = tx.(*postgres.Transaction)
+	var pgTx *db.Transaction = tx.(*db.Transaction)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []dto.HigherEducationInstitution = make([]dto.HigherEducationInstitution, 0)
 	if err := decoder.Decode(DEFAULT_PATH_HIGHER_EDUCATION_INSTITUTION_SEED, &dataToSeed); err != nil {

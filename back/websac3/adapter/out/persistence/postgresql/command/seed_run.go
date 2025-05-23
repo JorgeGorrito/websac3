@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
-	"websac3/adapter/out/persistence/postgresql/db/postgres"
+	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/seeders"
 	"websac3/app/port/out/persistence"
 	"websac3/common/dependencies/container"
@@ -17,7 +17,7 @@ type SeedRun struct {
 	cmdprinter     command.CMDPrinter
 	seedName       string
 	paramsReceived []string
-	txManager      *postgres.TransactionManager
+	txManager      *db.TransactionManager
 }
 
 func NewSeedRun(params map[string]string, cmdprinter command.CMDPrinter) command.Command {
@@ -26,8 +26,8 @@ func NewSeedRun(params map[string]string, cmdprinter command.CMDPrinter) command
 		cmdprinter:     cmdprinter,
 		seedName:       params["seed"],
 		paramsReceived: paramsReceived,
-		txManager: func() *postgres.TransactionManager {
-			var pgTxManager *postgres.TransactionManager = container.Inject[persistence.TransactionManager]().(*postgres.TransactionManager)
+		txManager: func() *db.TransactionManager {
+			var pgTxManager *db.TransactionManager = container.Inject[persistence.TransactionManager]().(*db.TransactionManager)
 			return pgTxManager
 		}(),
 	}
