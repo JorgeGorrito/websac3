@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"time"
 	"websac3/app/domain/builder"
 	"websac3/app/domain/entity"
@@ -112,20 +111,15 @@ func (c *CreateAccessRequestService) createFirstAccessRequest(
 	createAccessRequest *entity.AccessRequest,
 	tx persistence.Transaction,
 ) (err error) {
-	fmt.Println("Ingreso a create first")
 	if err = c.createUserPort.Create(createAccessRequest.Person.User, tx); err != nil {
 		return err
 	}
-	fmt.Printf("User entity: %+v\n", *createAccessRequest.Person.User)
 	if err = c.createPersonPort.Create(createAccessRequest.Person, tx); err != nil {
 		return err
 	}
-	fmt.Printf("Person entity: %+v\n", *createAccessRequest.Person)
 	if err = c.createAccessRequestPort.Create(createAccessRequest, tx); err != nil {
 		return err
 	}
-	fmt.Printf("create access request entity: %+v\n", *createAccessRequest)
-	fmt.Println("No se rompio")
 	return nil
 }
 
