@@ -7,7 +7,6 @@ import (
 	"websac3/app/domain/builder"
 	"websac3/app/domain/entity"
 	"websac3/app/domain/errs"
-	"websac3/app/port/in/dto"
 	"websac3/app/port/in/dto/command"
 	"websac3/app/port/out/persistence"
 )
@@ -54,7 +53,7 @@ func NewCreateAccessRequestService(
 	}
 }
 
-func (c *CreateAccessRequestService) validateInputData(validators []dto.Validator) error {
+func (c *CreateAccessRequestService) validateInputData(validators []command.Validator) error {
 	for _, validator := range validators {
 		if err := validator.Validate(); err != nil {
 			return err
@@ -158,7 +157,7 @@ func (c *CreateAccessRequestService) createNewAccessRequest(
 func (c *CreateAccessRequestService) CreateAccessRequest(
 	createAccessRequestCommand command.CreateAccessRequestCommand,
 ) error {
-	if err := c.validateInputData([]dto.Validator{&createAccessRequestCommand}); err != nil {
+	if err := c.validateInputData([]command.Validator{&createAccessRequestCommand}); err != nil {
 		return err
 	}
 
