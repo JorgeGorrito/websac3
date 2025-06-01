@@ -148,7 +148,7 @@ func (c *CreateAccessRequestService) createNewAccessRequest(
 	return nil
 }
 
-func (c *CreateAccessRequestService) CreateAccessRequest(
+func (c *CreateAccessRequestService) Execute(
 	createAccessRequestCommand command.CreateAccessRequestCommand,
 ) error {
 	if err := c.validateInputData([]command.Validator{&createAccessRequestCommand}); err != nil {
