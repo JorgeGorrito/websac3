@@ -53,7 +53,6 @@ func mapWithoutOverLoadTags(src, dest any, tagToField *map[string]reflect.Value)
 		tagToField = &map[string]reflect.Value{}
 	}
 	setSrcKeysValues(tagToField, srcValue)
-	fmt.Printf("%+v\n", tagToField)
 
 	var destType reflect.Type = destElem.Type()
 	var field reflect.StructField

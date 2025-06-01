@@ -21,7 +21,6 @@ func (p *PersonRepository) Create(person *entity.Person, tx persistence.Transact
 	if err := mapper.Map(person, &personToSave); err != nil {
 		return err
 	}
-	fmt.Printf("person model: %+v\n", personToSave)
 
 	if err := pgTx.Tx().Create(&personToSave).Error; err != nil {
 		return err

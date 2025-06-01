@@ -25,7 +25,6 @@ func (a *AccessRequestRepository) Create(accessRequest *entity.AccessRequest, tx
 	if err := mapper.Map(accessRequest, &accessRequestToSave); err != nil {
 		return err
 	}
-	fmt.Printf("create access request entity: %+v\n", accessRequestToSave)
 
 	if err := pgTx.Tx().Create(&accessRequestToSave).Error; err != nil {
 		return err

@@ -1,16 +1,8 @@
 package response
 
-import (
-	"errors"
-)
-
-var (
-	failedToMarshalResult = errors.New("failed to marshal result")
-)
-
 type ApiResponse[T any] struct {
-	HttpStatusCode int `json:"httpStatusCode"`
-	Result         T   `json:"result"`
+	HttpStatusCode int
+	Result         T
 }
 
 func (r *ApiResponse[T]) ToResponseFormat() map[string]T {
