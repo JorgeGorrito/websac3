@@ -1,6 +1,7 @@
 ../../front/**
 !Dockefile*
 /.*
+logs/**
 
 *.elf
 *.exe
