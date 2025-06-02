@@ -14,7 +14,7 @@ type AccessRequest struct {
 	Applicant   Person `gorm:"foreignKey:ApplicantID"`
 
 	StatusID  uint      `gorm:"not null" mapper:"statusID"`
-	Status    Status    `gorm:"foreignKey:StatusID"`
+	Status    Status    `gorm:"foreignKey:StatusID" mapper:"accessRequestStatus"`
 	CreatedAt time.Time `mapper:"accessRequestcreatedAt"`
 	UpdatedAt time.Time `mapper:"accessRequestupdatedAt"`
 	DeleteAt  time.Time `mapper:"accessRequestdeleteAt"`

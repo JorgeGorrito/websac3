@@ -17,9 +17,9 @@ type Person struct {
 
 	JobPosition string `gorm:"type:varchar(128); not null" mapper:"personJobPosition"`
 
-	UserID    uint      `gorm:"not null" mapper:"userID"`
-	User      User      `gorm:"foreignKey:UserID"`
-	CreatedAt time.Time `mapper:"personCreatedAt"`
-	UpdatedAt time.Time `mapper:"personUpdatedAt"`
-	DeleteAt  time.Time `mapper:"personDeleteAt"`
+	UserID    uint       `gorm:"not null" mapper:"userID"`
+	User      User       `gorm:"foreignKey:UserID"`
+	CreatedAt time.Time  `mapper:"personCreatedAt"`
+	UpdatedAt time.Time  `mapper:"personUpdatedAt"`
+	DeleteAt  *time.Time `gorm:"null; default:null" mapper:"personDeleteAt"`
 }

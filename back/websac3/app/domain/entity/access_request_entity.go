@@ -8,7 +8,7 @@ import (
 type AccessRequest struct {
 	ID        uint      `mapper:"accessRequestID"`
 	Person    *Person   `mapper:"person"`
-	Status    *Status   `mapper:"status"`
+	Status    *Status   `mapper:"accessRequestStatus"`
 	CreatedAt time.Time `mapper:"accessRequestcreatedAt"`
 	UpdatedAt time.Time `mapper:"accessRequestupdatedAt"`
 	DeleteAt  time.Time `mapper:"accessRequestdeleteAt"`
@@ -28,9 +28,9 @@ func (a *AccessRequest) CanRegisterAnother() (bool, error) {
 		case a.Status.IsRejected():
 			return true, nil
 		case a.Status.IsApproved():
-			return false, errs.NewConflictError("access request already approved")
+			return false, errs.NewConflictError("Solicitud de acceso ya ha sido aprobada")
 		case a.Status.IsPending():
-			return false, errs.NewConflictError("access request already pending")
+			return false, errs.NewConflictError("Solicitud de acceso ya ha sido registrada y está pendiente de aprobación")
 		}
 	}
 	return false, nil
