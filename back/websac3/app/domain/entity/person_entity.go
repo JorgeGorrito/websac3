@@ -5,7 +5,7 @@ import "time"
 type Person struct {
 	ID                              uint      `mapper:"personID"`
 	Name                            string    `mapper:"personName"`
-	Lastname                        string    `mapper:"personLastname"`
+	Lastname                        string    `mapper:"personLastName"`
 	IdentificationTypeID            uint      `mapper:"personIdentificationTypeID"`
 	IdentificationNumber            string    `mapper:"personIdentificationNumber"`
 	HigherEducationInstitutionSnies uint      `mapper:"personHigherEducationInstitutionSnies"`

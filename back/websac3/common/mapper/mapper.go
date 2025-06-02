@@ -101,6 +101,17 @@ func mapWithoutOverLoadTags(src, dest any, tagToField *map[string]reflect.Value)
 			continue
 		}
 
+		// Manejar estructuras a punteros
+		if srcFieldType.Kind() == reflect.Struct && destFieldType.Kind() == reflect.Ptr && destFieldType.Elem().Kind() == reflect.Struct {
+			if destField.IsNil() {
+				destField.Set(reflect.New(destFieldType.Elem()))
+			}
+			if err := mapWithoutOverLoadTags(srcField.Addr().Interface(), destField.Interface(), tagToField); err != nil {
+				return err
+			}
+			continue
+		}
+
 		// Manejar estructuras directas (no punteros)
 		if srcFieldType.Kind() == reflect.Struct && destFieldType.Kind() == reflect.Struct {
 			// Creamos un nuevo valor para el destino
