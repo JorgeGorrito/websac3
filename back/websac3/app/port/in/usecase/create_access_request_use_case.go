@@ -1,7 +1,9 @@
 package usecase
 
-import "websac3/app/port/in/dto/command"
+import (
+	"websac3/app/domain/entity"
+)
 
 type CreateAccessRequestUseCase interface {
-	Execute(command.CreateAccessRequestCommand) error
+	Execute(request entity.AccessRequest) error
 }

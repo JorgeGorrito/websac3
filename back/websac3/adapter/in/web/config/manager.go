@@ -3,8 +3,8 @@ package config
 import (
 	"errors"
 	"reflect"
+	handler "websac3/adapter/in/web/handler/command"
 	"websac3/app/port/in/dto/command"
-	handler "websac3/app/port/in/handler/command"
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/logging"
 	"websac3/common/dependencies/container"

@@ -2,16 +2,12 @@ package service
 
 import (
 	"errors"
-	"time"
-	"websac3/app/domain/builder"
 	"websac3/app/domain/entity"
 	"websac3/app/domain/errs"
-	"websac3/app/port/in/dto/command"
 	"websac3/app/port/out/persistence"
 )
 
 type CreateAccessRequestService struct {
-	Service
 	createAccessRequestPort persistence.CreateAccessRequestPort
 	createPersonPort        persistence.CreatePersonPort
 	createUserPort          persistence.CreateUserPort
@@ -23,42 +19,6 @@ type CreateAccessRequestService struct {
 	getStatusPort           persistence.GetStatusPort
 	statusPending           *entity.Status
 	txManager               persistence.TransactionManager
-}
-
-func NewCreateAccessRequestService(
-	createAccessRequestPort persistence.CreateAccessRequestPort,
-	createPersonPort persistence.CreatePersonPort,
-	createUserPort persistence.CreateUserPort,
-	updateUserPort persistence.UpdateUserPort,
-	updatePersonPort persistence.UpdatePersonPort,
-	getUserPort persistence.GetUserPort,
-	getPersonPort persistence.GetPersonPort,
-	getAccessRequestPort persistence.GetAccessRequestPort,
-	getStatusPort persistence.GetStatusPort,
-	txManager persistence.TransactionManager,
-) *CreateAccessRequestService {
-	return &CreateAccessRequestService{
-		createAccessRequestPort: createAccessRequestPort,
-		createPersonPort:        createPersonPort,
-		createUserPort:          createUserPort,
-		getUserPort:             getUserPort,
-		getPersonPort:           getPersonPort,
-		getAccessRequestPort:    getAccessRequestPort,
-		getStatusPort:           getStatusPort,
-		updateUserPort:          updateUserPort,
-		updatePersonPort:        updatePersonPort,
-		statusPending:           nil,
-		txManager:               txManager,
-	}
-}
-
-func (c *CreateAccessRequestService) validateInputData(validators []command.Validator) error {
-	for _, validator := range validators {
-		if err := validator.Validate(); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func (c *CreateAccessRequestService) initStatusPending(tx persistence.Transaction) error {
@@ -75,126 +35,71 @@ func (c *CreateAccessRequestService) initStatusPending(tx persistence.Transactio
 	return nil
 }
 
-func (c *CreateAccessRequestService) buildNewUser(userBuilder builder.UserBuilder, userCommand *command.CreateUserCommand) *entity.User {
-	return userBuilder.
-		WithEmail(userCommand.Email).
-		WithRole(nil).
-		Build()
+func NewCreateAccessRequestService(
+	createAccessRequestPort persistence.CreateAccessRequestPort,
+	createPersonPort persistence.CreatePersonPort,
+	createUserPort persistence.CreateUserPort,
+	updateUserPort persistence.UpdateUserPort,
+	updatePersonPort persistence.UpdatePersonPort,
+	getUserPort persistence.GetUserPort,
+	getPersonPort persistence.GetPersonPort,
+	getAccessRequestPort persistence.GetAccessRequestPort,
+	getStatusPort persistence.GetStatusPort,
+	txManager persistence.TransactionManager,
+) *CreateAccessRequestService {
+	c := &CreateAccessRequestService{
+		createAccessRequestPort: createAccessRequestPort,
+		createPersonPort:        createPersonPort,
+		createUserPort:          createUserPort,
+		getUserPort:             getUserPort,
+		getPersonPort:           getPersonPort,
+		getAccessRequestPort:    getAccessRequestPort,
+		getStatusPort:           getStatusPort,
+		updateUserPort:          updateUserPort,
+		updatePersonPort:        updatePersonPort,
+		statusPending:           nil,
+		txManager:               txManager,
+	}
+
+	if err := txManager.ExecuteInTransaction(func(tx persistence.Transaction) error {
+		c.initStatusPending(tx)
+		return nil
+	}); err != nil {
+		panic(err)
+	}
+
+	return c
 }
 
-func (c *CreateAccessRequestService) buildNewPerson(personBuilder builder.PersonBuilder, personCommand *command.CreatePersonCommand, user *entity.User) *entity.Person {
-	return personBuilder.
-		WithIdentificationNumber(personCommand.IdentificationNumber).
-		WithName(personCommand.Name).
-		WithLastname(personCommand.Lastname).
-		WithIdentificationTypeID(personCommand.IdentificationTypeID).
-		WithIdentificationNumber(personCommand.IdentificationNumber).
-		WithHigherEducationInstitutionSnies(personCommand.HigherEducationInstitutionSnies).
-		WithJobPosition(personCommand.JobPosition).
-		WithUser(user).
-		Build()
-}
-
-func (c *CreateAccessRequestService) buildAccessRequest(
-	accessRequestBuilder builder.AccessRequestBuilder,
-	person *entity.Person,
-) *entity.AccessRequest {
-	return accessRequestBuilder.
-		WithPerson(person).
-		WithCreatedAt(time.Now()).
-		WithUpdatedAt(time.Now()).
-		WithStatus(c.statusPending).
-		Build()
-}
-
-func (c *CreateAccessRequestService) createFirstAccessRequest(
-	createAccessRequest *entity.AccessRequest,
-	tx persistence.Transaction,
-) (err error) {
-	if err = c.createUserPort.Create(createAccessRequest.Person.User, tx); err != nil {
+func (c *CreateAccessRequestService) CreateAccessRequest(requestToCreate *entity.AccessRequest, tx persistence.Transaction) error {
+	requestToCreate.Status = c.statusPending
+	if err := c.createUserPort.Create(requestToCreate.Person.User, tx); err != nil {
 		return err
 	}
-	if err = c.createPersonPort.Create(createAccessRequest.Person, tx); err != nil {
+	if err := c.createPersonPort.Create(requestToCreate.Person, tx); err != nil {
 		return err
 	}
-	if err = c.createAccessRequestPort.Create(createAccessRequest, tx); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (c *CreateAccessRequestService) createNewAccessRequest(
-	newAccessRequest *entity.AccessRequest,
-	accessRequestFound *entity.AccessRequest,
-	tx persistence.Transaction,
-) (err error) {
-	if newAccessRequest.Person.User.Email != accessRequestFound.Person.User.Email {
-		if err = c.updateUserPort.UpdateById(newAccessRequest.Person.User, accessRequestFound.ID, tx); err != nil {
-			return err
-		}
-	}
-
-	if newAccessRequest.Person.JobPosition != accessRequestFound.Person.JobPosition ||
-		newAccessRequest.Person.HigherEducationInstitutionSnies != accessRequestFound.Person.HigherEducationInstitutionSnies ||
-		newAccessRequest.Person.Name != accessRequestFound.Person.Name ||
-		newAccessRequest.Person.Lastname != accessRequestFound.Person.Lastname {
-		if err = c.updatePersonPort.UpdateById(newAccessRequest.Person, accessRequestFound.ID, tx); err != nil {
-			return err
-		}
-	}
-	if err = c.createAccessRequestPort.Create(newAccessRequest, tx); err != nil {
+	if err := c.createAccessRequestPort.Create(requestToCreate, tx); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (c *CreateAccessRequestService) Execute(
-	createAccessRequestCommand command.CreateAccessRequestCommand,
+	requestToCreate entity.AccessRequest,
 ) error {
-	if err := c.validateInputData([]command.Validator{&createAccessRequestCommand}); err != nil {
-		return err
-	}
-
 	return c.txManager.ExecuteInTransaction(
 		func(tx persistence.Transaction) error {
 			var err error
-			var canRegisterForFirstTime, canRegisterAnother bool
+			var requestFound entity.AccessRequest
 
-			var accessRequestFound entity.AccessRequest
-			var user *entity.User = nil
-			var person *entity.Person = nil
-			var newAccessRequest *entity.AccessRequest = nil
-
-			var accessRequestBuilder builder.AccessRequestBuilder = builder.NewAccessRequestBuilder()
-			var personBuilder builder.PersonBuilder = builder.NewPersonBuilder()
-			var userBuilder builder.UserBuilder = builder.NewUserBuilder()
-
-			if c.statusPending == nil {
-				if err = c.initStatusPending(tx); err != nil {
-					return err
-				}
-			}
-			accessRequestFound, err = c.getAccessRequestPort.GetLastCreatedPersonIdentificationNumber(
-				createAccessRequestCommand.Person.IdentificationNumber, tx,
-			)
+			requestFound, err = c.getAccessRequestPort.GetLastCreatedPersonIdentificationNumber(requestToCreate.Person.IdentificationNumber, tx)
 			if err != nil {
 				return err
 			}
 
-			user = c.buildNewUser(userBuilder, &createAccessRequestCommand.Person.User)
-			person = c.buildNewPerson(personBuilder, &createAccessRequestCommand.Person, user)
-			newAccessRequest = c.buildAccessRequest(accessRequestBuilder, person)
-
-			if canRegisterForFirstTime = !accessRequestFound.IsRegistered(); canRegisterForFirstTime {
-				return c.createFirstAccessRequest(newAccessRequest, tx)
-			}
-
-			canRegisterAnother, err = accessRequestFound.CanRegisterAnother()
-			if err != nil {
-				return err
-			}
-			if canRegisterAnother {
-				return c.createNewAccessRequest(newAccessRequest, &accessRequestFound, tx)
+			if requestFound.CanRegisterForFirstTime() {
+				return c.CreateAccessRequest(&requestToCreate, tx)
 			}
 
 			return err
