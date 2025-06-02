@@ -1,4 +1,4 @@
-package models
+package model
 
 import "time"
 
@@ -6,7 +6,7 @@ type Person struct {
 	ID uint `gorm:"primaryKey" mapper:"personID"`
 
 	Name                 string `gorm:"type:varchar(36); not null" mapper:"personName"`
-	Lastname             string `gorm:"type:varchar(36); not null" mapper:"personLastname"`
+	Lastname             string `gorm:"type:varchar(36); not null" mapper:"personLastName"`
 	IdentificationNumber string `gorm:"type:varchar(16); not null; unique" mapper:"personIdentificationNumber"`
 
 	IdentificationTypeID uint `gorm:"not null" mapper:"personIdentificationTypeID"`

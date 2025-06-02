@@ -1,4 +1,4 @@
-package models
+package model
 
 type Status struct {
 	ID   uint   `gorm:"primary_key" mapper:"statusID"`

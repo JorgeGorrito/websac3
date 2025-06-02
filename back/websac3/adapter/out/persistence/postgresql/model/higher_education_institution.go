@@ -1,4 +1,4 @@
-package models
+package model
 
 type HigherEducationInstitution struct {
 	Snies uint `gorm:"primary_key"`
