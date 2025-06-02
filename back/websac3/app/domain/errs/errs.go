@@ -2,7 +2,6 @@ package errs
 
 import (
 	"errors"
-	"fmt"
 )
 
 var (
@@ -11,14 +10,10 @@ var (
 	NotFoundError   error = errors.New("not found error")
 )
 
-func NewValidationError(message string) error {
-	return fmt.Errorf("%w: %s", ValidationError, message)
+type baseError struct {
+	msg string
 }
 
-func NewConflictError(message string) error {
-	return fmt.Errorf("%w: %s", ConflictError, message)
-}
-
-func NewNotFoundError(message string) error {
-	return fmt.Errorf("%w: %s", NotFoundError, message)
+func (e *baseError) Error() string {
+	return e.msg
 }
