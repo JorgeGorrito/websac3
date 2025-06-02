@@ -2,7 +2,7 @@ package seeders
 
 import (
 	"websac3/adapter/out/persistence/postgresql/db"
-	"websac3/adapter/out/persistence/postgresql/models"
+	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/port/out/persistence"
 	"websac3/common/decoder"
 )
@@ -20,7 +20,7 @@ func InstitutionalCategories() Seeder {
 func (i *institutionalCategories) Seed(tx persistence.Transaction) error {
 	var pgTx *db.Transaction = tx.(*db.Transaction)
 	var decoder decoder.Decoder = decoder.Json()
-	var dataToSeed []models.InstitutionalCategory = make([]models.InstitutionalCategory, 0)
+	var dataToSeed []model.InstitutionalCategory = make([]model.InstitutionalCategory, 0)
 
 	if err := decoder.Decode(DEFAULT_PATH_INSTITUTIONAL_CATEGORY_SEED, &dataToSeed); err != nil {
 		return err

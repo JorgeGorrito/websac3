@@ -2,7 +2,7 @@ package seeders
 
 import (
 	"websac3/adapter/out/persistence/postgresql/db"
-	"websac3/adapter/out/persistence/postgresql/models"
+	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/port/out/persistence"
 	"websac3/common/decoder"
 )
@@ -20,7 +20,7 @@ func AccessRequestStatuses() Seeder {
 func (a *accessRequestStatuses) Seed(tx persistence.Transaction) error {
 	var pgTx *db.Transaction = tx.(*db.Transaction)
 	var decoder decoder.Decoder = decoder.Json()
-	var dataToSeed []models.Status = make([]models.Status, 0)
+	var dataToSeed []model.Status = make([]model.Status, 0)
 	if err := decoder.Decode(DEFAULT_PATH_ACCESS_REQUEST_STATUS_SEED, &dataToSeed); err != nil {
 		return err
 	}

@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 	"websac3/adapter/out/persistence/postgresql/db"
-	"websac3/adapter/out/persistence/postgresql/models"
+	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/persistence"
 	"websac3/common/mapper"
@@ -21,7 +21,7 @@ func (a *AccessRequestRepository) Create(accessRequest *entity.AccessRequest, tx
 		return fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
-	var accessRequestToSave models.AccessRequest
+	var accessRequestToSave model.AccessRequest
 	if err := mapper.Map(accessRequest, &accessRequestToSave); err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func (a *AccessRequestRepository) GetLastCreatedPersonIdentificationNumber(ident
 		return entity.AccessRequest{}, fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
-	var accessRequest models.AccessRequest
+	var accessRequest model.AccessRequest
 	var accessRequestFound entity.AccessRequest
 	if err := pgTx.Tx().Table("access_requests a").
 		Joins("inner join people p on a.applicant_id = p.id").

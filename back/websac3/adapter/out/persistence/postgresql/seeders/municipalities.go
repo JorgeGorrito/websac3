@@ -2,7 +2,7 @@ package seeders
 
 import (
 	"websac3/adapter/out/persistence/postgresql/db"
-	"websac3/adapter/out/persistence/postgresql/models"
+	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/port/out/persistence"
 	"websac3/common/decoder"
 )
@@ -20,7 +20,7 @@ func Municipalities() Seeder {
 func (m *municipalities) Seed(tx persistence.Transaction) error {
 	var pgTx *db.Transaction = tx.(*db.Transaction)
 	var decoder decoder.Decoder = decoder.Json()
-	var dataToSeed []models.Municipality = make([]models.Municipality, 0)
+	var dataToSeed []model.Municipality = make([]model.Municipality, 0)
 	if err := decoder.Decode(DEFAULT_PATH_MUNICIPALITY_SEED, &dataToSeed); err != nil {
 		return err
 	}

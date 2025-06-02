@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/dto"
-	models2 "websac3/adapter/out/persistence/postgresql/models"
+	models2 "websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/port/out/persistence"
 	"websac3/common/decoder"
 

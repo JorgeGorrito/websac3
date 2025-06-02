@@ -2,7 +2,7 @@ package command
 
 import (
 	"websac3/adapter/out/persistence/postgresql/db"
-	"websac3/adapter/out/persistence/postgresql/models"
+	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/port/out/persistence"
 	"websac3/common/dependencies/container"
 
@@ -22,7 +22,7 @@ func NewMigrateAllModels(params map[string]string, cmdprinter command.CMDPrinter
 		cmdprinter: cmdprinter,
 		db:         nil,
 		models: func() (modelsToMigrate []any) {
-			var modelsConstructors map[string]models.NewBaseModel = models.GetRegistryAllConstructModelBase()
+			var modelsConstructors map[string]model.NewBaseModel = model.GetRegistryAllConstructModelBase()
 			for _, constructor := range modelsConstructors {
 				modelsToMigrate = append(modelsToMigrate, constructor())
 			}

@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 	"websac3/adapter/out/persistence/postgresql/db"
-	"websac3/adapter/out/persistence/postgresql/models"
+	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/persistence"
 	"websac3/common/mapper"
@@ -17,7 +17,7 @@ func (p *PersonRepository) Create(person *entity.Person, tx persistence.Transact
 		return fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
-	var personToSave models.Person
+	var personToSave model.Person
 	if err := mapper.Map(person, &personToSave); err != nil {
 		return err
 	}
@@ -36,7 +36,7 @@ func (p *PersonRepository) UpdateById(person *entity.Person, personID uint, tx p
 		return fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
-	var personToUpdate models.Person
+	var personToUpdate model.Person
 	if err := mapper.Map(person, &personToUpdate); err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func (p *PersonRepository) GetByIdentificationNumber(identificationNumber string
 		return entity.Person{}, fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
-	var person models.Person
+	var person model.Person
 	if err := pgTx.Tx().Where("identification_number = ?", identificationNumber).First(&person).Error; err != nil {
 		return entity.Person{}, err
 	}

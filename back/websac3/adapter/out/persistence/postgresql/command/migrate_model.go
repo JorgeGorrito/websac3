@@ -5,7 +5,7 @@ import (
 	"maps"
 	"slices"
 	"websac3/adapter/out/persistence/postgresql/db"
-	"websac3/adapter/out/persistence/postgresql/models"
+	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/port/out/persistence"
 	"websac3/common/dependencies/container"
 	"websac3/common/validator"
@@ -40,7 +40,7 @@ func (m *MigrateModel) Execute() error {
 		if err := validator.ValidateParamsRequired(m.paramsReceived, []string{"model"}); err != nil {
 			return err
 		}
-		constructor := models.GetConstructModelBaseByName(m.modelNameToMigrate)
+		constructor := model.GetConstructModelBaseByName(m.modelNameToMigrate)
 		if constructor == nil {
 			return fmt.Errorf("model %s not found", m.modelNameToMigrate)
 		}

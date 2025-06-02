@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 	"websac3/adapter/out/persistence/postgresql/db"
-	"websac3/adapter/out/persistence/postgresql/models"
+	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/persistence"
 	"websac3/common/mapper"
@@ -21,7 +21,7 @@ func (u *UserRepository) Create(user *entity.User, tx persistence.Transaction) e
 		return fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
-	var userToSave models.User
+	var userToSave model.User
 	if err := mapper.Map(user, &userToSave); err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func (u *UserRepository) UpdateById(user *entity.User, userID uint, tx persisten
 		return fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
-	var userToUpdate models.User
+	var userToUpdate model.User
 	if err := mapper.Map(user, &userToUpdate); err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (u *UserRepository) GetByEmail(email string, tx persistence.Transaction) (e
 		return entity.User{}, fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
-	var user models.User
+	var user model.User
 	if err := pgTx.Tx().Where("email = ?", email).First(&user).Error; err != nil {
 		return entity.User{}, err
 	}

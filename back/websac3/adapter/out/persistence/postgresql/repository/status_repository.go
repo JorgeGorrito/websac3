@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"websac3/adapter/out/persistence/postgresql/db"
-	"websac3/adapter/out/persistence/postgresql/models"
+	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/domain/errs"
 	"websac3/app/port/out/persistence"
@@ -25,7 +25,7 @@ func (a *StatusRepository) GetByName(name string, tx persistence.Transaction) (s
 		return status, fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
-	var statusFound models.Status
+	var statusFound model.Status
 	if err = pgTx.Tx().Where("name = ?", name).First(&statusFound).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return status, errs.NewNotFoundError("status not found")
