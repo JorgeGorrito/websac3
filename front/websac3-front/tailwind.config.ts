@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
+  darkMode: ["class"], // Usar la clase 'dark' para cambiar de tema
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,27 +11,62 @@ export default {
     extend: {
       colors: {
         primary: {
-          light: '#1E4E79', // Azul principal
-          dark: '#122A45',  // Azul más oscuro para modo oscuro
+          light: '#1E4E79',
+          dark: '#122A45',
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         accent: {
-          light: '#E53935', // Rojo brillante (modo claro)
-          dark: '#C62828',  // Rojo oscuro (modo oscuro)
+          light: '#E53935',
+          dark: '#C62828',
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
-        background: {
-          light: '#FFFFFF', // Fondo blanco (modo claro)
-          dark: '#121212',  // Fondo oscuro (modo oscuro)
-        },
+        background: "hsl(var(--background))",
+        text: "hsl(var(--foreground))",
         secondary: {
-          light: '#3B87C1', // Azul claro (modo claro)
-          dark: '#246791',  // Azul claro más oscuro
+          light: '#3B87C1',
+          dark: '#246791',
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         neutral: {
-          light: '#E5E5E5', // Gris claro (modo claro)
-          dark: '#1A1A1A',  // Gris oscuro (modo oscuro)
+          light: '#E5E5E5',
+          dark: '#1A1A1A',
         },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        chart: {
+          1: "hsl(var(--chart-1))",
+          2: "hsl(var(--chart-2))",
+          3: "hsl(var(--chart-3))",
+          4: "hsl(var(--chart-4))",
+          5: "hsl(var(--chart-5))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config;

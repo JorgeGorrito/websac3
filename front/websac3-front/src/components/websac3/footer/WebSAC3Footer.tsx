@@ -6,7 +6,7 @@ import { FCBILogo } from "../logos/FCBILogo";
 
 const WebSAC3Footer = () => {
     return (
-        <footer className="flex w-full h-20 bg-secondary-light p-2">
+        <footer className="flex w-full h-1/2 items-end  p-2 mb-2">
             <SupportContainer>
                 <FooterLine />
                 <LogosContainer>
