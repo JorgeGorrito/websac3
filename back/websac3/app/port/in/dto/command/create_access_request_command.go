@@ -1,5 +1,6 @@
 package command
 
 type CreateAccessRequestCommand struct {
-	Person CreatePersonCommand `mapper:"person"`
+	Person        CreatePersonCommand `validations:"required"`
+	RedirectUrlTo string              `validations:"required"`
 }
