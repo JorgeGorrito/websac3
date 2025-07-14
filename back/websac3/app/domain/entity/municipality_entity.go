@@ -1,6 +1,6 @@
 package entity
 
-type Role struct {
+type Municipality struct {
 	ID   uint
 	Name string
 }

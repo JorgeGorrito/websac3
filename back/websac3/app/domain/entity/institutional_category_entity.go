@@ -1,6 +1,6 @@
 package entity
 
-type Role struct {
+type InstitutionalCategory struct {
 	ID   uint
 	Name string
 }
