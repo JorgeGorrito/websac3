@@ -1,0 +1,6 @@
+{
+  "create_access_request": {
+    "user_alredy_registered": "Unable to register the access request.",
+    "cannot_create_access_request" : ""
+  }
+}

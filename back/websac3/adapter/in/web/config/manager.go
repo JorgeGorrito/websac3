@@ -4,26 +4,21 @@ import (
 	"errors"
 	"reflect"
 	handler "websac3/adapter/in/web/handler/command"
+	"websac3/adapter/in/web/middleware"
 	"websac3/app/port/in/dto/command"
 	"websac3/app/port/in/usecase"
-	"websac3/app/port/out/logging"
 	"websac3/common/dependencies/container"
+	"websac3/common/logging"
+	"websac3/common/mapper"
 	"websac3/common/mediator"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 type manager struct{}
 
 func NewConfigManager() *manager {
 	return &manager{}
-}
-
-func (m *manager) loadEnviroment(errorList *error) {
-	if err := godotenv.Load(); err != nil {
-		*errorList = errors.Join(*errorList, err)
-	}
 }
 
 func (m *manager) ConfigureMediator(errorList *error) {
@@ -44,15 +39,27 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 }
 
+func (m *manager) ConfigureMappers() {
+	mapper.RegisterMapFunctions()
+}
+
 func (m *manager) ConfigureApplication() error {
 	var errorList error
-	m.loadEnviroment(&errorList)
 	m.ConfigureMediator(&errorList)
+	m.ConfigureMappers()
+	return errorList
+}
+
+func (m *manager) ConfigureMiddleware(engine *gin.Engine) error {
+	var errorList error
+	engine.Use(middleware.LangMiddleware())
+
 	return errorList
 }
 
 func (m *manager) ConfigureEngine(engine *gin.Engine) error {
 	var errorList error
+	m.ConfigureMiddleware(engine)
 
 	return errorList
 }
