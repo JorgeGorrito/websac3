@@ -2,8 +2,7 @@ package dependencies
 
 import (
 	"github.com/JorgeGorrito/anise-dependency-injection/andi"
-	"websac3/app/port/out/logging"
-	imp "websac3/common/logging"
+	"websac3/common/logging"
 
 	"os"
 	"strconv"
@@ -23,7 +22,7 @@ func (m *manager) registerLoggerDependencies() {
 			if err != nil {
 				panic(err)
 			}
-			logger, err := imp.NewLogger(
+			logger, err := logging.NewLogger(
 				appName,
 				logfilePath,
 				bufferSize,

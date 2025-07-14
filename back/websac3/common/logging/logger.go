@@ -7,11 +7,17 @@ import (
 	"time"
 )
 
+type Logger interface {
+	Info(format string, v ...any)
+	Warn(format string, v ...any)
+	Error(format string, v ...any)
+}
+
 type ContentLog struct {
 	Buffer []byte
 }
 
-type Logger struct {
+type logger struct {
 	appName   string
 	file      *os.File
 	pool      sync.Pool
@@ -20,7 +26,7 @@ type Logger struct {
 	wg        sync.WaitGroup
 }
 
-func (l *Logger) Close() error {
+func (l *logger) Close() error {
 	close(l.closeChan)
 	l.wg.Wait()
 	close(l.logChan)
@@ -30,7 +36,7 @@ func (l *Logger) Close() error {
 	return nil
 }
 
-func (l *Logger) write(buffer []byte) {
+func (l *logger) write(buffer []byte) {
 	if _, err := l.file.Write(buffer); err != nil {
 		if errClose := l.Close(); errClose != nil {
 			fmt.Println(errClose)
@@ -41,7 +47,7 @@ func (l *Logger) write(buffer []byte) {
 	os.Stdout.Write(buffer)
 }
 
-func (l *Logger) processLog() {
+func (l *logger) processLog() {
 	defer l.wg.Done()
 	defer func() {
 		if r := recover(); r != nil {
@@ -59,16 +65,16 @@ func (l *Logger) processLog() {
 	}
 }
 
-func (l *Logger) cleanBuffer(contentLog *ContentLog) {
+func (l *logger) cleanBuffer(contentLog *ContentLog) {
 	contentLog.Buffer = contentLog.Buffer[:0]
 }
 
-func (l *Logger) applyLogFormat(format *string, level string) {
+func (l *logger) applyLogFormat(format *string, level string) {
 	var currentTime string = time.Now().Format("2006-01-02 15:04:05")
 	*format = fmt.Sprintf("[%s] %s %s -> %s\n", l.appName, level, currentTime, *format)
 }
 
-func (l *Logger) Info(format string, v ...any) {
+func (l *logger) Info(format string, v ...any) {
 	var contentLog *ContentLog = l.pool.Get().(*ContentLog)
 	l.cleanBuffer(contentLog)
 	l.applyLogFormat(&format, "Info")
@@ -76,7 +82,7 @@ func (l *Logger) Info(format string, v ...any) {
 	l.logChan <- contentLog
 }
 
-func (l *Logger) Warn(format string, v ...any) {
+func (l *logger) Warn(format string, v ...any) {
 	var contentLog *ContentLog = l.pool.Get().(*ContentLog)
 	l.cleanBuffer(contentLog)
 	l.applyLogFormat(&format, "Warn")
@@ -84,7 +90,7 @@ func (l *Logger) Warn(format string, v ...any) {
 	l.logChan <- contentLog
 }
 
-func (l *Logger) Error(format string, v ...any) {
+func (l *logger) Error(format string, v ...any) {
 	var contentLog *ContentLog = l.pool.Get().(*ContentLog)
 	l.cleanBuffer(contentLog)
 	l.applyLogFormat(&format, "Error")
@@ -97,13 +103,13 @@ func NewLogger(
 	path string,
 	bufferSize int,
 	maxJobs int,
-) (*Logger, error) {
+) (*logger, error) {
 	var flag int = os.O_APPEND | os.O_CREATE | os.O_WRONLY
 	file, err := os.OpenFile(path, flag, 0666)
 	if err != nil {
 		return nil, err
 	}
-	var loggerPtr *Logger = &Logger{
+	var loggerPtr *logger = &logger{
 		appName:   appName,
 		file:      file,
 		closeChan: make(chan struct{}),
