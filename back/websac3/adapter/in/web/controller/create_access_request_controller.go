@@ -11,8 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CreateAccessRequestController struct {
-}
+type CreateAccessRequestController struct{}
 
 var createAccessRequestControllerInstance *CreateAccessRequestController = nil
 
@@ -24,18 +23,20 @@ func InitCreateAccessRequestController() *CreateAccessRequestController {
 }
 
 func (c *CreateAccessRequestController) CreateAccessRequest(context *gin.Context) {
+	var err error
 	var createAccessRequestRequest request.CreateAccessRequestRequest
-	if err := context.ShouldBindJSON(&createAccessRequestRequest); err != nil {
+	if err = context.ShouldBindJSON(&createAccessRequestRequest); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"result": err.Error()})
 		return
 	}
 
 	var createAccessRequestCommand command.CreateAccessRequestCommand
-	if err := mapper.Map(&createAccessRequestRequest, &createAccessRequestCommand); err != nil {
+	createAccessRequestCommand, err = mapper.Map[request.CreateAccessRequestRequest, command.CreateAccessRequestCommand](&createAccessRequestRequest)
+	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"result": err.Error()})
 		return
 	}
 
-	result, _ := mediator.Send[command.CreateAccessRequestCommand, response.ApiResponse[string]](createAccessRequestCommand)
+	result, _ := mediator.Send[command.CreateAccessRequestCommand, response.ApiResponse[string]](createAccessRequestCommand, context.GetString("lang"))
 	context.JSON(result.HttpStatusCode, result.ToResponseFormat())
 }

@@ -15,6 +15,7 @@ import (
 
 type SeedRun struct {
 	cmdprinter     command.CMDPrinter
+	validator      validator.Validator
 	seedName       string
 	paramsReceived []string
 	dbManager      *db.Manager
@@ -26,6 +27,7 @@ func NewSeedRun(params map[string]string, cmdprinter command.CMDPrinter) command
 		cmdprinter:     cmdprinter,
 		seedName:       params["seed"],
 		paramsReceived: paramsReceived,
+		validator:      container.Inject[validator.Validator](),
 		dbManager: func() *db.Manager {
 			var dbManager *db.Manager = container.Inject[persistence.Manager]().(*db.Manager)
 			return dbManager
@@ -33,7 +35,7 @@ func NewSeedRun(params map[string]string, cmdprinter command.CMDPrinter) command
 	}
 }
 func (m *SeedRun) Execute() error {
-	if err := validator.ValidateParamsRequired(m.paramsReceived, m.paramsReceived); err != nil {
+	if err := m.validator.ValidateParamsRequired(m.paramsReceived, m.paramsReceived, "es"); err != nil {
 		return err
 	}
 

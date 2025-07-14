@@ -11,6 +11,7 @@ import (
 	"websac3/common/logging"
 	"websac3/common/mapper"
 	"websac3/common/mediator"
+	"websac3/common/validator"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,6 +33,7 @@ func (m *manager) ConfigureMediator(errorList *error) {
 		reflect.TypeOf(command.CreateAccessRequestCommand{}),
 		handler.NewCreateAccessRequestCommandHandler(
 			container.Inject[usecase.CreateAccessRequestUseCase](),
+			container.Inject[validator.Validator](),
 			container.Inject[logging.Logger](),
 		),
 	); err != nil {

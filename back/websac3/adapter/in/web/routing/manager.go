@@ -11,7 +11,7 @@ func NewRoutingManager() *manager {
 }
 
 func (m *manager) RegisterRoutes(engine *gin.Engine) error {
-	var routerGroup *gin.RouterGroup = engine.Group("/api/v1")
+	var routerGroup *gin.RouterGroup = engine.Group("/api/v1/:lang")
 	RegisterAccessRequest(routerGroup)
 
 	return nil

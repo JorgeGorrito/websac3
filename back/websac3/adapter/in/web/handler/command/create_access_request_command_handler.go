@@ -14,23 +14,26 @@ import (
 
 type CreateAccessRequestCommandHandler struct {
 	createAccessRequestUseCase usecase.CreateAccessRequestUseCase
+	validator                  validator.Validator
 	logger                     logging.Logger
 }
 
 func NewCreateAccessRequestCommandHandler(
 	createAccessRequestUseCase usecase.CreateAccessRequestUseCase,
+	validator validator.Validator,
 	logger logging.Logger,
 ) *CreateAccessRequestCommandHandler {
 	return &CreateAccessRequestCommandHandler{
 		createAccessRequestUseCase: createAccessRequestUseCase,
+		validator:                  validator,
 		logger:                     logger,
 	}
 }
 
 func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessRequestCommand, lang string) (response.ApiResponse[string], error) {
 	h.logger.Info("Inicio la creación de solicitud de acceso para el usuario con CC: " + request.Person.IdentificationNumber)
-	if err := validator.ValidateFields(&request); err != nil {
-		h.logger.Error("Error de validación datos de entrada al crear solicitud de acceso. Errores: %v", err)
+	if err := h.validator.ValidateFields(&request, lang); err != nil {
+		h.logger.Warn("Advertencia de validación datos de entrada al crear solicitud de acceso. Errores: %v", err)
 		var validationErrors []string
 		for n := range err {
 			validationErrors = append(validationErrors, err[n].Error())

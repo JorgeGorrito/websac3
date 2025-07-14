@@ -11,5 +11,15 @@
   },
   "mail_template" : {
     "template_not_found" : "No se ha encontrado la plantilla de correo electrónico. %s"
+  },
+  "validator": {
+  "field_is_required": "El campo %s es obligatorio.",
+  "field_cant_be_null": "El campo %s no puede ser nulo.",
+  "value_is_not_number": "El valor %s no es un número.",
+  "field_value_is_not_number": "El valor del campo %s no es un número.",
+  "field_must_be_greater_than": "El campo %s debe ser mayor que %f.",
+  "field_must_be_less_than": "El campo %s debe ser menor que %f.",
+  "field_must_be_different_to": "El campo %s debe ser diferente de '%s'.",
+  "field_must_be_email": "El campo %s debe ser una dirección de correo electrónico válida."
   }
 }

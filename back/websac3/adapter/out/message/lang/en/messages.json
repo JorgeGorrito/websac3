@@ -1,6 +1,25 @@
 {
   "create_access_request": {
-    "user_alredy_registered": "Unable to register the access request.",
-    "cannot_create_access_request" : ""
+    "user_alredy_registered": "The person already has a registered user.",
+    "cannot_create_access_request": "The access request has already been approved."
+  },
+  "persistence": {
+    "transaction_bad_casting": "It was not possible to cast the transaction implementation."
+  },
+  "mapper": {
+    "cannot_map_to": "It was not possible to map the object. %w"
+  },
+  "mail_template": {
+    "template_not_found": "Email template not found. %s"
+  },
+  "validator" : {
+    "field_is_required": "Field %s is required.",
+    "field_cant_be_null" : "Field %s can't be null.",
+    "value_is_not_number": "Value %s is not a number.",
+    "field_value_is_not_number": "Field %s value is not a number.",
+    "field_must_be_greater_than": "Field %s must be greater than %f.",
+    "field_must_be_less_than": "Field %s must be less than %f.",
+    "field_must_be_different_to": "Field %s must be different to '%s'.",
+    "field_must_be_email": "Field %s must be a valid email address."
   }
 }
