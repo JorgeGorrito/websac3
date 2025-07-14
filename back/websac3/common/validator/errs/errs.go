@@ -1,54 +1,86 @@
 package errs
 
 import (
-	"fmt"
 	"websac3/app/domain/errs"
+	"websac3/app/port/out/message"
 )
 
 type FieldIsRequiredError error
 
-func NewFieldIsRequiredError(fieldName string) FieldIsRequiredError {
-	return errs.NewValidationError(fmt.Sprintf("field %s is required.", fieldName))
+func NewFieldIsRequiredError(fieldName string, msgProvider message.Provider, lang string) FieldIsRequiredError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_is_required", fieldName),
+	)
 }
 
 type FieldCantBeNullError error
 
-func NewFieldCantBeNullError(fieldName string) FieldCantBeNullError {
-	return errs.NewValidationError(fmt.Sprintf("field %s can't be null.", fieldName))
+func NewFieldCantBeNullError(fieldName string, msgProvider message.Provider, lang string) FieldCantBeNullError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_cant_be_null", fieldName),
+	)
 }
 
 type ValueIsNotNumberError error
 
-func NewValueIsNotNumberError(value string) ValueIsNotNumberError {
-	return errs.NewValidationError(fmt.Sprintf("value '%s' is not a number.", value))
+func NewValueIsNotNumberError(value string, msgProvider message.Provider, lang string) ValueIsNotNumberError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "value_is_not_number", value),
+	)
 }
 
 type FieldValueIsNotNumberError error
 
-func NewFieldValueIsNotNumberError(fieldName string) FieldValueIsNotNumberError {
-	return errs.NewValidationError(fmt.Sprintf("field %s value is not a number.", fieldName))
+func NewFieldValueIsNotNumberError(fieldName string, msgProvider message.Provider, lang string) FieldValueIsNotNumberError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_value_is_not_number", fieldName),
+	)
 }
 
 type FieldMustBeGreaterThanError error
 
-func NewFieldMustBeGreaterThanError(fieldName string, value float64) FieldMustBeGreaterThanError {
-	return errs.NewValidationError(fmt.Sprintf("field %s must be greater than %f.", fieldName, value))
+func NewFieldMustBeGreaterThanError(fieldName string, value float64, msgProvider message.Provider, lang string) FieldMustBeGreaterThanError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_must_be_greater_than", fieldName, value),
+	)
 }
 
 type FieldMustBeLessThanError error
 
-func NewFieldMustBeLessThanError(fieldName string, value float64) FieldMustBeLessThanError {
-	return errs.NewValidationError(fmt.Sprintf("field %s must be less than %f.", fieldName, value))
+func NewFieldMustBeLessThanError(fieldName string, value float64, msgProvider message.Provider, lang string) FieldMustBeLessThanError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_must_be_less_than", fieldName, value),
+	)
 }
 
 type FieldMustBeDifferentToError error
 
-func NewFieldMustBeDifferentToError(fieldName string, value string) FieldMustBeDifferentToError {
-	return errs.NewValidationError(fmt.Sprintf("field %s must be different to '%s'.", fieldName, value))
+func NewFieldMustBeDifferentToError(fieldName string, value string, msgProvider message.Provider, lang string) FieldMustBeDifferentToError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_must_be_different_to", fieldName, value),
+	)
 }
 
 type FieldMustBeEmailError error
 
-func NewFieldMustBeEmailError(fieldName string) FieldMustBeEmailError {
-	return errs.NewValidationError(fmt.Sprintf("field %s must be a valid email.", fieldName))
+func NewFieldMustBeEmailError(fieldName string, msgProvider message.Provider, lang string) FieldMustBeEmailError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_must_be_email", fieldName),
+	)
 }
