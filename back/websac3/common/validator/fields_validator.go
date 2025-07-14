@@ -1,7 +1,6 @@
 package validator
 
 import (
-	"errors"
 	"fmt"
 	"net/mail"
 	"reflect"
@@ -83,8 +82,8 @@ var fieldsValidationRules = map[string]FieldValidationFunction{
 	"email":        validateIsEmail,
 }
 
-func ValidateFields(t interface{}) error {
-	var errs error
+func ValidateFields(t interface{}) []error {
+	var errs []error
 	var val reflect.Value = reflect.ValueOf(t).Elem()
 	var typ reflect.Type = val.Type()
 
@@ -118,7 +117,7 @@ func ValidateFields(t interface{}) error {
 				continue
 			}
 			if err := fieldValidationFunc(field.Name, fieldValue, validation[validationValue]); err != nil {
-				errs = errors.Join(errs, err)
+				errs = append(errs, err)
 			}
 		}
 	}
