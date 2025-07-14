@@ -28,6 +28,8 @@ func GetDependenciesManager() *manager {
 }
 
 func (m *manager) RegisterDependencies() error {
+	m.registerCommandsFactoryDependencies()
+	m.registerMailSenderDependencies()
 	m.registerLoggerDependencies()
 	m.registerPersistenceDependencies()
 	m.registerAniseDependencies()
@@ -36,5 +38,8 @@ func (m *manager) RegisterDependencies() error {
 	m.registerUserDependencies()
 	m.registerStatusDependencies()
 	m.registerMediatorDependencies()
+	m.registerMessageProviderDependencies()
+	m.registerEnumDependencies()
+	m.registerTemplateDependencies()
 	return nil
 }
