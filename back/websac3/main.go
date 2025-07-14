@@ -9,15 +9,19 @@ import (
 	"github.com/JorgeGorrito/anise-with-gin/anise/config"
 	"github.com/JorgeGorrito/anise-with-gin/anise/routing"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		panic("Error loading .env file. \n Error: " + err.Error())
+	}
 	dependencies.InitDependenciesManager()
-	app := anise.NewWebApplication(
-		gin.Default(),
-		container.Inject[config.Manager](),
-		container.Inject[routing.Manager](),
-		container.Inject[command.Manager](),
-	)
-	app.Run(":8110")
+	app := anise.NewWebApplication()
+	app.
+		SetEngine(gin.Default()).
+		SetConfigManager(container.Inject[config.Manager]()).
+		SetRoutesManager(container.Inject[routing.Manager]()).
+		SetCommandsManager(container.Inject[command.Manager]()).
+		Run(":8110")
 }
