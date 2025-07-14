@@ -1,0 +1,45 @@
+services:
+  websac3-db:
+    container_name: websac3-db
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=websac3
+      - POSTGRES_USER=websac3
+      - POSTGRES_PASSWORD=12345678
+    ports:
+      - "5432:5432"
+    networks:
+      - websac3
+    volumes:
+      -  websac3-db-data:/var/lib/postgresql/data
+    command: postgres -c timezone=America/Bogota
+
+  websac3-back:
+    container_name: websac3-back
+    build: ./back/websac3/
+    volumes:
+      - "./back/websac3/adapter/out/persistence/postgresql/seeders/seeds/:/app/adapter/out/persistence/seeders/seeds/"
+      - "./back/websac3/logs/:/app/logs/"
+    ports:
+      - "8110:8110"
+    depends_on:
+      - websac3-db
+    networks:
+      - websac3
+
+  websac3-front:
+    container_name: websac3-front
+    build: ./front/websac3-front/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - websac3-back
+    networks:
+      - websac3
+
+networks:
+  websac3:
+    driver: bridge
+
+volumes:
+  websac3-db-data:
