@@ -5,5 +5,5 @@ import (
 )
 
 type GetStatusPort interface {
-	GetByName(name string, tx Transaction) (entity.Status, error)
+	GetByName(name string, db Context) (entity.Status, error)
 }

@@ -17,8 +17,8 @@ func Roles() Seeder {
 	return &roles{}
 }
 
-func (r *roles) Seed(tx persistence.Transaction) error {
-	var pgTx *db.Transaction = tx.(*db.Transaction)
+func (r *roles) Seed(ctx persistence.Context) error {
+	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []model.Role = make([]model.Role, 0)
 
@@ -26,7 +26,7 @@ func (r *roles) Seed(tx persistence.Transaction) error {
 		return err
 	}
 	for _, role := range dataToSeed {
-		if err := pgTx.Tx().Create(&role).Error; err != nil {
+		if err := dbCtx.DB().Create(&role).Error; err != nil {
 			return err
 		}
 	}

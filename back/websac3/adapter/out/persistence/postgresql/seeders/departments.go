@@ -17,15 +17,15 @@ func Departments() Seeder {
 	return &departments{}
 }
 
-func (d *departments) Seed(tx persistence.Transaction) error {
-	var pgTx *db.Transaction = tx.(*db.Transaction)
+func (d *departments) Seed(ctx persistence.Context) error {
+	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []model.Department = make([]model.Department, 0)
 	if err := decoder.Decode(DEFAULT_PATH_DEPARTMENT_SEED, &dataToSeed); err != nil {
 		return nil
 	}
 	for _, department := range dataToSeed {
-		if err := pgTx.Tx().Create(&department).Error; err != nil {
+		if err := dbCtx.DB().Create(&department).Error; err != nil {
 			return err
 		}
 	}

@@ -23,9 +23,9 @@ func EssentialData() Seeder {
 	}
 }
 
-func (e *essentialData) Seed(tx persistence.Transaction) error {
+func (e *essentialData) Seed(ctx persistence.Context) error {
 	for _, seeder := range e.essentialSeeders {
-		if err := seeder.Seed(tx); err != nil {
+		if err := seeder.Seed(ctx); err != nil {
 			return err
 		}
 	}

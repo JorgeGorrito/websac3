@@ -17,8 +17,8 @@ func InstitutionalCategories() Seeder {
 	return &institutionalCategories{}
 }
 
-func (i *institutionalCategories) Seed(tx persistence.Transaction) error {
-	var pgTx *db.Transaction = tx.(*db.Transaction)
+func (i *institutionalCategories) Seed(ctx persistence.Context) error {
+	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []model.InstitutionalCategory = make([]model.InstitutionalCategory, 0)
 
@@ -26,7 +26,7 @@ func (i *institutionalCategories) Seed(tx persistence.Transaction) error {
 		return err
 	}
 	for _, institutionalCategory := range dataToSeed {
-		if err := pgTx.Tx().Create(&institutionalCategory).Error; err != nil {
+		if err := dbCtx.DB().Create(&institutionalCategory).Error; err != nil {
 			return err
 		}
 	}

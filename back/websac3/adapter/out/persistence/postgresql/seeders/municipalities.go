@@ -17,15 +17,15 @@ func Municipalities() Seeder {
 	return &municipalities{}
 }
 
-func (m *municipalities) Seed(tx persistence.Transaction) error {
-	var pgTx *db.Transaction = tx.(*db.Transaction)
+func (m *municipalities) Seed(ctx persistence.Context) error {
+	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []model.Municipality = make([]model.Municipality, 0)
 	if err := decoder.Decode(DEFAULT_PATH_MUNICIPALITY_SEED, &dataToSeed); err != nil {
 		return err
 	}
 	for _, municipality := range dataToSeed {
-		if err := pgTx.Tx().Create(&municipality).Error; err != nil {
+		if err := dbCtx.DB().Create(&municipality).Error; err != nil {
 			return err
 		}
 	}

@@ -17,15 +17,15 @@ func AccessRequestStatuses() Seeder {
 	return &accessRequestStatuses{}
 }
 
-func (a *accessRequestStatuses) Seed(tx persistence.Transaction) error {
-	var pgTx *db.Transaction = tx.(*db.Transaction)
+func (a *accessRequestStatuses) Seed(ctx persistence.Context) error {
+	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []model.Status = make([]model.Status, 0)
 	if err := decoder.Decode(DEFAULT_PATH_ACCESS_REQUEST_STATUS_SEED, &dataToSeed); err != nil {
 		return err
 	}
 	for _, accessRequestStatus := range dataToSeed {
-		if err := pgTx.Tx().Create(&accessRequestStatus).Error; err != nil {
+		if err := dbCtx.DB().Create(&accessRequestStatus).Error; err != nil {
 			return err
 		}
 	}

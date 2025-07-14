@@ -5,5 +5,5 @@ import (
 )
 
 type CreateAccessRequestPort interface {
-	Create(accessRequest *entity.AccessRequest, tx Transaction) error
+	Create(accessRequest *entity.AccessRequest, db Context) error
 }

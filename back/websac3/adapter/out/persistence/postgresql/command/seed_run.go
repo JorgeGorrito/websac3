@@ -17,7 +17,7 @@ type SeedRun struct {
 	cmdprinter     command.CMDPrinter
 	seedName       string
 	paramsReceived []string
-	txManager      *db.TransactionManager
+	dbManager      *db.Manager
 }
 
 func NewSeedRun(params map[string]string, cmdprinter command.CMDPrinter) command.Command {
@@ -26,9 +26,9 @@ func NewSeedRun(params map[string]string, cmdprinter command.CMDPrinter) command
 		cmdprinter:     cmdprinter,
 		seedName:       params["seed"],
 		paramsReceived: paramsReceived,
-		txManager: func() *db.TransactionManager {
-			var pgTxManager *db.TransactionManager = container.Inject[persistence.TransactionManager]().(*db.TransactionManager)
-			return pgTxManager
+		dbManager: func() *db.Manager {
+			var dbManager *db.Manager = container.Inject[persistence.Manager]().(*db.Manager)
+			return dbManager
 		}(),
 	}
 }
@@ -37,13 +37,13 @@ func (m *SeedRun) Execute() error {
 		return err
 	}
 
-	return m.txManager.ExecuteInTransaction(func(tx persistence.Transaction) error {
+	return m.dbManager.ExecuteInTransaction(func(ctx persistence.Context) error {
 		var constructor seeders.NewSeeder = seeders.GetSeederConstructorByName(m.seedName)
 		if constructor == nil {
 			return fmt.Errorf("seeder %s not found", m.seedName)
 		}
 		var seeder seeders.Seeder = constructor()
-		if err := seeder.Seed(tx); err != nil {
+		if err := seeder.Seed(ctx); err != nil {
 			return err
 		}
 		return nil

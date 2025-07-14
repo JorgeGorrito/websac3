@@ -2,39 +2,43 @@ package repository
 
 import (
 	"errors"
-	"fmt"
-	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
-	"websac3/app/domain/errs"
+	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
 	"websac3/common/mapper"
 
 	"gorm.io/gorm"
 )
 
-type StatusRepository struct{}
+type StatusRepository struct {
+	Repository
+}
 
-func NewStatusRepository() *StatusRepository {
+func NewStatusRepository(messageProvider message.Provider) *StatusRepository {
 	return &StatusRepository{}
 }
 
-func (a *StatusRepository) GetByName(name string, tx persistence.Transaction) (status entity.Status, err error) {
-	pgTx, ok := tx.(*db.Transaction)
-	if !ok {
-		return status, fmt.Errorf("expected *postgres.Transaction, got %T", tx)
+func (a *StatusRepository) GetByName(name string, ctx persistence.Context) (entity.Status, error) {
+	dbCtx, err := a.CastDbContext(ctx)
+	if err != nil {
+		return entity.Status{}, err
 	}
 
+	var status entity.Status
 	var statusFound model.Status
-	if err = pgTx.Tx().Where("name = ?", name).First(&statusFound).Error; err != nil {
+	if err = dbCtx.DB().
+		Where("name = ?", name).
+		First(&statusFound).
+		Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return status, errs.NewNotFoundError("status not found")
+			return entity.Status{}, nil
 		}
-		return status, err
+		return entity.Status{}, err
 	}
 
-	if err = mapper.Map(&statusFound, &status); err != nil {
-		return status, err
+	if status, err = mapper.Map[model.Status, entity.Status](&statusFound); err != nil {
+		return entity.Status{}, err
 	}
 
 	return status, nil

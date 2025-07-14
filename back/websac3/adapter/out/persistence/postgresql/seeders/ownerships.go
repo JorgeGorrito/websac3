@@ -17,8 +17,8 @@ func Ownerships() Seeder {
 	return &ownerships{}
 }
 
-func (o *ownerships) Seed(tx persistence.Transaction) error {
-	var pgTx *db.Transaction = tx.(*db.Transaction)
+func (o *ownerships) Seed(ctx persistence.Context) error {
+	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []model.Ownership = make([]model.Ownership, 0)
 
@@ -26,7 +26,7 @@ func (o *ownerships) Seed(tx persistence.Transaction) error {
 		return err
 	}
 	for _, ownership := range dataToSeed {
-		if err := pgTx.Tx().Create(&ownership).Error; err != nil {
+		if err := dbCtx.DB().Create(&ownership).Error; err != nil {
 			return err
 		}
 	}

@@ -5,5 +5,5 @@ import (
 )
 
 type CreatePersonPort interface {
-	Create(person *entity.Person, tx Transaction) error
+	Create(person *entity.Person, db Context) error
 }

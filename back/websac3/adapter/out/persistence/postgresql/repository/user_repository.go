@@ -1,72 +1,114 @@
 package repository
 
 import (
-	"fmt"
-	"websac3/adapter/out/persistence/postgresql/db"
+	"errors"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
+	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
 	"websac3/common/mapper"
+
+	"gorm.io/gorm"
 )
 
-type UserRepository struct{}
+type UserRepository struct {
+	Repository
+}
 
-func NewUserRepository() *UserRepository {
+func NewUserRepository(
+	messageProvider message.Provider,
+) *UserRepository {
 	return &UserRepository{}
 }
 
-func (u *UserRepository) Create(user *entity.User, tx persistence.Transaction) error {
-	pgTx, ok := tx.(*db.Transaction)
-	if !ok {
-		return fmt.Errorf("expected *postgres.Transaction, got %T", tx)
-	}
-
-	var userToSave model.User
-	if err := mapper.Map(user, &userToSave); err != nil {
+func (u *UserRepository) Create(userToSave *entity.User, ctx persistence.Context) error {
+	dbCtx, err := u.CastDbContext(ctx)
+	if err != nil {
 		return err
-	}
-
-	if err := pgTx.Tx().Create(&userToSave).Error; err != nil {
-		return err
-	}
-	user.ID = userToSave.ID
-
-	return nil
-}
-
-func (u *UserRepository) UpdateById(user *entity.User, userID uint, tx persistence.Transaction) error {
-	pgTx, ok := tx.(*db.Transaction)
-	if !ok {
-		return fmt.Errorf("expected *postgres.Transaction, got %T", tx)
-	}
-
-	var userToUpdate model.User
-	if err := mapper.Map(user, &userToUpdate); err != nil {
-		return err
-	}
-
-	if err := pgTx.Tx().Model(&userToUpdate).Where("id = ?", userID).Updates(userToUpdate).Error; err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (u *UserRepository) GetByEmail(email string, tx persistence.Transaction) (entity.User, error) {
-	pgTx, ok := tx.(*db.Transaction)
-	if !ok {
-		return entity.User{}, fmt.Errorf("expected *postgres.Transaction, got %T", tx)
 	}
 
 	var user model.User
-	if err := pgTx.Tx().Where("email = ?", email).First(&user).Error; err != nil {
+	if user, err = mapper.Map[entity.User, model.User](userToSave); err != nil {
+		return err
+	}
+
+	if err := dbCtx.DB().
+		Create(&user).
+		Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *UserRepository) UpdateByID(userToUpdate *entity.User, userID uint, ctx persistence.Context) error {
+	dbCtx, err := u.CastDbContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	var user model.User
+	if user, err = mapper.Map[entity.User, model.User](userToUpdate); err != nil {
+		return err
+	}
+
+	if err := dbCtx.DB().
+		Model(&user).
+		Where("id = ?", userID).
+		Updates(&user).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *UserRepository) GetByEmail(email string, ctx persistence.Context) (entity.User, error) {
+	dbCtx, err := u.CastDbContext(ctx)
+	if err != nil {
 		return entity.User{}, err
 	}
 
-	var userEntity entity.User
-	if err := mapper.Map(user, &userEntity); err != nil {
+	var userFound model.User
+	var user entity.User
+	if err := dbCtx.DB().
+		Where("email = ?", email).
+		First(&userFound).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return entity.User{}, nil
+		}
 		return entity.User{}, err
 	}
 
-	return userEntity, nil
+	if user, err = mapper.Map[model.User, entity.User](&userFound); err != nil {
+		return entity.User{}, err
+	}
+
+	return user, nil
+}
+
+func (u *UserRepository) GetByDNI(identificationType uint, identificationNumber string, ctx persistence.Context) (entity.User, error) {
+	dbCtx, err := u.CastDbContext(ctx)
+	if err != nil {
+		return entity.User{}, err
+	}
+
+	var userFound model.User
+	var user entity.User
+	if err := dbCtx.DB().
+		Model(&userFound).
+		Joins("Person").
+		Where(`"Person".identification_type_id = ?`, identificationType).
+		Where(`"Person".identification_number = ?`, identificationNumber).
+		First(&userFound).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return entity.User{}, nil
+		}
+		return entity.User{}, err
+	}
+
+	if user, err = mapper.Map[model.User, entity.User](&userFound); err != nil {
+		return entity.User{}, err
+	}
+
+	return user, nil
 }

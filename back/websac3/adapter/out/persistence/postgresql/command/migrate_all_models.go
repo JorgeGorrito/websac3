@@ -14,7 +14,7 @@ type MigrateAllModels struct {
 	cmdprinter command.CMDPrinter
 	db         *gorm.DB
 	models     []any
-	txManager  *db.TransactionManager
+	dbManager  *db.Manager
 }
 
 func NewMigrateAllModels(params map[string]string, cmdprinter command.CMDPrinter) command.Command {
@@ -28,17 +28,19 @@ func NewMigrateAllModels(params map[string]string, cmdprinter command.CMDPrinter
 			}
 			return modelsToMigrate
 		}(),
-		txManager: func() *db.TransactionManager {
-			var txm *db.TransactionManager = container.Inject[persistence.TransactionManager]().(*db.TransactionManager)
-			return txm
+		dbManager: func() *db.Manager {
+			var dbManager *db.Manager = container.Inject[persistence.Manager]().(*db.Manager)
+			return dbManager
 		}(),
 	}
 }
 
 func (m *MigrateAllModels) Execute() error {
-	var err error = m.txManager.ExecuteInTransaction(func(tx persistence.Transaction) error {
-		var pgTx *db.Transaction = tx.(*db.Transaction)
-		if err := pgTx.Tx().AutoMigrate(m.models...); err != nil {
+	var err error = m.dbManager.ExecuteInTransaction(func(ctx persistence.Context) error {
+		var dbCtx *db.Context = ctx.(*db.Context)
+		if err := dbCtx.
+			DB().
+			AutoMigrate(m.models...); err != nil {
 			return err
 		}
 		return nil

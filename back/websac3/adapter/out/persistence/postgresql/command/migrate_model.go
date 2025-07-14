@@ -17,7 +17,7 @@ type MigrateModel struct {
 	cmdprinter         command.CMDPrinter
 	modelNameToMigrate string
 	paramsReceived     []string
-	txManager          *db.TransactionManager
+	dbManager          *db.Manager
 }
 
 func NewMigrateModel(params map[string]string, cmdprinter command.CMDPrinter) command.Command {
@@ -27,16 +27,16 @@ func NewMigrateModel(params map[string]string, cmdprinter command.CMDPrinter) co
 		cmdprinter:         cmdprinter,
 		modelNameToMigrate: modelNameReceived,
 		paramsReceived:     paramsReceived,
-		txManager: func() *db.TransactionManager {
-			var txm *db.TransactionManager = container.Inject[persistence.TransactionManager]().(*db.TransactionManager)
-			return txm
+		dbManager: func() *db.Manager {
+			var dbManager *db.Manager = container.Inject[persistence.Manager]().(*db.Manager)
+			return dbManager
 		}(),
 	}
 }
 
 func (m *MigrateModel) Execute() error {
-	var err error = m.txManager.ExecuteInTransaction(func(tx persistence.Transaction) error {
-		var pgTx *db.Transaction = tx.(*db.Transaction)
+	var err error = m.dbManager.ExecuteInTransaction(func(ctx persistence.Context) error {
+		var dbCtx *db.Context = ctx.(*db.Context)
 		if err := validator.ValidateParamsRequired(m.paramsReceived, []string{"model"}); err != nil {
 			return err
 		}
@@ -46,7 +46,9 @@ func (m *MigrateModel) Execute() error {
 		}
 
 		modelToMigrate := constructor()
-		if err := pgTx.Tx().AutoMigrate(modelToMigrate); err != nil {
+		if err := dbCtx.
+			DB().
+			AutoMigrate(modelToMigrate); err != nil {
 			return err
 		}
 		return nil

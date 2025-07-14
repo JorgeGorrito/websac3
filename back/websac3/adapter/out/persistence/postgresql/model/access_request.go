@@ -5,17 +5,19 @@ import (
 )
 
 type AccessRequest struct {
-	ID uint `gorm:"primaryKey" mapper:"accessRequestID"`
+	ID uint `gorm:"primaryKey" `
 
-	UpdatedBy *uint `gorm:"null"`
-	User      User  `gorm:"foreignKey:UpdatedBy"`
-
-	ApplicantID uint   `gorm:"not null" mapper:"personID"`
+	ApplicantID uint   `gorm:"not null" `
 	Applicant   Person `gorm:"foreignKey:ApplicantID"`
 
-	StatusID  uint      `gorm:"not null" mapper:"statusID"`
-	Status    Status    `gorm:"foreignKey:StatusID" mapper:"accessRequestStatus"`
-	CreatedAt time.Time `mapper:"accessRequestcreatedAt"`
-	UpdatedAt time.Time `mapper:"accessRequestupdatedAt"`
-	DeleteAt  time.Time `mapper:"accessRequestdeleteAt"`
+	ValidationCode string `gorm:"not null; type:uuid" `
+
+	VerificationEmailID *uint  `gorm:"null" `
+	VerificationEmail   *Email `gorm:"foreignKey:VerificationEmailID" `
+
+	StatusID uint   `gorm:"not null" `
+	Status   Status `gorm:"foreignKey:StatusID" `
+
+	IsVerified bool `gorm:"not null; default:false" `
+	CreatedAt  time.Time
 }

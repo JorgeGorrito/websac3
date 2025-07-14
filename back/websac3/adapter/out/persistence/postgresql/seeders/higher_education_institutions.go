@@ -57,8 +57,8 @@ func (h *higherEducationInstitutions) getMunicipalityId(transaction *gorm.DB, mu
 	return municipality, result.Error
 }
 
-func (h *higherEducationInstitutions) Seed(tx persistence.Transaction) error {
-	var pgTx *db.Transaction = tx.(*db.Transaction)
+func (h *higherEducationInstitutions) Seed(ctx persistence.Context) error {
+	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []dto.HigherEducationInstitution = make([]dto.HigherEducationInstitution, 0)
 	if err := decoder.Decode(DEFAULT_PATH_HIGHER_EDUCATION_INSTITUTION_SEED, &dataToSeed); err != nil {
@@ -70,24 +70,24 @@ func (h *higherEducationInstitutions) Seed(tx persistence.Transaction) error {
 			return err
 		}
 
-		ownershipId, err := h.getOwnershipId(pgTx.Tx(), higherEducationInstitution.Ownership)
+		ownershipId, err := h.getOwnershipId(dbCtx.DB(), higherEducationInstitution.Ownership)
 		if err != nil {
 			return err
 		}
 
-		institutionalCategoryId, err := h.getInstitutionalCategoryId(pgTx.Tx(), higherEducationInstitution.InstitutionalCategory)
+		institutionalCategoryId, err := h.getInstitutionalCategoryId(dbCtx.DB(), higherEducationInstitution.InstitutionalCategory)
 		if err != nil {
 			return err
 		}
 
-		municipalityId, err := h.getMunicipalityId(pgTx.Tx(), higherEducationInstitution.Municipality)
+		municipalityId, err := h.getMunicipalityId(dbCtx.DB(), higherEducationInstitution.Municipality)
 		if err != nil {
 			return err
 		}
 
 		departmentId, err := func() (uint, error) {
 			var department uint
-			result := pgTx.Tx().Model(&models2.Department{}).Select("id").Where("name = ?", higherEducationInstitution.Department).First(&department)
+			result := dbCtx.DB().Model(&models2.Department{}).Select("id").Where("name = ?", higherEducationInstitution.Department).First(&department)
 			if result.RowsAffected == 0 {
 				return 0, nil
 			}
@@ -97,7 +97,7 @@ func (h *higherEducationInstitutions) Seed(tx persistence.Transaction) error {
 			return err
 		}
 
-		if err := pgTx.Tx().Create(&models2.HigherEducationInstitution{
+		if err := dbCtx.DB().Create(&models2.HigherEducationInstitution{
 			Snies:                   snies,
 			SniesParent:             nil,
 			Name:                    higherEducationInstitution.Name,
@@ -119,7 +119,7 @@ func (h *higherEducationInstitutions) Seed(tx persistence.Transaction) error {
 		if err != nil {
 			return err
 		}
-		if err := pgTx.Tx().Model(&models2.HigherEducationInstitution{}).
+		if err := dbCtx.DB().Model(&models2.HigherEducationInstitution{}).
 			Where("snies = ?", snies).
 			Update("snies_parent", sniesParent).Error; err != nil {
 			return err

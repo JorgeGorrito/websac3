@@ -5,7 +5,7 @@ import (
 )
 
 type Seeder interface {
-	Seed(persistence.Transaction) error
+	Seed(persistence.Context) error
 }
 
 type NewSeeder func() Seeder

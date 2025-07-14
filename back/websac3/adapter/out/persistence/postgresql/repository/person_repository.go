@@ -1,66 +1,78 @@
 package repository
 
 import (
-	"fmt"
-	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
+	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
 	"websac3/common/mapper"
 )
 
-type PersonRepository struct{}
-
-func (p *PersonRepository) Create(person *entity.Person, tx persistence.Transaction) error {
-	pgTx, ok := tx.(*db.Transaction)
-	if !ok {
-		return fmt.Errorf("expected *postgres.Transaction, got %T", tx)
-	}
-
-	var personToSave model.Person
-	if err := mapper.Map(person, &personToSave); err != nil {
-		return err
-	}
-
-	if err := pgTx.Tx().Create(&personToSave).Error; err != nil {
-		return err
-	}
-	person.ID = personToSave.ID
-
-	return nil
+type PersonRepository struct {
+	Repository
 }
 
-func (p *PersonRepository) UpdateById(person *entity.Person, personID uint, tx persistence.Transaction) error {
-	pgTx, ok := tx.(*db.Transaction)
-	if !ok {
-		return fmt.Errorf("expected *postgres.Transaction, got %T", tx)
-	}
-
-	var personToUpdate model.Person
-	if err := mapper.Map(person, &personToUpdate); err != nil {
-		return err
-	}
-
-	if err := pgTx.Tx().Where("id = ?", personID).Updates(personToUpdate).Error; err != nil {
-		return err
-	}
-
-	return nil
+func NewPersonRepository(messageProvider message.Provider) *PersonRepository {
+	return &PersonRepository{}
 }
 
-func (p *PersonRepository) GetByIdentificationNumber(identificationNumber string, tx persistence.Transaction) (entity.Person, error) {
-	pgTx, ok := tx.(*db.Transaction)
-	if !ok {
-		return entity.Person{}, fmt.Errorf("expected *postgres.Transaction, got %T", tx)
+func (p *PersonRepository) Create(personToSave *entity.Person, ctx persistence.Context) error {
+	dbCtx, err := p.CastDbContext(ctx)
+	if err != nil {
+		return err
 	}
 
 	var person model.Person
-	if err := pgTx.Tx().Where("identification_number = ?", identificationNumber).First(&person).Error; err != nil {
+	if person, err = mapper.Map[entity.Person, model.Person](personToSave); err != nil {
+		return err
+	}
+
+	if err := dbCtx.DB().
+		Create(&person).
+		Error; err != nil {
+		return err
+	}
+	personToSave.ID = person.ID
+
+	return nil
+}
+
+func (p *PersonRepository) UpdateById(personToUpdate *entity.Person, personID uint, ctx persistence.Context) error {
+	dbCtx, err := p.CastDbContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	var person model.Person
+	if person, err = mapper.Map[entity.Person, model.Person](personToUpdate); err != nil {
+		return err
+	}
+
+	if err := dbCtx.DB().
+		Where("id = ?", personID).
+		Updates(&person).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *PersonRepository) GetByIdentificationNumber(identificationNumber string, ctx persistence.Context) (entity.Person, error) {
+	dbCtx, err := p.CastDbContext(ctx)
+	if err != nil {
+		return entity.Person{}, err
+	}
+
+	var person model.Person
+	if err := dbCtx.DB().
+		Model(&person).
+		Where("identification_number = ?", identificationNumber).
+		First(&person).Error; err != nil {
 		return entity.Person{}, err
 	}
 
 	var personEntity entity.Person
-	if err := mapper.Map(&person, &personEntity); err != nil {
+	if personEntity, err = mapper.Map[model.Person, entity.Person](&person); err != nil {
 		return entity.Person{}, err
 	}
 

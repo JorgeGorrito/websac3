@@ -10,9 +10,9 @@ import (
 
 func (m *manager) registerPersistenceDependencies() {
 	m.binder.Bind(
-		andi.GetAbstractType[persistence.TransactionManager](),
+		andi.GetAbstractType[persistence.Manager](),
 		func() any {
-			return db.NewTransactionManager(
+			return db.NewManager(
 				func() *gorm.DB {
 					if conn, err := db.GetConnection(); err != nil {
 						panic(err)

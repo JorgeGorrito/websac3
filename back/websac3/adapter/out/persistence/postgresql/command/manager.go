@@ -1,11 +1,12 @@
 package command
 
-import "github.com/JorgeGorrito/anise-with-gin/anise/command"
+import (
+	"github.com/JorgeGorrito/anise-with-gin/anise/command"
+	"websac3/common/dependencies/container"
+)
 
-type manager struct{}
-
-func NewCommandManager() *manager {
-	return &manager{}
+type manager struct {
+	factory command.Factory
 }
 
 func (m *manager) RegisterCommands(registry command.Registry) error {
@@ -13,4 +14,16 @@ func (m *manager) RegisterCommands(registry command.Registry) error {
 	registry.Register("migrate:model", NewMigrateModel)
 	registry.Register("seed:run", NewSeedRun)
 	return nil
+}
+
+func NewCommandManager() *manager {
+	return &manager{factory: container.Inject[command.Factory]()}
+}
+
+func (m *manager) GetRetrieverCommand() command.Retriever {
+	return m.factory
+}
+
+func (m *manager) GetRegistryCommand() command.Registry {
+	return m.factory
 }
