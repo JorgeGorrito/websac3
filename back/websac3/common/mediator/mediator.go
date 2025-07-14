@@ -21,7 +21,7 @@ type RequestType reflect.Type
 type RequestHandler any
 
 type Handler[I any, O any] interface {
-	Handle(request I) (O, error)
+	Handle(request I, lang string) (O, error)
 }
 
 type IMediator interface {
@@ -64,7 +64,7 @@ func (m *Mediator) GetHandler(t RequestType) (RequestHandler, error) {
 	return h, nil
 }
 
-func Send[I any, O any](request I) (O, error) {
+func Send[I any, O any](request I, lang string) (O, error) {
 	var zero O
 	t := reflect.TypeOf(request)
 
@@ -80,7 +80,7 @@ func Send[I any, O any](request I) (O, error) {
 
 	switch handler := h.(type) {
 	case Handler[I, O]:
-		return handler.Handle(request)
+		return handler.Handle(request, lang)
 	case func(I) (O, error):
 		return handler(request)
 	default:
