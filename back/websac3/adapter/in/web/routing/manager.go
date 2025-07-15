@@ -14,6 +14,8 @@ func (m *manager) RegisterRoutes(engine *gin.Engine) error {
 	var routerGroup *gin.RouterGroup = engine.Group("/api/v1/:lang")
 	RegisterAccessRequest(routerGroup)
 
+	RegisterSwagger(engine)
+
 	return nil
 }
 

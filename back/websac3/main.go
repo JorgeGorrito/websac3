@@ -3,6 +3,7 @@ package main
 import (
 	"websac3/common/dependencies"
 	"websac3/common/dependencies/container"
+	_ "websac3/docs"
 
 	"github.com/JorgeGorrito/anise-with-gin/anise"
 	"github.com/JorgeGorrito/anise-with-gin/anise/command"
@@ -12,6 +13,13 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// @title Websac3 API
+// @version 1.0
+// @description API documentation for Websac3 backend
+// @host localhost:8110
+// @schemes http
+// @contact.name API Support
+// @contact.email j0rg3.4b3ll4@gmail.com
 func main() {
 	if err := godotenv.Load(); err != nil {
 		panic("Error loading .env file. \n Error: " + err.Error())

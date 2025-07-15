@@ -1,10 +1,11 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func isConfiguredLang(lang string, allowed []string) bool {
@@ -16,8 +17,17 @@ func isConfiguredLang(lang string, allowed []string) bool {
 	return false
 }
 
+func isSwaggerRoute(path string) bool {
+	return strings.Contains(path, "/swagger")
+}
+
 func LangMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if isSwaggerRoute(c.Request.URL.Path) {
+			c.Next()
+			return
+		}
+
 		configuredLangs := strings.Split(os.Getenv("MESSAGES_LANGUAGES"), ",")
 		lang := ""
 
