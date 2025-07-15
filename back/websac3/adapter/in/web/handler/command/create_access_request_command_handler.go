@@ -56,7 +56,7 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 			Errors: []string{
 				h.msgProvider.
 					WithLang(lang).
-					GetMessage("create_access_request", "internal_error"),
+					GetMessage("base_error", "internal_error"),
 			},
 		}, nil
 	}
@@ -71,7 +71,7 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 					err,
 					h.msgProvider.
 						WithLang(lang).
-						GetMessage("create_access_request", "internal_error"),
+						GetMessage("base_error", "internal_error"),
 				),
 			},
 		}, nil
@@ -81,6 +81,6 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 		HttpStatusCode: http.StatusOK,
 		Result: h.msgProvider.
 			WithLang(lang).
-			GetMessage("create_access_request", "access_request_created"),
+			GetMessage("base_error", "internal_error"),
 	}, nil
 }

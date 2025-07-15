@@ -2,8 +2,7 @@
   "create_access_request" : {
     "user_alredy_registered" : "La persona ya cuenta con un usuario registrado.",
     "cannot_create_access_request" : "La solicitud de acceso ya ha sido aprobada.",
-    "access_request_created" : "Solicitud de acceso creada correctamente.",
-    "internal_error" : "Error al procesar la petición."
+    "access_request_created" : "Solicitud de acceso creada correctamente."
   },
   "persistence" : {
     "transaction_bad_casting" : "No ha sido posible castear la implementación de la transacción."
@@ -15,13 +14,16 @@
     "template_not_found" : "No se ha encontrado la plantilla de correo electrónico. %s"
   },
   "validator": {
-  "field_is_required": "El campo %s es obligatorio.",
-  "field_cant_be_null": "El campo %s no puede ser nulo.",
-  "value_is_not_number": "El valor %s no es un número.",
-  "field_value_is_not_number": "El valor del campo %s no es un número.",
-  "field_must_be_greater_than": "El campo %s debe ser mayor que %f.",
-  "field_must_be_less_than": "El campo %s debe ser menor que %f.",
-  "field_must_be_different_to": "El campo %s debe ser diferente de '%s'.",
-  "field_must_be_email": "El campo %s debe ser una dirección de correo electrónico válida."
+    "field_is_required": "El campo %s es obligatorio.",
+    "field_cant_be_null": "El campo %s no puede ser nulo.",
+    "value_is_not_number": "El valor %s no es un número.",
+    "field_value_is_not_number": "El va`lor del campo %s no es un número.",
+    "field_must_be_greater_than": "El campo %s debe ser mayor que %f.",
+    "field_must_be_less_than": "El campo %s debe ser menor que %f.",
+    "field_must_be_different_to": "El campo %s debe ser diferente de '%s'.",
+    "field_must_be_email": "El campo %s debe ser una dirección de correo electrónico válida."
+  },
+  "base_error": {
+    "internal_error": "No fue posible procesar la petición."
   }
 }
