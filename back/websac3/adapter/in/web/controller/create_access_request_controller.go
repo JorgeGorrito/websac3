@@ -34,6 +34,7 @@ func InitCreateAccessRequestController() *CreateAccessRequestController {
 // @Param lang path string true "Código de idioma" default(en) English Enums(en, es)
 // @Success 200 {object} response.ApiResponse[string]
 // @Failure 400 {object} response.ApiResponse[string]
+// @Failure 409 {object} response.ApiResponse[string]
 // @Failure 500 {object} response.ApiResponse[string]
 // @Router /api/v1/{lang}/access-request [post]
 func (c *CreateAccessRequestController) CreateAccessRequest(context *gin.Context) {

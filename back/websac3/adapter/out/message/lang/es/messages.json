@@ -1,7 +1,9 @@
 {
   "create_access_request" : {
     "user_alredy_registered" : "La persona ya cuenta con un usuario registrado.",
-    "cannot_create_access_request" : "La solicitud de acceso ya ha sido aprobada."
+    "cannot_create_access_request" : "La solicitud de acceso ya ha sido aprobada.",
+    "access_request_created" : "Solicitud de acceso creada correctamente.",
+    "internal_error" : "Error al procesar la petición."
   },
   "persistence" : {
     "transaction_bad_casting" : "No ha sido posible castear la implementación de la transacción."

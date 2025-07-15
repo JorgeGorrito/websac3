@@ -1,7 +1,9 @@
 {
   "create_access_request": {
     "user_alredy_registered": "The person already has a registered user.",
-    "cannot_create_access_request": "The access request has already been approved."
+    "cannot_create_access_request": "The access request has already been approved.",
+    "access_request_created": "Access request created successfully.",
+    "internal_error": "Error processing the request."
   },
   "persistence": {
     "transaction_bad_casting": "It was not possible to cast the transaction implementation."

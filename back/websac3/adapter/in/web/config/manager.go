@@ -7,6 +7,7 @@ import (
 	"websac3/adapter/in/web/middleware"
 	"websac3/app/port/in/dto/command"
 	"websac3/app/port/in/usecase"
+	"websac3/app/port/out/message"
 	"websac3/common/dependencies/container"
 	"websac3/common/logging"
 	"websac3/common/mapper"
@@ -34,6 +35,7 @@ func (m *manager) ConfigureMediator(errorList *error) {
 		handler.NewCreateAccessRequestCommandHandler(
 			container.Inject[usecase.CreateAccessRequestUseCase](),
 			container.Inject[validator.Validator](),
+			container.Inject[message.Provider](),
 			container.Inject[logging.Logger](),
 		),
 	); err != nil {

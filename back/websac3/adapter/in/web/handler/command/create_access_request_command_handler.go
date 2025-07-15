@@ -7,6 +7,7 @@ import (
 	"websac3/app/domain/entity"
 	"websac3/app/port/in/dto/command"
 	"websac3/app/port/in/usecase"
+	"websac3/app/port/out/message"
 	"websac3/common/logging"
 	"websac3/common/mapper"
 	"websac3/common/validator"
@@ -14,6 +15,7 @@ import (
 
 type CreateAccessRequestCommandHandler struct {
 	createAccessRequestUseCase usecase.CreateAccessRequestUseCase
+	msgProvider                message.Provider
 	validator                  validator.Validator
 	logger                     logging.Logger
 }
@@ -21,10 +23,12 @@ type CreateAccessRequestCommandHandler struct {
 func NewCreateAccessRequestCommandHandler(
 	createAccessRequestUseCase usecase.CreateAccessRequestUseCase,
 	validator validator.Validator,
+	msgProvider message.Provider,
 	logger logging.Logger,
 ) *CreateAccessRequestCommandHandler {
 	return &CreateAccessRequestCommandHandler{
 		createAccessRequestUseCase: createAccessRequestUseCase,
+		msgProvider:                msgProvider,
 		validator:                  validator,
 		logger:                     logger,
 	}
@@ -49,7 +53,11 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 		h.logger.Error("Error al mapear datos de entrada a entidad AccessRequest. Error: %s", err.Error())
 		return response.ApiResponse[string]{
 			HttpStatusCode: http.StatusInternalServerError,
-			Errors:         []string{"Error al procesar los datos de la solicitud de acceso"},
+			Errors: []string{
+				h.msgProvider.
+					WithLang(lang).
+					GetMessage("create_access_request", "internal_error"),
+			},
 		}, nil
 	}
 
@@ -58,12 +66,21 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 		var httpStatusCode int = util.GetHttpStatusCodeByErr(err)
 		return response.ApiResponse[string]{
 			HttpStatusCode: httpStatusCode,
-			Errors:         []string{util.GetResultMessageByErr(err, "Algo salió mal al registrar la solicitud de acceso")},
+			Errors: []string{
+				util.GetResultMessageByErr(
+					err,
+					h.msgProvider.
+						WithLang(lang).
+						GetMessage("create_access_request", "internal_error"),
+				),
+			},
 		}, nil
 	}
 	h.logger.Info("Solicitud de acceso creada exitosamente para el usuario con CC: " + request.Person.IdentificationNumber)
 	return response.ApiResponse[string]{
 		HttpStatusCode: http.StatusOK,
-		Result:         "Solicitud de acceso creada exitosamente",
+		Result: h.msgProvider.
+			WithLang(lang).
+			GetMessage("create_access_request", "access_request_created"),
 	}, nil
 }
