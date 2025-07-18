@@ -7,11 +7,18 @@ import (
 )
 
 func registerCreateAccessRequest(routerGroup *gin.RouterGroup) {
-	createAccessRequestController := controller.InitCreateAccessRequestController()
+	createAccessRequestController := controller.GetCreateAccessRequestController()
 
 	routerGroup.POST("/access-request", createAccessRequestController.CreateAccessRequest)
 }
 
+func validateEmailRequest(routerGroup *gin.RouterGroup) {
+	validateEmailController := controller.GetValidateEmailController()
+
+	routerGroup.POST("/access-request/email/validate", validateEmailController.ValidateEmail)
+}
+
 func RegisterAccessRequest(routerGroup *gin.RouterGroup) {
 	registerCreateAccessRequest(routerGroup)
+	validateEmailRequest(routerGroup)
 }

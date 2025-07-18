@@ -4,6 +4,10 @@
     "cannot_create_access_request" : "La solicitud de acceso ya ha sido aprobada.",
     "access_request_created" : "Solicitud de acceso creada correctamente."
   },
+  "validate_email" : {
+    "email_validated" : "Correo electrónico validado exitosamente.",
+    "email_not_found" : "No se encontró el correo electrónico con el token proporcionado."
+  },
   "persistence" : {
     "transaction_bad_casting" : "No ha sido posible castear la implementación de la transacción."
   },

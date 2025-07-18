@@ -62,6 +62,36 @@ func (a *AccessRequestRepository) Update(accessRequestToUpdate *entity.AccessReq
 	return nil
 }
 
+func (a *AccessRequestRepository) GetUnvalidatedEmailByToken(validationToken string, ctx persistence.Context) (entity.AccessRequest, error) {
+	dbCtx, err := a.CastDbContext(ctx)
+	if err != nil {
+		return entity.AccessRequest{}, err
+	}
+
+	var accessRequestFound entity.AccessRequest
+	var accessRequest model.AccessRequest
+	if err = dbCtx.DB().
+		Model(&accessRequest).
+		Joins("Applicant").
+		Joins("Status").
+		Joins("VerificationEmail").
+		Where("validation_code = ?", validationToken).
+		Where("is_verified = ?", false).
+		First(&accessRequest).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return entity.AccessRequest{}, nil
+		}
+		return entity.AccessRequest{}, err
+	}
+
+	accessRequestFound, err = mapper.Map[model.AccessRequest, entity.AccessRequest](&accessRequest)
+	if err != nil {
+		return entity.AccessRequest{}, err
+	}
+
+	return accessRequestFound, nil
+}
+
 func (a *AccessRequestRepository) GetLastCreatedByIdentificationAndEmail(
 	identificationTypeID uint,
 	identificationNumber string,

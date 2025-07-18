@@ -13,13 +13,13 @@ import (
 
 type CreateAccessRequestController struct{}
 
-var createAccessRequestControllerInstance *CreateAccessRequestController = nil
+var instanceCreateAccessRequestController *CreateAccessRequestController = nil
 
-func InitCreateAccessRequestController() *CreateAccessRequestController {
-	if createAccessRequestControllerInstance == nil {
-		createAccessRequestControllerInstance = &CreateAccessRequestController{}
+func GetCreateAccessRequestController() *CreateAccessRequestController {
+	if instanceCreateAccessRequestController == nil {
+		instanceCreateAccessRequestController = &CreateAccessRequestController{}
 	}
-	return createAccessRequestControllerInstance
+	return instanceCreateAccessRequestController
 }
 
 // CreateAccessRequest manejador para crear una solicitud de acceso sin verificación de correo electrónico

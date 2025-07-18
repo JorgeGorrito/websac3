@@ -47,6 +47,18 @@ func (m *manager) registerAccessRequestDependencies() {
 	)
 
 	m.binder.Bind(
+		andi.GetAbstractType[usecase.ValidateEmailUseCase](),
+		func() any {
+			return service.NewValidateEmailService(
+				container.Inject[persistence.GetAccessRequestPort](),
+				container.Inject[persistence.UpdateAccessRequestPort](),
+				container.Inject[message.Provider](),
+				container.Inject[persistence.Manager](),
+			)
+		},
+	)
+
+	m.binder.Bind(
 		andi.GetAbstractType[persistence.CreateAccessRequestPort](),
 		func() any { return container.Inject[persistence.AccessRequestPort]() },
 	)

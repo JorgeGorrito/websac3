@@ -4,6 +4,10 @@
     "cannot_create_access_request": "The access request has already been approved.",
     "access_request_created": "Access request created successfully."
   },
+  "validate_email": {
+    "email_validated": "Email successfully validated.",
+    "email_not_found": "Email not found with the provided token."
+  },
   "persistence": {
     "transaction_bad_casting": "It was not possible to cast the transaction implementation."
   },
