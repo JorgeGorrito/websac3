@@ -35,7 +35,7 @@ func NewCreateAccessRequestCommandHandler(
 }
 
 func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessRequestCommand, lang string) (response.ApiResponse[string], error) {
-	h.logger.Info("Inicio la creación de solicitud de acceso para el usuario con CC: " + request.Person.IdentificationNumber)
+	h.logger.Info("Inicio la creación de solicitud de acceso para el usuario con CC: " + request.IdentificationNumber)
 	if err := h.validator.ValidateFields(&request, lang); err != nil {
 		h.logger.Warn("Advertencia de validación datos de entrada al crear solicitud de acceso. Errores: %v", err)
 		var validationErrors []string
@@ -61,8 +61,8 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 		}, nil
 	}
 
-	if err := h.createAccessRequestUseCase.Execute(accessRequest, request.RedirectUrlTo, lang); err != nil {
-		h.logger.Error("Error al crear solicitud de acceso para el usuario con CC "+request.Person.IdentificationNumber+". Error: %s", err.Error())
+	if err := h.createAccessRequestUseCase.Execute(accessRequest, request.RedirectURLTo, lang); err != nil {
+		h.logger.Error("Error al crear solicitud de acceso para el usuario con CC "+request.IdentificationNumber+". Error: %s", err.Error())
 		var httpStatusCode int = util.GetHttpStatusCodeByErr(err)
 		return response.ApiResponse[string]{
 			HttpStatusCode: httpStatusCode,
@@ -76,11 +76,11 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 			},
 		}, nil
 	}
-	h.logger.Info("Solicitud de acceso creada exitosamente para el usuario con CC: " + request.Person.IdentificationNumber)
+	h.logger.Info("Solicitud de acceso creada exitosamente para el usuario con CC: " + request.IdentificationNumber)
 	return response.ApiResponse[string]{
 		HttpStatusCode: http.StatusOK,
 		Result: h.msgProvider.
 			WithLang(lang).
-			GetMessage("base_error", "internal_error"),
+			GetMessage("create_access_request", "access_request_created"),
 	}, nil
 }

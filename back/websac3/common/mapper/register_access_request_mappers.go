@@ -10,31 +10,31 @@ import (
 
 func registerAccessRequestMappers() {
 	RegisterMapFunc(func(createAccessRequestRequest *request.CreateAccessRequestRequest) (command.CreateAccessRequestCommand, error) {
-		var errorList error
-
-		personMapped, err := Map[request.CreatePersonRequest, command.CreatePersonCommand](&createAccessRequestRequest.Person)
-		if err != nil {
-			errorList = errors.Join(errorList, err)
-		}
-
 		return command.CreateAccessRequestCommand{
-			RedirectUrlTo: createAccessRequestRequest.RedirectUrlTo,
-			Person:        personMapped,
-		}, errorList
+			RedirectURLTo:                   createAccessRequestRequest.RedirectUrlTo,
+			Name:                            createAccessRequestRequest.Person.Name,
+			Lastname:                        createAccessRequestRequest.Person.Lastname,
+			IdentificationNumber:            createAccessRequestRequest.Person.IdentificationNumber,
+			IdentificationTypeID:            createAccessRequestRequest.Person.IdentificationTypeID,
+			HigherEducationInstitutionSnies: createAccessRequestRequest.Person.HigherEducationInstitutionSnies,
+			JobPosition:                     createAccessRequestRequest.Person.JobPosition,
+			Email:                           createAccessRequestRequest.Person.Email,
+		}, nil
 	})
 
 	RegisterMapFunc(func(createAccessRequestCommand *command.CreateAccessRequestCommand) (entity.AccessRequest, error) {
 		var errorList error
-
-		personMapped, err := Map[command.CreatePersonCommand, entity.Person](&createAccessRequestCommand.Person)
-		if err != nil {
-			errorList = errors.Join(errorList, err)
-		}
-
 		return entity.AccessRequest{
-			Applicant: &personMapped,
+			Applicant: &entity.Person{
+				Name:                            createAccessRequestCommand.Name,
+				Lastname:                        createAccessRequestCommand.Lastname,
+				IdentificationNumber:            createAccessRequestCommand.IdentificationNumber,
+				IdentificationTypeID:            createAccessRequestCommand.IdentificationTypeID,
+				HigherEducationInstitutionSnies: createAccessRequestCommand.HigherEducationInstitutionSnies,
+				JobPosition:                     createAccessRequestCommand.JobPosition,
+			},
 			EmailValidation: &entity.EmailNotification{
-				To: createAccessRequestCommand.Person.Email,
+				To: createAccessRequestCommand.Email,
 			},
 		}, errorList
 	})
