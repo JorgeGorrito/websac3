@@ -6,16 +6,15 @@ RUN apk add --no-cache tzdata && \
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
+COPY . .
 RUN go mod download
 
-COPY . .
+RUN go install github.com/swaggo/swag/cmd/swag@v1.16.4
+RUN swag init --dir /app --output /app/docs --parseDependency --parseInternal
 
-RUN go install github.com/swaggo/swag/cmd/swag@latest && \
-    swag init
+RUN go build -o /bin/anise github.com/JorgeGorrito/anise-with-gin/anise/command/client
+RUN go build -o /bin/main .
 
-RUN go build -o /bin/anise github.com/JorgeGorrito/anise-with-gin/anise/command/client && \
-    go build -o /bin/main .
 
 FROM alpine:3.21
 
@@ -27,6 +26,7 @@ WORKDIR /app
 
 COPY --from=builder /bin/main /app/main
 COPY --from=builder /bin/anise /app/anise
+COPY --from=builder /app /app
 
 COPY .env .
 COPY .mail-credentials.json .
