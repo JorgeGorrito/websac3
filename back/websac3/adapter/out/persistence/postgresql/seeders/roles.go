@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DEFAULT_PATH_ROLE_SEED = "adapter/out/persistence/seeders/seeds/roles.json"
+	DEFAULT_PATH_ROLE_SEED = "adapter/out/persistence/postgresql/seeders/seeds/roles.json"
 )
 
 type roles struct{}

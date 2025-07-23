@@ -1,8 +1,10 @@
 package model
 
 type Permission struct {
-	ID          uint   `gorm:"primaryKey"`
-	Name        string `gorm:"not null"`
-	Description string `gorm:"not null"`
-	Roles       []Role `gorm:"many2many:role_permissions"`
+	ID       uint   `gorm:"primaryKey"`
+	ModuleID uint   `gorm:"not null" json:"module_id"`
+	Module   Module `gorm:"foreignKey:ModuleID;references:ID"`
+	ActionID uint   `gorm:"not null" json:"action_id"`
+	Action   Action `gorm:"foreignKey:ActionID;references:ID"`
+	Roles    []Role `gorm:"many2many:role_permissions"`
 }

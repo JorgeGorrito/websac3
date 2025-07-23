@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DEFAULT_PATH_IDENTIFICATION_TYPE_SEED = "adapter/out/persistence/seeders/seeds/identification_types.json"
+	DEFAULT_PATH_IDENTIFICATION_TYPE_SEED = "adapter/out/persistence/postgresql/seeders/seeds/identification_types.json"
 )
 
 type identificationTypes struct{}

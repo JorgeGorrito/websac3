@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	DEFAULT_PATH_HIGHER_EDUCATION_INSTITUTION_SEED = "adapter/out/persistence/seeders/seeds/higher_education_institutions.json"
+	DEFAULT_PATH_HIGHER_EDUCATION_INSTITUTION_SEED = "adapter/out/persistence/postgresql/seeders/seeds/higher_education_institutions.json"
 )
 
 type higherEducationInstitutions struct{}

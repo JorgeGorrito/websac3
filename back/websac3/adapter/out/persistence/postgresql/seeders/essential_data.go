@@ -19,6 +19,9 @@ func EssentialData() Seeder {
 			InstitutionalCategories(),
 			Ownerships(),
 			HigherEducationInstitutions(),
+			Modules(),
+			Actions(),
+			Permissions(),
 		},
 	}
 }

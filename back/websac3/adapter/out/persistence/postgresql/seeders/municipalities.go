@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DEFAULT_PATH_MUNICIPALITY_SEED = "adapter/out/persistence/seeders/seeds/municipalities.json"
+	DEFAULT_PATH_MUNICIPALITY_SEED = "adapter/out/persistence/postgresql/seeders/seeds/municipalities.json"
 )
 
 type municipalities struct{}

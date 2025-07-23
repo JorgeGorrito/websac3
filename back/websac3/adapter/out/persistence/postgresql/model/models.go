@@ -5,7 +5,6 @@ type NewBaseModel func() any
 var registry map[string]NewBaseModel = map[string]NewBaseModel{
 	"users":                         func() any { return &User{} },
 	"roles":                         func() any { return &Role{} },
-	"permissions":                   func() any { return &Permission{} },
 	"access_requests":               func() any { return &AccessRequest{} },
 	"access_request_statuses":       func() any { return &Status{} },
 	"people":                        func() any { return &Person{} },
@@ -16,6 +15,9 @@ var registry map[string]NewBaseModel = map[string]NewBaseModel{
 	"higher_education_institutions": func() any { return &HigherEducationInstitution{} },
 	"identification_types":          func() any { return &IdentificationType{} },
 	"emails":                        func() any { return &Email{} },
+	"modules":                       func() any { return &Module{} },
+	"actions":                       func() any { return &Action{} },
+	"permissions":                   func() any { return &Permission{} },
 }
 
 func GetRegistryAllConstructModelBase() map[string]NewBaseModel {

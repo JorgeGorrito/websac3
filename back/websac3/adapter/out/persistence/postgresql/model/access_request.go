@@ -5,7 +5,7 @@ import (
 )
 
 type AccessRequest struct {
-	ID uint `gorm:"primaryKey" `
+	ID uint `gorm:"primaryKey"`
 
 	ApplicantID uint   `gorm:"not null" `
 	Applicant   Person `gorm:"foreignKey:ApplicantID"`

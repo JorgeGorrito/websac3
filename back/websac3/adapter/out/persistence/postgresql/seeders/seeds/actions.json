@@ -1,0 +1,43 @@
+[
+  {
+    "id": 1,
+    "name": "create"
+  },
+  {
+    "id": 2,
+    "name": "read"
+  },
+  {
+    "id": 3,
+    "name": "update"
+  },
+  {
+    "id": 4,
+    "name": "delete"
+  },
+  {
+    "id": 5,
+    "name": "list"
+  },
+  {
+    "id": 6,
+    "name": "approve"
+  },
+  {
+    "id": 7,
+    
+    "name": "reject"
+  },
+  {
+    "id": 8,
+    "name": "cancel"
+  },
+  {
+    "id": 9,
+    "name": "activate"
+  },
+  {
+    "id": 10,
+    "name": "deactivate"
+  }
+]

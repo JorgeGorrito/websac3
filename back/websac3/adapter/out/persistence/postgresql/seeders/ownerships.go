@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DEFAULT_PATH_OWNERSHIP_SEED = "adapter/out/persistence/seeders/seeds/ownerships.json"
+	DEFAULT_PATH_OWNERSHIP_SEED = "adapter/out/persistence/postgresql/seeders/seeds/ownerships.json"
 )
 
 type ownerships struct{}

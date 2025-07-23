@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DEFAULT_PATH_ACCESS_REQUEST_STATUS_SEED = "adapter/out/persistence/seeders/seeds/statuses.json"
+	DEFAULT_PATH_ACCESS_REQUEST_STATUS_SEED = "adapter/out/persistence/postgresql/seeders/seeds/statuses.json"
 )
 
 type accessRequestStatuses struct{}

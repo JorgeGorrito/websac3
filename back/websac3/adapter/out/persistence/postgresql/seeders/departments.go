@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DEFAULT_PATH_DEPARTMENT_SEED = "adapter/out/persistence/seeders/seeds/departments.json"
+	DEFAULT_PATH_DEPARTMENT_SEED = "adapter/out/persistence/postgresql/seeders/seeds/departments.json"
 )
 
 type departments struct{}

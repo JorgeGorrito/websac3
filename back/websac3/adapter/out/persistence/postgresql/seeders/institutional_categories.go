@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DEFAULT_PATH_INSTITUTIONAL_CATEGORY_SEED = "adapter/out/persistence/seeders/seeds/institutional_categories.json"
+	DEFAULT_PATH_INSTITUTIONAL_CATEGORY_SEED = "adapter/out/persistence/postgresql/seeders/seeds/institutional_categories.json"
 )
 
 type institutionalCategories struct{}

@@ -1,0 +1,42 @@
+[
+    {
+        "id" : 1,
+        "name" : "access-request",
+        "description" : "Grupo que gestiona las solicitudes de acceso al sistema"
+    },
+    {
+        "id" : 2,
+        "name" : "reporting",
+        "description" : "Grupo para la gestión de reportes generados por el sistema"
+    },
+    {
+        "id" : 3,
+        "name" : "reporting-feedback",
+        "description" : "Grupo para la gestión de retroalimentación de reportes generados por el sistema"
+    },
+    {
+        "id" : 4,
+        "name" : "expert-advisory-requests",
+        "description" : "Grupo que gestiona las solicitudes de asesorías con el experto en ciberseguridad"
+    },
+    {
+        "id" : 5,
+        "name" : "expert-advisory",
+        "description" : "Grupo para la gestión de asesorías con el experto en ciberseguridad"
+    },
+    {
+        "id" : 6,
+        "name" : "user-management",
+        "description" : "Módulo para la gestión de usuarios del sistema"
+    }, 
+    {
+        "id" : 7,
+        "name" : "academic-programs",
+        "description" : "Módulo para la gestión de programas académicos"
+    },
+    {
+        "id" : 8,
+        "name" : "academic-evaluator",
+        "description" : "Módulo que evalua programas académicos en ciberseguridad"
+    }
+]
