@@ -11,7 +11,6 @@ type essentialData struct {
 func EssentialData() Seeder {
 	return &essentialData{
 		essentialSeeders: []Seeder{
-			Roles(),
 			AccessRequestStatuses(),
 			IdentificationTypes(),
 			Municipalities(),
@@ -22,6 +21,8 @@ func EssentialData() Seeder {
 			Modules(),
 			Actions(),
 			Permissions(),
+			Roles(),
+			DefaultUsers(),
 		},
 	}
 }

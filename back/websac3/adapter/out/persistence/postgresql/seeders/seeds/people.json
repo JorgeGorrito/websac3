@@ -1,0 +1,13 @@
+[
+    {
+        "id": 1,
+        "name": "Admin User",
+        "lastname": "",
+        "identification_number" : "",
+        "identification_type_id": 1,
+        "higher_education_institution_snies": 1101,
+        "job_position": "Administrator",
+        "created_at": "2024-01-01T12:00:00Z",
+        "updated_at": "2024-01-01T12:00:00Z"
+    }
+]

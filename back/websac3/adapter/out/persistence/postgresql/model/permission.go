@@ -1,7 +1,7 @@
 package model
 
 type Permission struct {
-	ID       uint   `gorm:"primaryKey"`
+	ID       uint   `gorm:"primaryKey" json:"id"`
 	ModuleID uint   `gorm:"not null" json:"module_id"`
 	Module   Module `gorm:"foreignKey:ModuleID;references:ID"`
 	ActionID uint   `gorm:"not null" json:"action_id"`

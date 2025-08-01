@@ -1,7 +1,7 @@
 package entity
 
-type Role struct {
+type Module struct {
 	ID          uint
 	Name        string
-	Permissions []Permission
+	Description string
 }

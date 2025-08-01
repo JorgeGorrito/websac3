@@ -21,9 +21,7 @@ type CreateAccessRequestService struct {
 	createAccessRequestPort persistence.CreateAccessRequestPort
 	updateAccessRequestPort persistence.UpdateAccessRequestPort
 	createPersonPort        persistence.CreatePersonPort
-	createUserPort          persistence.CreateUserPort
 	getUserPort             persistence.GetUserPort
-	updateUserPort          persistence.UpdateUserPort
 	updatePersonPort        persistence.UpdatePersonPort
 	getPersonPort           persistence.GetPersonPort
 	getAccessRequestPort    persistence.GetAccessRequestPort
@@ -36,8 +34,6 @@ func NewCreateAccessRequestService(
 	createAccessRequestPort persistence.CreateAccessRequestPort,
 	updateAccessRequestPort persistence.UpdateAccessRequestPort,
 	createPersonPort persistence.CreatePersonPort,
-	createUserPort persistence.CreateUserPort,
-	updateUserPort persistence.UpdateUserPort,
 	updatePersonPort persistence.UpdatePersonPort,
 	getUserPort persistence.GetUserPort,
 	getPersonPort persistence.GetPersonPort,
@@ -52,12 +48,10 @@ func NewCreateAccessRequestService(
 		createAccessRequestPort: createAccessRequestPort,
 		updateAccessRequestPort: updateAccessRequestPort,
 		createPersonPort:        createPersonPort,
-		createUserPort:          createUserPort,
 		getUserPort:             getUserPort,
 		getPersonPort:           getPersonPort,
 		getAccessRequestPort:    getAccessRequestPort,
 		statusEnum:              statusEnum,
-		updateUserPort:          updateUserPort,
 		updatePersonPort:        updatePersonPort,
 		msgProvider:             msgProvider,
 		sendNotificationPort:    notificationPort,

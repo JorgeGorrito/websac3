@@ -71,6 +71,10 @@ func (u *UserRepository) GetByEmail(email string, ctx persistence.Context) (enti
 	var userFound model.User
 	var user entity.User
 	if err := dbCtx.DB().
+		Preload("Role.Permissions.Action").
+		Preload("Role.Permissions.Module").
+		Joins("Role").
+		Joins("Person").
 		Where("email = ?", email).
 		First(&userFound).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -99,6 +103,35 @@ func (u *UserRepository) GetByDNI(identificationType uint, identificationNumber 
 		Joins("Person").
 		Where(`"Person".identification_type_id = ?`, identificationType).
 		Where(`"Person".identification_number = ?`, identificationNumber).
+		First(&userFound).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return entity.User{}, nil
+		}
+		return entity.User{}, err
+	}
+
+	if user, err = mapper.Map[model.User, entity.User](&userFound); err != nil {
+		return entity.User{}, err
+	}
+
+	return user, nil
+}
+
+func (u *UserRepository) GetByID(ID uint, ctx persistence.Context) (entity.User, error) {
+	dbCtx, err := u.CastDbContext(ctx)
+	if err != nil {
+		return entity.User{}, err
+	}
+
+	var userFound model.User
+	var user entity.User
+	if err := dbCtx.DB().
+		Model(&userFound).
+		Preload("Role.Permissions.Action").
+		Preload("Role.Permissions.Module").
+		Joins("Role").
+		Joins("Person").
+		Where("users.id = ?", ID).
 		First(&userFound).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return entity.User{}, nil

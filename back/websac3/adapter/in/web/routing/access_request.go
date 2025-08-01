@@ -18,7 +18,7 @@ func validateEmailRequest(routerGroup *gin.RouterGroup) {
 	routerGroup.POST("/access-request/email/validate", validateEmailController.ValidateEmail)
 }
 
-func RegisterAccessRequest(routerGroup *gin.RouterGroup) {
+func RegisterAccessRequestRoutes(routerGroup *gin.RouterGroup) {
 	registerCreateAccessRequest(routerGroup)
 	validateEmailRequest(routerGroup)
 }

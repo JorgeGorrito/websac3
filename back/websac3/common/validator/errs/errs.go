@@ -84,3 +84,34 @@ func NewFieldMustBeEmailError(fieldName string, msgProvider message.Provider, la
 			GetMessage("validator", "field_must_be_email", fieldName),
 	)
 }
+
+type FieldMinLengthError error
+
+func NewFieldMinLengthError(fieldName string, minLength int, msgProvider message.Provider, lang string) FieldMinLengthError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_min_length", fieldName, minLength),
+	)
+}
+
+type FieldMaxLengthError error
+
+func NewFieldMaxLengthError(fieldName string, maxLength int, msgProvider message.Provider,
+	lang string) FieldMaxLengthError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_max_length", fieldName, maxLength),
+	)
+}
+
+type FieldMustBeStringError error
+
+func NewFieldMustBeStringError(fieldName string, msgProvider message.Provider, lang string) FieldMustBeStringError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("validator", "field_must_be_string", fieldName),
+	)
+}

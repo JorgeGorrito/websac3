@@ -5,5 +5,5 @@ import (
 )
 
 type CreateAccessRequestUseCase interface {
-	Execute(request entity.AccessRequest, redirectUrl string, lang string) error
+	Execute(request entity.AccessRequest, redirectURLTo string, lang string) error
 }

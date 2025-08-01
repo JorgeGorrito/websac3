@@ -6,5 +6,10 @@ func RegisterMapFunctions() {
 	registerStatusMappers()
 	registerIdentificationTypeMappers()
 	registerEmailMappers()
+	registerUserMappers()
+	registerRoleMappers()
 	registerHigherEducationInstitutionMappers()
+	registerActionMappers()
+	registerModuleMappers()
+	registerPermissionMappers()
 }

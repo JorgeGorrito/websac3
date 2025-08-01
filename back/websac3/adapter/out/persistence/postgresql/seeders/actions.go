@@ -1,7 +1,6 @@
 package seeders
 
 import (
-	"fmt"
 	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/port/out/persistence"
@@ -26,7 +25,6 @@ func (a *actions) Seed(ctx persistence.Context) error {
 	if err := decoder.Decode(DEFAULT_PATH_ACTION_SEED, &dataToSeed); err != nil {
 		return err
 	}
-	fmt.Printf("Seeding actions: %+v\n", dataToSeed)
 	for _, permission := range dataToSeed {
 		if err := dbCtx.DB().Create(&permission).Error; err != nil {
 			return err

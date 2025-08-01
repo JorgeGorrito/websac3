@@ -9,6 +9,7 @@ import (
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/message"
 	"websac3/common/dependencies/container"
+	"websac3/common/jwt"
 	"websac3/common/logging"
 	"websac3/common/mapper"
 	"websac3/common/mediator"
@@ -48,6 +49,32 @@ func (m *manager) ConfigureMediator(errorList *error) {
 			container.Inject[usecase.ValidateEmailUseCase](),
 			container.Inject[validator.Validator](),
 			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.LoginCommand{}),
+		handler.NewLoginHandler(
+			container.Inject[usecase.LoginUseCase](),
+			container.Inject[jwt.Generator](),
+			container.Inject[message.Provider](),
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.RefreshTokenCommand{}),
+		handler.NewRefreshTokenHandler(
+			container.Inject[usecase.GetUserByIDUseCase](),
+			container.Inject[jwt.Generator](),
+			container.Inject[message.Provider](),
+			container.Inject[validator.Validator](),
 			container.Inject[logging.Logger](),
 		),
 	); err != nil {

@@ -31,8 +31,6 @@ func (m *manager) registerAccessRequestDependencies() {
 				container.Inject[persistence.CreateAccessRequestPort](),
 				container.Inject[persistence.UpdateAccessRequestPort](),
 				container.Inject[persistence.CreatePersonPort](),
-				container.Inject[persistence.CreateUserPort](),
-				container.Inject[persistence.UpdateUserPort](),
 				container.Inject[persistence.UpdatePersonPort](),
 				container.Inject[persistence.GetUserPort](),
 				container.Inject[persistence.GetPersonPort](),

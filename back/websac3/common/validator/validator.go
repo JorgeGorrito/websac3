@@ -78,6 +78,34 @@ func (v *validator) validateDiffTo(lang string, fieldName string, objectValue re
 	return nil
 }
 
+func (v *validator) validateMinLength(lang string, fieldName string, objectValue reflect.Value, value string) error {
+	if objectValue.Kind() != reflect.String {
+		return verrs.NewFieldMustBeStringError(fieldName, v.msgProvider, lang)
+	}
+	minLen, err := strconv.Atoi(value)
+	if err != nil {
+		return verrs.NewValueIsNotNumberError(value, v.msgProvider, lang)
+	}
+	if len(objectValue.String()) < minLen {
+		return verrs.NewFieldMinLengthError(fieldName, minLen, v.msgProvider, lang)
+	}
+	return nil
+}
+
+func (v *validator) validateMaxLength(lang string, fieldName string, objectValue reflect.Value, value string) error {
+	if objectValue.Kind() != reflect.String {
+		return verrs.NewFieldMustBeStringError(fieldName, v.msgProvider, lang)
+	}
+	maxLen, err := strconv.Atoi(value)
+	if err != nil {
+		return verrs.NewValueIsNotNumberError(value, v.msgProvider, lang)
+	}
+	if len(objectValue.String()) > maxLen {
+		return verrs.NewFieldMaxLengthError(fieldName, maxLen, v.msgProvider, lang)
+	}
+	return nil
+}
+
 func (v *validator) validateIsEmail(lang string, fieldName string, objectValue reflect.Value, _ string) error {
 	_, err := mail.ParseAddress(fmt.Sprintf("%v", objectValue.Interface()))
 	if err != nil {
@@ -158,6 +186,8 @@ func New(msgProvider message.Provider) *validator {
 		"less_than":    v.validateLessThan,
 		"diff_to":      v.validateDiffTo,
 		"email":        v.validateIsEmail,
+		"min":          v.validateMinLength,
+		"max":          v.validateMaxLength,
 	}
 	v.fieldsValidationRules = fieldValidationRules
 

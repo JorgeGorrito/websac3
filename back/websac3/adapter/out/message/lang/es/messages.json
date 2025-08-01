@@ -8,6 +8,15 @@
     "email_validated" : "Correo electrónico validado exitosamente.",
     "email_not_found" : "No se encontró el correo electrónico con el token proporcionado."
   },
+  "login" : {
+    "invalid_user_password" : "Usuario o contraseña inválida.",
+    "login_successful" : "Inicio de sesión exitoso."
+  },
+  "refresh_token" : {
+    "user_not_found" : "Usuario no encontrado.",
+    "invalid_refresh_token" : "Token de actualización inválido.",
+    "refresh_token_successful" : "Token de actualización exitoso."
+  },
   "persistence" : {
     "transaction_bad_casting" : "No ha sido posible castear la implementación de la transacción."
   },
@@ -25,7 +34,10 @@
     "field_must_be_greater_than": "El campo %s debe ser mayor que %f.",
     "field_must_be_less_than": "El campo %s debe ser menor que %f.",
     "field_must_be_different_to": "El campo %s debe ser diferente de '%s'.",
-    "field_must_be_email": "El campo %s debe ser una dirección de correo electrónico válida."
+    "field_must_be_email": "El campo %s debe ser una dirección de correo electrónico válida.",
+    "field_min_length": "El campo %s debe tener al menos %d caracteres.",
+    "field_max_length": "El campo %s debe tener como máximo %d caracteres.",
+    "field_must_be_string": "El campo %s debe ser una cadena de texto."
   },
   "base_error": {
     "internal_error": "No fue posible procesar la petición."

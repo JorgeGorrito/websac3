@@ -8,6 +8,15 @@
     "email_validated": "Email successfully validated.",
     "email_not_found": "Email not found with the provided token."
   },
+  "login": {
+    "invalid_user_password": "Invalid user or password.",
+    "login_successful": "Login successful."
+  },
+  "refresh_token": {
+    "user_not_found": "User not found.",
+    "invalid_refresh_token": "Invalid refresh token.",
+    "refresh_token_successful": "Refresh token successful."
+  },
   "persistence": {
     "transaction_bad_casting": "It was not possible to cast the transaction implementation."
   },
@@ -25,7 +34,10 @@
     "field_must_be_greater_than": "Field %s must be greater than %f.",
     "field_must_be_less_than": "Field %s must be less than %f.",
     "field_must_be_different_to": "Field %s must be different to '%s'.",
-    "field_must_be_email": "Field %s must be a valid email address."
+    "field_must_be_email": "Field %s must be a valid email address.",
+    "field_min_length": "Field %s must have at least %d characters.",
+    "field_max_length": "Field %s must have at most %d characters.",
+    "field_must_be_string": "Field %s must be a string."
   },
   "base_error": {
     "internal_error": "The request could not be processed."

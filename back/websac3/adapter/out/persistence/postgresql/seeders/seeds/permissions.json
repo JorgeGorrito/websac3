@@ -1,10 +1,17 @@
 [
     {
+        "id": 1,
         "module_id": 1,
         "action_id": 6
     },
     {
+        "id": 2,
         "module_id": 1,
         "action_id": 7
+    },
+    {
+        "id": 3,
+        "module_id": 1,
+        "action_id": 5
     }
 ]
