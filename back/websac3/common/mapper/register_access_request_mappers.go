@@ -11,7 +11,8 @@ import (
 func registerAccessRequestMappers() {
 	RegisterMapFunc(func(createAccessRequestRequest *request.CreateAccessRequestRequest) (command.CreateAccessRequestCommand, error) {
 		return command.CreateAccessRequestCommand{
-			RedirectURLTo:                   createAccessRequestRequest.RedirectUrlTo,
+			ValidationEmailURL:              createAccessRequestRequest.ValidationEmailURL,
+			RegisterUserURL:                 createAccessRequestRequest.RegisterUserURL,
 			Name:                            createAccessRequestRequest.Person.Name,
 			Lastname:                        createAccessRequestRequest.Person.Lastname,
 			IdentificationNumber:            createAccessRequestRequest.Person.IdentificationNumber,
@@ -25,6 +26,8 @@ func registerAccessRequestMappers() {
 	RegisterMapFunc(func(createAccessRequestCommand *command.CreateAccessRequestCommand) (entity.AccessRequest, error) {
 		var errorList error
 		return entity.AccessRequest{
+			ValidationEmailURL: createAccessRequestCommand.ValidationEmailURL,
+			CreateUserURL:      createAccessRequestCommand.RegisterUserURL,
 			Applicant: &entity.Person{
 				Name:                            createAccessRequestCommand.Name,
 				Lastname:                        createAccessRequestCommand.Lastname,
@@ -41,13 +44,17 @@ func registerAccessRequestMappers() {
 
 	RegisterMapFunc(func(accessRequest *entity.AccessRequest) (model.AccessRequest, error) {
 		return model.AccessRequest{
-			ID:                  accessRequest.ID,
-			ApplicantID:         accessRequest.ApplicantID,
-			StatusID:            accessRequest.StatusID,
-			VerificationEmailID: accessRequest.EmailValidationID,
-			ValidationCode:      accessRequest.ValidationCode,
-			IsVerified:          accessRequest.IsVerified,
-			CreatedAt:           accessRequest.CreatedAt,
+			ID:                       accessRequest.ID,
+			ApplicantID:              accessRequest.ApplicantID,
+			StatusID:                 accessRequest.StatusID,
+			VerificationEmailID:      accessRequest.EmailValidationID,
+			ApprovedEmailID:          accessRequest.EmailApprovedID,
+			ValidationEmailURL:       accessRequest.ValidationEmailURL,
+			CreateUserURL:            accessRequest.CreateUserURL,
+			ValidationEmailCode:      accessRequest.ValidationEmailCode,
+			ValidationCreateUserCode: accessRequest.CreateUserCode,
+			IsVerified:               accessRequest.IsVerified,
+			CreatedAt:                accessRequest.CreatedAt,
 		}, nil
 	})
 
@@ -74,6 +81,18 @@ func registerAccessRequestMappers() {
 			verificationEmailID = &verificationEmailMapped.ID
 		}
 
+		var approvedEmail *entity.EmailNotification
+		var approvedEmailID *uint
+		approvedEmailMapped, err := Map[model.Email, entity.EmailNotification](accessRequest.ApprovedEmail)
+		if err != nil {
+			if err != SrcPointerIsNilError {
+				errorList = errors.Join(errorList, err)
+			}
+		} else {
+			approvedEmail = &approvedEmailMapped
+			approvedEmailID = &approvedEmailMapped.ID
+		}
+
 		if errorList != nil {
 			return entity.AccessRequest{}, errorList
 		}
@@ -90,9 +109,17 @@ func registerAccessRequestMappers() {
 			EmailValidationID: verificationEmailID,
 			EmailValidation:   verificationEmail,
 
-			ValidationCode: accessRequest.ValidationCode,
-			IsVerified:     accessRequest.IsVerified,
-			CreatedAt:      accessRequest.CreatedAt,
+			EmailApprovedID: approvedEmailID,
+			EmailApproved:   approvedEmail,
+
+			ValidationEmailURL: accessRequest.ValidationEmailURL,
+			CreateUserURL:      accessRequest.CreateUserURL,
+
+			ValidationEmailCode: accessRequest.ValidationEmailCode,
+			CreateUserCode:      accessRequest.ValidationCreateUserCode,
+
+			IsVerified: accessRequest.IsVerified,
+			CreatedAt:  accessRequest.CreatedAt,
 		}, nil
 	})
 }

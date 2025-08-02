@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"time"
 	"websac3/app/domain/constants"
 	"websac3/app/domain/entity"
@@ -62,7 +63,6 @@ func NewCreateAccessRequestService(
 
 func (c *CreateAccessRequestService) Execute(
 	requestToCreate entity.AccessRequest,
-	redirectURL string,
 	lang string,
 ) error {
 	return c.persistenceManager.ExecuteInTransaction(
@@ -123,7 +123,8 @@ func (c *CreateAccessRequestService) Execute(
 				requestToCreate.ApplicantID = requestFound.ApplicantID
 			}
 
-			requestToCreate.ValidationCode = uuid.GenerateUUID()
+			requestToCreate.ValidationEmailCode = uuid.GenerateUUID()
+			requestToCreate.CreateUserCode = uuid.GenerateUUID()
 			requestToCreate.IsVerified = false
 			if err = c.createAccessRequestPort.Create(&requestToCreate, ctx); err != nil {
 				return err
@@ -139,10 +140,12 @@ func (c *CreateAccessRequestService) Execute(
 			}
 
 			var templateToSend string
+			var enlaceConfirmacion string = requestToCreate.ValidationEmailURL + requestToCreate.ValidationEmailCode
+			fmt.Printf("Enlace de confirmación: %s\n", enlaceConfirmacion)
 			if templateToSend, err = templateEmail.Render(
 				&context.AccessRequestConfirmation{
 					NombrePersona:      applicantToCreate.Name,
-					EnlaceConfirmacion: redirectURL + requestToCreate.ValidationCode,
+					EnlaceConfirmacion: enlaceConfirmacion,
 				},
 			); err != nil {
 				return err

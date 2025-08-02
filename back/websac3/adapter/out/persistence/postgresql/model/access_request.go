@@ -10,7 +10,14 @@ type AccessRequest struct {
 	ApplicantID uint   `gorm:"not null" `
 	Applicant   Person `gorm:"foreignKey:ApplicantID"`
 
-	ValidationCode string `gorm:"not null; type:uuid" `
+	ValidationEmailCode      string `gorm:"not null; type:uuid" `
+	ValidationCreateUserCode string `gorm:"not null; type:uuid" `
+
+	ValidationEmailURL string `gorm:"not null; type:varchar(255)" `
+	CreateUserURL      string `gorm:"not null; type:varchar(255)" `
+
+	ApprovedEmailID *uint  `gorm:"null" `
+	ApprovedEmail   *Email `gorm:"foreignKey:ApprovedEmailID" `
 
 	VerificationEmailID *uint  `gorm:"null" `
 	VerificationEmail   *Email `gorm:"foreignKey:VerificationEmailID" `

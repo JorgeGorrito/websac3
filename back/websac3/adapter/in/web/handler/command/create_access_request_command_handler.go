@@ -61,7 +61,7 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 		}, nil
 	}
 
-	if err := h.createAccessRequestUseCase.Execute(accessRequest, request.RedirectURLTo, lang); err != nil {
+	if err := h.createAccessRequestUseCase.Execute(accessRequest, lang); err != nil {
 		h.logger.Error("Error al crear solicitud de acceso para el usuario con CC "+request.IdentificationNumber+". Error: %s", err.Error())
 		var httpStatusCode int = util.GetHttpStatusCodeByErr(err)
 		return response.ApiResponse[string]{

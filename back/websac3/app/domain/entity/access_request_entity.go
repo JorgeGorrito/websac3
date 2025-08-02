@@ -7,13 +7,20 @@ import (
 type AccessRequest struct {
 	ID uint
 
+	ValidationEmailURL string
+	CreateUserURL      string
+
+	ValidationEmailCode string
+	CreateUserCode      string
+
 	ApplicantID uint
 	Applicant   *Person
 
-	ValidationCode string
-
 	EmailValidationID *uint
 	EmailValidation   *EmailNotification
+
+	EmailApprovedID *uint
+	EmailApproved   *EmailNotification
 
 	StatusID uint
 	Status   *Status

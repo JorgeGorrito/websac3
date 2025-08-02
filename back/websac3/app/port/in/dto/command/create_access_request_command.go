@@ -8,5 +8,6 @@ type CreateAccessRequestCommand struct {
 	HigherEducationInstitutionSnies uint   `validations:"required"`
 	JobPosition                     string `validations:"required"`
 	Email                           string `validations:"required;email"`
-	RedirectURLTo                   string `validations:"required"`
+	ValidationEmailURL              string `validations:"required"`
+	RegisterUserURL                 string `validations:"required"`
 }
