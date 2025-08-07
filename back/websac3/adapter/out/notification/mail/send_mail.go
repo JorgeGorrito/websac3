@@ -4,6 +4,7 @@ import (
 	"time"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 	"websac3/common/logging"
 	"websac3/common/mail"
 )
@@ -14,7 +15,7 @@ type NotificationAdapter struct {
 	createEmailPort      persistence.CreateEmailPort
 	getEmailPort         persistence.GetEmailPort
 	updateEmailPort      persistence.UpdateEmailPort
-	persistenceManager   persistence.Manager
+	persistenceManager   db.Manager
 	isSenderWorking      bool
 	pendingNotifications []entity.EmailNotification
 }
@@ -25,7 +26,7 @@ func (n *NotificationAdapter) sendAsync() {
 	var page uint = 0
 
 	for {
-		if err = n.persistenceManager.ExecuteNonTransactional(func(db persistence.Context) error {
+		if err = n.persistenceManager.ExecuteNonTransactional(func(db db.Context) error {
 			if n.pendingNotifications, err = n.getEmailPort.GetChunkNotSent(
 				chunkSize,
 				page,
@@ -51,7 +52,7 @@ func (n *NotificationAdapter) sendAsync() {
 
 			var currentTime time.Time = time.Now()
 			emailToSend.SentAt = &currentTime
-			if err = n.persistenceManager.ExecuteInTransaction(func(tx persistence.Context) error {
+			if err = n.persistenceManager.ExecuteInTransaction(func(tx db.Context) error {
 				if err = n.updateEmailPort.Update(&emailToSend, tx); err != nil {
 					return err
 				}
@@ -69,7 +70,7 @@ func (n *NotificationAdapter) sendAsync() {
 	n.isSenderWorking = false
 }
 
-func (n *NotificationAdapter) Send(notification *entity.EmailNotification, ctx persistence.Context) error {
+func (n *NotificationAdapter) Send(notification *entity.EmailNotification, ctx db.Context) error {
 	if err := n.createEmailPort.Create(notification, ctx); err != nil {
 		n.logger.Error("Error al registrar notificacion de correo electrónico. Error: %s", err.Error())
 		return err
@@ -87,7 +88,7 @@ func NewNotificationAdapter(
 	createEmailPort persistence.CreateEmailPort,
 	updateEmailPort persistence.UpdateEmailPort,
 	getEmailPort persistence.GetEmailPort,
-	persistenceManager persistence.Manager,
+	persistenceManager db.Manager,
 	logger logging.Logger,
 ) *NotificationAdapter {
 	return &NotificationAdapter{

@@ -3,7 +3,7 @@ package seeders
 import (
 	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/model"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/decoder"
 )
 
@@ -18,7 +18,7 @@ func DefaultUsers() Seeder {
 	return &defaultUsers{}
 }
 
-func (a *defaultUsers) Seed(ctx persistence.Context) error {
+func (a *defaultUsers) Seed(ctx _db.Context) error {
 	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var usersToSeed []model.User = make([]model.User, 0)

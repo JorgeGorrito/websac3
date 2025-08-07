@@ -32,10 +32,10 @@ func GetCreateAccessRequestController() *CreateAccessRequestController {
 // @Produce json
 // @Param request body request.CreateAccessRequestRequest true "CreateAccessRequestRequest"
 // @Param lang path string true "Código de idioma" default(en) English Enums(en, es)
-// @Success 200 {object} response.ApiResponse[string]
-// @Failure 400 {object} response.ApiResponse[string]
-// @Failure 409 {object} response.ApiResponse[string]
-// @Failure 500 {object} response.ApiResponse[string]
+// @Success 200 {object} response.ApiResponse[string] "Solicitud de acceso creada exitosamente"
+// @Failure 400 {object} response.ApiResponse[string] "Formato de solicitud inválido (ejemplo: JSON mal formado)"
+// @Failure 409 {object} response.ApiResponse[string] "Solicitud de acceso ya existe para el usuario"
+// @Failure 500 {object} response.ApiResponse[string] "Error interno del servidor"
 // @Router /api/v1/{lang}/access-request [post]
 func (c *CreateAccessRequestController) CreateAccessRequest(context *gin.Context) {
 	var err error

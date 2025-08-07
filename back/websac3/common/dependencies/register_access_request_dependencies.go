@@ -8,6 +8,7 @@ import (
 	"websac3/app/port/out/notification"
 	"websac3/app/port/out/notification/template"
 	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 	"websac3/app/port/out/persistence/enum"
 	"websac3/common/dependencies/container"
 
@@ -19,7 +20,7 @@ func (m *manager) registerAccessRequestDependencies() {
 		andi.GetAbstractType[persistence.AccessRequestPort](),
 		func() any {
 			return repository.NewAccessRequestRepository(
-				container.Inject[message.Provider](),
+				container.Inject[enum.StatusEnum](),
 			)
 		},
 	)
@@ -38,7 +39,7 @@ func (m *manager) registerAccessRequestDependencies() {
 				container.Inject[enum.StatusEnum](),
 				container.Inject[message.Provider](),
 				container.Inject[notification.SendMailPort](),
-				container.Inject[persistence.Manager](),
+				container.Inject[db.Manager](),
 				container.Inject[template.Provider](),
 			)
 		},
@@ -51,7 +52,7 @@ func (m *manager) registerAccessRequestDependencies() {
 				container.Inject[persistence.GetAccessRequestPort](),
 				container.Inject[persistence.UpdateAccessRequestPort](),
 				container.Inject[message.Provider](),
-				container.Inject[persistence.Manager](),
+				container.Inject[db.Manager](),
 			)
 		},
 	)
@@ -69,5 +70,16 @@ func (m *manager) registerAccessRequestDependencies() {
 	m.binder.Bind(
 		andi.GetAbstractType[persistence.GetAccessRequestPort](),
 		func() any { return container.Inject[persistence.AccessRequestPort]() },
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.ListAccessRequestUseCase](),
+		func() any {
+			return service.NewListAccessRequestService(
+				container.Inject[persistence.GetAccessRequestPort](),
+				container.Inject[db.Manager](),
+				container.Inject[message.Provider](),
+			)
+		},
 	)
 }

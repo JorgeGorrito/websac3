@@ -3,24 +3,24 @@ package paginator
 import "fmt"
 
 type paginator[T any] struct {
-	page *page[T]
+	page *Page[T]
 }
 
-type page[T any] struct {
-	Data         []T
-	TotalCount   uint
-	Currentpage  uint
-	ItemsPerpage uint
+type Page[T any] struct {
+	Data         []T   `json:"data"`
+	TotalCount   int64 `json:"total_count"`
+	Currentpage  uint  `json:"current_page"`
+	ItemsPerpage uint  `json:"items_per_page"`
 }
 
 type PaginationParams struct {
-	Currentpage  uint
-	ItemsPerpage uint
+	Currentpage  uint `json:"current_page" form:"current_page"`
+	ItemsPerpage uint `json:"items_per_page" form:"items_per_page"`
 }
 
 func New[T any]() *paginator[T] {
 	return &paginator[T]{
-		page: &page[T]{
+		page: &Page[T]{
 			Data:         []T{},
 			TotalCount:   0,
 			Currentpage:  0,
@@ -42,7 +42,7 @@ func (p *paginator[T]) SetData(data []T) *paginator[T] {
 	return p
 }
 
-func (p *paginator[T]) SetTotalCount(totalCount uint) *paginator[T] {
+func (p *paginator[T]) SetTotalCount(totalCount int64) *paginator[T] {
 	p.page.TotalCount = totalCount
 	return p
 }
@@ -52,11 +52,9 @@ func (p *paginator[T]) SetCurrentPage(currentPage uint) *paginator[T] {
 	return p
 }
 
-func (p *paginator[T]) GetPage() (*page[T], error) {
+func (p *paginator[T]) GetPage() (*Page[T], error) {
 	if p.page == nil ||
-		p.page.Data == nil ||
-		p.page.Currentpage == 0 ||
-		p.page.ItemsPerpage == 0 {
+		p.page.Currentpage == 0 {
 		return nil, fmt.Errorf("page is not initialized")
 	}
 	return p.page, nil

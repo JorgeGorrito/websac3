@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"time"
 	"websac3/app/domain/constants"
 	"websac3/app/domain/entity"
@@ -12,6 +11,7 @@ import (
 	"websac3/app/port/out/notification"
 	"websac3/app/port/out/notification/template"
 	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 	"websac3/app/port/out/persistence/enum"
 	"websac3/common/uuid"
 )
@@ -28,7 +28,7 @@ type CreateAccessRequestService struct {
 	getAccessRequestPort    persistence.GetAccessRequestPort
 	statusEnum              enum.StatusEnum
 	sendNotificationPort    notification.SendMailPort
-	persistenceManager      persistence.Manager
+	persistenceManager      db.Manager
 }
 
 func NewCreateAccessRequestService(
@@ -42,7 +42,7 @@ func NewCreateAccessRequestService(
 	statusEnum enum.StatusEnum,
 	msgProvider message.Provider,
 	notificationPort notification.SendMailPort,
-	persistenceManager persistence.Manager,
+	persistenceManager db.Manager,
 	templateProvider template.Provider,
 ) *CreateAccessRequestService {
 	return &CreateAccessRequestService{
@@ -66,7 +66,7 @@ func (c *CreateAccessRequestService) Execute(
 	lang string,
 ) error {
 	return c.persistenceManager.ExecuteInTransaction(
-		func(ctx persistence.Context) error {
+		func(ctx db.Context) error {
 			var err error
 			var requestFound entity.AccessRequest
 			var userFound entity.User
@@ -141,7 +141,6 @@ func (c *CreateAccessRequestService) Execute(
 
 			var templateToSend string
 			var enlaceConfirmacion string = requestToCreate.ValidationEmailURL + requestToCreate.ValidationEmailCode
-			fmt.Printf("Enlace de confirmación: %s\n", enlaceConfirmacion)
 			if templateToSend, err = templateEmail.Render(
 				&context.AccessRequestConfirmation{
 					NombrePersona:      applicantToCreate.Name,

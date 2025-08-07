@@ -9,6 +9,7 @@ import (
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 	"websac3/common/dependencies/container"
 	"websac3/common/jwt"
 
@@ -44,7 +45,7 @@ func (m *manager) registerUserDependencies() {
 		func() any {
 			return service.NewLoginService(
 				container.Inject[message.Provider](),
-				container.Inject[persistence.Manager](),
+				container.Inject[db.Manager](),
 				container.Inject[persistence.GetUserPort](),
 			)
 		},
@@ -56,7 +57,7 @@ func (m *manager) registerUserDependencies() {
 			return service.NewGetUserByIDService(
 				container.Inject[persistence.GetUserPort](),
 				container.Inject[message.Provider](),
-				container.Inject[persistence.Manager](),
+				container.Inject[db.Manager](),
 			)
 		},
 	)

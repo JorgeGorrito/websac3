@@ -4,7 +4,7 @@ import (
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/message"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/mapper"
 )
 
@@ -16,7 +16,7 @@ func NewEmailRepository(messageProvider message.Provider) *EmailRepository {
 	return &EmailRepository{}
 }
 
-func (e *EmailRepository) Create(emailToCreate *entity.EmailNotification, ctx persistence.Context) error {
+func (e *EmailRepository) Create(emailToCreate *entity.EmailNotification, ctx _db.Context) error {
 	dbCtx, err := e.CastDbContext(ctx)
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func (e *EmailRepository) Create(emailToCreate *entity.EmailNotification, ctx pe
 	return nil
 }
 
-func (e *EmailRepository) GetChunkNotSent(chunkSize uint, page uint, ctx persistence.Context) ([]entity.EmailNotification, error) {
+func (e *EmailRepository) GetChunkNotSent(chunkSize uint, page uint, ctx _db.Context) ([]entity.EmailNotification, error) {
 	dbCtx, err := e.CastDbContext(ctx)
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func (e *EmailRepository) GetChunkNotSent(chunkSize uint, page uint, ctx persist
 
 }
 
-func (e *EmailRepository) Update(email *entity.EmailNotification, ctx persistence.Context) error {
+func (e *EmailRepository) Update(email *entity.EmailNotification, ctx _db.Context) error {
 	dbCtx, err := e.CastDbContext(ctx)
 	if err != nil {
 		return err

@@ -20,6 +20,9 @@ import (
 // @schemes http
 // @contact.name API Support
 // @contact.email j0rg3.4b3ll4@gmail.com
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	if err := godotenv.Load(); err != nil {
 		panic("Error loading .env file. \n Error: " + err.Error())

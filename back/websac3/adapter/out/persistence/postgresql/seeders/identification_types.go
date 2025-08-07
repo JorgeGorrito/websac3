@@ -3,7 +3,7 @@ package seeders
 import (
 	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/model"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/decoder"
 )
 
@@ -17,7 +17,7 @@ func IdentificationTypes() Seeder {
 	return &identificationTypes{}
 }
 
-func (r *identificationTypes) Seed(ctx persistence.Context) error {
+func (r *identificationTypes) Seed(ctx _db.Context) error {
 	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []model.IdentificationType = make([]model.IdentificationType, 0)

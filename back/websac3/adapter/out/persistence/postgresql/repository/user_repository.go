@@ -5,7 +5,7 @@ import (
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/message"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/mapper"
 
 	"gorm.io/gorm"
@@ -21,7 +21,7 @@ func NewUserRepository(
 	return &UserRepository{}
 }
 
-func (u *UserRepository) Create(userToSave *entity.User, ctx persistence.Context) error {
+func (u *UserRepository) Create(userToSave *entity.User, ctx _db.Context) error {
 	dbCtx, err := u.CastDbContext(ctx)
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func (u *UserRepository) Create(userToSave *entity.User, ctx persistence.Context
 	return nil
 }
 
-func (u *UserRepository) UpdateByID(userToUpdate *entity.User, userID uint, ctx persistence.Context) error {
+func (u *UserRepository) UpdateByID(userToUpdate *entity.User, userID uint, ctx _db.Context) error {
 	dbCtx, err := u.CastDbContext(ctx)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func (u *UserRepository) UpdateByID(userToUpdate *entity.User, userID uint, ctx 
 	return nil
 }
 
-func (u *UserRepository) GetByEmail(email string, ctx persistence.Context) (entity.User, error) {
+func (u *UserRepository) GetByEmail(email string, ctx _db.Context) (entity.User, error) {
 	dbCtx, err := u.CastDbContext(ctx)
 	if err != nil {
 		return entity.User{}, err
@@ -90,7 +90,7 @@ func (u *UserRepository) GetByEmail(email string, ctx persistence.Context) (enti
 	return user, nil
 }
 
-func (u *UserRepository) GetByDNI(identificationType uint, identificationNumber string, ctx persistence.Context) (entity.User, error) {
+func (u *UserRepository) GetByDNI(identificationType uint, identificationNumber string, ctx _db.Context) (entity.User, error) {
 	dbCtx, err := u.CastDbContext(ctx)
 	if err != nil {
 		return entity.User{}, err
@@ -117,7 +117,7 @@ func (u *UserRepository) GetByDNI(identificationType uint, identificationNumber 
 	return user, nil
 }
 
-func (u *UserRepository) GetByID(ID uint, ctx persistence.Context) (entity.User, error) {
+func (u *UserRepository) GetByID(ID uint, ctx _db.Context) (entity.User, error) {
 	dbCtx, err := u.CastDbContext(ctx)
 	if err != nil {
 		return entity.User{}, err

@@ -1,13 +1,17 @@
 package db
 
 import (
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 
 	"gorm.io/gorm"
 )
 
 type Context struct {
 	db *gorm.DB
+}
+
+func (t *Context) DBSet(db *gorm.DB) {
+	t.db = db
 }
 
 func (t *Context) DB() *gorm.DB {
@@ -23,7 +27,7 @@ func NewManager(db *gorm.DB) *Manager {
 }
 
 func (tm *Manager) ExecuteInTransaction(
-	fn func(tx persistence.Context) error,
+	fn func(tx _db.Context) error,
 ) error {
 	var tx *gorm.DB = tm.db.Begin()
 	if err := tx.Error; err != nil {
@@ -40,7 +44,7 @@ func (tm *Manager) ExecuteInTransaction(
 }
 
 func (tm *Manager) ExecuteNonTransactional(
-	fn func(ctx persistence.Context) error,
+	fn func(ctx _db.Context) error,
 ) error {
 	var db *gorm.DB = tm.db
 	if err := db.Error; err != nil {

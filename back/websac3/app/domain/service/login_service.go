@@ -7,17 +7,18 @@ import (
 	"websac3/app/domain/errs"
 	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 )
 
 type LoginService struct {
 	msgProvider        message.Provider
-	persistenceManager persistence.Manager
+	persistenceManager db.Manager
 	getUserPort        persistence.GetUserPort
 }
 
 func NewLoginService(
 	msgProvider message.Provider,
-	persistenceManager persistence.Manager,
+	persistenceManager db.Manager,
 	getUserPort persistence.GetUserPort,
 ) *LoginService {
 	return &LoginService{
@@ -29,7 +30,7 @@ func NewLoginService(
 
 func (ls *LoginService) Execute(user entity.User, lang string) (entity.User, error) {
 	var userFound entity.User
-	var err error = ls.persistenceManager.ExecuteInTransaction(func(tx persistence.Context) error {
+	var err error = ls.persistenceManager.ExecuteInTransaction(func(tx db.Context) error {
 		var err error
 		userFound, err = ls.getUserPort.GetByEmail(user.Email, tx)
 		if err != nil {

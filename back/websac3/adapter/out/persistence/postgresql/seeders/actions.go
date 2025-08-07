@@ -3,7 +3,7 @@ package seeders
 import (
 	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/model"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/decoder"
 )
 
@@ -17,7 +17,7 @@ func Actions() Seeder {
 	return &actions{}
 }
 
-func (a *actions) Seed(ctx persistence.Context) error {
+func (a *actions) Seed(ctx _db.Context) error {
 	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []model.Action = make([]model.Action, 0)

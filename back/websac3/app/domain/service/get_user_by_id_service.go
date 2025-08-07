@@ -5,18 +5,19 @@ import (
 	"websac3/app/domain/errs"
 	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 )
 
 type GetUserByIDService struct {
 	getUserPort        persistence.GetUserPort
 	msgProvider        message.Provider
-	persistenceManager persistence.Manager
+	persistenceManager db.Manager
 }
 
 func NewGetUserByIDService(
 	getUserPort persistence.GetUserPort,
 	msgProvider message.Provider,
-	persistenceManager persistence.Manager,
+	persistenceManager db.Manager,
 ) *GetUserByIDService {
 	return &GetUserByIDService{
 		getUserPort:        getUserPort,
@@ -28,9 +29,9 @@ func NewGetUserByIDService(
 func (s *GetUserByIDService) Execute(ID uint, lang string) (entity.User, error) {
 	var user entity.User
 	var err error = s.persistenceManager.ExecuteNonTransactional(
-		func(db persistence.Context) error {
+		func(dbCtx db.Context) error {
 			var err error
-			user, err = s.getUserPort.GetByID(ID, db)
+			user, err = s.getUserPort.GetByID(ID, dbCtx)
 			if err != nil {
 				user = entity.User{}
 				return err

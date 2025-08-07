@@ -5,7 +5,7 @@ import (
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/message"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/mapper"
 
 	"gorm.io/gorm"
@@ -19,7 +19,7 @@ func NewStatusRepository(messageProvider message.Provider) *StatusRepository {
 	return &StatusRepository{}
 }
 
-func (a *StatusRepository) GetByName(name string, ctx persistence.Context) (entity.Status, error) {
+func (a *StatusRepository) GetByName(name string, ctx _db.Context) (entity.Status, error) {
 	dbCtx, err := a.CastDbContext(ctx)
 	if err != nil {
 		return entity.Status{}, err

@@ -12,11 +12,11 @@ type HigherEducationInstitution struct {
 	Ownership   *Ownership
 
 	InstitutionalCategoryID uint
-	InstitutionalCategory   InstitutionalCategory
+	InstitutionalCategory   *InstitutionalCategory
 
 	MunicipalityID uint
-	Municipality   Municipality
+	Municipality   *Municipality
 
 	DepartmentID uint
-	Department   Department
+	Department   *Department
 }

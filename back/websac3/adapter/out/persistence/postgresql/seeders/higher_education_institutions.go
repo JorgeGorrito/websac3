@@ -5,7 +5,7 @@ import (
 	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/dto"
 	models2 "websac3/adapter/out/persistence/postgresql/model"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/decoder"
 
 	"gorm.io/gorm"
@@ -57,7 +57,7 @@ func (h *higherEducationInstitutions) getMunicipalityId(transaction *gorm.DB, mu
 	return municipality, result.Error
 }
 
-func (h *higherEducationInstitutions) Seed(ctx persistence.Context) error {
+func (h *higherEducationInstitutions) Seed(ctx _db.Context) error {
 	var dbCtx *db.Context = ctx.(*db.Context)
 	var decoder decoder.Decoder = decoder.Json()
 	var dataToSeed []dto.HigherEducationInstitution = make([]dto.HigherEducationInstitution, 0)

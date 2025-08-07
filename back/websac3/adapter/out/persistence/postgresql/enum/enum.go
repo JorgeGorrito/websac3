@@ -2,11 +2,11 @@ package enum
 
 import (
 	"time"
-	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 )
 
 type GetPortBase[T any] interface {
-	GetByName(name string, ctx persistence.Context) (T, error)
+	GetByName(name string, ctx db.Context) (T, error)
 }
 
 type cacheEntry[T any] struct {
@@ -15,14 +15,14 @@ type cacheEntry[T any] struct {
 }
 
 type Enum[T any] struct {
-	persistenceManager persistence.Manager
+	persistenceManager db.Manager
 	getPortBase        GetPortBase[T]
 	registry           map[string]cacheEntry[T]
 	ttl                time.Duration
 }
 
 func New[T any](
-	persistenceManager persistence.Manager,
+	persistenceManager db.Manager,
 	getPortBase GetPortBase[T],
 	ttl time.Duration,
 ) *Enum[T] {
@@ -47,7 +47,7 @@ func (e *Enum[T]) GetByName(name string) (T, error) {
 
 	var value T
 	var err error = e.persistenceManager.ExecuteNonTransactional(
-		func(tx persistence.Context) error {
+		func(tx db.Context) error {
 			v, getErr := e.getPortBase.GetByName(name, tx)
 			if getErr != nil {
 				return getErr

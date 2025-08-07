@@ -2,10 +2,13 @@ package repository
 
 import (
 	"errors"
+	psqlfilter "websac3/adapter/out/persistence/postgresql/filter"
 	"websac3/adapter/out/persistence/postgresql/model"
+	"websac3/app/domain/constants"
 	"websac3/app/domain/entity"
-	"websac3/app/port/out/message"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
+	"websac3/app/port/out/persistence/enum"
+	"websac3/app/port/out/persistence/filter"
 	"websac3/common/mapper"
 
 	"gorm.io/gorm"
@@ -13,13 +16,16 @@ import (
 
 type AccessRequestRepository struct {
 	Repository
+	statusEnum enum.StatusEnum
 }
 
-func NewAccessRequestRepository(messageProvider message.Provider) *AccessRequestRepository {
-	return &AccessRequestRepository{}
+func NewAccessRequestRepository(statusEnum enum.StatusEnum) *AccessRequestRepository {
+	return &AccessRequestRepository{
+		statusEnum: statusEnum,
+	}
 }
 
-func (a *AccessRequestRepository) Create(accessRequestToSave *entity.AccessRequest, ctx persistence.Context) error {
+func (a *AccessRequestRepository) Create(accessRequestToSave *entity.AccessRequest, ctx _db.Context) error {
 	dbCtx, err := a.CastDbContext(ctx)
 	if err != nil {
 		return err
@@ -40,7 +46,7 @@ func (a *AccessRequestRepository) Create(accessRequestToSave *entity.AccessReque
 	return nil
 }
 
-func (a *AccessRequestRepository) Update(accessRequestToUpdate *entity.AccessRequest, ctx persistence.Context) error {
+func (a *AccessRequestRepository) Update(accessRequestToUpdate *entity.AccessRequest, ctx _db.Context) error {
 	dbCtx, err := a.CastDbContext(ctx)
 	if err != nil {
 		return err
@@ -62,7 +68,7 @@ func (a *AccessRequestRepository) Update(accessRequestToUpdate *entity.AccessReq
 	return nil
 }
 
-func (a *AccessRequestRepository) GetUnvalidatedEmailByToken(validationToken string, ctx persistence.Context) (entity.AccessRequest, error) {
+func (a *AccessRequestRepository) GetUnvalidatedEmailByToken(validationToken string, ctx _db.Context) (entity.AccessRequest, error) {
 	dbCtx, err := a.CastDbContext(ctx)
 	if err != nil {
 		return entity.AccessRequest{}, err
@@ -96,7 +102,7 @@ func (a *AccessRequestRepository) GetLastCreatedByIdentificationAndEmail(
 	identificationTypeID uint,
 	identificationNumber string,
 	email string,
-	ctx persistence.Context,
+	ctx _db.Context,
 ) (entity.AccessRequest, error) {
 	dbCtx, err := a.CastDbContext(ctx)
 	if err != nil {
@@ -126,4 +132,77 @@ func (a *AccessRequestRepository) GetLastCreatedByIdentificationAndEmail(
 	}
 
 	return accessRequestFound, nil
+}
+
+func (a *AccessRequestRepository) GetAuthenticatedEmailByFilters(
+	page, perPage uint,
+	filters filter.Filters,
+	ctx _db.Context,
+) ([]entity.AccessRequest, int64, error) {
+	dbCtx, err := a.CastDbContext(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	pendingStatus, err := a.statusEnum.GetByName(constants.Pending)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	baseQuery := dbCtx.DB().
+		Model(&model.AccessRequest{}).
+		Joins("Applicant").
+		Joins("Applicant.HigherEducationInstitution").
+		Joins("Applicant.HigherEducationInstitution.Municipality").
+		Joins("Applicant.HigherEducationInstitution.Department").
+		Joins("Status").
+		Joins("VerificationEmail").
+		Where("access_requests.is_verified = ?", true).
+		Where(`"Status".id = ?`, pendingStatus.ID)
+
+	dbCtx.DBSet(baseQuery)
+
+	dbCtxFiltered, err := filters.Apply(dbCtx, psqlfilter.FiltersRegistry)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	dbCtx, err = a.CastDbContext(dbCtxFiltered)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	var total int64
+	if err := dbCtx.DB().Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	query := dbCtx.DB().
+		Preload("Applicant.IdentificationType").
+		Preload("Applicant.HigherEducationInstitution.Ownership").
+		Preload("Applicant.HigherEducationInstitution.InstitutionalCategory").
+		Preload("Applicant.HigherEducationInstitution.Department").
+		Preload("Applicant.HigherEducationInstitution.Municipality").
+		Preload("VerificationEmail").
+		Preload("Status").
+		Offset(int((page - 1) * perPage)).
+		Limit(int(perPage))
+
+	dbCtx.DBSet(query)
+
+	var accessRequestsFound []model.AccessRequest
+	if err := dbCtx.DB().Find(&accessRequestsFound).Error; err != nil {
+		return nil, 0, err
+	}
+
+	var accessRequests []entity.AccessRequest
+	for _, accessRequest := range accessRequestsFound {
+		var accessRequestEntity entity.AccessRequest
+		if accessRequestEntity, err = mapper.Map[model.AccessRequest, entity.AccessRequest](&accessRequest); err != nil {
+			return nil, 0, err
+		}
+		accessRequests = append(accessRequests, accessRequestEntity)
+	}
+
+	return accessRequests, total, nil
 }

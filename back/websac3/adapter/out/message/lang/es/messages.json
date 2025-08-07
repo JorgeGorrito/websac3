@@ -4,6 +4,10 @@
     "cannot_create_access_request" : "La solicitud de acceso ya ha sido aprobada.",
     "access_request_created" : "Solicitud de acceso creada correctamente."
   },
+  "list_access_request" : {
+    "not_found" : "No se encontraron solicitudes de acceso.",
+    "access_requests_listed" : "Solicitudes de acceso listadas correctamente."
+  },
   "validate_email" : {
     "email_validated" : "Correo electrónico validado exitosamente.",
     "email_not_found" : "No se encontró el correo electrónico con el token proporcionado."

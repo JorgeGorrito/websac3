@@ -7,6 +7,7 @@ import (
 	aenum "websac3/adapter/out/persistence/postgresql/enum"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 	"websac3/app/port/out/persistence/enum"
 	"websac3/common/dependencies/container"
 
@@ -23,7 +24,7 @@ func (m *manager) registerEnumDependencies() {
 		andi.GetAbstractType[enum.StatusEnum](),
 		func() any {
 			return aenum.New[entity.Status](
-				container.Inject[persistence.Manager](),
+				container.Inject[db.Manager](),
 				container.Inject[persistence.GetStatusPort](),
 				time.Duration(accessRequestStatusTTLMinutes)*time.Minute,
 			)

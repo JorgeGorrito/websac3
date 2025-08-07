@@ -6,7 +6,7 @@ import (
 	"slices"
 	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/seeders"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/dependencies/container"
 	"websac3/common/validator"
 
@@ -29,7 +29,7 @@ func NewSeedRun(params map[string]string, cmdprinter command.CMDPrinter) command
 		paramsReceived: paramsReceived,
 		validator:      container.Inject[validator.Validator](),
 		dbManager: func() *db.Manager {
-			var dbManager *db.Manager = container.Inject[persistence.Manager]().(*db.Manager)
+			var dbManager *db.Manager = container.Inject[_db.Manager]().(*db.Manager)
 			return dbManager
 		}(),
 	}
@@ -39,7 +39,7 @@ func (m *SeedRun) Execute() error {
 		return err
 	}
 
-	return m.dbManager.ExecuteInTransaction(func(ctx persistence.Context) error {
+	return m.dbManager.ExecuteInTransaction(func(ctx _db.Context) error {
 		var constructor seeders.NewSeeder = seeders.GetSeederConstructorByName(m.seedName)
 		if constructor == nil {
 			return fmt.Errorf("seeder %s not found", m.seedName)

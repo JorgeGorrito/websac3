@@ -3,9 +3,11 @@ package config
 import (
 	"errors"
 	"reflect"
-	handler "websac3/adapter/in/web/handler/command"
+	chandler "websac3/adapter/in/web/handler/command"
+	qhandler "websac3/adapter/in/web/handler/query"
 	"websac3/adapter/in/web/middleware"
 	"websac3/app/port/in/dto/command"
+	"websac3/app/port/in/dto/query"
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/message"
 	"websac3/common/dependencies/container"
@@ -33,7 +35,7 @@ func (m *manager) ConfigureMediator(errorList *error) {
 
 	if err := iMediator.Register(
 		reflect.TypeOf(command.CreateAccessRequestCommand{}),
-		handler.NewCreateAccessRequestCommandHandler(
+		chandler.NewCreateAccessRequestCommandHandler(
 			container.Inject[usecase.CreateAccessRequestUseCase](),
 			container.Inject[validator.Validator](),
 			container.Inject[message.Provider](),
@@ -45,7 +47,7 @@ func (m *manager) ConfigureMediator(errorList *error) {
 
 	if err := iMediator.Register(
 		reflect.TypeOf(command.ValidateEmailCommand{}),
-		handler.NewValidateEmailCommandHandler(
+		chandler.NewValidateEmailCommandHandler(
 			container.Inject[usecase.ValidateEmailUseCase](),
 			container.Inject[validator.Validator](),
 			container.Inject[message.Provider](),
@@ -57,7 +59,7 @@ func (m *manager) ConfigureMediator(errorList *error) {
 
 	if err := iMediator.Register(
 		reflect.TypeOf(command.LoginCommand{}),
-		handler.NewLoginHandler(
+		chandler.NewLoginHandler(
 			container.Inject[usecase.LoginUseCase](),
 			container.Inject[jwt.Generator](),
 			container.Inject[message.Provider](),
@@ -70,11 +72,23 @@ func (m *manager) ConfigureMediator(errorList *error) {
 
 	if err := iMediator.Register(
 		reflect.TypeOf(command.RefreshTokenCommand{}),
-		handler.NewRefreshTokenHandler(
+		chandler.NewRefreshTokenHandler(
 			container.Inject[usecase.GetUserByIDUseCase](),
 			container.Inject[jwt.Generator](),
 			container.Inject[message.Provider](),
 			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.ListAccessRequestQuery{}),
+		qhandler.NewListAccessRequestQueryHandler(
+			container.Inject[usecase.ListAccessRequestUseCase](),
+			container.Inject[validator.Validator](),
+			container.Inject[message.Provider](),
 			container.Inject[logging.Logger](),
 		),
 	); err != nil {

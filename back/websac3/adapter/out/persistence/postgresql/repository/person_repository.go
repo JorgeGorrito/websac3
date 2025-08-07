@@ -4,7 +4,7 @@ import (
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/message"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/mapper"
 )
 
@@ -16,7 +16,7 @@ func NewPersonRepository(messageProvider message.Provider) *PersonRepository {
 	return &PersonRepository{}
 }
 
-func (p *PersonRepository) Create(personToSave *entity.Person, ctx persistence.Context) error {
+func (p *PersonRepository) Create(personToSave *entity.Person, ctx _db.Context) error {
 	dbCtx, err := p.CastDbContext(ctx)
 	if err != nil {
 		return err
@@ -37,7 +37,7 @@ func (p *PersonRepository) Create(personToSave *entity.Person, ctx persistence.C
 	return nil
 }
 
-func (p *PersonRepository) UpdateById(personToUpdate *entity.Person, personID uint, ctx persistence.Context) error {
+func (p *PersonRepository) UpdateById(personToUpdate *entity.Person, personID uint, ctx _db.Context) error {
 	dbCtx, err := p.CastDbContext(ctx)
 	if err != nil {
 		return err
@@ -57,7 +57,7 @@ func (p *PersonRepository) UpdateById(personToUpdate *entity.Person, personID ui
 	return nil
 }
 
-func (p *PersonRepository) GetByIdentificationNumber(identificationNumber string, ctx persistence.Context) (entity.Person, error) {
+func (p *PersonRepository) GetByIdentificationNumber(identificationNumber string, ctx _db.Context) (entity.Person, error) {
 	dbCtx, err := p.CastDbContext(ctx)
 	if err != nil {
 		return entity.Person{}, err

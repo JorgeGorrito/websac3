@@ -1,11 +1,9 @@
 package seeders
 
-import (
-	"websac3/app/port/out/persistence"
-)
+import "websac3/app/port/out/persistence/db"
 
 type Seeder interface {
-	Seed(persistence.Context) error
+	Seed(db.Context) error
 }
 
 type NewSeeder func() Seeder

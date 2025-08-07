@@ -3,6 +3,7 @@ package mapper
 import (
 	"errors"
 	"websac3/adapter/in/web/request"
+	"websac3/adapter/in/web/response"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/in/dto/command"
@@ -121,5 +122,27 @@ func registerAccessRequestMappers() {
 			IsVerified: accessRequest.IsVerified,
 			CreatedAt:  accessRequest.CreatedAt,
 		}, nil
+	})
+
+	RegisterMapFunc(func(accessRequest *entity.AccessRequest) (response.ListAccessRequestResponse, error) {
+		var errorList error
+		var listAccessRequestResponse response.ListAccessRequestResponse = response.ListAccessRequestResponse{
+			ID:                                  accessRequest.ID,
+			Name:                                accessRequest.Applicant.Name,
+			Lastname:                            accessRequest.Applicant.Lastname,
+			Email:                               accessRequest.EmailValidation.To,
+			IdentificationNumber:                accessRequest.Applicant.IdentificationNumber,
+			IdentificationType:                  accessRequest.Applicant.IdentificationType.Name,
+			JobPosition:                         accessRequest.Applicant.JobPosition,
+			HigherEducationInstitutionSnies:     accessRequest.Applicant.HigherEducationInstitutionSnies,
+			HigherEducationInstitutionName:      accessRequest.Applicant.HigherEducationInstitution.Name,
+			HigherEducationInstitutionOwnership: accessRequest.Applicant.HigherEducationInstitution.Ownership.Name,
+			MunicipalityName:                    accessRequest.Applicant.HigherEducationInstitution.Municipality.Name,
+			DepartmentName:                      accessRequest.Applicant.HigherEducationInstitution.Department.Name,
+			StatusID:                            accessRequest.Status.ID,
+			StatusName:                          accessRequest.Status.Name,
+		}
+
+		return listAccessRequestResponse, errorList
 	})
 }

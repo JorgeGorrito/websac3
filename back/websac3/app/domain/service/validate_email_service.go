@@ -5,20 +5,21 @@ import (
 	"websac3/app/domain/errs"
 	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 )
 
 type ValidateEmailService struct {
 	getAccessRequestPort    persistence.GetAccessRequestPort
 	updateAccessRequestPort persistence.UpdateAccessRequestPort
 	msgProvider             message.Provider
-	persistenceManager      persistence.Manager
+	persistenceManager      db.Manager
 }
 
 func NewValidateEmailService(
 	getAccessRequestPort persistence.GetAccessRequestPort,
 	updateAccessRequestPort persistence.UpdateAccessRequestPort,
 	msgProvider message.Provider,
-	persistenceManager persistence.Manager,
+	persistenceManager db.Manager,
 ) *ValidateEmailService {
 	return &ValidateEmailService{
 		getAccessRequestPort:    getAccessRequestPort,
@@ -30,7 +31,7 @@ func NewValidateEmailService(
 
 func (v *ValidateEmailService) Execute(validationToken string, lang string) error {
 	return v.persistenceManager.ExecuteInTransaction(
-		func(tx persistence.Context) error {
+		func(tx db.Context) error {
 			var err error
 			var accessRequestFound entity.AccessRequest
 

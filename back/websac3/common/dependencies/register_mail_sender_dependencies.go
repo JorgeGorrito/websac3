@@ -7,6 +7,7 @@ import (
 	"websac3/app/port/out/message"
 	"websac3/app/port/out/notification"
 	"websac3/app/port/out/persistence"
+	"websac3/app/port/out/persistence/db"
 	"websac3/common/dependencies/container"
 	"websac3/common/logging"
 	"websac3/common/mail"
@@ -31,7 +32,7 @@ func (m *manager) registerMailSenderDependencies() {
 				container.Inject[persistence.CreateEmailPort](),
 				container.Inject[persistence.UpdateEmailPort](),
 				container.Inject[persistence.GetEmailPort](),
-				container.Inject[persistence.Manager](),
+				container.Inject[db.Manager](),
 				container.Inject[logging.Logger](),
 			)
 		},

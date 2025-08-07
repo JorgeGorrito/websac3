@@ -4,6 +4,10 @@
     "cannot_create_access_request": "The access request has already been approved.",
     "access_request_created": "Access request created successfully."
   },
+  "list_access_request": {
+    "not_found": "No access requests found.",
+    "access_requests_listed": "Access requests listed successfully."
+  },
   "validate_email": {
     "email_validated": "Email successfully validated.",
     "email_not_found": "Email not found with the provided token."

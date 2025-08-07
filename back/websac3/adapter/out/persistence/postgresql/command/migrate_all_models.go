@@ -3,7 +3,7 @@ package command
 import (
 	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/model"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/dependencies/container"
 
 	"github.com/JorgeGorrito/anise-with-gin/anise/command"
@@ -29,14 +29,14 @@ func NewMigrateAllModels(params map[string]string, cmdprinter command.CMDPrinter
 			return modelsToMigrate
 		}(),
 		dbManager: func() *db.Manager {
-			var dbManager *db.Manager = container.Inject[persistence.Manager]().(*db.Manager)
+			var dbManager *db.Manager = container.Inject[_db.Manager]().(*db.Manager)
 			return dbManager
 		}(),
 	}
 }
 
 func (m *MigrateAllModels) Execute() error {
-	var err error = m.dbManager.ExecuteInTransaction(func(ctx persistence.Context) error {
+	var err error = m.dbManager.ExecuteInTransaction(func(ctx _db.Context) error {
 		var dbCtx *db.Context = ctx.(*db.Context)
 		if err := dbCtx.
 			DB().

@@ -6,7 +6,7 @@ import (
 	"slices"
 	"websac3/adapter/out/persistence/postgresql/db"
 	"websac3/adapter/out/persistence/postgresql/model"
-	"websac3/app/port/out/persistence"
+	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/dependencies/container"
 	"websac3/common/validator"
 
@@ -30,14 +30,14 @@ func NewMigrateModel(params map[string]string, cmdprinter command.CMDPrinter) co
 		paramsReceived:     paramsReceived,
 		validator:          container.Inject[validator.Validator](),
 		dbManager: func() *db.Manager {
-			var dbManager *db.Manager = container.Inject[persistence.Manager]().(*db.Manager)
+			var dbManager *db.Manager = container.Inject[_db.Manager]().(*db.Manager)
 			return dbManager
 		}(),
 	}
 }
 
 func (m *MigrateModel) Execute() error {
-	var err error = m.dbManager.ExecuteInTransaction(func(ctx persistence.Context) error {
+	var err error = m.dbManager.ExecuteInTransaction(func(ctx _db.Context) error {
 		var dbCtx *db.Context = ctx.(*db.Context)
 		if err := m.validator.ValidateParamsRequired(m.paramsReceived, []string{"model"}, "es"); err != nil {
 			return err
