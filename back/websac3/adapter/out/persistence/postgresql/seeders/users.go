@@ -41,5 +41,9 @@ func (a *defaultUsers) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "people")
+	ResetAutoIncrement(dbCtx, "users")
+
 	return nil
 }

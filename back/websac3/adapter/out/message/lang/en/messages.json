@@ -1,4 +1,9 @@
 {
+  "approve_access_request": {
+    "not_found": "The access request with the provided ID was not found.",
+    "already_approved": "The access request has already been approved.",
+    "approve_success": "Access request approved successfully."
+  },
   "create_access_request": {
     "user_alredy_registered": "The person already has a registered user.",
     "cannot_create_access_request": "The access request has already been approved.",
@@ -44,6 +49,7 @@
     "field_must_be_string": "Field %s must be a string."
   },
   "base_error": {
-    "internal_error": "The request could not be processed."
+    "internal_error": "The request could not be processed.",
+    "forbidden": "You do not have permission to perform this action."
   }
 }

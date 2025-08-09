@@ -1,4 +1,9 @@
 {
+  "approve_access_request" : {
+    "not_found" : "No se encontró la solicitud de acceso con el ID proporcionado.",
+    "already_approved" : "La solicitud de acceso ya ha sido aprobada.",
+    "approve_success" : "Solicitud de acceso aprobada exitosamente."
+  },
   "create_access_request" : {
     "user_alredy_registered" : "La persona ya cuenta con un usuario registrado.",
     "cannot_create_access_request" : "La solicitud de acceso ya ha sido aprobada.",
@@ -44,6 +49,7 @@
     "field_must_be_string": "El campo %s debe ser una cadena de texto."
   },
   "base_error": {
-    "internal_error": "No fue posible procesar la petición."
+    "internal_error": "No fue posible procesar la petición.",
+    "forbidden": "No tiene permiso para realizar esta acción."
   }
 }

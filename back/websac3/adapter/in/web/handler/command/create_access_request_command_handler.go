@@ -78,7 +78,7 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 	}
 	h.logger.Info("Solicitud de acceso creada exitosamente para el usuario con CC: " + request.IdentificationNumber)
 	return response.ApiResponse[string]{
-		HttpStatusCode: http.StatusOK,
+		HttpStatusCode: http.StatusCreated,
 		Result: h.msgProvider.
 			WithLang(lang).
 			GetMessage("create_access_request", "access_request_created"),

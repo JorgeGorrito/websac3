@@ -6,13 +6,14 @@ import (
 	"websac3/adapter/in/web/response"
 	"websac3/adapter/in/web/util"
 	"websac3/app/port/in/dto/query"
+	"websac3/common/jwt"
 	"websac3/common/mediator"
 	"websac3/common/paginator"
 
 	"github.com/gin-gonic/gin"
 )
 
-type ListAccessRequestController struct{}
+type ListAccessRequestController struct{ Authenticable }
 
 var listAccessRequestControllerInstance *ListAccessRequestController = nil
 
@@ -69,12 +70,16 @@ func (c *ListAccessRequestController) Handle(ctx *gin.Context) {
 		return
 	}
 	var filters = util.ParseParamsFilter(filtersMap)
+	var lang string = ctx.Param("lang")
+	var token *jwt.AccessTokenClaims = c.GetToken(ctx)
 	var requestQuery query.ListAccessRequestQuery = query.ListAccessRequestQuery{
 		PaginationParams: request,
 		Filters:          filters,
+		UserID:           token.Sub,
+		Permissions:      token.Permissions["access-request"],
 	}
 
-	result, _ := mediator.Send[query.ListAccessRequestQuery, response.ApiResponse[paginator.Page[response.ListAccessRequestResponse]]](requestQuery, ctx.GetString("lang"))
+	result, _ := mediator.Send[query.ListAccessRequestQuery, response.ApiResponse[paginator.Page[response.ListAccessRequestResponse]]](requestQuery, lang)
 	ctx.JSON(result.HttpStatusCode, result.ToResponseFormat())
 	return
 }

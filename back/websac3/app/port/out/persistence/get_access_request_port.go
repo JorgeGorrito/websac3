@@ -7,6 +7,7 @@ import (
 )
 
 type GetAccessRequestPort interface {
+	GetByID(id uint, db db.Context) (entity.AccessRequest, error)
 	GetAuthenticatedEmailByFilters(page, perPage uint, filters filter.Filters, db db.Context) ([]entity.AccessRequest, int64, error)
 	GetLastCreatedByIdentificationAndEmail(identificationTypeID uint, identificationNumber string, email string, db db.Context) (entity.AccessRequest, error)
 	GetUnvalidatedEmailByToken(validationToken string, db db.Context) (entity.AccessRequest, error)

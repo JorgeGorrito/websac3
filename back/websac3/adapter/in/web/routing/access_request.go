@@ -24,10 +24,18 @@ func registerListAccessRequest(routerGroup *gin.RouterGroup) {
 	routerGroup.GET("/access-request", listAccessRequestController.Handle)
 }
 
+func registerApproveAccessRequest(routerGroup *gin.RouterGroup) {
+	approveAccessRequestController := controller.GetApproveAccessRequestController()
+
+	routerGroup.POST("/access-request/:accessRequestToApproveID/approve", approveAccessRequestController.Handle)
+}
+
 func RegisterAccessRequestRoutes(routerGroup *gin.RouterGroup) {
 	authRequiredGroup := getAuthRequiredGroup(routerGroup)
 
 	registerCreateAccessRequest(routerGroup)
 	registerValidateEmailRequest(routerGroup)
+
 	registerListAccessRequest(authRequiredGroup)
+	registerApproveAccessRequest(authRequiredGroup)
 }

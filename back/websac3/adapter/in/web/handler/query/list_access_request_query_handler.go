@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"websac3/adapter/in/web/handler"
 	"websac3/adapter/in/web/response"
 	"websac3/adapter/in/web/util"
 	"websac3/app/domain/entity"
@@ -18,6 +19,7 @@ import (
 )
 
 type ListAccessRequestQueryHandler struct {
+	handler.Authenticable
 	listAccessRequestUseCase usecase.ListAccessRequestUseCase
 	msgProvider              message.Provider
 	validator                validator.Validator
@@ -33,6 +35,9 @@ func NewListAccessRequestQueryHandler(
 	logger logging.Logger,
 ) *ListAccessRequestQueryHandler {
 	return &ListAccessRequestQueryHandler{
+		Authenticable: handler.Authenticable{
+			PermissionsRequired: []string{"list"},
+		},
 		listAccessRequestUseCase: listAccessRequestUseCase,
 		msgProvider:              msgProvider,
 		validator:                validator,
@@ -59,6 +64,18 @@ func (h *ListAccessRequestQueryHandler) Handle(request query.ListAccessRequestQu
 		return response.ApiResponse[paginator.Page[response.ListAccessRequestResponse]]{
 			HttpStatusCode: http.StatusBadRequest,
 			Errors:         validationErrors,
+		}, nil
+	}
+
+	if !h.ValidatePermissions(request.Permissions) {
+		h.logger.Warn("El usuario con ID: %d no tiene permisos para listar las solicitudes de acceso", request.UserID)
+		return response.ApiResponse[paginator.Page[response.ListAccessRequestResponse]]{
+			HttpStatusCode: http.StatusForbidden,
+			Errors: []string{
+				h.msgProvider.
+					WithLang(lang).
+					GetMessage("base_error", "forbidden"),
+			},
 		}, nil
 	}
 
@@ -90,6 +107,7 @@ func (h *ListAccessRequestQueryHandler) Handle(request query.ListAccessRequestQu
 		SetData(resultsMapped).
 		SetCurrentPage(pagination.Currentpage).
 		SetTotalCount(total).
+		SetItemsPerPage(pagination.ItemsPerpage).
 		GetPage()
 	if errPag != nil {
 		h.logger.Error("Error al paginar resultados de solicitudes de acceso. Error: %s", errPag.Error())

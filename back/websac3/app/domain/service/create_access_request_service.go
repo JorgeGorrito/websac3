@@ -103,7 +103,7 @@ func (c *CreateAccessRequestService) Execute(
 				return err
 			}
 
-			if !requestFound.CanRegister() {
+			if !requestFound.CanRegisterNewRequest(requestToCreate.EmailValidation.To) {
 				return errs.NewConflictError(
 					c.msgProvider.
 						WithLang(lang).

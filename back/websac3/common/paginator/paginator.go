@@ -29,16 +29,13 @@ func New[T any]() *paginator[T] {
 	}
 }
 
-func (p *paginator[T]) CountElements() uint {
-	if p.page == nil {
-		return 0
-	}
-	return uint(len(p.page.Data))
+func (p *paginator[T]) SetItemsPerPage(itemsPerPage uint) *paginator[T] {
+	p.page.ItemsPerpage = itemsPerPage
+	return p
 }
 
 func (p *paginator[T]) SetData(data []T) *paginator[T] {
 	p.page.Data = data
-	p.page.ItemsPerpage = p.CountElements()
 	return p
 }
 

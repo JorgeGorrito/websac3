@@ -19,6 +19,9 @@ func (m *manager) registerTemplateDependencies() {
 					"access_request_confirmation": atemplate.NewAccessRequestConfirmationTemplate(
 						baseDir + "access_request_confirmation.html",
 					),
+					"access_request_approved": atemplate.NewAccessRequestApprovedTemplate(
+						baseDir + "access_request_approved.html",
+					),
 				},
 			)
 		},

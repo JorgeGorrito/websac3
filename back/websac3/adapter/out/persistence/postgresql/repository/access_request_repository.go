@@ -81,7 +81,7 @@ func (a *AccessRequestRepository) GetUnvalidatedEmailByToken(validationToken str
 		Joins("Applicant").
 		Joins("Status").
 		Joins("VerificationEmail").
-		Where("validation_code = ?", validationToken).
+		Where("validation_email_code = ?", validationToken).
 		Where("is_verified = ?", false).
 		First(&accessRequest).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -205,4 +205,35 @@ func (a *AccessRequestRepository) GetAuthenticatedEmailByFilters(
 	}
 
 	return accessRequests, total, nil
+}
+
+func (a *AccessRequestRepository) GetByID(ID uint, ctx _db.Context) (entity.AccessRequest, error) {
+	dbCtx, err := a.CastDbContext(ctx)
+	if err != nil {
+		return entity.AccessRequest{}, err
+	}
+
+	var accessRequest model.AccessRequest
+	if err := dbCtx.DB().
+		Model(&model.AccessRequest{}).
+		Joins("Applicant").
+		Joins("Applicant.HigherEducationInstitution").
+		Joins("Applicant.HigherEducationInstitution.Municipality").
+		Joins("Applicant.HigherEducationInstitution.Department").
+		Joins("Status").
+		Joins("VerificationEmail").
+		Where("access_requests.id = ?", ID).
+		First(&accessRequest).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return entity.AccessRequest{}, nil
+		}
+		return entity.AccessRequest{}, err
+	}
+
+	var accessRequestFound entity.AccessRequest
+	if accessRequestFound, err = mapper.Map[model.AccessRequest, entity.AccessRequest](&accessRequest); err != nil {
+		return entity.AccessRequest{}, err
+	}
+
+	return accessRequestFound, nil
 }

@@ -29,6 +29,10 @@ type AccessRequest struct {
 	CreatedAt  time.Time
 }
 
+func (a *AccessRequest) HasEmailVerified() bool {
+	return a.IsVerified
+}
+
 func (a *AccessRequest) IsRegistered() bool {
 	return a.ID != 0
 }
@@ -37,8 +41,12 @@ func (a *AccessRequest) IsApproved() bool {
 	return a.Status != nil && a.Status.IsApproved()
 }
 
-func (a *AccessRequest) CanRegister() bool {
-	return !a.IsRegistered() || !a.IsApproved()
+func (a *AccessRequest) IsRejected() bool {
+	return a.Status != nil && a.Status.IsRejected()
+}
+
+func (a *AccessRequest) CanRegisterNewRequest(emailNewRequest string) bool {
+	return !a.IsRegistered() || (a.IsRejected() && a.EmailValidation != nil && a.EmailValidation.To == emailNewRequest)
 }
 
 func (a *AccessRequest) IsApplicantRegistered() bool {

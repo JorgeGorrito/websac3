@@ -8,4 +8,6 @@ import (
 type ListAccessRequestQuery struct {
 	PaginationParams paginator.PaginationParams
 	Filters          filter.Params
+	UserID           uint
+	Permissions      []string
 }
