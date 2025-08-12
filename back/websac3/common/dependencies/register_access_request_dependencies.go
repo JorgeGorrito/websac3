@@ -98,4 +98,20 @@ func (m *manager) registerAccessRequestDependencies() {
 			)
 		},
 	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.RejectAccessRequestUseCase](),
+		func() any {
+			return service.NewRejectAccessRequestService(
+				container.Inject[enum.StatusEnum](),
+				container.Inject[persistence.GetUserPort](),
+				container.Inject[persistence.GetAccessRequestPort](),
+				container.Inject[persistence.UpdateAccessRequestPort](),
+				container.Inject[message.Provider](),
+				container.Inject[notification.SendMailPort](),
+				container.Inject[db.Manager](),
+				container.Inject[template.Provider](),
+			)
+		},
+	)
 }

@@ -4,6 +4,12 @@
     "already_approved" : "La solicitud de acceso ya ha sido aprobada.",
     "approve_success" : "Solicitud de acceso aprobada exitosamente."
   },
+  "reject_access_request": {
+    "already_rejected": "La solicitud de acceso ya ha sido rechazada.",
+    "not_found": "No se encontró la solicitud de acceso con el ID proporcionado.",
+    "user_alredy_registered": "La persona ya cuenta con un usuario registrado.",
+    "reject_success": "Solicitud de acceso rechazada exitosamente."
+  },
   "create_access_request" : {
     "user_alredy_registered" : "La persona ya cuenta con un usuario registrado.",
     "cannot_create_access_request" : "La solicitud de acceso ya ha sido aprobada.",

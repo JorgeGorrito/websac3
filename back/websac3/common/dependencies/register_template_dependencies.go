@@ -22,6 +22,9 @@ func (m *manager) registerTemplateDependencies() {
 					"access_request_approved": atemplate.NewAccessRequestApprovedTemplate(
 						baseDir + "access_request_approved.html",
 					),
+					"access_request_rejected": atemplate.NewAccessRequestRejectedTemplate(
+						baseDir + "access_request_rejected.html",
+					),
 				},
 			)
 		},

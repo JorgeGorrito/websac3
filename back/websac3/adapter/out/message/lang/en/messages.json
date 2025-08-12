@@ -4,6 +4,12 @@
     "already_approved": "The access request has already been approved.",
     "approve_success": "Access request approved successfully."
   },
+  "reject_access_request": {
+    "already_rejected": "The access request has already been rejected.",
+    "not_found": "The access request with the provided ID was not found.",
+    "user_alredy_registered": "The person already has a registered user.",
+    "reject_success": "Access request rejected successfully."
+  },
   "create_access_request": {
     "user_alredy_registered": "The person already has a registered user.",
     "cannot_create_access_request": "The access request has already been approved.",
