@@ -23,6 +23,7 @@ func getAuthRequiredGroup(routerGroup *gin.RouterGroup) *gin.RouterGroup {
 func (m *manager) RegisterRoutes(engine *gin.Engine) error {
 	var routerGroup *gin.RouterGroup = engine.Group("/api/v1/:lang")
 	RegisterAccessRequestRoutes(routerGroup)
+	RegisterIdentificationTypesRoutes(routerGroup)
 	RegisterAuthRoutes(routerGroup)
 	RegisterSwagger(engine)
 

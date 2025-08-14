@@ -42,5 +42,6 @@ func (m *manager) RegisterDependencies() error {
 	m.registerEnumDependencies()
 	m.registerTemplateDependencies()
 	m.registerValidatorDependencies()
+	m.registerIdentificationTypeDependencies()
 	return nil
 }

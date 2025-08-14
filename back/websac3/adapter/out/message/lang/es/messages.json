@@ -1,4 +1,7 @@
 {
+  "list_identification_type": {
+    "not_found": "No se encontraron tipos de identificación."
+  },
   "approve_access_request" : {
     "not_found" : "No se encontró la solicitud de acceso con el ID proporcionado.",
     "already_approved" : "La solicitud de acceso ya ha sido aprobada.",
