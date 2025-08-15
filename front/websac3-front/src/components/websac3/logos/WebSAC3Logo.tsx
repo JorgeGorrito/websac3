@@ -8,9 +8,9 @@ const WebSAC3Logo = () => {
             <Image
             src={LogoWebSAC3}
             alt="Logo WebSAC3"
-            width={1600} 
-            height={516}
-            className="h-[95%] w-auto"
+            width={400} 
+            height={129}
+            className="h-full w-auto object-contain"
             quality={100}
             draggable={false}
             />
