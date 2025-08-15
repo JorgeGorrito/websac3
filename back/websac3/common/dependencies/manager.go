@@ -43,5 +43,6 @@ func (m *manager) RegisterDependencies() error {
 	m.registerTemplateDependencies()
 	m.registerValidatorDependencies()
 	m.registerIdentificationTypeDependencies()
+	m.registerHigherEducationInstitutionDependencies()
 	return nil
 }

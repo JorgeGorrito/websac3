@@ -1,6 +1,7 @@
 package mapper
 
 import (
+	"websac3/adapter/in/web/response"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 )
@@ -66,6 +67,13 @@ func registerHigherEducationInstitutionMappers() {
 			Municipality:            &municipality,
 			DepartmentID:            higherEducationInstitution.DepartmentID,
 			Department:              &department,
+		}, nil
+	})
+
+	RegisterMapFunc(func(higherEducationInstitution *entity.HigherEducationInstitution) (response.ListHigherEducationInstitutionResponse, error) {
+		return response.ListHigherEducationInstitutionResponse{
+			Snies: higherEducationInstitution.Snies,
+			Name:  higherEducationInstitution.Name,
 		}, nil
 	})
 }

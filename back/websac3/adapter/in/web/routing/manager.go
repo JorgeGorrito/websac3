@@ -24,6 +24,7 @@ func (m *manager) RegisterRoutes(engine *gin.Engine) error {
 	var routerGroup *gin.RouterGroup = engine.Group("/api/v1/:lang")
 	RegisterAccessRequestRoutes(routerGroup)
 	RegisterIdentificationTypesRoutes(routerGroup)
+	RegisterHigherEducationInstitutionRoutes(routerGroup)
 	RegisterAuthRoutes(routerGroup)
 	RegisterSwagger(engine)
 

@@ -1,4 +1,7 @@
 {
+  "list_higher_education_institution": {
+    "not_found": "No higher education institutions found."
+  },
   "list_identification_type": {
     "not_found": "No identification types found."
   },

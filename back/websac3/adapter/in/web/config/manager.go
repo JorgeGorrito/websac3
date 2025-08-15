@@ -130,6 +130,18 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	); err != nil {
 		*errorList = errors.Join(*errorList, err)
 	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.ListHigherEducationInstitutionQuery{}),
+		qhandler.NewListHigherEducationInstitutionQueryHandler(
+			container.Inject[usecase.ListHigherEducationInstitutionUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
 }
 
 func (m *manager) ConfigureMappers() {
