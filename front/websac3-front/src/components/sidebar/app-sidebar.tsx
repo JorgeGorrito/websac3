@@ -10,6 +10,7 @@ import { NavSecondary } from "@/components/sidebar/nav-secondary";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -23,22 +24,42 @@ type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   role?: RoleKey;
 };
 
-export function AppSidebar({ role = "EXPERTO", ...props }: AppSidebarProps) {
+export default function AppSidebar({
+  role = "EXPERTO",
+  ...props
+}: AppSidebarProps) {
   const data = SIDEBAR_BY_ROLE[role];
   return (
     <Sidebar variant="inset" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="border-b border-primary/20">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <Avatar className="h-9 w-9 rounded-lg">
-                  <AvatarImage src={data.user.avatar} alt={data.user.name} />
-                  <AvatarFallback className="rounded-lg">PP</AvatarFallback>
+            <SidebarMenuButton
+              size="lg"
+              asChild
+              className="hover:bg-primary/5 transition-colors"
+            >
+              <a href="#" className="group">
+                <Avatar className="h-10 w-10 rounded-xl">
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt={data.user.name}
+                  />
+                  <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-medium">
+                    {data.user.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{data.user.name}</span>
-                  <span className="truncate text-xs">{data.roleLabel}</span>
+                  <span className="truncate font-medium text-foreground">
+                    {data.user.name}
+                  </span>
+                  <span className="truncate text-xs text-primary bg-primary/5 px-2 py-1 rounded-full">
+                    {data.roleLabel}
+                  </span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -47,10 +68,12 @@ export function AppSidebar({ role = "EXPERTO", ...props }: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {data.navSecondary ? (
-          <NavSecondary items={data.navSecondary} className="mt-auto" />
-        ) : null}
       </SidebarContent>
+      {data.navSecondary ? (
+        <SidebarFooter>
+          <NavSecondary items={data.navSecondary} />
+        </SidebarFooter>
+      ) : null}
     </Sidebar>
   );
 }

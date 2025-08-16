@@ -20,15 +20,21 @@ export function NavSecondary({
   }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   return (
-    <SidebarGroup {...props}>
+    <SidebarGroup {...props} className="border-t border-primary/20 pt-4">
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild size="sm">
+              <SidebarMenuButton 
+                asChild 
+                size="sm"
+                className="group hover:bg-muted/50 transition-colors"
+              >
                 <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
+                  <div className="p-1.5 rounded-md text-foreground group-hover:text-foreground transition-colors">
+                    <item.icon className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-medium">{item.title}</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
