@@ -1,0 +1,10 @@
+[
+  { "id": 9,  "name": "Daily",         "lang": "en", "duration_unit_id": 1 },
+  { "id": 10, "name": "Weekly",        "lang": "en", "duration_unit_id": 2 },
+  { "id": 11, "name": "Monthly",       "lang": "en", "duration_unit_id": 3 },
+  { "id": 12, "name": "Bimonthly",     "lang": "en", "duration_unit_id": 4 },
+  { "id": 13, "name": "Quarterly",     "lang": "en", "duration_unit_id": 5 },
+  { "id": 14, "name": "Four-monthly",  "lang": "en", "duration_unit_id": 6 },
+  { "id": 15, "name": "Half-yearly",   "lang": "en", "duration_unit_id": 7 },
+  { "id": 16, "name": "Yearly",        "lang": "en", "duration_unit_id": 8 }
+]

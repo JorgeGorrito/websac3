@@ -23,6 +23,7 @@ func EssentialData() Seeder {
 			DefaultUsers(),
 			KnowledgeAreas(),
 			Topics(),
+			DurationUnits(),
 		},
 	}
 }
