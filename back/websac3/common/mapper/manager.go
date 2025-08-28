@@ -12,4 +12,5 @@ func RegisterMapFunctions() {
 	registerActionMappers()
 	registerModuleMappers()
 	registerPermissionMappers()
+	registerTopicMappers()
 }

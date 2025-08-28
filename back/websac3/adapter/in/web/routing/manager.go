@@ -25,6 +25,7 @@ func (m *manager) RegisterRoutes(engine *gin.Engine) error {
 	RegisterAccessRequestRoutes(routerGroup)
 	RegisterIdentificationTypesRoutes(routerGroup)
 	RegisterHigherEducationInstitutionRoutes(routerGroup)
+	RegisterTopicRoutes(routerGroup)
 	RegisterAuthRoutes(routerGroup)
 	RegisterSwagger(engine)
 

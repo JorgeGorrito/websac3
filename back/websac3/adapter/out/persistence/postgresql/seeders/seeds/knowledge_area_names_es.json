@@ -1,0 +1,10 @@
+[
+  { "id": 1, "name": "Seguridad de Datos", "ka_id": 1, "lang": "es" },
+  { "id": 2, "name": "Seguridad de Software", "ka_id": 2, "lang": "es" },
+  { "id": 3, "name": "Seguridad de Componentes", "ka_id": 3, "lang": "es" },
+  { "id": 4, "name": "Seguridad de Conexiones", "ka_id": 4, "lang": "es" },
+  { "id": 5, "name": "Seguridad del Sistema", "ka_id": 5, "lang": "es" },
+  { "id": 6, "name": "Seguridad Humana", "ka_id": 6, "lang": "es" },
+  { "id": 7, "name": "Seguridad Organizacional", "ka_id": 7, "lang": "es" },
+  { "id": 8, "name": "Seguridad Social", "ka_id": 8, "lang": "es" }
+]

@@ -21,6 +21,8 @@ func EssentialData() Seeder {
 			Permissions(),
 			Roles(),
 			DefaultUsers(),
+			KnowledgeAreas(),
+			Topics(),
 		},
 	}
 }

@@ -1,4 +1,7 @@
 {
+  "list_topic" : {
+    "not_found" : "No se encontraron temáticas."
+  },
   "list_higher_education_institution": {
     "not_found": "No se encontraron instituciones de educación superior."
   },

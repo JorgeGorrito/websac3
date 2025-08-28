@@ -1,4 +1,7 @@
 {
+  "list_topic" : {
+    "not_found" : "No topics found."
+  },
   "list_higher_education_institution": {
     "not_found": "No higher education institutions found."
   },

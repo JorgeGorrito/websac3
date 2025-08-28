@@ -1,0 +1,1730 @@
+[
+    {
+        "id": 289,
+        "name": "Cryptography - Basic Concepts",
+        "lang": "en",
+        "topic_id": 1
+    },
+    {
+        "id": 290,
+        "name": "Cryptography - Advanced Concepts",
+        "lang": "en",
+        "topic_id": 2
+    },
+    {
+        "id": 291,
+        "name": "Cryptography - Mathematical Foundations",
+        "lang": "en",
+        "topic_id": 3
+    },
+    {
+        "id": 292,
+        "name": "Cryptography - Historical Ciphers",
+        "lang": "en",
+        "topic_id": 4
+    },
+    {
+        "id": 293,
+        "name": "Cryptography - Symmetric Ciphers (Private Key)",
+        "lang": "en",
+        "topic_id": 5
+    },
+    {
+        "id": 294,
+        "name": "Cryptography - Asymmetric Ciphers (Public Key)",
+        "lang": "en",
+        "topic_id": 6
+    },
+    {
+        "id": 295,
+        "name": "Digital Forensics - Introduction",
+        "lang": "en",
+        "topic_id": 7
+    },
+    {
+        "id": 296,
+        "name": "Digital Forensics - Legal Aspects",
+        "lang": "en",
+        "topic_id": 8
+    },
+    {
+        "id": 297,
+        "name": "Digital Forensics - Tools",
+        "lang": "en",
+        "topic_id": 9
+    },
+    {
+        "id": 298,
+        "name": "Digital Forensics - Data Analysis Techniques",
+        "lang": "en",
+        "topic_id": 10
+    },
+    {
+        "id": 299,
+        "name": "Digital Forensics - Investigation Process",
+        "lang": "en",
+        "topic_id": 11
+    },
+    {
+        "id": 300,
+        "name": "Digital Forensics - Evidence Acquisition and Preservation",
+        "lang": "en",
+        "topic_id": 12
+    },
+    {
+        "id": 301,
+        "name": "Digital Forensics - Evidence Analysis",
+        "lang": "en",
+        "topic_id": 13
+    },
+    {
+        "id": 302,
+        "name": "Digital Forensics - Presentation of Findings",
+        "lang": "en",
+        "topic_id": 14
+    },
+    {
+        "id": 303,
+        "name": "Digital Forensics - Evidence Authentication",
+        "lang": "en",
+        "topic_id": 15
+    },
+    {
+        "id": 304,
+        "name": "Digital Forensics - Reporting, Incident Response and Management",
+        "lang": "en",
+        "topic_id": 16
+    },
+    {
+        "id": 305,
+        "name": "Digital Forensics - Mobile Forensics",
+        "lang": "en",
+        "topic_id": 17
+    },
+    {
+        "id": 306,
+        "name": "Data Integrity and Authentication - Authentication Strength",
+        "lang": "en",
+        "topic_id": 18
+    },
+    {
+        "id": 307,
+        "name": "Data Integrity and Authentication - Password Attack Techniques",
+        "lang": "en",
+        "topic_id": 19
+    },
+    {
+        "id": 308,
+        "name": "Data Integrity and Authentication - Password Storage Techniques",
+        "lang": "en",
+        "topic_id": 20
+    },
+    {
+        "id": 309,
+        "name": "Data Integrity and Authentication - Data Integrity",
+        "lang": "en",
+        "topic_id": 21
+    },
+    {
+        "id": 310,
+        "name": "Access Control - Physical Data Security",
+        "lang": "en",
+        "topic_id": 22
+    },
+    {
+        "id": 311,
+        "name": "Access Control - Logical Data Access Control",
+        "lang": "en",
+        "topic_id": 23
+    },
+    {
+        "id": 312,
+        "name": "Access Control - Secure Architecture Design",
+        "lang": "en",
+        "topic_id": 24
+    },
+    {
+        "id": 313,
+        "name": "Access Control - Data Leakage Prevention Techniques",
+        "lang": "en",
+        "topic_id": 25
+    },
+    {
+        "id": 314,
+        "name": "Secure Communication Protocols - Application and Transport Layer Protocols",
+        "lang": "en",
+        "topic_id": 26
+    },
+    {
+        "id": 315,
+        "name": "Secure Communication Protocols - TLS Attacks",
+        "lang": "en",
+        "topic_id": 27
+    },
+    {
+        "id": 316,
+        "name": "Secure Communication Protocols - Network/Internet Layer",
+        "lang": "en",
+        "topic_id": 28
+    },
+    {
+        "id": 317,
+        "name": "Secure Communication Protocols - Privacy Preservation Protocols",
+        "lang": "en",
+        "topic_id": 29
+    },
+    {
+        "id": 318,
+        "name": "Secure Communication Protocols - Data Link Layer",
+        "lang": "en",
+        "topic_id": 30
+    },
+    {
+        "id": 319,
+        "name": "Cryptanalysis - Classical Attacks",
+        "lang": "en",
+        "topic_id": 31
+    },
+    {
+        "id": 320,
+        "name": "Cryptanalysis - Side Channel Attacks",
+        "lang": "en",
+        "topic_id": 32
+    },
+    {
+        "id": 321,
+        "name": "Cryptanalysis - Attacks on Private Key Ciphers",
+        "lang": "en",
+        "topic_id": 33
+    },
+    {
+        "id": 322,
+        "name": "Cryptanalysis - Attacks on Public Key Ciphers",
+        "lang": "en",
+        "topic_id": 34
+    },
+    {
+        "id": 323,
+        "name": "Cryptanalysis - Algorithms for the Discrete Logarithm Problem",
+        "lang": "en",
+        "topic_id": 35
+    },
+    {
+        "id": 324,
+        "name": "Cryptanalysis - Attacks on RSA",
+        "lang": "en",
+        "topic_id": 36
+    },
+    {
+        "id": 325,
+        "name": "Data Privacy - Overview",
+        "lang": "en",
+        "topic_id": 37
+    },
+    {
+        "id": 326,
+        "name": "Information Storage Security - Disk and File Encryption",
+        "lang": "en",
+        "topic_id": 38
+    },
+    {
+        "id": 327,
+        "name": "Information Storage Security - Data Erasure",
+        "lang": "en",
+        "topic_id": 39
+    },
+    {
+        "id": 328,
+        "name": "Information Storage Security - Data Masking",
+        "lang": "en",
+        "topic_id": 40
+    },
+    {
+        "id": 329,
+        "name": "Information Storage Security - Database Security",
+        "lang": "en",
+        "topic_id": 41
+    },
+    {
+        "id": 330,
+        "name": "Information Storage Security - Data Security Legislation",
+        "lang": "en",
+        "topic_id": 42
+    },
+    {
+        "id": 331,
+        "name": "Fundamental Principles - Least Privilege",
+        "lang": "en",
+        "topic_id": 43
+    },
+    {
+        "id": 332,
+        "name": "Fundamental Principles - Fail-Safe Defaults",
+        "lang": "en",
+        "topic_id": 44
+    },
+    {
+        "id": 333,
+        "name": "Fundamental Principles - Complete Mediation",
+        "lang": "en",
+        "topic_id": 45
+    },
+    {
+        "id": 334,
+        "name": "Fundamental Principles - Separation",
+        "lang": "en",
+        "topic_id": 46
+    },
+    {
+        "id": 335,
+        "name": "Fundamental Principles - Minimize Trust",
+        "lang": "en",
+        "topic_id": 47
+    },
+    {
+        "id": 336,
+        "name": "Fundamental Principles - Economy of Mechanism",
+        "lang": "en",
+        "topic_id": 48
+    },
+    {
+        "id": 337,
+        "name": "Fundamental Principles - Minimize Common Mechanisms",
+        "lang": "en",
+        "topic_id": 49
+    },
+    {
+        "id": 338,
+        "name": "Fundamental Principles - Principle of Least Astonishment",
+        "lang": "en",
+        "topic_id": 50
+    },
+    {
+        "id": 339,
+        "name": "Fundamental Principles - Open Design",
+        "lang": "en",
+        "topic_id": 51
+    },
+    {
+        "id": 340,
+        "name": "Fundamental Principles - Layering",
+        "lang": "en",
+        "topic_id": 52
+    },
+    {
+        "id": 341,
+        "name": "Fundamental Principles - Abstraction",
+        "lang": "en",
+        "topic_id": 53
+    },
+    {
+        "id": 342,
+        "name": "Fundamental Principles - Modularity",
+        "lang": "en",
+        "topic_id": 54
+    },
+    {
+        "id": 343,
+        "name": "Fundamental Principles - Psychological Acceptability",
+        "lang": "en",
+        "topic_id": 55
+    },
+    {
+        "id": 344,
+        "name": "Fundamental Principles - Design for Iteration",
+        "lang": "en",
+        "topic_id": 56
+    },
+    {
+        "id": 345,
+        "name": "Design - Derivation of Security Requirements",
+        "lang": "en",
+        "topic_id": 57
+    },
+    {
+        "id": 346,
+        "name": "Design - Specification of Security Requirements",
+        "lang": "en",
+        "topic_id": 58
+    },
+    {
+        "id": 347,
+        "name": "Design - Software Development Life Cycle / Secure Development Life Cycle",
+        "lang": "en",
+        "topic_id": 59
+    },
+    {
+        "id": 348,
+        "name": "Design - Programming Languages and Type-Safe Languages",
+        "lang": "en",
+        "topic_id": 60
+    },
+    {
+        "id": 349,
+        "name": "Implementation - Input Validation and Representation Verification",
+        "lang": "en",
+        "topic_id": 61
+    },
+    {
+        "id": 350,
+        "name": "Implementation - Correct Use of APIs",
+        "lang": "en",
+        "topic_id": 62
+    },
+    {
+        "id": 351,
+        "name": "Implementation - Use of Security Features",
+        "lang": "en",
+        "topic_id": 63
+    },
+    {
+        "id": 352,
+        "name": "Implementation - Verification of Time and State Relationships",
+        "lang": "en",
+        "topic_id": 64
+    },
+    {
+        "id": 353,
+        "name": "Implementation - Proper Handling of Exceptions and Errors",
+        "lang": "en",
+        "topic_id": 65
+    },
+    {
+        "id": 354,
+        "name": "Implementation - Robust Programming",
+        "lang": "en",
+        "topic_id": 66
+    },
+    {
+        "id": 355,
+        "name": "Implementation - Encapsulation of Structures and Modules",
+        "lang": "en",
+        "topic_id": 67
+    },
+    {
+        "id": 356,
+        "name": "Implementation - Consideration of the Environment",
+        "lang": "en",
+        "topic_id": 68
+    },
+    {
+        "id": 357,
+        "name": "Analysis and Testing - Static and Dynamic Analysis",
+        "lang": "en",
+        "topic_id": 69
+    },
+    {
+        "id": 358,
+        "name": "Analysis and Testing - Unit Testing",
+        "lang": "en",
+        "topic_id": 70
+    },
+    {
+        "id": 359,
+        "name": "Analysis and Testing - Integration Testing",
+        "lang": "en",
+        "topic_id": 71
+    },
+    {
+        "id": 360,
+        "name": "Analysis and Testing - Software Testing",
+        "lang": "en",
+        "topic_id": 72
+    },
+    {
+        "id": 361,
+        "name": "Maintenance - Configuration",
+        "lang": "en",
+        "topic_id": 73
+    },
+    {
+        "id": 362,
+        "name": "Maintenance - Patching and Vulnerability Life Cycle",
+        "lang": "en",
+        "topic_id": 74
+    },
+    {
+        "id": 363,
+        "name": "Maintenance - Environment Verification",
+        "lang": "en",
+        "topic_id": 75
+    },
+    {
+        "id": 364,
+        "name": "Maintenance - DevOps",
+        "lang": "en",
+        "topic_id": 76
+    },
+    {
+        "id": 365,
+        "name": "Maintenance - Retirement/Decommissioning",
+        "lang": "en",
+        "topic_id": 77
+    },
+    {
+        "id": 366,
+        "name": "Documentation - Installation Documents",
+        "lang": "en",
+        "topic_id": 78
+    },
+    {
+        "id": 367,
+        "name": "Documentation - User Guides and Manuals",
+        "lang": "en",
+        "topic_id": 79
+    },
+    {
+        "id": 368,
+        "name": "Documentation - Assurance Documentation",
+        "lang": "en",
+        "topic_id": 80
+    },
+    {
+        "id": 369,
+        "name": "Documentation - Security Documentation",
+        "lang": "en",
+        "topic_id": 81
+    },
+    {
+        "id": 370,
+        "name": "Ethics - Ethical Issues in Software Development",
+        "lang": "en",
+        "topic_id": 82
+    },
+    {
+        "id": 371,
+        "name": "Ethics - Social Aspects of Software Development",
+        "lang": "en",
+        "topic_id": 83
+    },
+    {
+        "id": 372,
+        "name": "Legal Aspects - Legal Aspects of Software Development",
+        "lang": "en",
+        "topic_id": 84
+    },
+    {
+        "id": 373,
+        "name": "Legal Aspects - Vulnerability Disclosure",
+        "lang": "en",
+        "topic_id": 85
+    },
+    {
+        "id": 374,
+        "name": "Legal Aspects - What, When, and Why to Test",
+        "lang": "en",
+        "topic_id": 86
+    },
+    {
+        "id": 375,
+        "name": "Component Design - Security in Component Design",
+        "lang": "en",
+        "topic_id": 87
+    },
+    {
+        "id": 376,
+        "name": "Component Design - Secure Component Design Principles",
+        "lang": "en",
+        "topic_id": 88
+    },
+    {
+        "id": 377,
+        "name": "Component Design - Component Identification",
+        "lang": "en",
+        "topic_id": 89
+    },
+    {
+        "id": 378,
+        "name": "Component Design - Anti-Reverse Engineering Techniques",
+        "lang": "en",
+        "topic_id": 90
+    },
+    {
+        "id": 379,
+        "name": "Component Design - Side Channel Attack Mitigation",
+        "lang": "en",
+        "topic_id": 91
+    },
+    {
+        "id": 380,
+        "name": "Component Design - Anti-Tamper Technologies",
+        "lang": "en",
+        "topic_id": 92
+    },
+    {
+        "id": 381,
+        "name": "Component Acquisition - Supply Chain Risks",
+        "lang": "en",
+        "topic_id": 93
+    },
+    {
+        "id": 382,
+        "name": "Component Acquisition - Supply Chain Security",
+        "lang": "en",
+        "topic_id": 94
+    },
+    {
+        "id": 383,
+        "name": "Component Acquisition - Vendor Evaluation",
+        "lang": "en",
+        "topic_id": 95
+    },
+    {
+        "id": 384,
+        "name": "Component Testing - Unit Testing Principles",
+        "lang": "en",
+        "topic_id": 96
+    },
+    {
+        "id": 385,
+        "name": "Component Testing - Security Testing",
+        "lang": "en",
+        "topic_id": 97
+    },
+    {
+        "id": 386,
+        "name": "Component Reverse Engineering - Design Reverse Engineering",
+        "lang": "en",
+        "topic_id": 98
+    },
+    {
+        "id": 387,
+        "name": "Component Reverse Engineering - Hardware Reverse Engineering",
+        "lang": "en",
+        "topic_id": 99
+    },
+    {
+        "id": 388,
+        "name": "Component Reverse Engineering - Software Reverse Engineering",
+        "lang": "en",
+        "topic_id": 100
+    },
+    {
+        "id": 389,
+        "name": "Physical Media - Transmission in a Medium",
+        "lang": "en",
+        "topic_id": 101
+    },
+    {
+        "id": 390,
+        "name": "Physical Media - Shared and Point-to-Point Media",
+        "lang": "en",
+        "topic_id": 102
+    },
+    {
+        "id": 391,
+        "name": "Physical Media - Sharing Models",
+        "lang": "en",
+        "topic_id": 103
+    },
+    {
+        "id": 392,
+        "name": "Physical Media - Common Technologies",
+        "lang": "en",
+        "topic_id": 104
+    },
+    {
+        "id": 393,
+        "name": "Physical Interfaces and Connectors - Hardware Characteristics and Materials",
+        "lang": "en",
+        "topic_id": 105
+    },
+    {
+        "id": 394,
+        "name": "Physical Interfaces and Connectors - Standards",
+        "lang": "en",
+        "topic_id": 106
+    },
+    {
+        "id": 395,
+        "name": "Physical Interfaces and Connectors - Common Connectors",
+        "lang": "en",
+        "topic_id": 107
+    },
+    {
+        "id": 396,
+        "name": "Hardware Architecture - Standard Architectures",
+        "lang": "en",
+        "topic_id": 108
+    },
+    {
+        "id": 397,
+        "name": "Hardware Architecture - Hardware Interface Standards",
+        "lang": "en",
+        "topic_id": 109
+    },
+    {
+        "id": 398,
+        "name": "Hardware Architecture - Common Architectures",
+        "lang": "en",
+        "topic_id": 110
+    },
+    {
+        "id": 399,
+        "name": "Distributed Systems Architecture - General Concepts",
+        "lang": "en",
+        "topic_id": 111
+    },
+    {
+        "id": 400,
+        "name": "Distributed Systems Architecture - World Wide Web",
+        "lang": "en",
+        "topic_id": 112
+    },
+    {
+        "id": 401,
+        "name": "Distributed Systems Architecture - Internet",
+        "lang": "en",
+        "topic_id": 113
+    },
+    {
+        "id": 402,
+        "name": "Distributed Systems Architecture - Protocols and Layers",
+        "lang": "en",
+        "topic_id": 114
+    },
+    {
+        "id": 403,
+        "name": "Distributed Systems Architecture - High Performance Computing (Supercomputers)",
+        "lang": "en",
+        "topic_id": 115
+    },
+    {
+        "id": 404,
+        "name": "Distributed Systems Architecture - Hypervisors and Cloud Computing Implementations",
+        "lang": "en",
+        "topic_id": 116
+    },
+    {
+        "id": 405,
+        "name": "Distributed Systems Architecture - Vulnerabilities and Exploit Examples",
+        "lang": "en",
+        "topic_id": 117
+    },
+    {
+        "id": 406,
+        "name": "Network Architecture - General Concepts",
+        "lang": "en",
+        "topic_id": 118
+    },
+    {
+        "id": 407,
+        "name": "Network Architecture - Common Architectures",
+        "lang": "en",
+        "topic_id": 119
+    },
+    {
+        "id": 408,
+        "name": "Network Architecture - Forwarding",
+        "lang": "en",
+        "topic_id": 120
+    },
+    {
+        "id": 409,
+        "name": "Network Architecture - Routing",
+        "lang": "en",
+        "topic_id": 121
+    },
+    {
+        "id": 410,
+        "name": "Network Architecture - Switching/Bridging",
+        "lang": "en",
+        "topic_id": 122
+    },
+    {
+        "id": 411,
+        "name": "Network Architecture - Emerging Trends",
+        "lang": "en",
+        "topic_id": 123
+    },
+    {
+        "id": 412,
+        "name": "Network Architecture - Virtualization and Virtual Hypervisor Architectures",
+        "lang": "en",
+        "topic_id": 124
+    },
+    {
+        "id": 413,
+        "name": "Network Implementations - IEEE 802/ISO Networks",
+        "lang": "en",
+        "topic_id": 125
+    },
+    {
+        "id": 414,
+        "name": "Network Implementations - IETF and TCP/IP Networks",
+        "lang": "en",
+        "topic_id": 126
+    },
+    {
+        "id": 415,
+        "name": "Network Implementations - Practical Integration and Bridging Protocols",
+        "lang": "en",
+        "topic_id": 127
+    },
+    {
+        "id": 416,
+        "name": "Network Implementations - Vulnerabilities and Exploit Examples",
+        "lang": "en",
+        "topic_id": 128
+    },
+    {
+        "id": 417,
+        "name": "Network Services - Concept of a Service",
+        "lang": "en",
+        "topic_id": 129
+    },
+    {
+        "id": 418,
+        "name": "Network Services - Service Models (Client-Server, Peer-to-Peer)",
+        "lang": "en",
+        "topic_id": 130
+    },
+    {
+        "id": 419,
+        "name": "Network Services - Service Protocol Concepts (IPC, API, IDL)",
+        "lang": "en",
+        "topic_id": 131
+    },
+    {
+        "id": 420,
+        "name": "Network Services - Common Service Communication Architectures",
+        "lang": "en",
+        "topic_id": 132
+    },
+    {
+        "id": 421,
+        "name": "Network Services - Service Virtualization",
+        "lang": "en",
+        "topic_id": 133
+    },
+    {
+        "id": 422,
+        "name": "Network Services - Vulnerabilities and Exploit Examples",
+        "lang": "en",
+        "topic_id": 134
+    },
+    {
+        "id": 423,
+        "name": "Network Defense - Network Hardening",
+        "lang": "en",
+        "topic_id": 135
+    },
+    {
+        "id": 424,
+        "name": "Network Defense - IDS/IPS Implementation",
+        "lang": "en",
+        "topic_id": 136
+    },
+    {
+        "id": 425,
+        "name": "Network Defense - Firewalls and Virtual Private Networks (VPNs)",
+        "lang": "en",
+        "topic_id": 137
+    },
+    {
+        "id": 426,
+        "name": "Network Defense - Defense in Depth",
+        "lang": "en",
+        "topic_id": 138
+    },
+    {
+        "id": 427,
+        "name": "Network Defense - Honeypots and Honeynets",
+        "lang": "en",
+        "topic_id": 139
+    },
+    {
+        "id": 428,
+        "name": "Network Defense - Network Monitoring",
+        "lang": "en",
+        "topic_id": 140
+    },
+    {
+        "id": 429,
+        "name": "Network Defense - Network Traffic Analysis",
+        "lang": "en",
+        "topic_id": 141
+    },
+    {
+        "id": 430,
+        "name": "Network Defense - Exposure Minimization (Attack Surface and Vectors)",
+        "lang": "en",
+        "topic_id": 142
+    },
+    {
+        "id": 431,
+        "name": "Network Defense - Network Access Control (Internal and External)",
+        "lang": "en",
+        "topic_id": 143
+    },
+    {
+        "id": 432,
+        "name": "Network Defense - Perimeter Networks (DMZs) / Proxy Servers",
+        "lang": "en",
+        "topic_id": 144
+    },
+    {
+        "id": 433,
+        "name": "Network Defense - Network Policy Development and Enforcement",
+        "lang": "en",
+        "topic_id": 145
+    },
+    {
+        "id": 434,
+        "name": "Network Defense - Network Operational Procedures",
+        "lang": "en",
+        "topic_id": 146
+    },
+    {
+        "id": 435,
+        "name": "Network Defense - Network Attacks (e.g., Session Hijacking, Man-in-the-Middle Attacks)",
+        "lang": "en",
+        "topic_id": 147
+    },
+    {
+        "id": 436,
+        "name": "Network Defense - Threat Hunting and Machine Learning",
+        "lang": "en",
+        "topic_id": 148
+    },
+    {
+        "id": 437,
+        "name": "Systems Thinking - What is a System?",
+        "lang": "en",
+        "topic_id": 149
+    },
+    {
+        "id": 438,
+        "name": "Systems Thinking - What is Systems Engineering?",
+        "lang": "en",
+        "topic_id": 150
+    },
+    {
+        "id": 439,
+        "name": "Systems Thinking - Holistic Approaches",
+        "lang": "en",
+        "topic_id": 151
+    },
+    {
+        "id": 440,
+        "name": "Systems Thinking - General-Purpose System Security",
+        "lang": "en",
+        "topic_id": 152
+    },
+    {
+        "id": 441,
+        "name": "Systems Thinking - Special-Purpose System Security",
+        "lang": "en",
+        "topic_id": 153
+    },
+    {
+        "id": 442,
+        "name": "Systems Thinking - Threat Models",
+        "lang": "en",
+        "topic_id": 154
+    },
+    {
+        "id": 443,
+        "name": "Systems Thinking - Requirements Analysis",
+        "lang": "en",
+        "topic_id": 155
+    },
+    {
+        "id": 444,
+        "name": "Systems Thinking - Fundamental Principles",
+        "lang": "en",
+        "topic_id": 156
+    },
+    {
+        "id": 445,
+        "name": "Systems Thinking - Test-Driven Development",
+        "lang": "en",
+        "topic_id": 157
+    },
+    {
+        "id": 446,
+        "name": "Systems Management - Policy Models",
+        "lang": "en",
+        "topic_id": 158
+    },
+    {
+        "id": 447,
+        "name": "Systems Management - Policy Composition",
+        "lang": "en",
+        "topic_id": 159
+    },
+    {
+        "id": 448,
+        "name": "Systems Management - Use of Automation",
+        "lang": "en",
+        "topic_id": 160
+    },
+    {
+        "id": 449,
+        "name": "Systems Management - Patching and Vulnerability Life Cycle",
+        "lang": "en",
+        "topic_id": 161
+    },
+    {
+        "id": 450,
+        "name": "Systems Management - Operation",
+        "lang": "en",
+        "topic_id": 162
+    },
+    {
+        "id": 451,
+        "name": "Systems Management - Deployment and Retirement",
+        "lang": "en",
+        "topic_id": 163
+    },
+    {
+        "id": 452,
+        "name": "Systems Management - Insider Threat",
+        "lang": "en",
+        "topic_id": 164
+    },
+    {
+        "id": 453,
+        "name": "Systems Management - Documentation",
+        "lang": "en",
+        "topic_id": 165
+    },
+    {
+        "id": 454,
+        "name": "Systems Management - Systems and Procedures",
+        "lang": "en",
+        "topic_id": 166
+    },
+    {
+        "id": 455,
+        "name": "System Access - Authentication Methods",
+        "lang": "en",
+        "topic_id": 167
+    },
+    {
+        "id": 456,
+        "name": "System Access - Identity",
+        "lang": "en",
+        "topic_id": 168
+    },
+    {
+        "id": 457,
+        "name": "System Control - Access Control",
+        "lang": "en",
+        "topic_id": 169
+    },
+    {
+        "id": 458,
+        "name": "System Control - Authorization Models",
+        "lang": "en",
+        "topic_id": 170
+    },
+    {
+        "id": 459,
+        "name": "System Control - Intrusion Detection",
+        "lang": "en",
+        "topic_id": 171
+    },
+    {
+        "id": 460,
+        "name": "System Control - Attacks",
+        "lang": "en",
+        "topic_id": 172
+    },
+    {
+        "id": 461,
+        "name": "System Control - Defenses",
+        "lang": "en",
+        "topic_id": 173
+    },
+    {
+        "id": 462,
+        "name": "System Control - Auditing",
+        "lang": "en",
+        "topic_id": 174
+    },
+    {
+        "id": 463,
+        "name": "System Control - Malware",
+        "lang": "en",
+        "topic_id": 175
+    },
+    {
+        "id": 464,
+        "name": "System Control - Vulnerability Models",
+        "lang": "en",
+        "topic_id": 176
+    },
+    {
+        "id": 465,
+        "name": "System Control - Penetration Testing",
+        "lang": "en",
+        "topic_id": 177
+    },
+    {
+        "id": 466,
+        "name": "System Control - Forensics",
+        "lang": "en",
+        "topic_id": 178
+    },
+    {
+        "id": 467,
+        "name": "System Control - Recovery and Resilience",
+        "lang": "en",
+        "topic_id": 179
+    },
+    {
+        "id": 468,
+        "name": "System Retirement - Service Retirement",
+        "lang": "en",
+        "topic_id": 180
+    },
+    {
+        "id": 469,
+        "name": "System Retirement - Disposal",
+        "lang": "en",
+        "topic_id": 181
+    },
+    {
+        "id": 470,
+        "name": "System Testing - Requirements Validation",
+        "lang": "en",
+        "topic_id": 182
+    },
+    {
+        "id": 471,
+        "name": "System Testing - Component Composition Validation",
+        "lang": "en",
+        "topic_id": 183
+    },
+    {
+        "id": 472,
+        "name": "System Testing - Unit Testing versus System Testing",
+        "lang": "en",
+        "topic_id": 184
+    },
+    {
+        "id": 473,
+        "name": "System Testing - Formal Verification of Systems",
+        "lang": "en",
+        "topic_id": 185
+    },
+    {
+        "id": 474,
+        "name": "Common System Architectures - Virtual Machines",
+        "lang": "en",
+        "topic_id": 186
+    },
+    {
+        "id": 475,
+        "name": "Common System Architectures - Industrial Control Systems",
+        "lang": "en",
+        "topic_id": 187
+    },
+    {
+        "id": 476,
+        "name": "Common System Architectures - Internet of Things (IoT)",
+        "lang": "en",
+        "topic_id": 188
+    },
+    {
+        "id": 477,
+        "name": "Common System Architectures - Embedded Systems",
+        "lang": "en",
+        "topic_id": 189
+    },
+    {
+        "id": 478,
+        "name": "Common System Architectures - Mobile Systems",
+        "lang": "en",
+        "topic_id": 190
+    },
+    {
+        "id": 479,
+        "name": "Common System Architectures - Autonomous Systems",
+        "lang": "en",
+        "topic_id": 191
+    },
+    {
+        "id": 480,
+        "name": "Common System Architectures - General-Purpose Systems",
+        "lang": "en",
+        "topic_id": 192
+    },
+    {
+        "id": 481,
+        "name": "Identity Management - Identification and Authentication of People and Devices",
+        "lang": "en",
+        "topic_id": 193
+    },
+    {
+        "id": 482,
+        "name": "Identity Management - Physical and Logical Asset Control",
+        "lang": "en",
+        "topic_id": 194
+    },
+    {
+        "id": 483,
+        "name": "Identity Management - Identity as a Service (IDaaS)",
+        "lang": "en",
+        "topic_id": 195
+    },
+    {
+        "id": 484,
+        "name": "Identity Management - Third-Party Identity Services",
+        "lang": "en",
+        "topic_id": 196
+    },
+    {
+        "id": 485,
+        "name": "Identity Management - Access Control Attacks and Mitigations",
+        "lang": "en",
+        "topic_id": 197
+    },
+    {
+        "id": 486,
+        "name": "Social Engineering - Types of Social Engineering Attacks",
+        "lang": "en",
+        "topic_id": 198
+    },
+    {
+        "id": 487,
+        "name": "Social Engineering - Psychology of Social Engineering Attacks",
+        "lang": "en",
+        "topic_id": 199
+    },
+    {
+        "id": 488,
+        "name": "Social Engineering - Deception of Users",
+        "lang": "en",
+        "topic_id": 200
+    },
+    {
+        "id": 489,
+        "name": "Social Engineering - Detection and Mitigation of Social Engineering Attacks",
+        "lang": "en",
+        "topic_id": 201
+    },
+    {
+        "id": 490,
+        "name": "Personal Compliance with Cybersecurity Rules/Policies/Ethical Norms - System Misuse and User Misbehavior",
+        "lang": "en",
+        "topic_id": 202
+    },
+    {
+        "id": 491,
+        "name": "Personal Compliance with Cybersecurity Rules/Policies/Ethical Norms - Enforcement and Rules of Behavior",
+        "lang": "en",
+        "topic_id": 203
+    },
+    {
+        "id": 492,
+        "name": "Personal Compliance with Cybersecurity Rules/Policies/Ethical Norms - Appropriate Behavior under Uncertainty",
+        "lang": "en",
+        "topic_id": 204
+    },
+    {
+        "id": 493,
+        "name": "Awareness and Understanding - Risk Perception and Communication",
+        "lang": "en",
+        "topic_id": 205
+    },
+    {
+        "id": 494,
+        "name": "Awareness and Understanding - Cyber Hygiene",
+        "lang": "en",
+        "topic_id": 206
+    },
+    {
+        "id": 495,
+        "name": "Awareness and Understanding - Cybersecurity User Education",
+        "lang": "en",
+        "topic_id": 207
+    },
+    {
+        "id": 496,
+        "name": "Awareness and Understanding - Awareness of Cyber Vulnerabilities and Threats",
+        "lang": "en",
+        "topic_id": 208
+    },
+    {
+        "id": 497,
+        "name": "Social and Personal Privacy - Social Theories of Privacy",
+        "lang": "en",
+        "topic_id": 209
+    },
+    {
+        "id": 498,
+        "name": "Social and Personal Privacy - Privacy and Security in Social Networks",
+        "lang": "en",
+        "topic_id": 210
+    },
+    {
+        "id": 499,
+        "name": "Personal Data Privacy and Security - Sensitive Personal Data (SPD)",
+        "lang": "en",
+        "topic_id": 211
+    },
+    {
+        "id": 500,
+        "name": "Personal Data Privacy and Security - Personal Tracking and Digital Footprint",
+        "lang": "en",
+        "topic_id": 212
+    },
+    {
+        "id": 501,
+        "name": "Usable Security and Privacy - Usability and User Experience",
+        "lang": "en",
+        "topic_id": 213
+    },
+    {
+        "id": 502,
+        "name": "Usable Security and Privacy - Human Security Factors",
+        "lang": "en",
+        "topic_id": 214
+    },
+    {
+        "id": 503,
+        "name": "Usable Security and Privacy - Policy Awareness and Understanding",
+        "lang": "en",
+        "topic_id": 215
+    },
+    {
+        "id": 504,
+        "name": "Usable Security and Privacy - Privacy Policy",
+        "lang": "en",
+        "topic_id": 216
+    },
+    {
+        "id": 505,
+        "name": "Usable Security and Privacy - Design Guidance and Implications",
+        "lang": "en",
+        "topic_id": 217
+    },
+    {
+        "id": 506,
+        "name": "Risk Management - Risk Identification",
+        "lang": "en",
+        "topic_id": 218
+    },
+    {
+        "id": 507,
+        "name": "Risk Management - Risk Assessment and Analysis",
+        "lang": "en",
+        "topic_id": 219
+    },
+    {
+        "id": 508,
+        "name": "Risk Management - Insider Threats",
+        "lang": "en",
+        "topic_id": 220
+    },
+    {
+        "id": 509,
+        "name": "Risk Management - Risk Measurement and Evaluation Models and Methodologies",
+        "lang": "en",
+        "topic_id": 221
+    },
+    {
+        "id": 510,
+        "name": "Risk Management - Risk Control",
+        "lang": "en",
+        "topic_id": 222
+    },
+    {
+        "id": 511,
+        "name": "Security Governance and Policy - Organizational Context",
+        "lang": "en",
+        "topic_id": 223
+    },
+    {
+        "id": 512,
+        "name": "Security Governance and Policy - Privacy",
+        "lang": "en",
+        "topic_id": 224
+    },
+    {
+        "id": 513,
+        "name": "Security Governance and Policy - Law, Ethics, and Compliance",
+        "lang": "en",
+        "topic_id": 225
+    },
+    {
+        "id": 514,
+        "name": "Security Governance and Policy - Security Governance",
+        "lang": "en",
+        "topic_id": 226
+    },
+    {
+        "id": 515,
+        "name": "Security Governance and Policy - Executive and Board-Level Communication",
+        "lang": "en",
+        "topic_id": 227
+    },
+    {
+        "id": 516,
+        "name": "Security Governance and Policy - Management Policy",
+        "lang": "en",
+        "topic_id": 228
+    },
+    {
+        "id": 517,
+        "name": "Analytical Tools - Performance Measurement (Metrics)",
+        "lang": "en",
+        "topic_id": 229
+    },
+    {
+        "id": 518,
+        "name": "Analytical Tools - Data Analytics",
+        "lang": "en",
+        "topic_id": 230
+    },
+    {
+        "id": 519,
+        "name": "Analytical Tools - Security Intelligence",
+        "lang": "en",
+        "topic_id": 231
+    },
+    {
+        "id": 520,
+        "name": "System Administration - Operating Systems Administration",
+        "lang": "en",
+        "topic_id": 232
+    },
+    {
+        "id": 521,
+        "name": "System Administration - Database System Administration",
+        "lang": "en",
+        "topic_id": 233
+    },
+    {
+        "id": 522,
+        "name": "System Administration - Network Administration",
+        "lang": "en",
+        "topic_id": 234
+    },
+    {
+        "id": 523,
+        "name": "System Administration - Cloud Administration",
+        "lang": "en",
+        "topic_id": 235
+    },
+    {
+        "id": 524,
+        "name": "System Administration - Cyber-Physical Systems Administration",
+        "lang": "en",
+        "topic_id": 236
+    },
+    {
+        "id": 525,
+        "name": "System Administration - System Hardening",
+        "lang": "en",
+        "topic_id": 237
+    },
+    {
+        "id": 526,
+        "name": "System Administration - Availability",
+        "lang": "en",
+        "topic_id": 238
+    },
+    {
+        "id": 527,
+        "name": "Cybersecurity Planning - Strategic Planning",
+        "lang": "en",
+        "topic_id": 239
+    },
+    {
+        "id": 528,
+        "name": "Cybersecurity Planning - Operational and Tactical Management",
+        "lang": "en",
+        "topic_id": 240
+    },
+    {
+        "id": 529,
+        "name": "Business Continuity, Disaster Recovery, and Incident Management - Incident Response",
+        "lang": "en",
+        "topic_id": 241
+    },
+    {
+        "id": 530,
+        "name": "Business Continuity, Disaster Recovery, and Incident Management - Disaster Recovery",
+        "lang": "en",
+        "topic_id": 242
+    },
+    {
+        "id": 531,
+        "name": "Business Continuity, Disaster Recovery, and Incident Management - Business Continuity",
+        "lang": "en",
+        "topic_id": 243
+    },
+    {
+        "id": 532,
+        "name": "Security Program Management - Project Management",
+        "lang": "en",
+        "topic_id": 244
+    },
+    {
+        "id": 533,
+        "name": "Security Program Management - Resource Management",
+        "lang": "en",
+        "topic_id": 245
+    },
+    {
+        "id": 534,
+        "name": "Security Program Management - Security Metrics",
+        "lang": "en",
+        "topic_id": 246
+    },
+    {
+        "id": 535,
+        "name": "Security Program Management - Assurance and Quality Control",
+        "lang": "en",
+        "topic_id": 247
+    },
+    {
+        "id": 536,
+        "name": "Personnel Security - Security Awareness, Training, and Education",
+        "lang": "en",
+        "topic_id": 248
+    },
+    {
+        "id": 537,
+        "name": "Personnel Security - Secure Hiring Practices",
+        "lang": "en",
+        "topic_id": 249
+    },
+    {
+        "id": 538,
+        "name": "Personnel Security - Secure Termination Practices",
+        "lang": "en",
+        "topic_id": 250
+    },
+    {
+        "id": 539,
+        "name": "Personnel Security - Third-Party Security",
+        "lang": "en",
+        "topic_id": 251
+    },
+    {
+        "id": 540,
+        "name": "Personnel Security - Security in Review Processes",
+        "lang": "en",
+        "topic_id": 252
+    },
+    {
+        "id": 541,
+        "name": "Personnel Security - Special Issues of Employee Personal Information Privacy",
+        "lang": "en",
+        "topic_id": 253
+    },
+    {
+        "id": 542,
+        "name": "Security Operations - Security Convergence",
+        "lang": "en",
+        "topic_id": 254
+    },
+    {
+        "id": 543,
+        "name": "Security Operations - Global Security Operations Centers (GSOCs)",
+        "lang": "en",
+        "topic_id": 255
+    },
+    {
+        "id": 544,
+        "name": "Cybercrime - Cybercriminal Behavior",
+        "lang": "en",
+        "topic_id": 256
+    },
+    {
+        "id": 545,
+        "name": "Cybercrime - Cyberterrorism",
+        "lang": "en",
+        "topic_id": 257
+    },
+    {
+        "id": 546,
+        "name": "Cybercrime - Cybercriminal Investigations",
+        "lang": "en",
+        "topic_id": 258
+    },
+    {
+        "id": 547,
+        "name": "Cybercrime - Cybercrime Economy",
+        "lang": "en",
+        "topic_id": 259
+    },
+    {
+        "id": 548,
+        "name": "Cyber Law - Constitutional Foundations of Cyber Law",
+        "lang": "en",
+        "topic_id": 260
+    },
+    {
+        "id": 549,
+        "name": "Cyber Law - Cybersecurity-Related Intellectual Property",
+        "lang": "en",
+        "topic_id": 261
+    },
+    {
+        "id": 550,
+        "name": "Cyber Law - Privacy Laws",
+        "lang": "en",
+        "topic_id": 262
+    },
+    {
+        "id": 551,
+        "name": "Cyber Law - Data Security Law",
+        "lang": "en",
+        "topic_id": 263
+    },
+    {
+        "id": 552,
+        "name": "Cyber Law - Anti-Hacking Laws",
+        "lang": "en",
+        "topic_id": 264
+    },
+    {
+        "id": 553,
+        "name": "Cyber Law - Digital Evidence",
+        "lang": "en",
+        "topic_id": 265
+    },
+    {
+        "id": 554,
+        "name": "Cyber Law - Digital Contracts",
+        "lang": "en",
+        "topic_id": 266
+    },
+    {
+        "id": 555,
+        "name": "Cyber Law - Multinational Conventions (Agreements)",
+        "lang": "en",
+        "topic_id": 267
+    },
+    {
+        "id": 556,
+        "name": "Cyber Law - Cross-Border Privacy and Data Security Laws",
+        "lang": "en",
+        "topic_id": 268
+    },
+    {
+        "id": 557,
+        "name": "Cyberethics - Defining Ethics",
+        "lang": "en",
+        "topic_id": 269
+    },
+    {
+        "id": 558,
+        "name": "Cyberethics - Professional Ethics and Codes of Conduct",
+        "lang": "en",
+        "topic_id": 270
+    },
+    {
+        "id": 559,
+        "name": "Cyberethics - Ethics and Equity/Diversity",
+        "lang": "en",
+        "topic_id": 271
+    },
+    {
+        "id": 560,
+        "name": "Cyberethics - Ethics and Law",
+        "lang": "en",
+        "topic_id": 272
+    },
+    {
+        "id": 561,
+        "name": "Cyberethics - Ethics of Autonomy/Robots",
+        "lang": "en",
+        "topic_id": 273
+    },
+    {
+        "id": 562,
+        "name": "Cyberethics - Ethics and Conflict",
+        "lang": "en",
+        "topic_id": 274
+    },
+    {
+        "id": 563,
+        "name": "Cyberethics - Ethical Hacking",
+        "lang": "en",
+        "topic_id": 275
+    },
+    {
+        "id": 564,
+        "name": "Cyberethics - Ethical Frameworks and Normative Theories",
+        "lang": "en",
+        "topic_id": 276
+    },
+    {
+        "id": 565,
+        "name": "Cyber Policy - International Cyber Policy",
+        "lang": "en",
+        "topic_id": 277
+    },
+    {
+        "id": 566,
+        "name": "Cyber Policy - U.S. Federal Cyber Policy",
+        "lang": "en",
+        "topic_id": 278
+    },
+    {
+        "id": 567,
+        "name": "Cyber Policy - Global Impact",
+        "lang": "en",
+        "topic_id": 279
+    },
+    {
+        "id": 568,
+        "name": "Cyber Policy - Cybersecurity and National Security Policy",
+        "lang": "en",
+        "topic_id": 280
+    },
+    {
+        "id": 569,
+        "name": "Cyber Policy - National Economic Implications of Cybersecurity",
+        "lang": "en",
+        "topic_id": 281
+    },
+    {
+        "id": 570,
+        "name": "Cyber Policy - New Adjacent Areas to Diplomacy",
+        "lang": "en",
+        "topic_id": 282
+    },
+    {
+        "id": 571,
+        "name": "Privacy - Defining Privacy",
+        "lang": "en",
+        "topic_id": 283
+    },
+    {
+        "id": 572,
+        "name": "Privacy - Privacy Rights",
+        "lang": "en",
+        "topic_id": 284
+    },
+    {
+        "id": 573,
+        "name": "Privacy - Safeguarding Privacy",
+        "lang": "en",
+        "topic_id": 285
+    },
+    {
+        "id": 574,
+        "name": "Privacy - Privacy Norms and Attitudes",
+        "lang": "en",
+        "topic_id": 286
+    },
+    {
+        "id": 575,
+        "name": "Privacy - Privacy Breaches",
+        "lang": "en",
+        "topic_id": 287
+    },
+    {
+        "id": 576,
+        "name": "Privacy - Privacy in Societies",
+        "lang": "en",
+        "topic_id": 288
+    }
+]

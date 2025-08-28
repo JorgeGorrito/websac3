@@ -1,0 +1,1730 @@
+[
+    {
+        "id": 1,
+        "name": "Criptografía - Conceptos básicos",
+        "lang": "es",
+        "topic_id": 1
+    },
+    {
+        "id": 2,
+        "name": "Criptografía - Conceptos avanzados",
+        "lang": "es",
+        "topic_id": 2
+    },
+    {
+        "id": 3,
+        "name": "Criptografía - Fundamentos matemáticos",
+        "lang": "es",
+        "topic_id": 3
+    },
+    {
+        "id": 4,
+        "name": "Criptografía - Cifrados históricos",
+        "lang": "es",
+        "topic_id": 4
+    },
+    {
+        "id": 5,
+        "name": "Criptografía - Cifrados simétricos (de clave privada)",
+        "lang": "es",
+        "topic_id": 5
+    },
+    {
+        "id": 6,
+        "name": "Criptografía - Cifrados asimétricos (de clave pública)",
+        "lang": "es",
+        "topic_id": 6
+    },
+    {
+        "id": 7,
+        "name": "Informática forense - Introducción",
+        "lang": "es",
+        "topic_id": 7
+    },
+    {
+        "id": 8,
+        "name": "Informática forense - Aspectos legales",
+        "lang": "es",
+        "topic_id": 8
+    },
+    {
+        "id": 9,
+        "name": "Informática forense - Herramientas",
+        "lang": "es",
+        "topic_id": 9
+    },
+    {
+        "id": 10,
+        "name": "Informática forense - Técnicas de análisis de datos",
+        "lang": "es",
+        "topic_id": 10
+    },
+    {
+        "id": 11,
+        "name": "Informática forense - Proceso de investigación",
+        "lang": "es",
+        "topic_id": 11
+    },
+    {
+        "id": 12,
+        "name": "Informática forense - Adquisición y preservación de la evidencia",
+        "lang": "es",
+        "topic_id": 12
+    },
+    {
+        "id": 13,
+        "name": "Informática forense - Análisis de la evidencia",
+        "lang": "es",
+        "topic_id": 13
+    },
+    {
+        "id": 14,
+        "name": "Informática forense - Presentación de resultados",
+        "lang": "es",
+        "topic_id": 14
+    },
+    {
+        "id": 15,
+        "name": "Informática forense - Autenticación de la evidencia",
+        "lang": "es",
+        "topic_id": 15
+    },
+    {
+        "id": 16,
+        "name": "Informática forense - Elaboración de informes, respuesta y gestión de incidentes",
+        "lang": "es",
+        "topic_id": 16
+    },
+    {
+        "id": 17,
+        "name": "Informática forense - Informática forense móvil",
+        "lang": "es",
+        "topic_id": 17
+    },
+    {
+        "id": 18,
+        "name": "Integridad de los datos y autenticación - Fortaleza de la autenticación",
+        "lang": "es",
+        "topic_id": 18
+    },
+    {
+        "id": 19,
+        "name": "Integridad de los datos y autenticación - Técnicas de ataque a contraseñas",
+        "lang": "es",
+        "topic_id": 19
+    },
+    {
+        "id": 20,
+        "name": "Integridad de los datos y autenticación - Técnicas de almacenamiento de contraseñas",
+        "lang": "es",
+        "topic_id": 20
+    },
+    {
+        "id": 21,
+        "name": "Integridad de los datos y autenticación - Integridad de los datos",
+        "lang": "es",
+        "topic_id": 21
+    },
+    {
+        "id": 22,
+        "name": "Control de acceso - Seguridad física de los datos",
+        "lang": "es",
+        "topic_id": 22
+    },
+    {
+        "id": 23,
+        "name": "Control de acceso - Control lógico de acceso a los datos",
+        "lang": "es",
+        "topic_id": 23
+    },
+    {
+        "id": 24,
+        "name": "Control de acceso - Diseño de arquitectura segura",
+        "lang": "es",
+        "topic_id": 24
+    },
+    {
+        "id": 25,
+        "name": "Control de acceso - Técnicas de prevención de fugas de datos",
+        "lang": "es",
+        "topic_id": 25
+    },
+    {
+        "id": 26,
+        "name": "Protocolos de comunicación segura - Protocolos de la capa de aplicación y de transporte",
+        "lang": "es",
+        "topic_id": 26
+    },
+    {
+        "id": 27,
+        "name": "Protocolos de comunicación segura - Ataques a TLS",
+        "lang": "es",
+        "topic_id": 27
+    },
+    {
+        "id": 28,
+        "name": "Protocolos de comunicación segura - Capa de red / Internet",
+        "lang": "es",
+        "topic_id": 28
+    },
+    {
+        "id": 29,
+        "name": "Protocolos de comunicación segura - Protocolos de preservación de la privacidad",
+        "lang": "es",
+        "topic_id": 29
+    },
+    {
+        "id": 30,
+        "name": "Protocolos de comunicación segura - Capa de enlace de datos",
+        "lang": "es",
+        "topic_id": 30
+    },
+    {
+        "id": 31,
+        "name": "Criptoanálisis - Ataques clásicos",
+        "lang": "es",
+        "topic_id": 31
+    },
+    {
+        "id": 32,
+        "name": "Criptoanálisis - Ataques de canal lateral",
+        "lang": "es",
+        "topic_id": 32
+    },
+    {
+        "id": 33,
+        "name": "Criptoanálisis - Ataques contra cifrados de clave privada",
+        "lang": "es",
+        "topic_id": 33
+    },
+    {
+        "id": 34,
+        "name": "Criptoanálisis - Ataques contra cifrados de clave pública",
+        "lang": "es",
+        "topic_id": 34
+    },
+    {
+        "id": 35,
+        "name": "Criptoanálisis - Algoritmos para resolver el Problema del Logaritmo Discreto",
+        "lang": "es",
+        "topic_id": 35
+    },
+    {
+        "id": 36,
+        "name": "Criptoanálisis - Ataques contra RSA",
+        "lang": "es",
+        "topic_id": 36
+    },
+    {
+        "id": 37,
+        "name": "Privacidad de los datos - Visión general",
+        "lang": "es",
+        "topic_id": 37
+    },
+    {
+        "id": 38,
+        "name": "Seguridad del almacenamiento de la información - Cifrado de disco y archivos",
+        "lang": "es",
+        "topic_id": 38
+    },
+    {
+        "id": 39,
+        "name": "Seguridad del almacenamiento de la información - Borrado de datos",
+        "lang": "es",
+        "topic_id": 39
+    },
+    {
+        "id": 40,
+        "name": "Seguridad del almacenamiento de la información - Enmascaramiento de datos",
+        "lang": "es",
+        "topic_id": 40
+    },
+    {
+        "id": 41,
+        "name": "Seguridad del almacenamiento de la información - Seguridad en bases de datos",
+        "lang": "es",
+        "topic_id": 41
+    },
+    {
+        "id": 42,
+        "name": "Seguridad del almacenamiento de la información - Legislación sobre seguridad de los datos",
+        "lang": "es",
+        "topic_id": 42
+    },
+    {
+        "id": 43,
+        "name": "Principios fundamentales - Mínimo privilegio",
+        "lang": "es",
+        "topic_id": 43
+    },
+    {
+        "id": 44,
+        "name": "Principios fundamentales - Valores predeterminados a prueba de fallos",
+        "lang": "es",
+        "topic_id": 44
+    },
+    {
+        "id": 45,
+        "name": "Principios fundamentales - Mediación completa",
+        "lang": "es",
+        "topic_id": 45
+    },
+    {
+        "id": 46,
+        "name": "Principios fundamentales - Separación",
+        "lang": "es",
+        "topic_id": 46
+    },
+    {
+        "id": 47,
+        "name": "Principios fundamentales - Minimizar la confianza",
+        "lang": "es",
+        "topic_id": 47
+    },
+    {
+        "id": 48,
+        "name": "Principios fundamentales - Economía de mecanismos",
+        "lang": "es",
+        "topic_id": 48
+    },
+    {
+        "id": 49,
+        "name": "Principios fundamentales - Minimizar mecanismos comunes",
+        "lang": "es",
+        "topic_id": 49
+    },
+    {
+        "id": 50,
+        "name": "Principios fundamentales - Principio de menor sorpresa",
+        "lang": "es",
+        "topic_id": 50
+    },
+    {
+        "id": 51,
+        "name": "Principios fundamentales - Diseño abierto",
+        "lang": "es",
+        "topic_id": 51
+    },
+    {
+        "id": 52,
+        "name": "Principios fundamentales - Capas (o Estructuración en capas)",
+        "lang": "es",
+        "topic_id": 52
+    },
+    {
+        "id": 53,
+        "name": "Principios fundamentales - Abstracción",
+        "lang": "es",
+        "topic_id": 53
+    },
+    {
+        "id": 54,
+        "name": "Principios fundamentales - Modularidad",
+        "lang": "es",
+        "topic_id": 54
+    },
+    {
+        "id": 55,
+        "name": "Principios fundamentales - Vinculación completa",
+        "lang": "es",
+        "topic_id": 55
+    },
+    {
+        "id": 56,
+        "name": "Principios fundamentales - Diseño para la iteración",
+        "lang": "es",
+        "topic_id": 56
+    },
+    {
+        "id": 57,
+        "name": "Diseño - Derivación de requisitos de seguridad",
+        "lang": "es",
+        "topic_id": 57
+    },
+    {
+        "id": 58,
+        "name": "Diseño - Especificación de requisitos de seguridad",
+        "lang": "es",
+        "topic_id": 58
+    },
+    {
+        "id": 59,
+        "name": "Diseño - Ciclo de vida del desarrollo de software / Ciclo de vida del desarrollo seguro",
+        "lang": "es",
+        "topic_id": 59
+    },
+    {
+        "id": 60,
+        "name": "Diseño - Lenguajes de programación y lenguajes con seguridad de tipos",
+        "lang": "es",
+        "topic_id": 60
+    },
+    {
+        "id": 61,
+        "name": "Implementación - Validación de entradas y verificación de su representación",
+        "lang": "es",
+        "topic_id": 61
+    },
+    {
+        "id": 62,
+        "name": "Implementación - Uso correcto de las API",
+        "lang": "es",
+        "topic_id": 62
+    },
+    {
+        "id": 63,
+        "name": "Implementación - Uso de características de seguridad",
+        "lang": "es",
+        "topic_id": 63
+    },
+    {
+        "id": 64,
+        "name": "Implementación - Verificación de relaciones de tiempo y estado",
+        "lang": "es",
+        "topic_id": 64
+    },
+    {
+        "id": 65,
+        "name": "Implementación - Manejo adecuado de excepciones y errores",
+        "lang": "es",
+        "topic_id": 65
+    },
+    {
+        "id": 66,
+        "name": "Implementación - Programación robusta",
+        "lang": "es",
+        "topic_id": 66
+    },
+    {
+        "id": 67,
+        "name": "Implementación - Encapsulación de estructuras y módulos",
+        "lang": "es",
+        "topic_id": 67
+    },
+    {
+        "id": 68,
+        "name": "Implementación - Consideración del entorno",
+        "lang": "es",
+        "topic_id": 68
+    },
+    {
+        "id": 69,
+        "name": "Análisis y pruebas - Análisis estático y dinámico",
+        "lang": "es",
+        "topic_id": 69
+    },
+    {
+        "id": 70,
+        "name": "Análisis y pruebas - Pruebas unitarias",
+        "lang": "es",
+        "topic_id": 70
+    },
+    {
+        "id": 71,
+        "name": "Análisis y pruebas - Pruebas de integración",
+        "lang": "es",
+        "topic_id": 71
+    },
+    {
+        "id": 72,
+        "name": "Análisis y pruebas - Pruebas de software",
+        "lang": "es",
+        "topic_id": 72
+    },
+    {
+        "id": 73,
+        "name": "Mantenimiento - Configuración",
+        "lang": "es",
+        "topic_id": 73
+    },
+    {
+        "id": 74,
+        "name": "Mantenimiento - Aplicación de parches y ciclo de vida de la vulnerabilidad",
+        "lang": "es",
+        "topic_id": 74
+    },
+    {
+        "id": 75,
+        "name": "Mantenimiento - Verificación del entorno",
+        "lang": "es",
+        "topic_id": 75
+    },
+    {
+        "id": 76,
+        "name": "Mantenimiento - DevOps",
+        "lang": "es",
+        "topic_id": 76
+    },
+    {
+        "id": 77,
+        "name": "Mantenimiento - Retiro/Desmantelamiento",
+        "lang": "es",
+        "topic_id": 77
+    },
+    {
+        "id": 78,
+        "name": "Documentación - Documentos de instalación",
+        "lang": "es",
+        "topic_id": 78
+    },
+    {
+        "id": 79,
+        "name": "Documentación - Guías y manuales de usuario",
+        "lang": "es",
+        "topic_id": 79
+    },
+    {
+        "id": 80,
+        "name": "Documentación - Documentación de aseguramiento",
+        "lang": "es",
+        "topic_id": 80
+    },
+    {
+        "id": 81,
+        "name": "Documentación - Documentación de seguridad",
+        "lang": "es",
+        "topic_id": 81
+    },
+    {
+        "id": 82,
+        "name": "Ética - Cuestiones éticas en el desarrollo de software",
+        "lang": "es",
+        "topic_id": 82
+    },
+    {
+        "id": 83,
+        "name": "Ética - Aspectos sociales del desarrollo de software",
+        "lang": "es",
+        "topic_id": 83
+    },
+    {
+        "id": 84,
+        "name": "Aspectos legales - Aspectos legales del desarrollo de software",
+        "lang": "es",
+        "topic_id": 84
+    },
+    {
+        "id": 85,
+        "name": "Aspectos legales - Divulgación de vulnerabilidades",
+        "lang": "es",
+        "topic_id": 85
+    },
+    {
+        "id": 86,
+        "name": "Aspectos legales - Qué, cuándo y por qué probar",
+        "lang": "es",
+        "topic_id": 86
+    },
+    {
+        "id": 87,
+        "name": "Diseño de componentes - Seguridad en el diseño de componentes",
+        "lang": "es",
+        "topic_id": 87
+    },
+    {
+        "id": 88,
+        "name": "Diseño de componentes - Principios de diseño seguro de componentes",
+        "lang": "es",
+        "topic_id": 88
+    },
+    {
+        "id": 89,
+        "name": "Diseño de componentes - Identificación de componentes",
+        "lang": "es",
+        "topic_id": 89
+    },
+    {
+        "id": 90,
+        "name": "Diseño de componentes - Técnicas antiingeniería inversa",
+        "lang": "es",
+        "topic_id": 90
+    },
+    {
+        "id": 91,
+        "name": "Diseño de componentes - Mitigación de ataques de canal lateral",
+        "lang": "es",
+        "topic_id": 91
+    },
+    {
+        "id": 92,
+        "name": "Diseño de componentes - Tecnologías antimanipulación",
+        "lang": "es",
+        "topic_id": 92
+    },
+    {
+        "id": 93,
+        "name": "Adquisición de componentes - Riesgos en la cadena de suministro",
+        "lang": "es",
+        "topic_id": 93
+    },
+    {
+        "id": 94,
+        "name": "Adquisición de componentes - Seguridad en la cadena de suministro",
+        "lang": "es",
+        "topic_id": 94
+    },
+    {
+        "id": 95,
+        "name": "Adquisición de componentes - Evaluación de proveedores",
+        "lang": "es",
+        "topic_id": 95
+    },
+    {
+        "id": 96,
+        "name": "Pruebas de componentes - Principios de las pruebas unitarias",
+        "lang": "es",
+        "topic_id": 96
+    },
+    {
+        "id": 97,
+        "name": "Pruebas de componentes - Pruebas de seguridad",
+        "lang": "es",
+        "topic_id": 97
+    },
+    {
+        "id": 98,
+        "name": "Ingeniería inversa de componentes - Ingeniería inversa de diseño",
+        "lang": "es",
+        "topic_id": 98
+    },
+    {
+        "id": 99,
+        "name": "Ingeniería inversa de componentes - Ingeniería inversa de hardware",
+        "lang": "es",
+        "topic_id": 99
+    },
+    {
+        "id": 100,
+        "name": "Ingeniería inversa de componentes - Ingeniería inversa de software",
+        "lang": "es",
+        "topic_id": 100
+    },
+    {
+        "id": 101,
+        "name": "Medios físicos - Transmisión en un medio",
+        "lang": "es",
+        "topic_id": 101
+    },
+    {
+        "id": 102,
+        "name": "Medios físicos - Medios compartidos y punto a punto",
+        "lang": "es",
+        "topic_id": 102
+    },
+    {
+        "id": 103,
+        "name": "Medios físicos - Modelos de compartición",
+        "lang": "es",
+        "topic_id": 103
+    },
+    {
+        "id": 104,
+        "name": "Medios físicos - Tecnologías comunes",
+        "lang": "es",
+        "topic_id": 104
+    },
+    {
+        "id": 105,
+        "name": "Interfaces y conectores físicos - Características y materiales del hardware",
+        "lang": "es",
+        "topic_id": 105
+    },
+    {
+        "id": 106,
+        "name": "Interfaces y conectores físicos - Estándares",
+        "lang": "es",
+        "topic_id": 106
+    },
+    {
+        "id": 107,
+        "name": "Interfaces y conectores físicos - Conectores comunes",
+        "lang": "es",
+        "topic_id": 107
+    },
+    {
+        "id": 108,
+        "name": "Arquitectura de hardware - Arquitecturas estándar",
+        "lang": "es",
+        "topic_id": 108
+    },
+    {
+        "id": 109,
+        "name": "Arquitectura de hardware - Estándares de interfaces de hardware",
+        "lang": "es",
+        "topic_id": 109
+    },
+    {
+        "id": 110,
+        "name": "Arquitectura de hardware - Arquitecturas comunes",
+        "lang": "es",
+        "topic_id": 110
+    },
+    {
+        "id": 111,
+        "name": "Arquitectura de sistemas distribuidos - Conceptos generales",
+        "lang": "es",
+        "topic_id": 111
+    },
+    {
+        "id": 112,
+        "name": "Arquitectura de sistemas distribuidos - World Wide Web",
+        "lang": "es",
+        "topic_id": 112
+    },
+    {
+        "id": 113,
+        "name": "Arquitectura de sistemas distribuidos - Internet",
+        "lang": "es",
+        "topic_id": 113
+    },
+    {
+        "id": 114,
+        "name": "Arquitectura de sistemas distribuidos - Protocolos y capas",
+        "lang": "es",
+        "topic_id": 114
+    },
+    {
+        "id": 115,
+        "name": "Arquitectura de sistemas distribuidos - Computación de alto rendimiento (supercomputadoras)",
+        "lang": "es",
+        "topic_id": 115
+    },
+    {
+        "id": 116,
+        "name": "Arquitectura de sistemas distribuidos - Hipervisores e implementaciones de computación en la nube",
+        "lang": "es",
+        "topic_id": 116
+    },
+    {
+        "id": 117,
+        "name": "Arquitectura de sistemas distribuidos - Vulnerabilidades y ejemplos de exploits",
+        "lang": "es",
+        "topic_id": 117
+    },
+    {
+        "id": 118,
+        "name": "Arquitectura de redes - Conceptos generales",
+        "lang": "es",
+        "topic_id": 118
+    },
+    {
+        "id": 119,
+        "name": "Arquitectura de redes - Arquitecturas comunes",
+        "lang": "es",
+        "topic_id": 119
+    },
+    {
+        "id": 120,
+        "name": "Arquitectura de redes - Reenvío",
+        "lang": "es",
+        "topic_id": 120
+    },
+    {
+        "id": 121,
+        "name": "Arquitectura de redes - Enrutamiento",
+        "lang": "es",
+        "topic_id": 121
+    },
+    {
+        "id": 122,
+        "name": "Arquitectura de redes - Conmutación/Puenteo",
+        "lang": "es",
+        "topic_id": 122
+    },
+    {
+        "id": 123,
+        "name": "Arquitectura de redes - Tendencias emergentes",
+        "lang": "es",
+        "topic_id": 123
+    },
+    {
+        "id": 124,
+        "name": "Arquitectura de redes - Virtualización y arquitectura de hipervisores virtuales",
+        "lang": "es",
+        "topic_id": 124
+    },
+    {
+        "id": 125,
+        "name": "Implementaciones de redes - Redes IEEE 802/ISO",
+        "lang": "es",
+        "topic_id": 125
+    },
+    {
+        "id": 126,
+        "name": "Implementaciones de redes - Redes IETF y TCP/IP",
+        "lang": "es",
+        "topic_id": 126
+    },
+    {
+        "id": 127,
+        "name": "Implementaciones de redes - Integración práctica y protocolos de unión",
+        "lang": "es",
+        "topic_id": 127
+    },
+    {
+        "id": 128,
+        "name": "Implementaciones de redes - Vulnerabilidades y ejemplos de exploits",
+        "lang": "es",
+        "topic_id": 128
+    },
+    {
+        "id": 129,
+        "name": "Servicios de red - Concepto de un servicio",
+        "lang": "es",
+        "topic_id": 129
+    },
+    {
+        "id": 130,
+        "name": "Servicios de red - Modelos de servicio (cliente-servidor, par a par)",
+        "lang": "es",
+        "topic_id": 130
+    },
+    {
+        "id": 131,
+        "name": "Servicios de red - Conceptos de protocolos de servicio (IPC, API, IDL)",
+        "lang": "es",
+        "topic_id": 131
+    },
+    {
+        "id": 132,
+        "name": "Servicios de red - Arquitecturas comunes de comunicación de servicios",
+        "lang": "es",
+        "topic_id": 132
+    },
+    {
+        "id": 133,
+        "name": "Servicios de red - Virtualización de servicios",
+        "lang": "es",
+        "topic_id": 133
+    },
+    {
+        "id": 134,
+        "name": "Servicios de red - Vulnerabilidades y ejemplos de exploits",
+        "lang": "es",
+        "topic_id": 134
+    },
+    {
+        "id": 135,
+        "name": "Defensa de red - Endurecimiento de la red",
+        "lang": "es",
+        "topic_id": 135
+    },
+    {
+        "id": 136,
+        "name": "Defensa de red - Implementación de IDS/IPS",
+        "lang": "es",
+        "topic_id": 136
+    },
+    {
+        "id": 137,
+        "name": "Defensa de red - Implementación de firewalls y redes privadas virtuales (VPN)",
+        "lang": "es",
+        "topic_id": 137
+    },
+    {
+        "id": 138,
+        "name": "Defensa de red - Defensa en profundidad",
+        "lang": "es",
+        "topic_id": 138
+    },
+    {
+        "id": 139,
+        "name": "Defensa de red - Honeypots y honeynets",
+        "lang": "es",
+        "topic_id": 139
+    },
+    {
+        "id": 140,
+        "name": "Defensa de red - Monitoreo de red",
+        "lang": "es",
+        "topic_id": 140
+    },
+    {
+        "id": 141,
+        "name": "Defensa de red - Análisis de tráfico de red",
+        "lang": "es",
+        "topic_id": 141
+    },
+    {
+        "id": 142,
+        "name": "Defensa de red - Minimización de la exposición (superficie y vectores de ataque)",
+        "lang": "es",
+        "topic_id": 142
+    },
+    {
+        "id": 143,
+        "name": "Defensa de red - Control de acceso a la red (interno y externo)",
+        "lang": "es",
+        "topic_id": 143
+    },
+    {
+        "id": 144,
+        "name": "Defensa de red - Redes perimetrales (también conocidas como zonas desmilitarizadas o DMZs) / Servidores proxy",
+        "lang": "es",
+        "topic_id": 144
+    },
+    {
+        "id": 145,
+        "name": "Defensa de red - Desarrollo y aplicación de políticas de red",
+        "lang": "es",
+        "topic_id": 145
+    },
+    {
+        "id": 146,
+        "name": "Defensa de red - Procedimientos operativos de red",
+        "lang": "es",
+        "topic_id": 146
+    },
+    {
+        "id": 147,
+        "name": "Defensa de red - Ataques de red (p. ej., secuestro de sesión, ataques de intermediario/man-in-the-middle)",
+        "lang": "es",
+        "topic_id": 147
+    },
+    {
+        "id": 148,
+        "name": "Defensa de red - Cacería de amenazas y aprendizaje automático",
+        "lang": "es",
+        "topic_id": 148
+    },
+    {
+        "id": 149,
+        "name": "Pensamiento de sistemas - ¿Qué es un sistema?",
+        "lang": "es",
+        "topic_id": 149
+    },
+    {
+        "id": 150,
+        "name": "Pensamiento de sistemas - ¿Qué es la ingeniería de sistemas?",
+        "lang": "es",
+        "topic_id": 150
+    },
+    {
+        "id": 151,
+        "name": "Pensamiento de sistemas - Enfoques holísticos",
+        "lang": "es",
+        "topic_id": 151
+    },
+    {
+        "id": 152,
+        "name": "Pensamiento de sistemas - Seguridad de sistemas de propósito general",
+        "lang": "es",
+        "topic_id": 152
+    },
+    {
+        "id": 153,
+        "name": "Pensamiento de sistemas - Seguridad de sistemas de propósito especial",
+        "lang": "es",
+        "topic_id": 153
+    },
+    {
+        "id": 154,
+        "name": "Pensamiento de sistemas - Modelos de amenazas",
+        "lang": "es",
+        "topic_id": 154
+    },
+    {
+        "id": 155,
+        "name": "Pensamiento de sistemas - Análisis de requisitos",
+        "lang": "es",
+        "topic_id": 155
+    },
+    {
+        "id": 156,
+        "name": "Pensamiento de sistemas - Principios fundamentales",
+        "lang": "es",
+        "topic_id": 156
+    },
+    {
+        "id": 157,
+        "name": "Pensamiento de sistemas - Desarrollo orientado a pruebas",
+        "lang": "es",
+        "topic_id": 157
+    },
+    {
+        "id": 158,
+        "name": "Gestión de sistemas - Modelos de políticas",
+        "lang": "es",
+        "topic_id": 158
+    },
+    {
+        "id": 159,
+        "name": "Gestión de sistemas - Composición de políticas",
+        "lang": "es",
+        "topic_id": 159
+    },
+    {
+        "id": 160,
+        "name": "Gestión de sistemas - Uso de la automatización",
+        "lang": "es",
+        "topic_id": 160
+    },
+    {
+        "id": 161,
+        "name": "Gestión de sistemas - Aplicación de parches y ciclo de vida de la vulnerabilidad",
+        "lang": "es",
+        "topic_id": 161
+    },
+    {
+        "id": 162,
+        "name": "Gestión de sistemas - Operación",
+        "lang": "es",
+        "topic_id": 162
+    },
+    {
+        "id": 163,
+        "name": "Gestión de sistemas - Puesta en marcha y retiro",
+        "lang": "es",
+        "topic_id": 163
+    },
+    {
+        "id": 164,
+        "name": "Gestión de sistemas - Amenaza interna",
+        "lang": "es",
+        "topic_id": 164
+    },
+    {
+        "id": 165,
+        "name": "Gestión de sistemas - Documentación",
+        "lang": "es",
+        "topic_id": 165
+    },
+    {
+        "id": 166,
+        "name": "Gestión de sistemas - Sistemas y procedimientos",
+        "lang": "es",
+        "topic_id": 166
+    },
+    {
+        "id": 167,
+        "name": "Acceso a sistemas - Métodos de autenticación",
+        "lang": "es",
+        "topic_id": 167
+    },
+    {
+        "id": 168,
+        "name": "Acceso a sistemas - Identidad",
+        "lang": "es",
+        "topic_id": 168
+    },
+    {
+        "id": 169,
+        "name": "Control de sistemas - Control de acceso",
+        "lang": "es",
+        "topic_id": 169
+    },
+    {
+        "id": 170,
+        "name": "Control de sistemas - Modelos de autorización",
+        "lang": "es",
+        "topic_id": 170
+    },
+    {
+        "id": 171,
+        "name": "Control de sistemas - Detección de intrusiones",
+        "lang": "es",
+        "topic_id": 171
+    },
+    {
+        "id": 172,
+        "name": "Control de sistemas - Ataques",
+        "lang": "es",
+        "topic_id": 172
+    },
+    {
+        "id": 173,
+        "name": "Control de sistemas - Defensas",
+        "lang": "es",
+        "topic_id": 173
+    },
+    {
+        "id": 174,
+        "name": "Control de sistemas - Auditoría",
+        "lang": "es",
+        "topic_id": 174
+    },
+    {
+        "id": 175,
+        "name": "Control de sistemas - Malware",
+        "lang": "es",
+        "topic_id": 175
+    },
+    {
+        "id": 176,
+        "name": "Control de sistemas - Modelos de vulnerabilidades",
+        "lang": "es",
+        "topic_id": 176
+    },
+    {
+        "id": 177,
+        "name": "Control de sistemas - Pruebas de penetración",
+        "lang": "es",
+        "topic_id": 177
+    },
+    {
+        "id": 178,
+        "name": "Control de sistemas - Forense",
+        "lang": "es",
+        "topic_id": 178
+    },
+    {
+        "id": 179,
+        "name": "Control de sistemas - Recuperación y resiliencia",
+        "lang": "es",
+        "topic_id": 179
+    },
+    {
+        "id": 180,
+        "name": "Retiro de sistemas - Retiro de servicio",
+        "lang": "es",
+        "topic_id": 180
+    },
+    {
+        "id": 181,
+        "name": "Retiro de sistemas - Eliminación",
+        "lang": "es",
+        "topic_id": 181
+    },
+    {
+        "id": 182,
+        "name": "Pruebas de sistemas - Validación de requisitos",
+        "lang": "es",
+        "topic_id": 182
+    },
+    {
+        "id": 183,
+        "name": "Pruebas de sistemas - Validación de la composición de componentes",
+        "lang": "es",
+        "topic_id": 183
+    },
+    {
+        "id": 184,
+        "name": "Pruebas de sistemas - Pruebas unitarias versus pruebas de sistema",
+        "lang": "es",
+        "topic_id": 184
+    },
+    {
+        "id": 185,
+        "name": "Pruebas de sistemas - Verificación formal de sistemas",
+        "lang": "es",
+        "topic_id": 185
+    },
+    {
+        "id": 186,
+        "name": "Arquitecturas comunes de sistemas - Máquinas virtuales",
+        "lang": "es",
+        "topic_id": 186
+    },
+    {
+        "id": 187,
+        "name": "Arquitecturas comunes de sistemas - Sistemas de control industrial",
+        "lang": "es",
+        "topic_id": 187
+    },
+    {
+        "id": 188,
+        "name": "Arquitecturas comunes de sistemas - Internet de las cosas (IoT)",
+        "lang": "es",
+        "topic_id": 188
+    },
+    {
+        "id": 189,
+        "name": "Arquitecturas comunes de sistemas - Sistemas embebidos",
+        "lang": "es",
+        "topic_id": 189
+    },
+    {
+        "id": 190,
+        "name": "Arquitecturas comunes de sistemas - Sistemas móviles",
+        "lang": "es",
+        "topic_id": 190
+    },
+    {
+        "id": 191,
+        "name": "Arquitecturas comunes de sistemas - Sistemas autónomos",
+        "lang": "es",
+        "topic_id": 191
+    },
+    {
+        "id": 192,
+        "name": "Arquitecturas comunes de sistemas - Sistemas de propósito general",
+        "lang": "es",
+        "topic_id": 192
+    },
+    {
+        "id": 193,
+        "name": "Gestión de identidad - Identificación y autenticación de personas y dispositivos",
+        "lang": "es",
+        "topic_id": 193
+    },
+    {
+        "id": 194,
+        "name": "Gestión de identidad - Control de activos físicos y lógicos",
+        "lang": "es",
+        "topic_id": 194
+    },
+    {
+        "id": 195,
+        "name": "Gestión de identidad - Identidad como Servicio (IDaaS)",
+        "lang": "es",
+        "topic_id": 195
+    },
+    {
+        "id": 196,
+        "name": "Gestión de identidad - Servicios de identidad de terceros",
+        "lang": "es",
+        "topic_id": 196
+    },
+    {
+        "id": 197,
+        "name": "Gestión de identidad - Ataques al control de acceso y medidas de mitigación",
+        "lang": "es",
+        "topic_id": 197
+    },
+    {
+        "id": 198,
+        "name": "Ingeniería social - Tipos de ataques de ingeniería social",
+        "lang": "es",
+        "topic_id": 198
+    },
+    {
+        "id": 199,
+        "name": "Ingeniería social - Psicología de los ataques de ingeniería social",
+        "lang": "es",
+        "topic_id": 199
+    },
+    {
+        "id": 200,
+        "name": "Ingeniería social - Engaño a los usuarios",
+        "lang": "es",
+        "topic_id": 200
+    },
+    {
+        "id": 201,
+        "name": "Ingeniería social - Detección y mitigación de ataques de ingeniería social",
+        "lang": "es",
+        "topic_id": 201
+    },
+    {
+        "id": 202,
+        "name": "Cumplimiento personal con reglas/políticas/normas éticas de ciberseguridad - Uso indebido de sistemas y mal comportamiento de usuarios",
+        "lang": "es",
+        "topic_id": 202
+    },
+    {
+        "id": 203,
+        "name": "Cumplimiento personal con reglas/políticas/normas éticas de ciberseguridad - Aplicación y reglas de comportamiento",
+        "lang": "es",
+        "topic_id": 203
+    },
+    {
+        "id": 204,
+        "name": "Cumplimiento personal con reglas/políticas/normas éticas de ciberseguridad - Comportamiento adecuado bajo incertidumbre",
+        "lang": "es",
+        "topic_id": 204
+    },
+    {
+        "id": 205,
+        "name": "Conciencia y comprensión - Percepción y comunicación del riesgo",
+        "lang": "es",
+        "topic_id": 205
+    },
+    {
+        "id": 206,
+        "name": "Conciencia y comprensión - Higiene cibernética",
+        "lang": "es",
+        "topic_id": 206
+    },
+    {
+        "id": 207,
+        "name": "Conciencia y comprensión - Educación del usuario en ciberseguridad",
+        "lang": "es",
+        "topic_id": 207
+    },
+    {
+        "id": 208,
+        "name": "Conciencia y comprensión - Conciencia de vulnerabilidades y amenazas cibernéticas",
+        "lang": "es",
+        "topic_id": 208
+    },
+    {
+        "id": 209,
+        "name": "Privacidad social y personal - Teorías sociales de la privacidad",
+        "lang": "es",
+        "topic_id": 209
+    },
+    {
+        "id": 210,
+        "name": "Privacidad social y personal - Privacidad y seguridad en redes sociales",
+        "lang": "es",
+        "topic_id": 210
+    },
+    {
+        "id": 211,
+        "name": "Privacidad y seguridad de los datos personales - Datos personales sensibles (SPD)",
+        "lang": "es",
+        "topic_id": 211
+    },
+    {
+        "id": 212,
+        "name": "Privacidad y seguridad de los datos personales - Rastreo personal y huella digital",
+        "lang": "es",
+        "topic_id": 212
+    },
+    {
+        "id": 213,
+        "name": "Seguridad y privacidad utilizable - Usabilidad y experiencia del usuario",
+        "lang": "es",
+        "topic_id": 213
+    },
+    {
+        "id": 214,
+        "name": "Seguridad y privacidad utilizable - Factores de seguridad humana",
+        "lang": "es",
+        "topic_id": 214
+    },
+    {
+        "id": 215,
+        "name": "Seguridad y privacidad utilizable - Conciencia y comprensión de políticas",
+        "lang": "es",
+        "topic_id": 215
+    },
+    {
+        "id": 216,
+        "name": "Seguridad y privacidad utilizable - Política de privacidad",
+        "lang": "es",
+        "topic_id": 216
+    },
+    {
+        "id": 217,
+        "name": "Seguridad y privacidad utilizable - Guía e implicaciones de diseño",
+        "lang": "es",
+        "topic_id": 217
+    },
+    {
+        "id": 218,
+        "name": "Gestión de riesgos - Identificación de riesgos",
+        "lang": "es",
+        "topic_id": 218
+    },
+    {
+        "id": 219,
+        "name": "Gestión de riesgos - Evaluación y análisis de riesgos",
+        "lang": "es",
+        "topic_id": 219
+    },
+    {
+        "id": 220,
+        "name": "Gestión de riesgos - Amenazas internas",
+        "lang": "es",
+        "topic_id": 220
+    },
+    {
+        "id": 221,
+        "name": "Gestión de riesgos - Modelos y metodologías de medición y evaluación de riesgos",
+        "lang": "es",
+        "topic_id": 221
+    },
+    {
+        "id": 222,
+        "name": "Gestión de riesgos - Control de riesgos",
+        "lang": "es",
+        "topic_id": 222
+    },
+    {
+        "id": 223,
+        "name": "Gobernanza y políticas de seguridad - Contexto organizacional",
+        "lang": "es",
+        "topic_id": 223
+    },
+    {
+        "id": 224,
+        "name": "Gobernanza y políticas de seguridad - Privacidad",
+        "lang": "es",
+        "topic_id": 224
+    },
+    {
+        "id": 225,
+        "name": "Gobernanza y políticas de seguridad - Leyes, ética y cumplimiento",
+        "lang": "es",
+        "topic_id": 225
+    },
+    {
+        "id": 226,
+        "name": "Gobernanza y políticas de seguridad - Gobernanza de la seguridad",
+        "lang": "es",
+        "topic_id": 226
+    },
+    {
+        "id": 227,
+        "name": "Gobernanza y políticas de seguridad - Comunicación a nivel ejecutivo y de la junta directiva",
+        "lang": "es",
+        "topic_id": 227
+    },
+    {
+        "id": 228,
+        "name": "Gobernanza y políticas de seguridad - Política gerencial",
+        "lang": "es",
+        "topic_id": 228
+    },
+    {
+        "id": 229,
+        "name": "Herramientas analíticas - Medición del rendimiento (métricas)",
+        "lang": "es",
+        "topic_id": 229
+    },
+    {
+        "id": 230,
+        "name": "Herramientas analíticas - Análisis de datos",
+        "lang": "es",
+        "topic_id": 230
+    },
+    {
+        "id": 231,
+        "name": "Herramientas analíticas - Inteligencia de seguridad",
+        "lang": "es",
+        "topic_id": 231
+    },
+    {
+        "id": 232,
+        "name": "Administración de sistemas - Administración de sistemas operativos",
+        "lang": "es",
+        "topic_id": 232
+    },
+    {
+        "id": 233,
+        "name": "Administración de sistemas - Administración de sistemas de bases de datos",
+        "lang": "es",
+        "topic_id": 233
+    },
+    {
+        "id": 234,
+        "name": "Administración de sistemas - Administración de redes",
+        "lang": "es",
+        "topic_id": 234
+    },
+    {
+        "id": 235,
+        "name": "Administración de sistemas - Administración de la nube",
+        "lang": "es",
+        "topic_id": 235
+    },
+    {
+        "id": 236,
+        "name": "Administración de sistemas - Administración de sistemas ciberfísicos",
+        "lang": "es",
+        "topic_id": 236
+    },
+    {
+        "id": 237,
+        "name": "Administración de sistemas - Endurecimiento de sistemas",
+        "lang": "es",
+        "topic_id": 237
+    },
+    {
+        "id": 238,
+        "name": "Administración de sistemas - Disponibilidad",
+        "lang": "es",
+        "topic_id": 238
+    },
+    {
+        "id": 239,
+        "name": "Planificación de la ciberseguridad - Planificación estratégica",
+        "lang": "es",
+        "topic_id": 239
+    },
+    {
+        "id": 240,
+        "name": "Planificación de la ciberseguridad - Gestión operativa y táctica",
+        "lang": "es",
+        "topic_id": 240
+    },
+    {
+        "id": 241,
+        "name": "Continuidad del negocio, recuperación ante desastres y gestión de incidentes - Respuesta a incidentes",
+        "lang": "es",
+        "topic_id": 241
+    },
+    {
+        "id": 242,
+        "name": "Continuidad del negocio, recuperación ante desastres y gestión de incidentes - Recuperación ante desastres",
+        "lang": "es",
+        "topic_id": 242
+    },
+    {
+        "id": 243,
+        "name": "Continuidad del negocio, recuperación ante desastres y gestión de incidentes - Continuidad del negocio",
+        "lang": "es",
+        "topic_id": 243
+    },
+    {
+        "id": 244,
+        "name": "Gestión de programas de seguridad - Gestión de proyectos",
+        "lang": "es",
+        "topic_id": 244
+    },
+    {
+        "id": 245,
+        "name": "Gestión de programas de seguridad - Gestión de recursos",
+        "lang": "es",
+        "topic_id": 245
+    },
+    {
+        "id": 246,
+        "name": "Gestión de programas de seguridad - Métricas de seguridad",
+        "lang": "es",
+        "topic_id": 246
+    },
+    {
+        "id": 247,
+        "name": "Gestión de programas de seguridad - Aseguramiento y control de calidad",
+        "lang": "es",
+        "topic_id": 247
+    },
+    {
+        "id": 248,
+        "name": "Seguridad del personal - Concienciación, capacitación y educación en seguridad",
+        "lang": "es",
+        "topic_id": 248
+    },
+    {
+        "id": 249,
+        "name": "Seguridad del personal - Prácticas de contratación seguras",
+        "lang": "es",
+        "topic_id": 249
+    },
+    {
+        "id": 250,
+        "name": "Seguridad del personal - Prácticas de terminación de personal seguras",
+        "lang": "es",
+        "topic_id": 250
+    },
+    {
+        "id": 251,
+        "name": "Seguridad del personal - Seguridad de terceros",
+        "lang": "es",
+        "topic_id": 251
+    },
+    {
+        "id": 252,
+        "name": "Seguridad del personal - Seguridad en procesos de revisión",
+        "lang": "es",
+        "topic_id": 252
+    },
+    {
+        "id": 253,
+        "name": "Seguridad del personal - Cuestiones especiales sobre la privacidad de la información personal de los empleados",
+        "lang": "es",
+        "topic_id": 253
+    },
+    {
+        "id": 254,
+        "name": "Operaciones de seguridad - Convergencia de seguridad",
+        "lang": "es",
+        "topic_id": 254
+    },
+    {
+        "id": 255,
+        "name": "Operaciones de seguridad - Centros globales de operaciones de seguridad (GSOCs)",
+        "lang": "es",
+        "topic_id": 255
+    },
+    {
+        "id": 256,
+        "name": "Ciberdelito - Comportamiento cibercriminal",
+        "lang": "es",
+        "topic_id": 256
+    },
+    {
+        "id": 257,
+        "name": "Ciberdelito - Ciberterrorismo",
+        "lang": "es",
+        "topic_id": 257
+    },
+    {
+        "id": 258,
+        "name": "Ciberdelito - Investigaciones cibercriminales",
+        "lang": "es",
+        "topic_id": 258
+    },
+    {
+        "id": 259,
+        "name": "Ciberdelito - Economía del ciberdelito",
+        "lang": "es",
+        "topic_id": 259
+    },
+    {
+        "id": 260,
+        "name": "Derecho cibernético - Fundamentos constitucionales del derecho cibernético",
+        "lang": "es",
+        "topic_id": 260
+    },
+    {
+        "id": 261,
+        "name": "Derecho cibernético - Propiedad intelectual relacionada con la ciberseguridad",
+        "lang": "es",
+        "topic_id": 261
+    },
+    {
+        "id": 262,
+        "name": "Derecho cibernético - Leyes de privacidad",
+        "lang": "es",
+        "topic_id": 262
+    },
+    {
+        "id": 263,
+        "name": "Derecho cibernético - Ley de seguridad de los datos",
+        "lang": "es",
+        "topic_id": 263
+    },
+    {
+        "id": 264,
+        "name": "Derecho cibernético - Leyes contra el hacking informático",
+        "lang": "es",
+        "topic_id": 264
+    },
+    {
+        "id": 265,
+        "name": "Derecho cibernético - Evidencia digital",
+        "lang": "es",
+        "topic_id": 265
+    },
+    {
+        "id": 266,
+        "name": "Derecho cibernético - Contratos digitales",
+        "lang": "es",
+        "topic_id": 266
+    },
+    {
+        "id": 267,
+        "name": "Derecho cibernético - Convenciones multinacionales (acuerdos)",
+        "lang": "es",
+        "topic_id": 267
+    },
+    {
+        "id": 268,
+        "name": "Derecho cibernético - Leyes transfronterizas de privacidad y seguridad de los datos",
+        "lang": "es",
+        "topic_id": 268
+    },
+    {
+        "id": 269,
+        "name": "Ética cibernética - Definiendo la ética",
+        "lang": "es",
+        "topic_id": 269
+    },
+    {
+        "id": 270,
+        "name": "Ética cibernética - Ética profesional y códigos de conducta",
+        "lang": "es",
+        "topic_id": 270
+    },
+    {
+        "id": 271,
+        "name": "Ética cibernética - Ética y equidad/diversidad",
+        "lang": "es",
+        "topic_id": 271
+    },
+    {
+        "id": 272,
+        "name": "Ética cibernética - Ética y derecho",
+        "lang": "es",
+        "topic_id": 272
+    },
+    {
+        "id": 273,
+        "name": "Ética cibernética - Ética de la autonomía/robots",
+        "lang": "es",
+        "topic_id": 273
+    },
+    {
+        "id": 274,
+        "name": "Ética cibernética - Ética y conflicto",
+        "lang": "es",
+        "topic_id": 274
+    },
+    {
+        "id": 275,
+        "name": "Ética cibernética - Hacking ético",
+        "lang": "es",
+        "topic_id": 275
+    },
+    {
+        "id": 276,
+        "name": "Ética cibernética - Marcos éticos y teorías normativas",
+        "lang": "es",
+        "topic_id": 276
+    },
+    {
+        "id": 277,
+        "name": "Política cibernética - Política cibernética internacional",
+        "lang": "es",
+        "topic_id": 277
+    },
+    {
+        "id": 278,
+        "name": "Política cibernética - Política cibernética federal de EE.UU.",
+        "lang": "es",
+        "topic_id": 278
+    },
+    {
+        "id": 279,
+        "name": "Política cibernética - Impacto global",
+        "lang": "es",
+        "topic_id": 279
+    },
+    {
+        "id": 280,
+        "name": "Política cibernética - Política de ciberseguridad y seguridad nacional",
+        "lang": "es",
+        "topic_id": 280
+    },
+    {
+        "id": 281,
+        "name": "Política cibernética - Implicaciones económicas nacionales de la ciberseguridad",
+        "lang": "es",
+        "topic_id": 281
+    },
+    {
+        "id": 282,
+        "name": "Política cibernética - Nuevas adyacencias a la diplomacia",
+        "lang": "es",
+        "topic_id": 282
+    },
+    {
+        "id": 283,
+        "name": "Privacidad - Definiendo la privacidad",
+        "lang": "es",
+        "topic_id": 283
+    },
+    {
+        "id": 284,
+        "name": "Privacidad - Derechos de privacidad",
+        "lang": "es",
+        "topic_id": 284
+    },
+    {
+        "id": 285,
+        "name": "Privacidad - Salvaguardando la privacidad",
+        "lang": "es",
+        "topic_id": 285
+    },
+    {
+        "id": 286,
+        "name": "Privacidad - Normas y actitudes sobre la privacidad",
+        "lang": "es",
+        "topic_id": 286
+    },
+    {
+        "id": 287,
+        "name": "Privacidad - Brechas de privacidad",
+        "lang": "es",
+        "topic_id": 287
+    },
+    {
+        "id": 288,
+        "name": "Privacidad - Privacidad en las sociedades",
+        "lang": "es",
+        "topic_id": 288
+    }
+]
