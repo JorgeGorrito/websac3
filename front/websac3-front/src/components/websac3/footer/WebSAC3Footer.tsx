@@ -4,19 +4,19 @@ import { FooterLine } from "./FooterLine";
 import { SupportContainer } from "./SupportContainer";
 import { FCBILogo } from "../logos/FCBILogo";
 
-const WebSAC3Footer = () => {
-    return (
-        <footer className="flex w-full h-1/2 items-end  p-2 mb-2">
-            <SupportContainer>
-                <FooterLine />
-                <LogosContainer>
-                    <UnillanosLogo />
-                    <FCBILogo />
-                </LogosContainer>
-                <FooterLine />
-            </SupportContainer>
-        </footer>
-    );
+const WebSAC3Footer = ({applyShadow = true}: {applyShadow?: boolean}) => {
+  return (
+    <footer className="flex w-full justify-center items-center p-4 mt-auto">
+      <SupportContainer applyShadow={applyShadow}>
+        <FooterLine />
+        <LogosContainer>
+          <UnillanosLogo />
+          <FCBILogo />
+        </LogosContainer>
+        <FooterLine />
+      </SupportContainer>
+    </footer>
+  );
 };
 
 export { WebSAC3Footer };

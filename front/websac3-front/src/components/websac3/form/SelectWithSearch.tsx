@@ -1,76 +1,112 @@
-import React from "react"
+"use client";
+
+import { useState } from "react";
+import { Check, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-} from "@/components/ui/command"
-
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import ItemSelectWithSearch from "@/types/websac3/Input/ItemSelectWithSearch"
-import SelectWithSearchProps from "@/types/websac3/Input/SelectWithSearch"
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
-const SelectWithSearch = ({
-    placeHolderDefault = "Select An Option...",
-    placeHolderSearch = "Search...",
-    placeHolderNoResults = "No results found.",
-} : SelectWithSearchProps) => {
-    const [isOpen, setIsOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
-    const [data, setData] = React.useState<ItemSelectWithSearch[]>([])
+const institutions = [
+  { value: "universidad-nacional", label: "Universidad Nacional de Colombia" },
+  { value: "universidad-andes", label: "Universidad de los Andes" },
+  { value: "universidad-javeriana", label: "Pontificia Universidad Javeriana" },
+  { value: "universidad-rosario", label: "Universidad del Rosario" },
+  {
+    value: "universidad-externado",
+    label: "Universidad Externado de Colombia",
+  },
+  { value: "universidad-sabana", label: "Universidad de La Sabana" },
+  {
+    value: "universidad-minuto",
+    label: "Corporación Universitaria Minuto de Dios",
+  },
+  { value: "universidad-catolica", label: "Universidad Católica de Colombia" },
+  { value: "universidad-santo-tomas", label: "Universidad Santo Tomás" },
+  { value: "universidad-central", label: "Universidad Central" },
+];
 
-
-    return (
-       <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger asChild>
-                <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={isOpen}
-                className="w-full justify-between px-4 py-2"
-                >
-                {value ? data.find((item) => item.value === value)?.label : placeHolderDefault}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent 
-                className="w-[var(--radix-popover-trigger-width)] p-0"
-                align="start"
-                sideOffset={4}
-            >
-                <Command>
-                <CommandInput placeholder={placeHolderSearch} className="h-9" />
-                <CommandList>
-                    <CommandEmpty>{placeHolderNoResults}</CommandEmpty>
-                    <CommandGroup>
-                    {data.map((item) => (
-                        <CommandItem
-                        key={item.value}
-                        value={item.value}
-                        onSelect={(currentValue) => {
-                            setValue(currentValue === value ? "" : currentValue);
-                            setIsOpen(false);
-                        }}
-                        >
-                        {item.label}
-                        <Check className={cn("ml-auto h-4 w-4", value === item.value ? "opacity-100" : "opacity-0")} />
-                        </CommandItem>
-                    ))}
-                    </CommandGroup>
-                </CommandList>
-                </Command>
-            </PopoverContent>
-        </Popover>
-    )
+interface SelectWithSearchProps {
+  placeHolderDefault: string;
+  placeHolderSearch: string;
+  placeHolderNoResults: string;
 }
 
-export default SelectWithSearch
+export default function SelectWithSearch({
+  placeHolderDefault,
+  placeHolderSearch,
+  placeHolderNoResults,
+}: SelectWithSearchProps) {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full h-11 justify-between font-normal border-gray-200 focus:border-gray-400 focus:ring-0 transition-colors bg-white hover:bg-gray-50"
+        >
+          <span className={cn("truncate", !value && "text-gray-500")}>
+            {value
+              ? institutions.find((institution) => institution.value === value)
+                  ?.label
+              : placeHolderDefault}
+          </span>
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 text-gray-400" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-full p-0 border-gray-200" align="start">
+        <Command>
+          <div className="flex items-center border-b border-gray-100 px-3">
+            <CommandInput
+              placeholder={placeHolderSearch}
+              className="flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+          </div>
+          <CommandList className="max-h-60">
+            <CommandEmpty className="py-6 text-center text-sm text-gray-500">
+              {placeHolderNoResults}
+            </CommandEmpty>
+            <CommandGroup>
+              {institutions.map((institution) => (
+                <CommandItem
+                  key={institution.value}
+                  value={institution.value}
+                  onSelect={(currentValue) => {
+                    setValue(currentValue === value ? "" : currentValue);
+                    setOpen(false);
+                  }}
+                  className="cursor-pointer py-2 px-3 hover:bg-gray-50"
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === institution.value
+                        ? "opacity-100 text-gray-900"
+                        : "opacity-0"
+                    )}
+                  />
+                  <span className="text-sm">{institution.label}</span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}

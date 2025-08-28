@@ -1,12 +1,10 @@
-import { InputContainerProps } from "@/types/websac3/form/InputContainer";
-import React from "react";
+import type { ReactNode } from "react"
 
-const InputContainer : React.FC<InputContainerProps> = ({children}) => {
-    return (
-        <div className="w-full md:w-1/2 mt-1 mb-1 pl-3 pr-3">
-            {children}
-        </div>
-    );
-};
+interface InputContainerProps {
+  children: ReactNode
+  className?: string
+}
 
-export { InputContainer };
+export const InputContainer = ({ children, className = "" }: InputContainerProps) => {
+  return <div className={`${className}`}>{children}</div>
+}

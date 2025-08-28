@@ -1,3 +1,12 @@
+@reference "tailwindcss";
+
 .main-container {
     @apply flex flex-col h-screen w-screen;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 50%, #81d4fa 100%);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+    background: radial-gradient(circle at center, #3b82f6 0%, #60a5fa 30%, #93c5fd 60%, #dbeafe 100%);
+    background: radial-gradient(circle at center, #93c5fd 0%, #bfdbfe 30%, #dbeafe 60%, #f1f5f9 100%);
+    background: radial-gradient(circle at center, #dbeafe 0%, #e2e8f0 30%, #f1f5f9 60%, #f8fafc 100%);
 }
