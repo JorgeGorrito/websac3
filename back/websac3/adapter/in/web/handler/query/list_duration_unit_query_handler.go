@@ -16,41 +16,41 @@ import (
 	"websac3/common/validator"
 )
 
-type ListTopicQueryHandler struct {
-	listTopicUseCase usecase.ListTopicUseCase
-	msgProvider      message.Provider
-	logger           logging.Logger
-	validator        validator.Validator
+type ListDurationUnitQueryHandler struct {
+	listDurationUnitUseCase usecase.ListDurationUnitUseCase
+	msgProvider             message.Provider
+	logger                  logging.Logger
+	validator               validator.Validator
 
 	validFilters []string
 }
 
-func NewListTopicQueryHandler(
-	listTopicUseCase usecase.ListTopicUseCase,
+func NewListDurationUnitQueryHandler(
+	listDurationUnitUseCase usecase.ListDurationUnitUseCase,
 	msgProvider message.Provider,
 	logger logging.Logger,
 	validator validator.Validator,
-) *ListTopicQueryHandler {
-	return &ListTopicQueryHandler{
-		listTopicUseCase: listTopicUseCase,
-		msgProvider:      msgProvider,
-		logger:           logger,
-		validator:        validator,
+) *ListDurationUnitQueryHandler {
+	return &ListDurationUnitQueryHandler{
+		listDurationUnitUseCase: listDurationUnitUseCase,
+		msgProvider:             msgProvider,
+		logger:                  logger,
+		validator:               validator,
 
 		validFilters: []string{"name"},
 	}
 }
 
-func (h *ListTopicQueryHandler) Handle(request query.ListTopicQuery, lang string) (response.ApiResponse[paginator.Page[response.ListTopicResponse]], error) {
-	h.logger.Info("Inicio de consulta de tematicas de ciberseguridad")
+func (h *ListDurationUnitQueryHandler) Handle(request query.ListDurationUnitQuery, lang string) (response.ApiResponse[paginator.Page[response.ListDurationUnitResponse]], error) {
+	h.logger.Info("Inicio de consulta de unidades de duración")
 
 	if err := h.validator.ValidateFields(&request, lang); err != nil {
-		h.logger.Warn("Advertencia de validación para los datos de entrada al listar tematicas de ciberseguridad. Errores: %v", err)
+		h.logger.Warn("Advertencia de validación para los datos de entrada al listar unidades de duración. Errores: %v", err)
 		var validationErrors []string
 		for n := range err {
 			validationErrors = append(validationErrors, err[n].Error())
 		}
-		return response.ApiResponse[paginator.Page[response.ListTopicResponse]]{
+		return response.ApiResponse[paginator.Page[response.ListDurationUnitResponse]]{
 			HttpStatusCode: http.StatusBadRequest,
 			Errors:         validationErrors,
 		}, nil
@@ -63,16 +63,16 @@ func (h *ListTopicQueryHandler) Handle(request query.ListTopicQuery, lang string
 	if len(filters) > 0 {
 		name, _ = filters[0].Value.(string)
 	}
-	results, total, err := h.listTopicUseCase.Execute(pagination.Currentpage, pagination.ItemsPerpage, name, lang)
+	results, total, err := h.listDurationUnitUseCase.Execute(pagination.Currentpage, pagination.ItemsPerpage, name, lang)
 
-	var resultsMapped []response.ListTopicResponse
+	var resultsMapped []response.ListDurationUnitResponse
 	var errMap error
 	for _, result := range results {
-		var resultMapped response.ListTopicResponse
-		resultMapped, errMap = mapper.Map[entity.Topic, response.ListTopicResponse](&result)
+		var resultMapped response.ListDurationUnitResponse
+		resultMapped, errMap = mapper.Map[entity.DurationUnit, response.ListDurationUnitResponse](&result)
 		if errMap != nil {
-			h.logger.Error("Error al mapear la temática de ciberseguridad: %v", errMap)
-			return response.ApiResponse[paginator.Page[response.ListTopicResponse]]{
+			h.logger.Error("Error al mapear la unidad de duración: %v", errMap)
+			return response.ApiResponse[paginator.Page[response.ListDurationUnitResponse]]{
 				HttpStatusCode: http.StatusInternalServerError,
 				Errors: []string{
 					h.msgProvider.
@@ -84,15 +84,15 @@ func (h *ListTopicQueryHandler) Handle(request query.ListTopicQuery, lang string
 		resultsMapped = append(resultsMapped, resultMapped)
 	}
 
-	resultPaginated, errPag := paginator.New[response.ListTopicResponse]().
+	resultPaginated, errPag := paginator.New[response.ListDurationUnitResponse]().
 		SetData(resultsMapped).
 		SetCurrentPage(pagination.Currentpage).
 		SetTotalCount(total).
 		SetItemsPerPage(pagination.ItemsPerpage).
 		GetPage()
 	if errPag != nil {
-		h.logger.Error("Error al paginar los resultados de la consulta de tematicas de ciberseguridad. Error: %s", errPag.Error())
-		return response.ApiResponse[paginator.Page[response.ListTopicResponse]]{
+		h.logger.Error("Error al paginar los resultados de la consulta de unidades de duración. Error: %s", errPag.Error())
+		return response.ApiResponse[paginator.Page[response.ListDurationUnitResponse]]{
 			HttpStatusCode: http.StatusInternalServerError,
 			Errors: []string{
 				h.msgProvider.
@@ -102,9 +102,9 @@ func (h *ListTopicQueryHandler) Handle(request query.ListTopicQuery, lang string
 		}, errPag
 	}
 	if err != nil {
-		h.logger.Error("Error al obtener los resultados de la consulta de tematicas de ciberseguridad. Error: %s", err.Error())
+		h.logger.Error("Error al obtener los resultados de la consulta de unidades de duración. Error: %s", err.Error())
 		var httpStatusCode int = util.GetHttpStatusCodeByErr(err)
-		return response.ApiResponse[paginator.Page[response.ListTopicResponse]]{
+		return response.ApiResponse[paginator.Page[response.ListDurationUnitResponse]]{
 			HttpStatusCode: httpStatusCode,
 			Errors: []string{
 				util.GetResultMessageByErr(
@@ -117,8 +117,8 @@ func (h *ListTopicQueryHandler) Handle(request query.ListTopicQuery, lang string
 		}, err
 	}
 
-	h.logger.Info("Consulta de temáticas de ciberseguridad finalizada con éxito")
-	return response.ApiResponse[paginator.Page[response.ListTopicResponse]]{
+	h.logger.Info("Consulta de unidades de duración finalizada con éxito")
+	return response.ApiResponse[paginator.Page[response.ListDurationUnitResponse]]{
 		HttpStatusCode: http.StatusOK,
 		Result:         *resultPaginated,
 	}, nil

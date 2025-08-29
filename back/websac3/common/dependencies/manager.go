@@ -45,5 +45,6 @@ func (m *manager) RegisterDependencies() error {
 	m.registerIdentificationTypeDependencies()
 	m.registerHigherEducationInstitutionDependencies()
 	m.registerTopicDependencies()
+	m.registerDurationUnitDependencies()
 	return nil
 }

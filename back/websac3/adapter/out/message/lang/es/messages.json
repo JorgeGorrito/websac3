@@ -2,6 +2,9 @@
   "list_topic" : {
     "not_found" : "No se encontraron temáticas."
   },
+  "list_duration_unit" : {
+    "not_found" : "No se encontraron unidades de duración."
+  },
   "list_higher_education_institution": {
     "not_found": "No se encontraron instituciones de educación superior."
   },

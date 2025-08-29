@@ -27,7 +27,6 @@ func (r *TopicRepository) GetByNameAndLang(
 		return nil, 0, err
 	}
 
-	// Base con filtro por EXISTS
 	base := dbCtx.DB().
 		Model(&model.Topic{})
 
