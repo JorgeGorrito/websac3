@@ -166,6 +166,18 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	); err != nil {
 		*errorList = errors.Join(*errorList, err)
 	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.CreateDegreeProgramCommand{}),
+		chandler.NewCreateDegreeProgramCommandHandler(
+			container.Inject[usecase.CreateDegreeProgramUseCase](),
+			container.Inject[validator.Validator](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
 }
 
 func (m *manager) ConfigureMappers() {

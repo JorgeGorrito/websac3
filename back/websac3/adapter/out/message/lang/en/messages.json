@@ -5,6 +5,9 @@
   "list_duration_unit" : {
     "not_found" : "No duration units found."
   },
+  "create_degree_program" : {
+    "degree_program_created" : "Degree program created successfully."
+  },
   "list_higher_education_institution": {
     "not_found": "No higher education institutions found."
   },

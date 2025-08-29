@@ -24,6 +24,7 @@ var registry map[string]NewBaseModel = map[string]NewBaseModel{
 	"topics":                        func() any { return &Topic{} },
 	"duration_units":                func() any { return &DurationUnit{} },
 	"duration_unit_names":           func() any { return &DurationUnitName{} },
+	"degree_programs":               func() any { return &DegreeProgram{} },
 }
 
 func GetRegistryAllConstructModelBase() map[string]NewBaseModel {

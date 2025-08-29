@@ -14,33 +14,33 @@ import (
 	"websac3/common/validator"
 )
 
-type CreateAccessRequestCommandHandler struct {
+type CreateDegreeProgramCommandHandler struct {
 	handler.Authenticable
-	createAccessRequestUseCase usecase.CreateAccessRequestUseCase
+	createDegreeProgramUseCase usecase.CreateDegreeProgramUseCase
 	msgProvider                message.Provider
 	validator                  validator.Validator
 	logger                     logging.Logger
 }
 
-func NewCreateAccessRequestCommandHandler(
-	createAccessRequestUseCase usecase.CreateAccessRequestUseCase,
+func NewCreateDegreeProgramCommandHandler(
+	createDegreeProgramUseCase usecase.CreateDegreeProgramUseCase,
 	validator validator.Validator,
 	msgProvider message.Provider,
 	logger logging.Logger,
-) *CreateAccessRequestCommandHandler {
-	return &CreateAccessRequestCommandHandler{
+) *CreateDegreeProgramCommandHandler {
+	return &CreateDegreeProgramCommandHandler{
 		Authenticable:              handler.Authenticable{PermissionsRequired: []string{"create"}},
-		createAccessRequestUseCase: createAccessRequestUseCase,
+		createDegreeProgramUseCase: createDegreeProgramUseCase,
 		msgProvider:                msgProvider,
 		validator:                  validator,
 		logger:                     logger,
 	}
 }
 
-func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessRequestCommand, lang string) (response.ApiResponse[string], error) {
-	h.logger.Info("Inicio la creación de solicitud de acceso para el usuario con CC: " + request.IdentificationNumber)
+func (h *CreateDegreeProgramCommandHandler) Handle(request command.CreateDegreeProgramCommand, lang string) (response.ApiResponse[string], error) {
+	h.logger.Info("Inicio la creación de programa de grado: %s", request.Name)
 	if err := h.validator.ValidateFields(&request, lang); err != nil {
-		h.logger.Warn("Advertencia de validación datos de entrada al crear solicitud de acceso. Errores: %v", err)
+		h.logger.Warn("Advertencia de validación datos de entrada al crear programa de grado. Errores: %v", err)
 		var validationErrors []string
 		for n := range err {
 			validationErrors = append(validationErrors, err[n].Error())
@@ -52,7 +52,7 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 	}
 
 	if !h.ValidatePermissions(request.Permissions) {
-		h.logger.Warn("El usuario no tiene permisos para crear solicitudes de acceso")
+		h.logger.Warn("El usuario con ID: %d no tiene permisos para crear programas de grado", request.CreatedBy)
 		return response.ApiResponse[string]{
 			HttpStatusCode: http.StatusForbidden,
 			Errors: []string{
@@ -63,9 +63,9 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 		}, nil
 	}
 
-	accessRequest, err := mapper.Map[command.CreateAccessRequestCommand, entity.AccessRequest](&request)
+	degreeProgram, err := mapper.Map[command.CreateDegreeProgramCommand, entity.DegreeProgram](&request)
 	if err != nil {
-		h.logger.Error("Error al mapear datos de entrada a entidad AccessRequest. Error: %s", err.Error())
+		h.logger.Error("Error al mapear datos de entrada a entidad DegreeProgram. Error: %s", err.Error())
 		return response.ApiResponse[string]{
 			HttpStatusCode: http.StatusInternalServerError,
 			Errors: []string{
@@ -76,8 +76,8 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 		}, nil
 	}
 
-	if err := h.createAccessRequestUseCase.Execute(accessRequest, lang); err != nil {
-		h.logger.Error("Error al crear solicitud de acceso para el usuario con CC "+request.IdentificationNumber+". Error: %s", err.Error())
+	if err := h.createDegreeProgramUseCase.Execute(degreeProgram, lang); err != nil {
+		h.logger.Error("Error al crear programa de grado %s. Error: %s", request.Name, err.Error())
 		var httpStatusCode int = util.GetHttpStatusCodeByErr(err)
 		return response.ApiResponse[string]{
 			HttpStatusCode: httpStatusCode,
@@ -91,11 +91,11 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 			},
 		}, nil
 	}
-	h.logger.Info("Solicitud de acceso creada exitosamente para el usuario con CC: " + request.IdentificationNumber)
+	h.logger.Info("Programa de grado creado exitosamente: %s", request.Name)
 	return response.ApiResponse[string]{
 		HttpStatusCode: http.StatusCreated,
 		Result: h.msgProvider.
 			WithLang(lang).
-			GetMessage("create_access_request", "access_request_created"),
+			GetMessage("create_degree_program", "degree_program_created"),
 	}, nil
 }

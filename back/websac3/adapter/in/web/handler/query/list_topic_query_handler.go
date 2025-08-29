@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"websac3/adapter/in/web/handler"
 	"websac3/adapter/in/web/response"
 	"websac3/adapter/in/web/util"
 	"websac3/app/domain/entity"
@@ -17,6 +18,7 @@ import (
 )
 
 type ListTopicQueryHandler struct {
+	handler.Authenticable
 	listTopicUseCase usecase.ListTopicUseCase
 	msgProvider      message.Provider
 	logger           logging.Logger
@@ -32,6 +34,7 @@ func NewListTopicQueryHandler(
 	validator validator.Validator,
 ) *ListTopicQueryHandler {
 	return &ListTopicQueryHandler{
+		Authenticable:    handler.Authenticable{PermissionsRequired: []string{"list"}},
 		listTopicUseCase: listTopicUseCase,
 		msgProvider:      msgProvider,
 		logger:           logger,
@@ -53,6 +56,18 @@ func (h *ListTopicQueryHandler) Handle(request query.ListTopicQuery, lang string
 		return response.ApiResponse[paginator.Page[response.ListTopicResponse]]{
 			HttpStatusCode: http.StatusBadRequest,
 			Errors:         validationErrors,
+		}, nil
+	}
+
+	if !h.ValidatePermissions(request.Permissions) {
+		h.logger.Warn("El usuario no tiene permisos para listar temáticas de ciberseguridad")
+		return response.ApiResponse[paginator.Page[response.ListTopicResponse]]{
+			HttpStatusCode: http.StatusForbidden,
+			Errors: []string{
+				h.msgProvider.
+					WithLang(lang).
+					GetMessage("base_error", "forbidden"),
+			},
 		}, nil
 	}
 

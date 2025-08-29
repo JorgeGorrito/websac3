@@ -14,4 +14,5 @@ func RegisterMapFunctions() {
 	registerPermissionMappers()
 	registerTopicMappers()
 	registerDurationUnitMappers()
+	registerDegreeProgramMappers()
 }

@@ -31,12 +31,17 @@
     }, 
     {
         "id" : 7,
-        "name" : "academic-programs",
+        "name" : "degree-programs",
         "description" : "Módulo para la gestión de programas académicos"
     },
     {
         "id" : 8,
         "name" : "academic-evaluator",
         "description" : "Módulo que evalua programas académicos en ciberseguridad"
+    },
+    {
+        "id" : 9,
+        "name" : "topics-degree-programs",
+        "description" : "Módulo para la gestión de temas de programas académicos"
     }
 ]

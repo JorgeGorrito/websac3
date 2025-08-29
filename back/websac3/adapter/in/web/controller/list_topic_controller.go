@@ -64,11 +64,13 @@ func (c *ListTopicController) Handle(ctx *gin.Context) {
 		return
 	}
 
+	token := c.GetToken(ctx)
+	lang := ctx.Param("lang")
 	var filters = util.ParseParamsFilter(filtersMap)
-	var lang string = ctx.Param("lang")
 	var requestQuery = query.ListTopicQuery{
 		PaginationParams: paginationParams,
 		Filters:          filters,
+		Permissions:      token.Permissions["topics-degree-programs"],
 	}
 
 	result, _ := mediator.Send[query.ListTopicQuery, response.ApiResponse[paginator.Page[response.ListTopicResponse]]](requestQuery, lang)

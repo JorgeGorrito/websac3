@@ -8,4 +8,5 @@ import (
 type ListTopicQuery struct {
 	PaginationParams paginator.PaginationParams
 	Filters          filter.Params
+	Permissions      []string
 }

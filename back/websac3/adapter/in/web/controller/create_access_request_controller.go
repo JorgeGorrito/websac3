@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CreateAccessRequestController struct{}
+type CreateAccessRequestController struct{ Authenticable }
 
 var instanceCreateAccessRequestController *CreateAccessRequestController = nil
 
@@ -52,6 +52,10 @@ func (c *CreateAccessRequestController) CreateAccessRequest(context *gin.Context
 		return
 	}
 
-	result, _ := mediator.Send[command.CreateAccessRequestCommand, response.ApiResponse[string]](createAccessRequestCommand, context.GetString("lang"))
+	token := c.GetToken(context)
+	lang := context.Param("lang")
+	createAccessRequestCommand.Permissions = token.Permissions["access-request"]
+
+	result, _ := mediator.Send[command.CreateAccessRequestCommand, response.ApiResponse[string]](createAccessRequestCommand, lang)
 	context.JSON(result.HttpStatusCode, result.ToResponseFormat())
 }
