@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,38 +18,29 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const institutions = [
-  { value: "universidad-nacional", label: "Universidad Nacional de Colombia" },
-  { value: "universidad-andes", label: "Universidad de los Andes" },
-  { value: "universidad-javeriana", label: "Pontificia Universidad Javeriana" },
-  { value: "universidad-rosario", label: "Universidad del Rosario" },
-  {
-    value: "universidad-externado",
-    label: "Universidad Externado de Colombia",
-  },
-  { value: "universidad-sabana", label: "Universidad de La Sabana" },
-  {
-    value: "universidad-minuto",
-    label: "Corporación Universitaria Minuto de Dios",
-  },
-  { value: "universidad-catolica", label: "Universidad Católica de Colombia" },
-  { value: "universidad-santo-tomas", label: "Universidad Santo Tomás" },
-  { value: "universidad-central", label: "Universidad Central" },
-];
-
 interface SelectWithSearchProps {
   placeHolderDefault: string;
   placeHolderSearch: string;
   placeHolderNoResults: string;
+  items: { value: string; label: string }[];
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
 export default function SelectWithSearch({
   placeHolderDefault,
   placeHolderSearch,
   placeHolderNoResults,
+  items,
+  value: controlledValue,
+  onChange,
 }: SelectWithSearchProps) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [uncontrolledValue, setUncontrolledValue] = useState("");
+  const value = controlledValue ?? uncontrolledValue;
+  const setValue = onChange ?? setUncontrolledValue;
+
+  const labelByValue = useMemo(() => new Map(items.map((i) => [i.value, i.label])), [items]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -61,10 +52,7 @@ export default function SelectWithSearch({
           className="w-full h-11 justify-between font-normal border-gray-200 focus:border-gray-400 focus:ring-0 transition-colors bg-white hover:bg-gray-50"
         >
           <span className={cn("truncate", !value && "text-gray-500")}>
-            {value
-              ? institutions.find((institution) => institution.value === value)
-                  ?.label
-              : placeHolderDefault}
+            {value ? labelByValue.get(value) : placeHolderDefault}
           </span>
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 text-gray-400" />
         </Button>
@@ -82,7 +70,7 @@ export default function SelectWithSearch({
               {placeHolderNoResults}
             </CommandEmpty>
             <CommandGroup>
-              {institutions.map((institution) => (
+              {items.map((institution) => (
                 <CommandItem
                   key={institution.value}
                   value={institution.value}

@@ -2,6 +2,7 @@ import "@/app/globals.css";
 import "@/styles/layouts/DefaultLayout.css";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
+import { ReduxProvider } from "@/store/ReduxProvider";
 
 export const metadata: Metadata = {
   title: "WebSAC3",
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        {children}
+        <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
   );

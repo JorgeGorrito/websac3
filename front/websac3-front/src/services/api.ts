@@ -1,0 +1,178 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+export type ApiResponse<T> = {
+  errors?: string[];
+  httpStatusCode: number;
+  result: T;
+};
+
+export type PaginatedPage<T> = {
+  current_page: number;
+  data: T[];
+  items_per_page: number;
+  total_count: number;
+};
+
+export type AccessRequestItem = {
+  id: number;
+  name: string;
+  lastname: string;
+  email: string;
+  identification_number: string;
+  identification_type: string;
+  job_position: string;
+  higher_education_institution_name: string;
+  higher_education_institution_ownership: string;
+  higher_education_institution_snies: number;
+  municipality_name: string;
+  department_name: string;
+  status_id: number;
+  status_name: string;
+};
+
+export type CreatePersonRequest = {
+  email: string;
+  higher_education_institution_snies: number;
+  identification_number: string;
+  identification_type_id: number;
+  job_position: string;
+  lastname: string;
+  name: string;
+};
+
+export type CreateAccessRequestRequest = {
+  person: CreatePersonRequest;
+  register_user_url: string;
+  validation_email_url: string;
+};
+
+export type ValidateEmailRequest = {
+  validation_token: string;
+};
+
+export type IdentificationTypeItem = {
+  id: number;
+  name: string;
+};
+
+export type HigherEducationInstitutionItem = {
+  snies: number;
+  name: string;
+};
+
+export const api = createApi({
+  reducerPath: "api",
+  baseQuery: fetchBaseQuery({
+    baseUrl:
+      process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
+      "http://localhost:8110/api/v1/es",
+    credentials: "include",
+    prepareHeaders: (headers) => {
+      // Attach bearer token if present (supports cookie or localStorage setups)
+      if (typeof window !== "undefined") {
+        const token = window.localStorage?.getItem("access_token");
+        if (token) headers.set("Authorization", `Bearer ${token}`);
+      }
+      headers.set("Accept", "application/json");
+      return headers;
+    },
+  }),
+  tagTypes: ["AccessRequest"],
+  endpoints: (builder) => ({
+    // Catalogs
+    listIdentificationTypes: builder.query<IdentificationTypeItem[], { current_page?: number; items_per_page?: number } | void>({
+      query: (args) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(args?.current_page ?? 1));
+        params.set("items_per_page", String(args?.items_per_page ?? 10));
+        return { url: `/identification-types?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<IdentificationTypeItem>>) => response.result.data,
+    }),
+    listHigherEducationInstitutions: builder.query<
+      HigherEducationInstitutionItem[],
+      { nameCont?: string; current_page?: number; items_per_page?: number } | void
+    >({
+      query: (args) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(args?.current_page ?? 1));
+        params.set("items_per_page", String(args?.items_per_page ?? 10));
+        if (args && args.nameCont) {
+          const filters = new URLSearchParams();
+          filters.set("name[cont]", args.nameCont);
+          params.set("filters", filters.toString());
+        }
+        return { url: `/higher-education-institution?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<HigherEducationInstitutionItem>>) => response.result.data,
+    }),
+    // Admin: Access Requests
+    listAccessRequests: builder.query<
+      PaginatedPage<AccessRequestItem>,
+      { current_page?: number; items_per_page?: number; filters?: Record<string, string> }
+    >({
+      query: ({ current_page = 1, items_per_page = 10, filters } = {}) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        if (filters) {
+          const nested = new URLSearchParams();
+          for (const [key, value] of Object.entries(filters)) {
+            if (value !== undefined && value !== null && value !== "") {
+              nested.append(key, String(value));
+            }
+          }
+          params.set("filters", nested.toString());
+        }
+        return { url: `/access-request?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<AccessRequestItem>>) => response.result,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map((item) => ({ type: "AccessRequest" as const, id: item.id })),
+              { type: "AccessRequest" as const, id: "LIST" },
+            ]
+          : [{ type: "AccessRequest" as const, id: "LIST" }],
+    }),
+    createAccessRequest: builder.mutation<string, CreateAccessRequestRequest>({
+      query: (body) => ({ url: "/access-request", method: "POST", body }),
+      transformResponse: (response: ApiResponse<string>) => response.result,
+    }),
+    validateAccessRequestEmail: builder.mutation<string, ValidateEmailRequest>({
+      query: (body) => ({ url: "/access-request/email/validate", method: "POST", body }),
+      transformResponse: (response: ApiResponse<string>) => response.result,
+    }),
+    approveAccessRequest: builder.mutation<{ message: string }, { id: number }>(
+      {
+        query: ({ id }) => ({ url: `/access-request/${id}/approve`, method: "POST" }),
+        invalidatesTags: (_result, _error, { id }) => [
+          { type: "AccessRequest", id },
+          { type: "AccessRequest", id: "LIST" },
+        ],
+      }
+    ),
+    rejectAccessRequest: builder.mutation<{ message: string }, { id: number }>(
+      {
+        query: ({ id }) => ({ url: `/access-request/${id}/reject`, method: "POST" }),
+        invalidatesTags: (_result, _error, { id }) => [
+          { type: "AccessRequest", id },
+          { type: "AccessRequest", id: "LIST" },
+        ],
+      }
+    ),
+  }),
+});
+
+export const {
+  // catalogs
+  useListIdentificationTypesQuery,
+  useListHigherEducationInstitutionsQuery,
+  useListAccessRequestsQuery,
+  useCreateAccessRequestMutation,
+  useValidateAccessRequestEmailMutation,
+  useApproveAccessRequestMutation,
+  useRejectAccessRequestMutation,
+} = api;
+
+

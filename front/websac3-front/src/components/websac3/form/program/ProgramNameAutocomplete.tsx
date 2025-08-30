@@ -1,10 +1,6 @@
 import SelectWithSearch from "@/components/websac3/form/SelectWithSearch";
 
-type ProgramNameAutocompleteProps = {
-  label?: string; // reserved for future form libs
-};
-
-export function ProgramNameAutocomplete(_props: ProgramNameAutocompleteProps) {
+export function ProgramNameAutocomplete() {
   return (
     <SelectWithSearch
       placeHolderDefault="Seleccionar programa"
