@@ -21,6 +21,8 @@ func getAuthRequiredGroup(routerGroup *gin.RouterGroup) *gin.RouterGroup {
 }
 
 func (m *manager) RegisterRoutes(engine *gin.Engine) error {
+	m.configureCors(engine)
+
 	var routerGroup *gin.RouterGroup = engine.Group("/api/v1/:lang")
 	RegisterAccessRequestRoutes(routerGroup)
 	RegisterIdentificationTypesRoutes(routerGroup)
@@ -32,6 +34,10 @@ func (m *manager) RegisterRoutes(engine *gin.Engine) error {
 	RegisterSwagger(engine)
 
 	return nil
+}
+
+func (m *manager) configureCors(engine *gin.Engine) {
+	engine.Use(middleware.CorsMiddleware())
 }
 
 var instance *manager = nil
