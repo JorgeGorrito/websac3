@@ -15,7 +15,7 @@ import (
 )
 
 func (m *manager) registerEnumDependencies() {
-	accessRequestStatusTTLMinutes, err := strconv.Atoi(os.Getenv("ENUM_ACCESS_REQUEST_STATUS_TTL_MINUTES"))
+	enumTTLMinutes, err := strconv.Atoi(os.Getenv("ENUM_TTL_MINUTES"))
 	if err != nil {
 		panic(err)
 	}
@@ -26,7 +26,18 @@ func (m *manager) registerEnumDependencies() {
 			return aenum.New[entity.Status](
 				container.Inject[db.Manager](),
 				container.Inject[persistence.GetStatusPort](),
-				time.Duration(accessRequestStatusTTLMinutes)*time.Minute,
+				time.Duration(enumTTLMinutes)*time.Minute,
+			)
+		},
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[enum.RoleEnum](),
+		func() any {
+			return aenum.New[entity.Role](
+				container.Inject[db.Manager](),
+				container.Inject[persistence.GetRolePort](),
+				time.Duration(enumTTLMinutes)*time.Minute,
 			)
 		},
 	)
