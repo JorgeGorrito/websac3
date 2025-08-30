@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 	aenum "websac3/adapter/out/persistence/postgresql/enum"
+	"websac3/adapter/out/persistence/postgresql/repository"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/persistence"
 	"websac3/app/port/out/persistence/db"
@@ -19,6 +20,11 @@ func (m *manager) registerEnumDependencies() {
 	if err != nil {
 		panic(err)
 	}
+
+	m.binder.Bind(
+		andi.GetAbstractType[persistence.GetRolePort](),
+		func() any { return repository.NewRoleRepository() },
+	)
 
 	m.binder.Bind(
 		andi.GetAbstractType[enum.StatusEnum](),

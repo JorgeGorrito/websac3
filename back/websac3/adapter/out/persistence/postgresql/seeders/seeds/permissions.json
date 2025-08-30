@@ -23,5 +23,10 @@
         "id": 5,
         "module_id": 9,
         "action_id": 5
+    },
+    {
+        "id": 6,
+        "module_id": 7,
+        "action_id": 5
     }
 ]

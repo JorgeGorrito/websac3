@@ -2,7 +2,6 @@ package command
 
 import (
 	"net/http"
-	"websac3/adapter/in/web/handler"
 	"websac3/adapter/in/web/response"
 	"websac3/adapter/in/web/util"
 	"websac3/app/domain/entity"
@@ -15,7 +14,6 @@ import (
 )
 
 type CreateAccessRequestCommandHandler struct {
-	handler.Authenticable
 	createAccessRequestUseCase usecase.CreateAccessRequestUseCase
 	msgProvider                message.Provider
 	validator                  validator.Validator
@@ -29,7 +27,6 @@ func NewCreateAccessRequestCommandHandler(
 	logger logging.Logger,
 ) *CreateAccessRequestCommandHandler {
 	return &CreateAccessRequestCommandHandler{
-		Authenticable:              handler.Authenticable{PermissionsRequired: []string{"create"}},
 		createAccessRequestUseCase: createAccessRequestUseCase,
 		msgProvider:                msgProvider,
 		validator:                  validator,
@@ -48,18 +45,6 @@ func (h *CreateAccessRequestCommandHandler) Handle(request command.CreateAccessR
 		return response.ApiResponse[string]{
 			HttpStatusCode: http.StatusBadRequest,
 			Errors:         validationErrors,
-		}, nil
-	}
-
-	if !h.ValidatePermissions(request.Permissions) {
-		h.logger.Warn("El usuario no tiene permisos para crear solicitudes de acceso")
-		return response.ApiResponse[string]{
-			HttpStatusCode: http.StatusForbidden,
-			Errors: []string{
-				h.msgProvider.
-					WithLang(lang).
-					GetMessage("base_error", "forbidden"),
-			},
 		}, nil
 	}
 

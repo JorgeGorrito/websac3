@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"websac3/adapter/in/web/request"
+	"websac3/adapter/in/web/response"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/in/dto/command"
@@ -73,6 +74,24 @@ func registerDegreeProgramMappers() {
 				GraduateProfile:     command.GraduateProfile,
 				ProfessionalProfile: command.ProfessionalProfile,
 				CreatedBy:           command.CreatedBy,
+			}, nil
+		},
+	)
+
+	RegisterMapFunc(
+		func(degreeProgramEntity *entity.DegreeProgram) (response.ListDegreeProgramResponse, error) {
+			return response.ListDegreeProgramResponse{
+				ID:                  degreeProgramEntity.ID,
+				Snies:               degreeProgramEntity.Snies,
+				Name:                degreeProgramEntity.Name,
+				TotalCredits:        degreeProgramEntity.TotalCredits,
+				DurationValue:       degreeProgramEntity.DurationValue,
+				DurationUnitID:      degreeProgramEntity.DurationUnitID,
+				ProgramFocus:        degreeProgramEntity.ProgramFocus,
+				EntryProfile:        degreeProgramEntity.EntryProfile,
+				GraduateProfile:     degreeProgramEntity.GraduateProfile,
+				ProfessionalProfile: degreeProgramEntity.ProfessionalProfile,
+				CreatedBy:           degreeProgramEntity.CreatedBy,
 			}, nil
 		},
 	)

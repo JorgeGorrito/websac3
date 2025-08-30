@@ -8,6 +8,9 @@
   "create_degree_program" : {
     "degree_program_created" : "Degree program created successfully."
   },
+  "list_degree_program" : {
+    "not_found" : "No degree programs found."
+  },
   "list_higher_education_institution": {
     "not_found": "No higher education institutions found."
   },
