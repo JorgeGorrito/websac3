@@ -1,6 +1,6 @@
 package model
 
-import "time"
+import "gorm.io/gorm"
 
 type Topic struct {
 	ID    uint `gorm:"primaryKey" json:"id"`
@@ -9,5 +9,5 @@ type Topic struct {
 	KnowledgeAreaID uint          `gorm:"not null" json:"ka_id"`
 	KnowledgeArea   KnowledgeArea `gorm:"foreignKey:KnowledgeAreaID"`
 
-	DeletedAt *time.Time `gorm:"index; default: null;"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 }

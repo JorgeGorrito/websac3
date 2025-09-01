@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3,
+    "lang": "es",
+    "name": "Teoría",
+    "course_type_id": 1
+  },
+  {
+    "id": 4,
+    "lang": "es",
+    "name": "Laboratorio",
+    "course_type_id": 2
+  }
+]

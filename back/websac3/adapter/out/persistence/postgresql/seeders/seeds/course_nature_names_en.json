@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "lang": "en",
+    "name": "Virtual",
+    "course_nature_id": 1
+  },
+  {
+    "id": 2,
+    "lang": "en",
+    "name": "Face-to-face",
+    "course_nature_id": 2
+  }
+]

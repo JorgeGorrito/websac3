@@ -24,6 +24,8 @@ func EssentialData() Seeder {
 			KnowledgeAreas(),
 			Topics(),
 			DurationUnits(),
+			CourseTypes(),
+			CourseNatures(),
 		},
 	}
 }

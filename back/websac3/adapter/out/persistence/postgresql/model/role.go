@@ -2,6 +2,8 @@ package model
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Role struct {
@@ -11,5 +13,5 @@ type Role struct {
 	Permissions []Permission `gorm:"many2many:role_permissions" `
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-	DeletedAt   time.Time
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 }
