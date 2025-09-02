@@ -205,6 +205,9 @@ func (m *manager) ConfigureApplication() error {
 
 func (m *manager) ConfigureMiddleware(engine *gin.Engine) error {
 	var errorList error
+	// Aplicar CORS primero
+	engine.Use(middleware.CorsMiddleware())
+	// Luego aplicar el middleware de idioma
 	engine.Use(middleware.LangMiddleware())
 
 	return errorList

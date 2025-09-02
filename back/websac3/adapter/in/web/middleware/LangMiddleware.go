@@ -23,6 +23,12 @@ func isSwaggerRoute(path string) bool {
 
 func LangMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Permitir peticiones OPTIONS preflight sin validación de idioma
+		if c.Request.Method == "OPTIONS" {
+			c.Next()
+			return
+		}
+
 		if isSwaggerRoute(c.Request.URL.Path) {
 			c.Next()
 			return

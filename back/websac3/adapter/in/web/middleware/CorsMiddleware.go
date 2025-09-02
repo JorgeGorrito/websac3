@@ -33,9 +33,12 @@ func CorsMiddleware() gin.HandlerFunc {
 				c.Header("Access-Control-Allow-Origin", origin)
 				c.Header("Vary", "Origin")
 			} else {
-				// Si el origen no está permitido, no enviar el header
-				c.Next()
-				return
+				// Si el origen no está permitido, enviar un header vacío o el primer origen permitido
+				if len(allowedOrigins) > 0 {
+					c.Header("Access-Control-Allow-Origin", allowedOrigins[0])
+				} else {
+					c.Header("Access-Control-Allow-Origin", "*")
+				}
 			}
 		}
 
