@@ -21,7 +21,10 @@ const AccessRequestForm = () => {
 
   const [createAccessRequest, { isLoading }] = useCreateAccessRequestMutation()
   const { data: identificationTypes } = useListIdentificationTypesQuery()
-  const { data: institutions } = useListHigherEducationInstitutionsQuery()
+  const [institutionQuery, setInstitutionQuery] = useState("")
+  const { data: institutions } = useListHigherEducationInstitutionsQuery(
+    institutionQuery ? { nameCont: institutionQuery, items_per_page: 20 } : undefined
+  )
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -31,7 +34,7 @@ const AccessRequestForm = () => {
     const identification_type_id = Number(docType)
     const sniesNumber = Number(snies)
     if (!identification_type_id || !sniesNumber) {
-      setError("Por favor completa tipo de documento y SNIES válidos.")
+      setError("Por favor completa tipo de documento e institución válidos.")
       return
     }
 
@@ -58,13 +61,13 @@ const AccessRequestForm = () => {
       setPosition("")
       setEmail("")
       setSnies("")
-    } catch (err) {
+    } catch {
       setError("No se pudo enviar la solicitud. Intenta de nuevo.")
     }
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-8">
+    <form onSubmit={onSubmit} className="space-y-8 px-1">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <Label htmlFor="name" className="text-sm font-medium text-gray-700">
@@ -165,19 +168,7 @@ const AccessRequestForm = () => {
           items={(institutions ?? []).map((i) => ({ value: String(i.snies), label: i.name }))}
           value={snies}
           onChange={setSnies}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="snies" className="text-sm font-medium text-gray-700">
-          SNIES de la institución <span className="text-red-500">*</span>
-        </Label>
-        <Input
-          id="snies"
-          className="h-10 border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all"
-          placeholder="Ej: 1119"
-          value={snies}
-          onChange={(e) => setSnies(e.target.value)}
+          onSearch={setInstitutionQuery}
         />
       </div>
 

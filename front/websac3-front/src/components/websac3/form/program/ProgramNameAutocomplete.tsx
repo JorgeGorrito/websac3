@@ -6,6 +6,7 @@ export function ProgramNameAutocomplete() {
       placeHolderDefault="Seleccionar programa"
       placeHolderSearch="Buscar..."
       placeHolderNoResults="Sin resultados"
+      items={[]}
     />
   );
 }
