@@ -26,7 +26,7 @@ type validator struct {
 }
 
 func (v *validator) validateRequired(lang string, fieldName string, objectValue reflect.Value, _ string) error {
-	if objectValue.IsZero() {
+	if objectValue.IsZero() && objectValue.Kind() != reflect.Bool {
 		return verrs.NewFieldIsRequiredError(fieldName, v.msgProvider, lang)
 	}
 	return nil

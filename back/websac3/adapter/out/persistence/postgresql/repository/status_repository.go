@@ -4,7 +4,6 @@ import (
 	"errors"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
-	"websac3/app/port/out/message"
 	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/mapper"
 
@@ -15,7 +14,7 @@ type StatusRepository struct {
 	Repository
 }
 
-func NewStatusRepository(messageProvider message.Provider) *StatusRepository {
+func NewStatusRepository() *StatusRepository {
 	return &StatusRepository{}
 }
 

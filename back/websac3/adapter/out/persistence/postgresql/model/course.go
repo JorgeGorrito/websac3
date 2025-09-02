@@ -9,7 +9,7 @@ import (
 type Course struct {
 	ID                          uint         `gorm:"primaryKey" json:"id"`
 	Name                        string       `gorm:"type:varchar(255);not null" json:"name"`
-	Code                        string       `gorm:"type:varchar(20);not null;uniqueIndex" json:"code"`
+	Code                        string       `gorm:"type:varchar(20);not null" json:"code"`
 	Credits                     uint         `gorm:"not null" json:"credits"`
 	PeriodNumber                uint         `gorm:"not null" json:"period_number"`
 	NatureID                    uint         `gorm:"not null;index" json:"nature_id"`
@@ -18,7 +18,6 @@ type Course struct {
 	Type                        CourseType   `gorm:"foreignKey:TypeID"`
 	IsCybersecurity             bool         `gorm:"default:false" json:"is_cybersecurity"`
 	ContainsCybersecurityTopics bool         `gorm:"default:false" json:"contains_cybersecurity_topics"`
-	IsActive                    bool         `gorm:"default:true" json:"is_active"`
 
 	// Relación con DegreeProgram
 	DegreeProgramID uint          `gorm:"not null;index" json:"degree_program_id"`
@@ -34,4 +33,19 @@ type Course struct {
 	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+}
+
+// TableName especifica el nombre de la tabla
+func (Course) TableName() string {
+	return "courses"
+}
+
+// AfterMigrate crea el índice compuesto único después de la migración
+func (Course) AfterMigrate(tx *gorm.DB) error {
+	// Crear índice compuesto único para code + degree_program_id
+	return tx.Exec(`
+		CREATE UNIQUE INDEX IF NOT EXISTS idx_courses_code_degree_program_unique 
+		ON courses (code, degree_program_id) 
+		WHERE deleted_at IS NULL
+	`).Error
 }

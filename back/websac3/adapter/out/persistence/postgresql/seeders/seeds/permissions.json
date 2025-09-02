@@ -28,5 +28,30 @@
         "id": 6,
         "module_id": 7,
         "action_id": 5
+    },
+    {
+        "id": 7,
+        "module_id": 10,
+        "action_id": 1
+    },
+    {
+        "id": 8,
+        "module_id": 10,
+        "action_id": 2
+    },
+    {
+        "id": 9,
+        "module_id": 10,
+        "action_id": 3
+    },
+    {
+        "id": 10,
+        "module_id": 10,
+        "action_id": 4
+    },
+    {
+        "id": 11,
+        "module_id": 10,
+        "action_id": 5
     }
 ]
