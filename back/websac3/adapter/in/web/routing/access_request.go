@@ -18,6 +18,12 @@ func registerValidateEmailRequest(routerGroup *gin.RouterGroup) {
 	routerGroup.POST("/access-request/email/validate", validateEmailController.ValidateEmail)
 }
 
+func registerCreateUserFromToken(routerGroup *gin.RouterGroup) {
+	createUserFromTokenController := controller.GetCreateUserFromTokenController()
+
+	routerGroup.POST("/user/create-from-token", createUserFromTokenController.CreateUserFromToken)
+}
+
 func registerListAccessRequest(routerGroup *gin.RouterGroup) {
 	listAccessRequestController := controller.GetListAccessRequestController()
 
@@ -41,6 +47,7 @@ func RegisterAccessRequestRoutes(routerGroup *gin.RouterGroup) {
 
 	registerCreateAccessRequest(routerGroup)
 	registerValidateEmailRequest(routerGroup)
+	registerCreateUserFromToken(routerGroup)
 
 	registerListAccessRequest(authRequiredGroup)
 	registerApproveAccessRequest(authRequiredGroup)

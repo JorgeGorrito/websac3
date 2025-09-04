@@ -74,28 +74,55 @@ func (a *AccessRequestRepository) GetUnvalidatedEmailByToken(validationToken str
 		return entity.AccessRequest{}, err
 	}
 
-	var accessRequestFound entity.AccessRequest
-	var accessRequest model.AccessRequest
-	if err = dbCtx.DB().
-		Model(&accessRequest).
+	var accessRequestFound model.AccessRequest
+	var accessRequest entity.AccessRequest
+	if err := dbCtx.DB().
+		Model(&accessRequestFound).
 		Joins("Applicant").
 		Joins("Status").
-		Joins("VerificationEmail").
 		Where("validation_email_code = ?", validationToken).
 		Where("is_verified = ?", false).
-		First(&accessRequest).Error; err != nil {
+		First(&accessRequestFound).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return entity.AccessRequest{}, nil
 		}
 		return entity.AccessRequest{}, err
 	}
 
-	accessRequestFound, err = mapper.Map[model.AccessRequest, entity.AccessRequest](&accessRequest)
+	if accessRequest, err = mapper.Map[model.AccessRequest, entity.AccessRequest](&accessRequestFound); err != nil {
+		return entity.AccessRequest{}, err
+	}
+
+	return accessRequest, nil
+}
+
+func (a *AccessRequestRepository) GetByCreateUserToken(createUserToken string, ctx _db.Context) (entity.AccessRequest, error) {
+	dbCtx, err := a.CastDbContext(ctx)
 	if err != nil {
 		return entity.AccessRequest{}, err
 	}
 
-	return accessRequestFound, nil
+	var accessRequestFound model.AccessRequest
+	var accessRequest entity.AccessRequest
+	if err := dbCtx.DB().
+		Model(&accessRequestFound).
+		Joins("Applicant").
+		Joins("Status").
+		Joins("VerificationEmail").
+		Preload("ApprovedRole").
+		Where("validation_create_user_code = ?", createUserToken).
+		First(&accessRequestFound).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return entity.AccessRequest{}, nil
+		}
+		return entity.AccessRequest{}, err
+	}
+
+	if accessRequest, err = mapper.Map[model.AccessRequest, entity.AccessRequest](&accessRequestFound); err != nil {
+		return entity.AccessRequest{}, err
+	}
+
+	return accessRequest, nil
 }
 
 func (a *AccessRequestRepository) GetLastCreatedByIdentificationAndEmail(

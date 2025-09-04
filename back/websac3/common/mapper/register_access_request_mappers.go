@@ -50,6 +50,7 @@ func registerAccessRequestMappers() {
 			StatusID:                 accessRequest.StatusID,
 			VerificationEmailID:      accessRequest.EmailValidationID,
 			ApprovedEmailID:          accessRequest.EmailApprovedID,
+			ApprovedRoleID:           accessRequest.ApprovedRoleID,
 			ValidationEmailURL:       accessRequest.ValidationEmailURL,
 			CreateUserURL:            accessRequest.CreateUserURL,
 			ValidationEmailCode:      accessRequest.ValidationEmailCode,
@@ -94,6 +95,18 @@ func registerAccessRequestMappers() {
 			approvedEmailID = &approvedEmailMapped.ID
 		}
 
+		var approvedRole *entity.Role
+		var approvedRoleID *uint
+		if accessRequest.ApprovedRoleID != nil {
+			approvedRoleMapped, err := Map[model.Role, entity.Role](&accessRequest.ApprovedRole)
+			if err != nil {
+				errorList = errors.Join(errorList, err)
+			} else {
+				approvedRole = &approvedRoleMapped
+				approvedRoleID = accessRequest.ApprovedRoleID
+			}
+		}
+
 		if errorList != nil {
 			return entity.AccessRequest{}, errorList
 		}
@@ -112,6 +125,9 @@ func registerAccessRequestMappers() {
 
 			EmailApprovedID: approvedEmailID,
 			EmailApproved:   approvedEmail,
+
+			ApprovedRoleID: approvedRoleID,
+			ApprovedRole:   approvedRole,
 
 			ValidationEmailURL: accessRequest.ValidationEmailURL,
 			CreateUserURL:      accessRequest.CreateUserURL,
@@ -143,6 +159,16 @@ func registerAccessRequestMappers() {
 			StatusName:                          accessRequest.Status.Name,
 		}
 
-		return listAccessRequestResponse, errorList
+		if errorList != nil {
+			return response.ListAccessRequestResponse{}, errorList
+		}
+
+		return listAccessRequestResponse, nil
+	})
+
+	RegisterMapFunc(func(request *request.ApproveAccessRequestRequest) (command.ApproveAccessRequestCommand, error) {
+		return command.ApproveAccessRequestCommand{
+			RoleID: request.RoleID,
+		}, nil
 	})
 }

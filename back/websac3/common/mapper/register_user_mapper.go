@@ -54,6 +54,38 @@ func registerUserMappers() {
 		}, nil
 	})
 
+	RegisterMapFunc(func(user *entity.User) (model.User, error) {
+		var role model.Role
+		if user.Role != nil {
+			var err error
+			role, err = Map[entity.Role, model.Role](user.Role)
+			if err != nil {
+				return model.User{}, err
+			}
+		}
+
+		var person model.Person
+		if user.Person != nil {
+			var err error
+			person, err = Map[entity.Person, model.Person](user.Person)
+			if err != nil {
+				return model.User{}, err
+			}
+		}
+
+		return model.User{
+			ID:            user.ID,
+			Email:         user.Email,
+			PasswordHash:  user.PasswordHash,
+			RoleID:        user.RoleID,
+			Role:          role,
+			PersonID:      user.PersonID,
+			Person:        person,
+			DeactivatedAt: user.DeactivatedAt,
+			CreatedAt:     user.CreatedAt,
+		}, nil
+	})
+
 	RegisterMapFunc(
 		func(user *entity.User) (jwt.AccessTokenClaims, error) {
 			var username string = func() string {

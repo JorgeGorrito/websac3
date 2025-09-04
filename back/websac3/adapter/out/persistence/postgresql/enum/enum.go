@@ -7,6 +7,7 @@ import (
 
 type GetPortBase[T any] interface {
 	GetByName(name string, ctx db.Context) (T, error)
+	GetByID(id uint, ctx db.Context) (T, error)
 }
 
 type cacheEntry[T any] struct {
@@ -64,6 +65,28 @@ func (e *Enum[T]) GetByName(name string) (T, error) {
 	e.registry[name] = cacheEntry[T]{
 		value:      value,
 		expiryTime: time.Now().Add(e.ttl),
+	}
+
+	return value, nil
+}
+
+func (e *Enum[T]) GetByID(id uint) (T, error) {
+	var zeroValue T
+
+	var value T
+	var err error = e.persistenceManager.ExecuteNonTransactional(
+		func(tx db.Context) error {
+			v, getErr := e.getPortBase.GetByID(id, tx)
+			if getErr != nil {
+				return getErr
+			}
+			value = v
+			return nil
+		},
+	)
+
+	if err != nil {
+		return zeroValue, err
 	}
 
 	return value, nil

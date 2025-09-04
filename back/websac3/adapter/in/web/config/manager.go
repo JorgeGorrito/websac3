@@ -202,10 +202,22 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	); err != nil {
 		*errorList = errors.Join(*errorList, err)
 	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.CreateUserFromTokenCommand{}),
+		chandler.NewCreateUserFromTokenCommandHandler(
+			container.Inject[usecase.CreateUserFromTokenUseCase](),
+			container.Inject[validator.Validator](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
 }
 
 func (m *manager) ConfigureMappers() {
-	mapper.RegisterMapFunctions()
+	mapper.RegisterMappers()
 }
 
 func (m *manager) ConfigureApplication() error {

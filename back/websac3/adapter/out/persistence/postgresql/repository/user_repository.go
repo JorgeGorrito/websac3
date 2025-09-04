@@ -69,7 +69,6 @@ func (u *UserRepository) GetByEmail(email string, ctx _db.Context) (entity.User,
 	}
 
 	var userFound model.User
-	var user entity.User
 	if err := dbCtx.DB().
 		Preload("Role.Permissions.Action").
 		Preload("Role.Permissions.Module").
@@ -78,12 +77,19 @@ func (u *UserRepository) GetByEmail(email string, ctx _db.Context) (entity.User,
 		Where("email = ?", email).
 		First(&userFound).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// Retornar un usuario vacío sin error cuando no se encuentra
 			return entity.User{}, nil
 		}
 		return entity.User{}, err
 	}
 
-	if user, err = mapper.Map[model.User, entity.User](&userFound); err != nil {
+	// Solo mapear si se encontró un usuario
+	if userFound.ID == 0 {
+		return entity.User{}, nil
+	}
+
+	user, err := mapper.Map[model.User, entity.User](&userFound)
+	if err != nil {
 		return entity.User{}, err
 	}
 
@@ -97,7 +103,6 @@ func (u *UserRepository) GetByDNI(identificationType uint, identificationNumber 
 	}
 
 	var userFound model.User
-	var user entity.User
 	if err := dbCtx.DB().
 		Model(&userFound).
 		Joins("Person").
@@ -105,12 +110,19 @@ func (u *UserRepository) GetByDNI(identificationType uint, identificationNumber 
 		Where(`"Person".identification_number = ?`, identificationNumber).
 		First(&userFound).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// Retornar un usuario vacío sin error cuando no se encuentra
 			return entity.User{}, nil
 		}
 		return entity.User{}, err
 	}
 
-	if user, err = mapper.Map[model.User, entity.User](&userFound); err != nil {
+	// Solo mapear si se encontró un usuario
+	if userFound.ID == 0 {
+		return entity.User{}, nil
+	}
+
+	user, err := mapper.Map[model.User, entity.User](&userFound)
+	if err != nil {
 		return entity.User{}, err
 	}
 
@@ -124,7 +136,6 @@ func (u *UserRepository) GetByID(ID uint, ctx _db.Context) (entity.User, error) 
 	}
 
 	var userFound model.User
-	var user entity.User
 	if err := dbCtx.DB().
 		Model(&userFound).
 		Preload("Role.Permissions.Action").
@@ -134,12 +145,19 @@ func (u *UserRepository) GetByID(ID uint, ctx _db.Context) (entity.User, error) 
 		Where("users.id = ?", ID).
 		First(&userFound).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// Retornar un usuario vacío sin error cuando no se encuentra
 			return entity.User{}, nil
 		}
 		return entity.User{}, err
 	}
 
-	if user, err = mapper.Map[model.User, entity.User](&userFound); err != nil {
+	// Solo mapear si se encontró un usuario
+	if userFound.ID == 0 {
+		return entity.User{}, nil
+	}
+
+	user, err := mapper.Map[model.User, entity.User](&userFound)
+	if err != nil {
 		return entity.User{}, err
 	}
 

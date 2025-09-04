@@ -11,4 +11,5 @@ type GetAccessRequestPort interface {
 	GetAuthenticatedEmailByFilters(page, perPage uint, filters filter.Filters, db db.Context) ([]entity.AccessRequest, int64, error)
 	GetLastCreatedByIdentificationAndEmail(identificationTypeID uint, identificationNumber string, email string, db db.Context) (entity.AccessRequest, error)
 	GetUnvalidatedEmailByToken(validationToken string, db db.Context) (entity.AccessRequest, error)
+	GetByCreateUserToken(createUserToken string, db db.Context) (entity.AccessRequest, error)
 }

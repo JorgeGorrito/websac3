@@ -36,3 +36,25 @@ func (r *RoleRepository) GetByName(name string, ctx _db.Context) (entity.Role, e
 
 	return roleEntity, nil
 }
+
+func (r *RoleRepository) GetByID(id uint, ctx _db.Context) (entity.Role, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return entity.Role{}, err
+	}
+
+	var role model.Role
+	if err := dbCtx.DB().
+		Model(&model.Role{}).
+		Where("id = ?", id).
+		First(&role).Error; err != nil {
+		return entity.Role{}, err
+	}
+
+	roleEntity, err := mapper.Map[model.Role, entity.Role](&role)
+	if err != nil {
+		return entity.Role{}, err
+	}
+
+	return roleEntity, nil
+}

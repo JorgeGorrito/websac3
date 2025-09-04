@@ -24,6 +24,7 @@ type ApproveAccessRequestService struct {
 	templateProvider        template.Provider
 	sendNotificationPort    notification.SendMailPort
 	persistenceManager      db.Manager
+	roleEnum                enum.RoleEnum
 }
 
 func NewApproveAccessRequestService(
@@ -35,6 +36,7 @@ func NewApproveAccessRequestService(
 	notificationPort notification.SendMailPort,
 	persistenceManager db.Manager,
 	templateProvider template.Provider,
+	roleEnum enum.RoleEnum,
 ) *ApproveAccessRequestService {
 	return &ApproveAccessRequestService{
 		statusEnum:              statusEnum,
@@ -45,10 +47,11 @@ func NewApproveAccessRequestService(
 		sendNotificationPort:    notificationPort,
 		persistenceManager:      persistenceManager,
 		templateProvider:        templateProvider,
+		roleEnum:                roleEnum,
 	}
 }
 
-func (s *ApproveAccessRequestService) Execute(requestTpApproveID uint, lang string) error {
+func (s *ApproveAccessRequestService) Execute(requestTpApproveID uint, roleID uint, lang string) error {
 	var err error = s.persistenceManager.ExecuteInTransaction(
 		func(tx db.Context) error {
 			var err error
@@ -76,12 +79,27 @@ func (s *ApproveAccessRequestService) Execute(requestTpApproveID uint, lang stri
 				return errs.NewConflictError(s.msgProvider.WithLang(lang).GetMessage("approve_access_request", "already_approved"))
 			}
 
+			// Validar que el roleID sea válido
+			if roleID == 0 {
+				return errs.NewValidationError(s.msgProvider.WithLang(lang).GetMessage("approve_access_request", "role_required"))
+			}
+
+			// Obtener el rol por ID
+			roleEntity, err := s.roleEnum.GetByID(roleID)
+			if err != nil {
+				return errs.NewValidationError(s.msgProvider.WithLang(lang).GetMessage("approve_access_request", "invalid_role"))
+			}
+
 			statusApproved, err := s.statusEnum.GetByName(constants.Approved)
 			if err != nil {
 				return err
 			}
 			accessRequest.StatusID = statusApproved.ID
 			accessRequest.Status = &statusApproved
+
+			// Asignar el rol aprobado
+			accessRequest.ApprovedRoleID = &roleEntity.ID
+			accessRequest.ApprovedRole = &roleEntity
 
 			if err = s.updateAccessRequestPort.Update(&accessRequest, tx); err != nil {
 				return err

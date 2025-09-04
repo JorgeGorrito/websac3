@@ -115,3 +115,13 @@ func NewFieldMustBeStringError(fieldName string, msgProvider message.Provider, l
 			GetMessage("validator", "field_must_be_string", fieldName),
 	)
 }
+
+type PasswordsMismatchError error
+
+func NewPasswordsMismatchError(msgProvider message.Provider, lang string) PasswordsMismatchError {
+	return errs.NewValidationError(
+		msgProvider.
+			WithLang(lang).
+			GetMessage("create_user", "passwords_mismatch"),
+	)
+}

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"strconv"
+	"websac3/adapter/in/web/request"
 	"websac3/adapter/in/web/response"
 	"websac3/app/port/in/dto/command"
 	"websac3/common/mediator"
@@ -29,6 +30,7 @@ func GetApproveAccessRequestController() *ApproveAccessRequestController {
 // @Produce json
 // @Param lang path string true "Código de idioma" default(en) Enums(en, es)
 // @Param accessRequestID path int true "ID de la solicitud de acceso a aprobar"
+// @Param request body request.ApproveAccessRequestRequest true "Cuerpo de la solicitud con RoleID"
 // @Success 200 {object} response.ApiResponse[string] "La solicitud fue aprobada correctamente"
 // @Failure 400 {object} response.ApiResponse[string] "ID inválido o formato incorrecto"
 // @Failure 404 {object} response.ApiResponse[string] "No se encontró la solicitud de acceso"
@@ -51,11 +53,22 @@ func (c *ApproveAccessRequestController) Handle(ctx *gin.Context) {
 		return uint(ID), nil
 	}()
 
+	// Obtener el RoleID del body
+	var requestBody request.ApproveAccessRequestRequest
+	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
+		ctx.JSON(400, response.ApiResponse[string]{
+			HttpStatusCode: 400,
+			Errors:         []string{"Invalid request body"},
+		})
+		return
+	}
+
 	token := c.GetToken(ctx)
 	lang := ctx.Param("lang")
 	var request command.ApproveAccessRequestCommand = command.ApproveAccessRequestCommand{
 		AccessRequestID: AccessRequestToApproveID,
 		UserID:          token.Sub,
+		RoleID:          requestBody.RoleID,
 		Permissions:     token.Permissions["access-request"],
 	}
 

@@ -24,7 +24,10 @@
   "approve_access_request": {
     "not_found": "The access request with the provided ID was not found.",
     "already_approved": "The access request has already been approved.",
-    "approve_success": "Access request approved successfully."
+    "approve_success": "Access request approved successfully.",
+    "role_required": "The role ID is required.",
+    "invalid_role": "The specified role ID is not valid.",
+    "user_alredy_registered": "The person already has a registered user."
   },
   "reject_access_request": {
     "already_rejected": "The access request has already been rejected.",
@@ -36,6 +39,16 @@
     "user_alredy_registered": "The person already has a registered user.",
     "cannot_create_access_request": "The access request has already been approved.",
     "access_request_created": "Access request created successfully."
+  },
+  "create_user" : {
+    "user_created_successfully" : "User created successfully.",
+    "access_request_not_found" : "Access request not found.",
+    "email_mismatch" : "Email does not match the access request.",
+    "email_not_verified" : "Email has not been verified.",
+    "access_request_not_approved" : "Access request has not been approved.",
+    "user_already_exists" : "User already exists.",
+    "passwords_mismatch" : "Passwords do not match.",
+    "role_not_defined" : "The role has not been defined in the access request."
   },
   "list_access_request": {
     "not_found": "No access requests found.",

@@ -7,4 +7,5 @@ import (
 
 type GetStatusPort interface {
 	GetByName(name string, db db.Context) (entity.Status, error)
+	GetByID(id uint, db db.Context) (entity.Status, error)
 }

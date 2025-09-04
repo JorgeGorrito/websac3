@@ -42,3 +42,28 @@ func (a *StatusRepository) GetByName(name string, ctx _db.Context) (entity.Statu
 
 	return status, nil
 }
+
+func (a *StatusRepository) GetByID(id uint, ctx _db.Context) (entity.Status, error) {
+	dbCtx, err := a.CastDbContext(ctx)
+	if err != nil {
+		return entity.Status{}, err
+	}
+
+	var status entity.Status
+	var statusFound model.Status
+	if err = dbCtx.DB().
+		Where("id = ?", id).
+		First(&statusFound).
+		Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return entity.Status{}, nil
+		}
+		return entity.Status{}, err
+	}
+
+	if status, err = mapper.Map[model.Status, entity.Status](&statusFound); err != nil {
+		return entity.Status{}, err
+	}
+
+	return status, nil
+}

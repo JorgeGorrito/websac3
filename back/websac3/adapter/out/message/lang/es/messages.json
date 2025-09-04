@@ -24,7 +24,10 @@
   "approve_access_request" : {
     "not_found" : "No se encontró la solicitud de acceso con el ID proporcionado.",
     "already_approved" : "La solicitud de acceso ya ha sido aprobada.",
-    "approve_success" : "Solicitud de acceso aprobada exitosamente."
+    "approve_success" : "Solicitud de acceso aprobada exitosamente.",
+    "role_required" : "El ID del rol es requerido.",
+    "invalid_role" : "El ID del rol especificado no es válido.",
+    "user_alredy_registered" : "La persona ya cuenta con un usuario registrado."
   },
   "reject_access_request": {
     "already_rejected": "La solicitud de acceso ya ha sido rechazada.",
@@ -36,6 +39,16 @@
     "user_alredy_registered" : "La persona ya cuenta con un usuario registrado.",
     "cannot_create_access_request" : "La solicitud de acceso ya ha sido aprobada.",
     "access_request_created" : "Solicitud de acceso creada correctamente."
+  },
+  "create_user" : {
+    "user_created_successfully" : "Usuario creado exitosamente.",
+    "access_request_not_found" : "Solicitud de acceso no encontrada.",
+    "email_mismatch" : "El email no coincide con la solicitud de acceso.",
+    "email_not_verified" : "El email no ha sido verificado.",
+    "access_request_not_approved" : "La solicitud de acceso no ha sido aprobada.",
+    "user_already_exists" : "El usuario ya existe.",
+    "passwords_mismatch" : "Las contraseñas no coinciden.",
+    "role_not_defined" : "El rol no ha sido definido en la solicitud de acceso."
   },
   "list_access_request" : {
     "not_found" : "No se encontraron solicitudes de acceso.",

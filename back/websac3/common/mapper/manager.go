@@ -1,19 +1,19 @@
 package mapper
 
-func RegisterMapFunctions() {
+func RegisterMappers() {
 	registerAccessRequestMappers()
-	registerPersonMappers()
-	registerStatusMappers()
-	registerIdentificationTypeMappers()
-	registerEmailMappers()
-	registerUserMappers()
-	registerRoleMappers()
-	registerHigherEducationInstitutionMappers()
 	registerActionMappers()
+	registerDegreeProgramMappers()
+	registerDurationUnitMappers()
+	registerEmailMappers()
+	registerHigherEducationInstitutionMappers()
+	registerIdentificationTypeMappers()
 	registerModuleMappers()
 	registerPermissionMappers()
+	registerPersonMappers()
+	registerRoleMappers()
+	registerStatusMappers()
 	registerTopicMappers()
-	registerDurationUnitMappers()
-	registerDegreeProgramMappers()
-	registerCourseMappers()
+	registerUserMappers()
+	registerCreateUserMappers()
 }

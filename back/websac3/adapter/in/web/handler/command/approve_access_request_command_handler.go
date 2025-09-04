@@ -61,7 +61,7 @@ func (h *ApproveAccessRequestCommandHandler) Handle(request command.ApproveAcces
 		}, nil
 	}
 
-	err := h.approveAccessRequestUseCase.Execute(request.AccessRequestID, lang)
+	err := h.approveAccessRequestUseCase.Execute(request.AccessRequestID, request.RoleID, lang)
 	if err != nil {
 		h.logger.Error("Error al aprobar solicitud de acceso con ID: %d, el usuario con ID: %d. Error: %s", request.AccessRequestID, request.UserID, err.Error())
 		var httpStatusCode int = util.GetHttpStatusCodeByErr(err)

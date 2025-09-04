@@ -25,6 +25,9 @@ type AccessRequest struct {
 	StatusID uint   `gorm:"not null" `
 	Status   Status `gorm:"foreignKey:StatusID" `
 
+	ApprovedRoleID *uint `gorm:"null"`
+	ApprovedRole   Role  `gorm:"foreignKey:ApprovedRoleID"`
+
 	IsVerified bool `gorm:"not null; default:false" `
 	CreatedAt  time.Time
 }

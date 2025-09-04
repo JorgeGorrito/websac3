@@ -95,6 +95,7 @@ func (m *manager) registerAccessRequestDependencies() {
 				container.Inject[notification.SendMailPort](),
 				container.Inject[db.Manager](),
 				container.Inject[template.Provider](),
+				container.Inject[enum.RoleEnum](),
 			)
 		},
 	)
@@ -111,6 +112,22 @@ func (m *manager) registerAccessRequestDependencies() {
 				container.Inject[notification.SendMailPort](),
 				container.Inject[db.Manager](),
 				container.Inject[template.Provider](),
+			)
+		},
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.CreateUserFromTokenUseCase](),
+		func() any {
+			return service.NewCreateUserFromTokenService(
+				container.Inject[persistence.GetAccessRequestPort](),
+				container.Inject[persistence.CreateUserPort](),
+				container.Inject[persistence.CreatePersonPort](),
+				container.Inject[persistence.UpdateAccessRequestPort](),
+				container.Inject[persistence.GetUserPort](),
+				container.Inject[enum.RoleEnum](),
+				container.Inject[message.Provider](),
+				container.Inject[db.Manager](),
 			)
 		},
 	)

@@ -7,4 +7,5 @@ import (
 
 type GetRolePort interface {
 	GetByName(name string, ctx db.Context) (entity.Role, error)
+	GetByID(id uint, ctx db.Context) (entity.Role, error)
 }

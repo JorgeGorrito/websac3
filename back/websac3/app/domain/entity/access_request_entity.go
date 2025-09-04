@@ -25,6 +25,9 @@ type AccessRequest struct {
 	StatusID uint
 	Status   *Status
 
+	ApprovedRoleID *uint
+	ApprovedRole   *Role
+
 	IsVerified bool
 	CreatedAt  time.Time
 }
