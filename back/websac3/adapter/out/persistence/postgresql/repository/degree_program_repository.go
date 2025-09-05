@@ -47,6 +47,7 @@ func (r *DegreeProgramRepository) GetByFilters(page, perPage uint, filters filte
 	baseQuery := dbCtx.DB().
 		Model(&model.DegreeProgram{}).
 		Preload("DurationUnit").
+		Preload("DurationUnit.Names").
 		Preload("UserCreator")
 
 	dbCtx.DBSet(baseQuery)
@@ -98,6 +99,7 @@ func (r *DegreeProgramRepository) GetByIDAndFilters(page, perPage uint, userID u
 	baseQuery := dbCtx.DB().
 		Model(&model.DegreeProgram{}).
 		Preload("DurationUnit").
+		Preload("DurationUnit.Names").
 		Preload("UserCreator").
 		Where("created_by = ?", userID)
 

@@ -11,6 +11,12 @@ import (
 func registerDegreeProgramMappers() {
 	RegisterMapFunc(
 		func(degreeProgramModel *model.DegreeProgram) (entity.DegreeProgram, error) {
+			var durationUnitPtr *entity.DurationUnit
+			if degreeProgramModel.DurationUnit.ID != 0 {
+				if du, err := Map[model.DurationUnit, entity.DurationUnit](&degreeProgramModel.DurationUnit); err == nil {
+					durationUnitPtr = &du
+				}
+			}
 			return entity.DegreeProgram{
 				ID:                  degreeProgramModel.ID,
 				Snies:               degreeProgramModel.Snies,
@@ -18,6 +24,7 @@ func registerDegreeProgramMappers() {
 				TotalCredits:        degreeProgramModel.TotalCredits,
 				DurationValue:       degreeProgramModel.DurationValue,
 				DurationUnitID:      degreeProgramModel.DurationUnitID,
+				DurationUnit:        durationUnitPtr,
 				ProgramFocus:        degreeProgramModel.ProgramFocus,
 				EntryProfile:        degreeProgramModel.EntryProfile,
 				GraduateProfile:     degreeProgramModel.GraduateProfile,
@@ -80,13 +87,20 @@ func registerDegreeProgramMappers() {
 
 	RegisterMapFunc(
 		func(degreeProgramEntity *entity.DegreeProgram) (response.ListDegreeProgramResponse, error) {
+			var durResp response.ListDurationUnitResponse
+			if degreeProgramEntity.DurationUnit != nil {
+				durResp = response.ListDurationUnitResponse{
+					ID:   degreeProgramEntity.DurationUnit.ID,
+					Name: degreeProgramEntity.DurationUnit.Name,
+				}
+			}
 			return response.ListDegreeProgramResponse{
 				ID:                  degreeProgramEntity.ID,
 				Snies:               degreeProgramEntity.Snies,
 				Name:                degreeProgramEntity.Name,
 				TotalCredits:        degreeProgramEntity.TotalCredits,
 				DurationValue:       degreeProgramEntity.DurationValue,
-				DurationUnitID:      degreeProgramEntity.DurationUnitID,
+				DurationUnit:        durResp,
 				ProgramFocus:        degreeProgramEntity.ProgramFocus,
 				EntryProfile:        degreeProgramEntity.EntryProfile,
 				GraduateProfile:     degreeProgramEntity.GraduateProfile,

@@ -9,9 +9,13 @@ import (
 func registerDurationUnitMappers() {
 	RegisterMapFunc(
 		func(durationUnitModel *model.DurationUnit) (entity.DurationUnit, error) {
+			var name string
+			if len(durationUnitModel.Names) > 0 {
+				name = durationUnitModel.Names[0].Name
+			}
 			return entity.DurationUnit{
 				ID:   durationUnitModel.ID,
-				Name: durationUnitModel.Names[0].Name,
+				Name: name,
 			}, nil
 		},
 	)
