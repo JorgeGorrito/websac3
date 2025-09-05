@@ -55,6 +55,7 @@ func registerAccessRequestMappers() {
 			CreateUserURL:            accessRequest.CreateUserURL,
 			ValidationEmailCode:      accessRequest.ValidationEmailCode,
 			ValidationCreateUserCode: accessRequest.CreateUserCode,
+			Lang:                     accessRequest.Lang,
 			IsVerified:               accessRequest.IsVerified,
 			CreatedAt:                accessRequest.CreatedAt,
 		}, nil
@@ -134,9 +135,9 @@ func registerAccessRequestMappers() {
 
 			ValidationEmailCode: accessRequest.ValidationEmailCode,
 			CreateUserCode:      accessRequest.ValidationCreateUserCode,
-
-			IsVerified: accessRequest.IsVerified,
-			CreatedAt:  accessRequest.CreatedAt,
+			Lang:                accessRequest.Lang,
+			IsVerified:          accessRequest.IsVerified,
+			CreatedAt:           accessRequest.CreatedAt,
 		}, nil
 	})
 

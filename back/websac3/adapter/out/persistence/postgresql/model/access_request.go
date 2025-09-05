@@ -28,6 +28,8 @@ type AccessRequest struct {
 	ApprovedRoleID *uint `gorm:"null"`
 	ApprovedRole   Role  `gorm:"foreignKey:ApprovedRoleID"`
 
+	Lang string `gorm:"not null; type:varchar(5)"`
+
 	IsVerified bool `gorm:"not null; default:false" `
 	CreatedAt  time.Time
 }

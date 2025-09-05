@@ -6,4 +6,5 @@ type Template interface {
 
 type Provider interface {
 	GetByName(name string) Template
+	GetByNameAndLang(name string, lang string) Template
 }

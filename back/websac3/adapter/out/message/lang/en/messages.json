@@ -37,7 +37,8 @@
   },
   "create_access_request": {
     "user_alredy_registered": "The person already has a registered user.",
-    "cannot_create_access_request": "The access request has already been approved.",
+    "cannot_create_access_request": "An access request with this email already exists.",
+    "access_request_already_approved": "The access request has already been approved.",
     "access_request_created": "Access request created successfully."
   },
   "create_user" : {

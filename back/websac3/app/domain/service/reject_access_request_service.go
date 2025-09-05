@@ -88,8 +88,8 @@ func (s *RejectAccessRequestService) Execute(accessRequestToRejectID uint, lang 
 			}
 
 			var templateApproved template.Template
-			if templateApproved = s.templateProvider.GetByName("access_request_rejected"); templateApproved == nil {
-				return errors.New(s.msgProvider.WithLang(lang).GetMessage("template", "template_not_found", "access_request_rejected"))
+			if templateApproved = s.templateProvider.GetByNameAndLang("access_request_rejected", accessRequest.Lang); templateApproved == nil {
+				return errors.New(s.msgProvider.WithLang(accessRequest.Lang).GetMessage("template", "template_not_found", "access_request_rejected"))
 			}
 
 			var templateToSend string
@@ -104,7 +104,7 @@ func (s *RejectAccessRequestService) Execute(accessRequestToRejectID uint, lang 
 			accessRequest.EmailApproved = &entity.EmailNotification{
 				To:        accessRequest.EmailValidation.To,
 				Content:   templateToSend,
-				Subject:   "Solicitud de acceso rechazada",
+				Subject:   s.msgProvider.WithLang(accessRequest.Lang).GetMessage("reject_access_request", "reject_success"),
 				CreatedAt: time.Now(),
 			}
 			if err = s.sendNotificationPort.Send(

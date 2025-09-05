@@ -16,14 +16,23 @@ func (m *manager) registerTemplateDependencies() {
 		func() any {
 			return atemplate.NewProvider(
 				map[string]template.Template{
-					"access_request_confirmation": atemplate.NewAccessRequestConfirmationTemplate(
-						baseDir + "access_request_confirmation.html",
+					"access_request_confirmation:es": atemplate.NewAccessRequestConfirmationTemplate(
+						baseDir + "es/access_request_confirmation.html",
 					),
-					"access_request_approved": atemplate.NewAccessRequestApprovedTemplate(
-						baseDir + "access_request_approved.html",
+					"access_request_approved:es": atemplate.NewAccessRequestApprovedTemplate(
+						baseDir + "es/access_request_approved.html",
 					),
-					"access_request_rejected": atemplate.NewAccessRequestRejectedTemplate(
-						baseDir + "access_request_rejected.html",
+					"access_request_rejected:es": atemplate.NewAccessRequestRejectedTemplate(
+						baseDir + "es/access_request_rejected.html",
+					),
+					"access_request_confirmation:en": atemplate.NewAccessRequestConfirmationTemplate(
+						baseDir + "en/access_request_confirmation.html",
+					),
+					"access_request_approved:en": atemplate.NewAccessRequestApprovedTemplate(
+						baseDir + "en/access_request_approved.html",
+					),
+					"access_request_rejected:en": atemplate.NewAccessRequestRejectedTemplate(
+						baseDir + "en/access_request_rejected.html",
 					),
 				},
 			)

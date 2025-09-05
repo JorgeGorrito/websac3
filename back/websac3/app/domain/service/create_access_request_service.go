@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"time"
 	"websac3/app/domain/constants"
 	"websac3/app/domain/entity"
@@ -103,6 +104,7 @@ func (c *CreateAccessRequestService) Execute(
 				return err
 			}
 
+			fmt.Printf("requestFound: %+v\n", requestFound)
 			if !requestFound.CanRegisterNewRequest(requestToCreate.EmailValidation.To) {
 				return errs.NewConflictError(
 					c.msgProvider.
@@ -126,15 +128,17 @@ func (c *CreateAccessRequestService) Execute(
 			requestToCreate.ValidationEmailCode = uuid.GenerateUUID()
 			requestToCreate.CreateUserCode = uuid.GenerateUUID()
 			requestToCreate.IsVerified = false
+			// Persistir el idioma según URL param (fuente de verdad)
+			requestToCreate.Lang = lang
 			if err = c.createAccessRequestPort.Create(&requestToCreate, ctx); err != nil {
 				return err
 			}
 
 			var templateEmail template.Template
-			if templateEmail = c.templateProvider.GetByName("access_request_confirmation"); templateEmail == nil {
+			if templateEmail = c.templateProvider.GetByNameAndLang("access_request_confirmation", requestToCreate.Lang); templateEmail == nil {
 				return errors.New(
 					c.msgProvider.
-						WithLang(lang).
+						WithLang(requestToCreate.Lang).
 						GetMessage("mail_template", "template_not_found", "access_request_confirmation"),
 				)
 			}
@@ -153,7 +157,7 @@ func (c *CreateAccessRequestService) Execute(
 			requestToCreate.EmailValidation = &entity.EmailNotification{
 				To:        requestToCreate.EmailValidation.To,
 				Content:   templateToSend,
-				Subject:   "Confirmación de solicitud de acceso",
+				Subject:   c.msgProvider.WithLang(requestToCreate.Lang).GetMessage("create_access_request", "access_request_created"),
 				CreatedAt: time.Now(),
 			}
 			if err = c.sendNotificationPort.Send(

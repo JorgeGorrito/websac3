@@ -106,8 +106,8 @@ func (s *ApproveAccessRequestService) Execute(requestTpApproveID uint, roleID ui
 			}
 
 			var templateApproved template.Template
-			if templateApproved = s.templateProvider.GetByName("access_request_approved"); templateApproved == nil {
-				return errors.New(s.msgProvider.WithLang(lang).GetMessage("template", "template_not_found", "access_request_approved"))
+			if templateApproved = s.templateProvider.GetByNameAndLang("access_request_approved", accessRequest.Lang); templateApproved == nil {
+				return errors.New(s.msgProvider.WithLang(accessRequest.Lang).GetMessage("template", "template_not_found", "access_request_approved"))
 			}
 
 			var templateToSend string
@@ -124,7 +124,7 @@ func (s *ApproveAccessRequestService) Execute(requestTpApproveID uint, roleID ui
 			accessRequest.EmailApproved = &entity.EmailNotification{
 				To:        accessRequest.EmailValidation.To,
 				Content:   templateToSend,
-				Subject:   "Solicitud de acceso aprobada",
+				Subject:   s.msgProvider.WithLang(accessRequest.Lang).GetMessage("approve_access_request", "approve_success"),
 				CreatedAt: time.Now(),
 			}
 			if err = s.sendNotificationPort.Send(

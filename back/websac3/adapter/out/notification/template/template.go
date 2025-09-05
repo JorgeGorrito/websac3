@@ -22,6 +22,16 @@ func (p *Provider) GetByName(name string) ptemplate.Template {
 	return nil
 }
 
+func (p *Provider) GetByNameAndLang(name string, lang string) ptemplate.Template {
+	if t, ok := p.registry[name+":"+lang]; ok {
+		return t
+	}
+	if t, ok := p.registry[name+":es"]; ok {
+		return t
+	}
+	return p.GetByName(name)
+}
+
 type base struct {
 	template *template.Template
 }

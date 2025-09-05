@@ -37,7 +37,8 @@
   },
   "create_access_request" : {
     "user_alredy_registered" : "La persona ya cuenta con un usuario registrado.",
-    "cannot_create_access_request" : "La solicitud de acceso ya ha sido aprobada.",
+    "access_request_already_approved" : "La solicitud de acceso ya ha sido aprobada.",
+    "cannot_create_access_request" : "Ya existe una solicitud de acceso con este email.",
     "access_request_created" : "Solicitud de acceso creada correctamente."
   },
   "create_user" : {

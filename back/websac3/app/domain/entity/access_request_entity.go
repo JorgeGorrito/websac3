@@ -28,6 +28,8 @@ type AccessRequest struct {
 	ApprovedRoleID *uint
 	ApprovedRole   *Role
 
+	Lang string
+
 	IsVerified bool
 	CreatedAt  time.Time
 }
