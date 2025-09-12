@@ -38,6 +38,38 @@ func (r *DegreeProgramRepository) Create(degreeProgramToSave *entity.DegreeProgr
 	return nil
 }
 
+func (r *DegreeProgramRepository) GetByID(id uint, ctx _db.Context) (entity.DegreeProgram, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return entity.DegreeProgram{}, err
+	}
+
+	var dp model.DegreeProgram
+	if err := dbCtx.DB().
+		Model(&model.DegreeProgram{}).
+		Preload("DurationUnit").
+		Preload("DurationUnit.Names").
+		Preload("UserCreator").
+		Preload("UserCreator.Person").
+		Preload("UserCreator.Person.HigherEducationInstitution").
+		Preload("UserCreator.Person.HigherEducationInstitution.Ownership").
+		Preload("UserCreator.Person.HigherEducationInstitution.InstitutionalCategory").
+		Preload("UserCreator.Person.HigherEducationInstitution.Municipality").
+		Preload("UserCreator.Person.HigherEducationInstitution.Department").
+		Preload("Courses").
+		Preload("Courses.Nature").
+		Preload("Courses.Type").
+		Preload("Courses.CourseTopics").
+		Preload("Courses.CourseTopics.Topic").
+		Preload("Courses.CourseTopics.Topic.Names").
+		Where("degree_programs.id = ?", id).
+		First(&dp).Error; err != nil {
+		return entity.DegreeProgram{}, err
+	}
+
+	return mapper.Map[model.DegreeProgram, entity.DegreeProgram](&dp)
+}
+
 func (r *DegreeProgramRepository) GetByFilters(page, perPage uint, filters filter.Filters, ctx _db.Context) ([]entity.DegreeProgram, int64, error) {
 	dbCtx, err := r.CastDbContext(ctx)
 	if err != nil {
@@ -48,7 +80,9 @@ func (r *DegreeProgramRepository) GetByFilters(page, perPage uint, filters filte
 		Model(&model.DegreeProgram{}).
 		Preload("DurationUnit").
 		Preload("DurationUnit.Names").
-		Preload("UserCreator")
+		Preload("UserCreator").
+		Preload("UserCreator.Person").
+		Preload("UserCreator.Person.HigherEducationInstitution")
 
 	dbCtx.DBSet(baseQuery)
 
@@ -90,7 +124,7 @@ func (r *DegreeProgramRepository) GetByFilters(page, perPage uint, filters filte
 	return degreePrograms, total, nil
 }
 
-func (r *DegreeProgramRepository) GetByIDAndFilters(page, perPage uint, userID uint, filters filter.Filters, ctx _db.Context) ([]entity.DegreeProgram, int64, error) {
+func (r *DegreeProgramRepository) GetByUserIDAndFilters(page, perPage uint, userID uint, filters filter.Filters, ctx _db.Context) ([]entity.DegreeProgram, int64, error) {
 	dbCtx, err := r.CastDbContext(ctx)
 	if err != nil {
 		return nil, 0, err
@@ -101,6 +135,8 @@ func (r *DegreeProgramRepository) GetByIDAndFilters(page, perPage uint, userID u
 		Preload("DurationUnit").
 		Preload("DurationUnit.Names").
 		Preload("UserCreator").
+		Preload("UserCreator.Person").
+		Preload("UserCreator.Person.HigherEducationInstitution").
 		Where("created_by = ?", userID)
 
 	dbCtx.DBSet(baseQuery)

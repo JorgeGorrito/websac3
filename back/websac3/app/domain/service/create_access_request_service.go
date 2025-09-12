@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"time"
 	"websac3/app/domain/constants"
 	"websac3/app/domain/entity"
@@ -104,7 +103,6 @@ func (c *CreateAccessRequestService) Execute(
 				return err
 			}
 
-			fmt.Printf("requestFound: %+v\n", requestFound)
 			if !requestFound.CanRegisterNewRequest(requestToCreate.EmailValidation.To) {
 				return errs.NewConflictError(
 					c.msgProvider.

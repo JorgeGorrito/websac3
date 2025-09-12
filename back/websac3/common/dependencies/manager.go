@@ -41,6 +41,7 @@ func (m *manager) RegisterDependencies() error {
 	m.registerMessageProviderDependencies()
 	m.registerEnumDependencies()
 	m.registerTemplateDependencies()
+	m.registerPDFDependencies()
 	m.registerValidatorDependencies()
 	m.registerIdentificationTypeDependencies()
 	m.registerHigherEducationInstitutionDependencies()
@@ -48,5 +49,6 @@ func (m *manager) RegisterDependencies() error {
 	m.registerDurationUnitDependencies()
 	m.registerDegreeProgramDependencies()
 	m.registerCourseDependencies()
+	m.registerReportDependencies()
 	return nil
 }

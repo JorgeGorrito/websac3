@@ -1,0 +1,139 @@
+package mapper
+
+import (
+	"websac3/adapter/out/persistence/postgresql/model"
+	"websac3/app/domain/entity"
+)
+
+func registerReportMappers() {
+	// TopicReport: entity -> model
+	RegisterMapFunc(
+		func(topicReportEntity *entity.TopicReport) (model.TopicReport, error) {
+			return model.TopicReport{
+				ID:                    topicReportEntity.ID,
+				TopicID:               topicReportEntity.TopicID,
+				Name:                  topicReportEntity.Name,
+				LearnHoursExpected:    topicReportEntity.LearnHoursExpected,
+				LearnHoursActual:      topicReportEntity.LearnHoursActual,
+			}, nil
+		},
+	)
+
+	// TopicReport: model -> entity
+	RegisterMapFunc(
+		func(topicReportModel *model.TopicReport) (entity.TopicReport, error) {
+			return entity.TopicReport{
+				ID:                 topicReportModel.ID,
+				TopicID:            topicReportModel.TopicID,
+				Name:               topicReportModel.Name,
+				LearnHoursExpected: topicReportModel.LearnHoursExpected,
+				LearnHoursActual:   topicReportModel.LearnHoursActual,
+			}, nil
+		},
+	)
+
+	// KnowledgeAreaReport: entity -> model
+	RegisterMapFunc(
+		func(knowledgeAreaReportEntity *entity.KnowledgeAreaReport) (model.KnowledgeAreaReport, error) {
+			var topicReports []model.TopicReport
+			for _, tr := range knowledgeAreaReportEntity.TopicReports {
+				trModel, err := Map[entity.TopicReport, model.TopicReport](&tr)
+				if err != nil {
+					return model.KnowledgeAreaReport{}, err
+				}
+				topicReports = append(topicReports, trModel)
+			}
+
+			return model.KnowledgeAreaReport{
+				ID:                      knowledgeAreaReportEntity.ID,
+				Name:                    knowledgeAreaReportEntity.Name,
+				TotalLearnHoursExpected: knowledgeAreaReportEntity.TotalLearnHoursExpected,
+				TotalLearnHoursActual:   knowledgeAreaReportEntity.TotalLearnHoursActual,
+				ScoreExpected:           knowledgeAreaReportEntity.ScoreExpected,
+				ScoreGot:                knowledgeAreaReportEntity.ScoreGot,
+				TopicReports:            topicReports,
+			}, nil
+		},
+	)
+
+	// KnowledgeAreaReport: model -> entity
+	RegisterMapFunc(
+		func(knowledgeAreaReportModel *model.KnowledgeAreaReport) (entity.KnowledgeAreaReport, error) {
+			var topicReports []entity.TopicReport
+			for _, tr := range knowledgeAreaReportModel.TopicReports {
+				trEntity, err := Map[model.TopicReport, entity.TopicReport](&tr)
+				if err != nil {
+					return entity.KnowledgeAreaReport{}, err
+				}
+				topicReports = append(topicReports, trEntity)
+			}
+
+			return entity.KnowledgeAreaReport{
+				ID:                      knowledgeAreaReportModel.ID,
+				Name:                    knowledgeAreaReportModel.Name,
+				TotalLearnHoursExpected: knowledgeAreaReportModel.TotalLearnHoursExpected,
+				TotalLearnHoursActual:   knowledgeAreaReportModel.TotalLearnHoursActual,
+				ScoreExpected:           knowledgeAreaReportModel.ScoreExpected,
+				ScoreGot:                knowledgeAreaReportModel.ScoreGot,
+				TopicReports:            topicReports,
+			}, nil
+		},
+	)
+
+	// Report: entity -> model
+	RegisterMapFunc(
+		func(reportEntity *entity.Report) (model.Report, error) {
+			var knowledgeAreaReports []model.KnowledgeAreaReport
+			for _, kar := range reportEntity.KnowledgeAreaReports {
+				karModel, err := Map[entity.KnowledgeAreaReport, model.KnowledgeAreaReport](&kar)
+				if err != nil {
+					return model.Report{}, err
+				}
+				knowledgeAreaReports = append(knowledgeAreaReports, karModel)
+			}
+
+			return model.Report{
+				ID:                   reportEntity.ID,
+				ProfessionalRoleID:   reportEntity.ProfessionalRole.ID,
+				DegreeProgramID:      reportEntity.DegreeProgram.ID,
+				Score:                reportEntity.Score,
+				KnowledgeAreaReports: knowledgeAreaReports,
+			}, nil
+		},
+	)
+
+	// Report: model -> entity
+	RegisterMapFunc(
+		func(reportModel *model.Report) (entity.Report, error) {
+			var knowledgeAreaReports []entity.KnowledgeAreaReport
+			for _, kar := range reportModel.KnowledgeAreaReports {
+				karEntity, err := Map[model.KnowledgeAreaReport, entity.KnowledgeAreaReport](&kar)
+				if err != nil {
+					return entity.Report{}, err
+				}
+				knowledgeAreaReports = append(knowledgeAreaReports, karEntity)
+			}
+
+			// Map DegreeProgram and ProfessionalRole
+			degreeProgram, err := Map[model.DegreeProgram, entity.DegreeProgram](&reportModel.DegreeProgram)
+			if err != nil {
+				return entity.Report{}, err
+			}
+
+			professionalRole, err := Map[model.ProfessionalRole, entity.ProfessionalRole](&reportModel.ProfessionalRole)
+			if err != nil {
+				return entity.Report{}, err
+			}
+
+			return entity.Report{
+				ID:                   reportModel.ID,
+				DegreeProgram:        degreeProgram,
+				ProfessionalRole:     professionalRole,
+				KnowledgeAreaReports: knowledgeAreaReports,
+				Score:                reportModel.Score,
+				// Note: ReportDate and HigherEducationInstitution are not stored in the model
+				// They would need to be reconstructed from related data if needed
+			}, nil
+		},
+	)
+}

@@ -1,8 +1,10 @@
-FROM golang:1.23.7-alpine3.21 AS builder
+FROM golang:1.23.7-bookworm AS builder
 
-RUN apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/America/Bogota /etc/localtime && \
-    echo "America/Bogota" > /etc/timezone
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends tzdata ca-certificates && \
+    ln -fs /usr/share/zoneinfo/America/Bogota /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -16,11 +18,13 @@ RUN go build -o /bin/anise github.com/JorgeGorrito/anise-with-gin/anise/command/
 RUN go build -o /bin/main .
 
 
-FROM alpine:3.21
+FROM debian:bookworm-slim
 
-RUN apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/America/Bogota /etc/localtime && \
-    echo "America/Bogota" > /etc/timezone
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends tzdata ca-certificates wkhtmltopdf fontconfig fonts-dejavu && \
+    ln -fs /usr/share/zoneinfo/America/Bogota /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

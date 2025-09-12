@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"websac3/adapter/in/web/request"
 	"websac3/adapter/in/web/response"
@@ -44,14 +43,12 @@ func (c *CreateCourseController) CreateCourse(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"result": err.Error()})
 		return
 	}
-	fmt.Printf("createCourseRequest: %+v\n", createCourseRequest)
 	var createCourseCommand command.CreateCourseCommand
 	createCourseCommand, err = mapper.Map[request.CreateCourseRequest, command.CreateCourseCommand](&createCourseRequest)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"result": err.Error()})
 		return
 	}
-	fmt.Printf("createCourseCommand: %+v\n", createCourseCommand)
 
 	token := c.GetToken(context)
 	lang := context.Param("lang")

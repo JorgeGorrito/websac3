@@ -34,6 +34,18 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(command.EvaluateDegreeProgramCommand{}),
+		chandler.NewEvaluateDegreeProgramCommandHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.EvaluateDegreeProgramUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(command.CreateAccessRequestCommand{}),
 		chandler.NewCreateAccessRequestCommandHandler(
 			container.Inject[usecase.CreateAccessRequestUseCase](),

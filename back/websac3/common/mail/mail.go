@@ -1,11 +1,14 @@
 package mail
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"mime"
 	"os"
+	"time"
 	"websac3/app/domain/entity"
 
 	"golang.org/x/oauth2"
@@ -24,19 +27,79 @@ func (s *ServerSMTP) Send(notification *entity.EmailNotification) error {
 	subject := mime.BEncoding.Encode("UTF-8", notification.Subject)
 	body := notification.Content
 
-	message := []byte("From: " + s.emailFrom + "\r\n" +
-		"To: " + to + "\r\n" +
-		"Subject: " + subject + "\r\n" +
-		"MIME-Version: 1.0\r\n" +
-		"Content-Type: text/html; charset=\"UTF-8\"\r\n\r\n" +
-		body)
+	var message []byte
+	var err error
+
+	// Si no hay adjuntos, usar el formato simple
+	if len(notification.Attachments) == 0 {
+		message = []byte("From: " + s.emailFrom + "\r\n" +
+			"To: " + to + "\r\n" +
+			"Subject: " + subject + "\r\n" +
+			"MIME-Version: 1.0\r\n" +
+			"Content-Type: text/html; charset=\"UTF-8\"\r\n\r\n" +
+			body)
+	} else {
+		// Si hay adjuntos, crear mensaje multipart
+		message, err = s.createMultipartMessage(s.emailFrom, to, subject, body, notification.Attachments)
+		if err != nil {
+			return err
+		}
+	}
 
 	var msg gmail.Message
 	msg.Raw = base64.URLEncoding.EncodeToString(message)
 
-	_, err := s.srv.Users.Messages.Send("me", &msg).Do()
+	_, err = s.srv.Users.Messages.Send("me", &msg).Do()
 	return err
 }
+
+func (s *ServerSMTP) createMultipartMessage(from, to, subject, body string, attachments []entity.EmailAttachment) ([]byte, error) {
+	var buf bytes.Buffer
+
+	// Crear boundary manualmente
+	boundary := "----=_NextPart_" + fmt.Sprintf("%d", time.Now().Unix())
+
+	// Headers del mensaje principal
+	buf.WriteString(fmt.Sprintf("From: %s\r\n", from))
+	buf.WriteString(fmt.Sprintf("To: %s\r\n", to))
+	buf.WriteString(fmt.Sprintf("Subject: %s\r\n", subject))
+	buf.WriteString("MIME-Version: 1.0\r\n")
+	buf.WriteString(fmt.Sprintf("Content-Type: multipart/mixed; boundary=\"%s\"\r\n\r\n", boundary))
+
+	// Parte del cuerpo HTML
+	buf.WriteString(fmt.Sprintf("--%s\r\n", boundary))
+	buf.WriteString("Content-Type: text/html; charset=\"UTF-8\"\r\n")
+	buf.WriteString("Content-Transfer-Encoding: 8bit\r\n\r\n")
+	buf.WriteString(body)
+	buf.WriteString("\r\n\r\n")
+
+	// Agregar adjuntos
+	for _, attachment := range attachments {
+		buf.WriteString(fmt.Sprintf("--%s\r\n", boundary))
+		buf.WriteString(fmt.Sprintf("Content-Type: %s\r\n", attachment.ContentType))
+		buf.WriteString("Content-Transfer-Encoding: base64\r\n")
+		buf.WriteString(fmt.Sprintf("Content-Disposition: attachment; filename=\"%s\"\r\n\r\n", attachment.Filename))
+
+		// Codificar datos en base64
+		encodedData := base64.StdEncoding.EncodeToString(attachment.Data)
+
+		// Dividir en líneas de 76 caracteres
+		for i := 0; i < len(encodedData); i += 76 {
+			end := i + 76
+			if end > len(encodedData) {
+				end = len(encodedData)
+			}
+			buf.WriteString(encodedData[i:end] + "\r\n")
+		}
+		buf.WriteString("\r\n")
+	}
+
+	// Cerrar el boundary
+	buf.WriteString(fmt.Sprintf("--%s--\r\n", boundary))
+
+	return buf.Bytes(), nil
+}
+
 func NewServerSMTP(emailFrom string, credentialsJSONPath string, tokenPath string) *ServerSMTP {
 	ctx := context.Background()
 

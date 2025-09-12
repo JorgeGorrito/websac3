@@ -3,7 +3,6 @@ package service
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"websac3/app/domain/entity"
 	"websac3/app/domain/errs"
 	"websac3/app/port/out/message"
@@ -57,8 +56,6 @@ func (s *CreateUserFromTokenService) Execute(token string, password string, lang
 						GetMessage("create_user", "access_request_not_found"),
 				)
 			}
-
-			fmt.Printf("accessRequest: %+v\n", accessRequest)
 
 			// 2. Verificar que la solicitud esté aprobada
 			if !accessRequest.IsApproved() {

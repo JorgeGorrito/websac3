@@ -27,12 +27,15 @@ func (e *EmailRepository) Create(emailToCreate *entity.EmailNotification, ctx _d
 		return err
 	}
 
+	// Crear el email (los adjuntos solo se guardan como nombres)
 	if err := dbCtx.DB().
 		Create(&email).
 		Error; err != nil {
 		return err
 	}
+
 	emailToCreate.ID = email.ID
+
 	return nil
 }
 
@@ -63,7 +66,6 @@ func (e *EmailRepository) GetChunkNotSent(chunkSize uint, page uint, ctx _db.Con
 	}
 
 	return emailNotifications, nil
-
 }
 
 func (e *EmailRepository) Update(email *entity.EmailNotification, ctx _db.Context) error {

@@ -71,6 +71,27 @@ func (n *NotificationAdapter) sendAsync() {
 }
 
 func (n *NotificationAdapter) Send(notification *entity.EmailNotification, ctx db.Context) error {
+	// Si tiene adjuntos, enviar inmediatamente (no guardar para envío asíncrono)
+	if len(notification.Attachments) > 0 {
+		// Enviar inmediatamente
+		if err := n.emailSender.Send(notification); err != nil {
+			n.logger.Error("Error al enviar correo electrónico con adjuntos. Error: %s", err.Error())
+			return err
+		}
+
+		// Marcar como enviado y guardar en DB
+		var currentTime time.Time = time.Now()
+		notification.SentAt = &currentTime
+
+		if err := n.createEmailPort.Create(notification, ctx); err != nil {
+			n.logger.Error("Error al registrar notificacion de correo electrónico enviado. Error: %s", err.Error())
+			return err
+		}
+
+		return nil
+	}
+
+	// Si no tiene adjuntos, usar el flujo normal (asíncrono)
 	if err := n.createEmailPort.Create(notification, ctx); err != nil {
 		n.logger.Error("Error al registrar notificacion de correo electrónico. Error: %s", err.Error())
 		return err

@@ -17,6 +17,23 @@ func registerDegreeProgramMappers() {
 					durationUnitPtr = &du
 				}
 			}
+
+			var userCreatorPtr *entity.User
+			if degreeProgramModel.UserCreator.ID != 0 {
+				if uc, err := Map[model.User, entity.User](&degreeProgramModel.UserCreator); err == nil {
+					userCreatorPtr = &uc
+				}
+			}
+
+			var courses []entity.Course
+			for _, cm := range degreeProgramModel.Courses {
+				ce, err := Map[model.Course, entity.Course](&cm)
+				if err != nil {
+					return entity.DegreeProgram{}, err
+				}
+				courses = append(courses, ce)
+			}
+
 			return entity.DegreeProgram{
 				ID:                  degreeProgramModel.ID,
 				Snies:               degreeProgramModel.Snies,
@@ -29,7 +46,9 @@ func registerDegreeProgramMappers() {
 				EntryProfile:        degreeProgramModel.EntryProfile,
 				GraduateProfile:     degreeProgramModel.GraduateProfile,
 				ProfessionalProfile: degreeProgramModel.ProfessionalProfile,
+				Courses:             courses,
 				CreatedBy:           degreeProgramModel.CreatedBy,
+				UserCreator:         userCreatorPtr,
 			}, nil
 		},
 	)
@@ -94,18 +113,59 @@ func registerDegreeProgramMappers() {
 					Name: degreeProgramEntity.DurationUnit.Name,
 				}
 			}
+
+			var heiResp *response.HigherEducationInstitutionInfo
+			if degreeProgramEntity.UserCreator != nil &&
+				degreeProgramEntity.UserCreator.Person != nil &&
+				degreeProgramEntity.UserCreator.Person.HigherEducationInstitution != nil {
+				hei := degreeProgramEntity.UserCreator.Person.HigherEducationInstitution
+				heiResp = &response.HigherEducationInstitutionInfo{
+					Snies:                 hei.Snies,
+					Name:                  hei.Name,
+					Ownership:             "",
+					InstitutionalCategory: "",
+					Municipality:          "",
+					Department:            "",
+				}
+
+				// Agregar información adicional si está disponible
+				if hei.Ownership != nil {
+					heiResp.Ownership = hei.Ownership.Name
+				}
+				if hei.InstitutionalCategory != nil {
+					heiResp.InstitutionalCategory = hei.InstitutionalCategory.Name
+				}
+				if hei.Municipality != nil {
+					heiResp.Municipality = hei.Municipality.Name
+				}
+				if hei.Department != nil {
+					heiResp.Department = hei.Department.Name
+				}
+			}
+
 			return response.ListDegreeProgramResponse{
-				ID:                  degreeProgramEntity.ID,
-				Snies:               degreeProgramEntity.Snies,
-				Name:                degreeProgramEntity.Name,
-				TotalCredits:        degreeProgramEntity.TotalCredits,
-				DurationValue:       degreeProgramEntity.DurationValue,
-				DurationUnit:        durResp,
-				ProgramFocus:        degreeProgramEntity.ProgramFocus,
-				EntryProfile:        degreeProgramEntity.EntryProfile,
-				GraduateProfile:     degreeProgramEntity.GraduateProfile,
-				ProfessionalProfile: degreeProgramEntity.ProfessionalProfile,
-				CreatedBy:           degreeProgramEntity.CreatedBy,
+				ID:                         degreeProgramEntity.ID,
+				Snies:                      degreeProgramEntity.Snies,
+				Name:                       degreeProgramEntity.Name,
+				TotalCredits:               degreeProgramEntity.TotalCredits,
+				DurationValue:              degreeProgramEntity.DurationValue,
+				DurationUnit:               durResp,
+				ProgramFocus:               degreeProgramEntity.ProgramFocus,
+				EntryProfile:               degreeProgramEntity.EntryProfile,
+				GraduateProfile:            degreeProgramEntity.GraduateProfile,
+				ProfessionalProfile:        degreeProgramEntity.ProfessionalProfile,
+				CreatedBy:                  degreeProgramEntity.CreatedBy,
+				HigherEducationInstitution: heiResp,
+			}, nil
+		},
+	)
+
+	// Evaluate Degree Program mappers
+	RegisterMapFunc(
+		func(req *request.EvaluateDegreeProgramRequest) (command.EvaluateDegreeProgramCommand, error) {
+			return command.EvaluateDegreeProgramCommand{
+				DegreeProgramID:    req.DegreeProgramID,
+				ProfessionalRoleID: req.ProfessionalRoleID,
 			}, nil
 		},
 	)

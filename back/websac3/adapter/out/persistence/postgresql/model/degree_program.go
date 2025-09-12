@@ -19,6 +19,8 @@ type DegreeProgram struct {
 	GraduateProfile     string       `gorm:"varchar(255)" json:"graduate_profile"`
 	ProfessionalProfile string       `gorm:"varchar(255)" json:"professional_profile"`
 
+	Courses []Course `gorm:"foreignKey:DegreeProgramID" json:"courses"`
+
 	CreatedBy   uint `gorm:"not null" json:"created_by"`
 	UserCreator User `gorm:"foreignKey:CreatedBy"`
 

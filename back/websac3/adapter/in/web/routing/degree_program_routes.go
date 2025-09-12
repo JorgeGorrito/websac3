@@ -16,8 +16,14 @@ func registerListDegreeProgramRoute(routerGroup *gin.RouterGroup) {
 	routerGroup.GET("/degree-program", listDegreeProgramController.Handle)
 }
 
+func registerEvaluateDegreeProgramRoute(routerGroup *gin.RouterGroup) {
+	var evaluateDegreeProgramController = controller.GetEvaluateDegreeProgramController()
+	routerGroup.POST("/degree-program/evaluate", evaluateDegreeProgramController.Handle)
+}
+
 func RegisterDegreeProgramRoutes(routerGroup *gin.RouterGroup) {
 	authGroup := getAuthRequiredGroup(routerGroup)
 	registerCreateDegreeProgramRoute(authGroup)
 	registerListDegreeProgramRoute(authGroup)
+	registerEvaluateDegreeProgramRoute(authGroup)
 }

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluation Report - WebSAC3</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td align="center" style="padding: 40px 0;">
+            <table width="950" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 30px;">
+                <tr>
+                    <td align="center" style="padding-bottom: 16px;">
+                        <img src="https://drive.google.com/uc?export=view&id=1URKicNwfwyxUvxz_BWTGh42EIDTY2HV7" alt="WebSAC3" width="180" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-bottom: 8px;">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <!-- Left Column: Information -->
+                                <td style="vertical-align: top; width: 70%; padding-right: 30px;">
+                                    <h2 style="color: #2c3e50; margin: 0 0 8px; font-size: 24px;">Evaluation Report</h2>
+                                    <p style="font-size: 14px; color: #666; margin: 0 0 20px; line-height: 1.4;">Results of the cybersecurity component evaluation</p>
+                                    
+                                    <!-- Institution Rectangle -->
+                                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 16px;">
+                                        <tr>
+                                            <td style="padding: 16px; background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="width:20%; vertical-align:top; padding-right: 16px;">
+                                                            <div style="font-size:11px; color:#6c757d; margin-bottom: 4px; font-weight: 500;">Institution SNIES</div>
+                                                            <div style="font-size:15px; font-weight:700; color:#2c3e50;">
+                                                                {{if .HigherEducationInstitution}}
+                                                                    {{.HigherEducationInstitution.Snies}}
+                                                                {{else}}
+                                                                    N/A
+                                                                {{end}}
+                                                            </div>
+                                                        </td>
+                                                        <td style="width:50%; vertical-align:top; padding-right: 16px;">
+                                                            <div style="font-size:11px; color:#6c757d; margin-bottom: 4px; font-weight: 500;">Institution</div>
+                                                            <div style="font-size:15px; font-weight:700; color:#2c3e50; line-height: 1.3;">
+                                                                {{if .HigherEducationInstitution}}
+                                                                    {{.HigherEducationInstitution.Name}}
+                                                                {{else}}
+                                                                    Not available
+                                                                {{end}}
+                                                            </div>
+                                                        </td>
+                                                        <td style="width:30%; vertical-align:top;">
+                                                            <div style="font-size:11px; color:#6c757d; margin-bottom: 4px; font-weight: 500;">Report date</div>
+                                                            <div style="font-size:15px; font-weight:700; color:#2c3e50;">{{.ReportDate}}</div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                    <!-- Program Rectangle -->
+                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td style="padding: 16px; background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="width:20%; vertical-align:top; padding-right: 16px;">
+                                                            <div style="font-size:11px; color:#6c757d; margin-bottom: 4px; font-weight: 500;">Program SNIES</div>
+                                                            <div style="font-size:15px; font-weight:700; color:#2c3e50;">{{.DegreeProgram.Snies}}</div>
+                                                        </td>
+                                                        <td style="width:30%; vertical-align:top; padding-right: 16px;">
+                                                            <div style="font-size:11px; color:#6c757d; margin-bottom: 4px; font-weight: 500;">Program</div>
+                                                            <div style="font-size:15px; font-weight:700; color:#2c3e50; line-height: 1.3;">{{.DegreeProgram.Name}}</div>
+                                                        </td>
+                                                        <td style="width:30%; vertical-align:top; padding-right: 16px;">
+                                                            <div style="font-size:11px; color:#6c757d; margin-bottom: 4px; font-weight: 500;">Professional role</div>
+                                                            <div style="font-size:15px; font-weight:700; color:#2c3e50;">{{.ProfessionalRole.Name}}</div>
+                                                        </td>
+                                                        <td style="width:20%; vertical-align:top;">
+                                                            <div style="font-size:11px; color:#6c757d; margin-bottom: 4px; font-weight: 500;">Total score</div>
+                                                            <div style="font-size:15px; font-weight:700; color:#2c3e50;">{{printf "%.2f" .Score}}</div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                
+                                <!-- Right Column: Chart -->
+                                <td style="vertical-align: middle; width: 30%; text-align: center; padding-left: 20px;">
+                                    {{$score := .Score}}
+                                    {{$percentage := printf "%.0f" (mul $score 100)}}
+                                    {{$strokeColor := "#dc3545"}}
+                                    {{$statusText := "Needs Improvement"}}
+                                    {{if ge $score 0.9}}
+                                        {{$strokeColor = "#28a745"}}
+                                        {{$statusText = "Excellent"}}
+                                    {{else if ge $score 0.8}}
+                                        {{$strokeColor = "#ffc107"}}
+                                        {{$statusText = "Acceptable"}}
+                                    {{end}}
+                                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                                        <svg width="140" height="140" style="transform: rotate(-90deg); margin-bottom: 12px;">
+                                            <circle cx="70" cy="70" r="60" fill="none" stroke="#e9ecef" stroke-width="6"/>
+                                            <circle cx="70" cy="70" r="60" fill="none" stroke="{{$strokeColor}}" stroke-width="6" 
+                                                    stroke-dasharray="{{printf "%.2f" (mul $score 376.99)}} 376.99" 
+                                                    stroke-linecap="round"/>
+                                            <text x="70" y="75" text-anchor="middle" style="transform: rotate(90deg) translate(0px, -140px); font-size: 20px; font-weight: bold; fill: #2c3e50;">{{$percentage}}%</text>
+                                        </svg>
+                                        <div style="text-align: center; font-size: 13px; color: {{$strokeColor}}; font-weight: 600; background: rgba(220, 53, 69, 0.1); padding: 6px 12px; border-radius: 20px; border: 1px solid {{$strokeColor}};">{{$statusText}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 16px 0;">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        {{range .KnowledgeAreaReports}}
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin: 14px 0 10px;">
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    <h3 style="color:#5e35b1; margin: 0 0 8px;">Knowledge area: {{.Name}}</h3>
+                                    <p style="font-size: 13px; color:#555; margin:6px 0 0;">
+                                        <strong>Expected hours:</strong> {{printf "%.2f" .TotalLearnHoursExpected}} ·
+                                        <strong>Actual hours:</strong> {{printf "%.2f" .TotalLearnHoursActual}} ·
+                                        <strong>Weight (0–1):</strong> {{printf "%.2f" .ScoreExpected}} ·
+                                        <strong>Weighted (got):</strong> {{printf "%.2f" .ScoreGot}}
+                                    </p>
+                                </td>
+                                <td style="vertical-align: top; text-align: right; width: 100px;">
+                                    {{$kaScore := .ScoreGot}}
+                                    {{$kaExpected := .ScoreExpected}}
+                                    {{$kaPercentage := printf "%.0f" (mul (div $kaScore $kaExpected) 100)}}
+                                    {{$kaStrokeColor := "#dc3545"}}
+                                    {{$kaStatusText := "Needs Improvement"}}
+                                    {{$kaProgress := div $kaScore $kaExpected}}
+                                    {{if ge $kaProgress 0.9}}
+                                        {{$kaStrokeColor = "#28a745"}}
+                                        {{$kaStatusText = "Excellent"}}
+                                    {{else if ge $kaProgress 0.8}}
+                                        {{$kaStrokeColor = "#ffc107"}}
+                                        {{$kaStatusText = "Acceptable"}}
+                                    {{end}}
+                                    <svg width="60" height="60" style="transform: rotate(-90deg);">
+                                        <circle cx="30" cy="30" r="22" fill="none" stroke="#e0e0e0" stroke-width="4"/>
+                                        <circle cx="30" cy="30" r="22" fill="none" stroke="{{$kaStrokeColor}}" stroke-width="4" 
+                                                stroke-dasharray="{{printf "%.2f" (mul $kaProgress 138.23)}} 138.23" 
+                                                stroke-linecap="round"/>
+                                        <text x="30" y="33" text-anchor="middle" style="transform: rotate(90deg) translate(0px, -60px); font-size: 10px; font-weight: bold; fill: #333;">{{$kaPercentage}}%</text>
+                                    </svg>
+                                    <div style="text-align: center; font-size: 9px; color: {{$kaStrokeColor}}; font-weight: 600; margin-top: 4px;">{{$kaStatusText}}</div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse; margin-bottom: 14px;">
+                            <thead>
+                                <tr>
+                                    <th align="left" style="background:#f0f1f6; color:#333; font-size:12px; padding:8px; border:1px solid #e6e8f0;">Topic</th>
+                                    <th align="left" style="background:#f0f1f6; color:#333; font-size:12px; padding:8px; border:1px solid #e6e8f0;">Expected hours</th>
+                                    <th align="left" style="background:#f0f1f6; color:#333; font-size:12px; padding:8px; border:1px solid #e6e8f0;">Actual hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{range .TopicReports}}
+                                <tr>
+                                    <td style="font-size:12px; color:#333; padding:8px; border:1px solid #ececf5;">{{.Name}}</td>
+                                    <td style="font-size:12px; color:#333; padding:8px; border:1px solid #ececf5;">{{printf "%.2f" .LearnHoursExpected}}</td>
+                                    <td style="font-size:12px; color:#333; padding:8px; border:1px solid #ececf5;">{{printf "%.2f" .LearnHoursActual}}</td>
+                                </tr>
+                                {{end}}
+                            </tbody>
+                        </table>
+                        {{end}}
+
+                        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
+                        <div style="text-align: center; margin: 12px 0;">
+                            <img src="https://drive.google.com/uc?export=view&id=15By-VP-FG_DYjmO5Kq1byMkbQnTNguxR" alt="Universidad de los Llanos" style="width: 100px; margin: 0 10px;" />
+                            <img src="https://drive.google.com/uc?export=view&id=1s_Lhxq-tvV2oG_XR-aUkT76d0muebQcP" alt="Facultad de Ciencias Básicas e Ingeniería" style="width: 100px; margin: 0 10px;" />
+                        </div>
+                        <p style="font-size: 12px; color: #aaa; text-align:center; margin: 0;">
+                            Universidad de los Llanos • Facultad de Ciencias Básicas e Ingeniería
+                        </p>
+                        <p style="font-size: 11px; color: #bbb; text-align:center; margin: 8px 0 0;">
+                            WebSAC3 – Web System for Analysis of Curricula Cybersecurity Component
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
+
+

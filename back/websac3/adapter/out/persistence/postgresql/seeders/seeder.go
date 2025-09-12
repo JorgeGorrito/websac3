@@ -15,6 +15,7 @@ type NewSeeder func() Seeder
 
 var registry map[string]NewSeeder = map[string]NewSeeder{
 	"essential_data": EssentialData,
+	"devsecops_role": DevSecOpsRole,
 }
 
 func GetSeederConstructorByName(name string) NewSeeder {

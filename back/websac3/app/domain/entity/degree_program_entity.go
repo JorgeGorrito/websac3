@@ -14,4 +14,18 @@ type DegreeProgram struct {
 	ProfessionalProfile string
 	CreatedBy           uint
 	UserCreator         *User
+
+	Courses []Course
+}
+
+func (e *DegreeProgram) IsRegistered() bool {
+	return e.ID != 0
+}
+
+func (e *DegreeProgram) GetCourseTopics() []CourseTopic {
+	var courseTopics []CourseTopic = make([]CourseTopic, 0)
+	for _, course := range e.Courses {
+		courseTopics = append(courseTopics, course.GetCourseTopics()...)
+	}
+	return courseTopics
 }

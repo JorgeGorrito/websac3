@@ -5,6 +5,7 @@ go 1.23.5
 require (
 	github.com/JorgeGorrito/anise-dependency-injection v0.1.0-alpha.1
 	github.com/JorgeGorrito/anise-with-gin v0.1.0-alpha.15
+	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.3
 	github.com/gin-gonic/gin v1.10.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-jwt/jwt/v5 v5.3.0

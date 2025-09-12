@@ -34,6 +34,18 @@ func (m *manager) registerTemplateDependencies() {
 					"access_request_rejected:en": atemplate.NewAccessRequestRejectedTemplate(
 						baseDir + "en/access_request_rejected.html",
 					),
+					"report:es": atemplate.NewReportTemplate(
+						baseDir + "es/report.html",
+					),
+					"report:en": atemplate.NewReportTemplate(
+						baseDir + "en/report.html",
+					),
+					"degree_program_evaluation:es": atemplate.NewDegreeProgramEvaluationTemplate(
+						baseDir + "es/degree_program_evaluation.html",
+					),
+					"degree_program_evaluation:en": atemplate.NewDegreeProgramEvaluationTemplate(
+						baseDir + "en/degree_program_evaluation.html",
+					),
 				},
 			)
 		},

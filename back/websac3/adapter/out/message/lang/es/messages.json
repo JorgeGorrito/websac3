@@ -15,6 +15,13 @@
   "list_degree_program" : {
     "not_found" : "No se encontraron programas de grado."
   },
+  "evaluate_degree_program" : {
+    "not_found" : "No se encontró el programa de grado a evaluar.",
+    "professional_role_not_found": "No se encontró el rol profesional.",
+    "user_email_not_found": "El usuario no tiene un email configurado para recibir el reporte.",
+    "report_email_subject": "Reporte de Evaluación de Programa de Grado",
+    "report_sent_successfully": "El reporte de evaluación ha sido enviado a su correo exitosamente."
+  },
   "list_higher_education_institution": {
     "not_found": "No se encontraron instituciones de educación superior."
   },

@@ -63,7 +63,7 @@ func (s *ListDegreeProgramService) Execute(
 				)
 			} else {
 				// Si no es admin, traer solo los degree programs creados por el usuario
-				durationUnits, total, err = s.getDegreeProgramPort.GetByIDAndFilters(
+				durationUnits, total, err = s.getDegreeProgramPort.GetByUserIDAndFilters(
 					page,
 					perPage,
 					userID,

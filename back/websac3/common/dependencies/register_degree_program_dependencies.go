@@ -5,6 +5,9 @@ import (
 	"websac3/app/domain/service"
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/message"
+	"websac3/app/port/out/notification"
+	"websac3/app/port/out/notification/template"
+	"websac3/app/port/out/pdf"
 	"websac3/app/port/out/persistence"
 	"websac3/app/port/out/persistence/db"
 	"websac3/app/port/out/persistence/enum"
@@ -14,6 +17,27 @@ import (
 )
 
 func (m *manager) registerDegreeProgramDependencies() {
+	m.binder.Bind(
+		andi.GetAbstractType[persistence.GetProfessionalRolePort](),
+		func() any { return repository.NewProfessionalRoleRepository() },
+	)
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.EvaluateDegreeProgramUseCase](),
+		func() any {
+			return service.NewEvaluateDegreeProgramService(
+				container.Inject[persistence.GetDegreeProgramPort](),
+				container.Inject[persistence.GetProfessionalRolePort](),
+				container.Inject[persistence.CreateReportPort](),
+				container.Inject[usecase.GetUserByIDUseCase](),
+				container.Inject[message.Provider](),
+				container.Inject[template.Provider](),
+				container.Inject[pdf.Converter](),
+				container.Inject[notification.SendMailPort](),
+				container.Inject[db.Manager](),
+			)
+		},
+	)
+
 	m.binder.Bind(
 		andi.GetAbstractType[persistence.DegreeProgramPort](),
 		func() any { return repository.NewDegreeProgramRepository() },

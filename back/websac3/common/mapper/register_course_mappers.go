@@ -9,19 +9,38 @@ import (
 
 func registerCourseMappers() {
 	RegisterMapFunc(
+		func(ct *model.CourseTopic) (entity.CourseTopic, error) {
+			return entity.CourseTopic{
+				CourseID:   ct.CourseID,
+				TopicID:    ct.TopicID,
+				StudyHours: float32(ct.StudyHours),
+			}, nil
+		},
+	)
+
+	RegisterMapFunc(
 		func(courseModel *model.Course) (entity.Course, error) {
+			var courseTopics []entity.CourseTopic
+			for _, ct := range courseModel.CourseTopics {
+				mapped, err := Map[model.CourseTopic, entity.CourseTopic](&ct)
+				if err != nil {
+					return entity.Course{}, err
+				}
+				courseTopics = append(courseTopics, mapped)
+			}
+
 			return entity.Course{
-				ID:                          courseModel.ID,
-				Name:                        courseModel.Name,
-				Code:                        courseModel.Code,
-				Credits:                     courseModel.Credits,
-				PeriodNumber:                courseModel.PeriodNumber,
-				NatureID:                    courseModel.NatureID,
-				TypeID:                      courseModel.TypeID,
-				IsCybersecurity:             courseModel.IsCybersecurity,
-				ContainsCybersecurityTopics: courseModel.ContainsCybersecurityTopics,
-				DegreeProgramID:             courseModel.DegreeProgramID,
-				CreatedBy:                   courseModel.CreatedBy,
+				ID:              courseModel.ID,
+				Name:            courseModel.Name,
+				Code:            courseModel.Code,
+				Credits:         courseModel.Credits,
+				PeriodNumber:    courseModel.PeriodNumber,
+				NatureID:        courseModel.NatureID,
+				TypeID:          courseModel.TypeID,
+				IsCybersecurity: courseModel.IsCybersecurity,
+				DegreeProgramID: courseModel.DegreeProgramID,
+				CourseTopics:    courseTopics,
+				CreatedBy:       courseModel.CreatedBy,
 			}, nil
 		},
 	)
@@ -37,7 +56,7 @@ func registerCourseMappers() {
 				NatureID:                    courseEntity.NatureID,
 				TypeID:                      courseEntity.TypeID,
 				IsCybersecurity:             courseEntity.IsCybersecurity,
-				ContainsCybersecurityTopics: courseEntity.ContainsCybersecurityTopics,
+				ContainsCybersecurityTopics: courseEntity.ContainsCybersecurityTopics(),
 				DegreeProgramID:             courseEntity.DegreeProgramID,
 				CreatedBy:                   courseEntity.CreatedBy,
 			}, nil
@@ -71,17 +90,24 @@ func registerCourseMappers() {
 
 	RegisterMapFunc(
 		func(command *command.CreateCourseCommand) (entity.Course, error) {
+			var courseTopics []entity.CourseTopic
+			for _, t := range command.CourseTopics {
+				courseTopics = append(courseTopics, entity.CourseTopic{
+					TopicID:    t.TopicID,
+					StudyHours: float32(t.StudyHours),
+				})
+			}
 			return entity.Course{
-				Name:                        command.Name,
-				Code:                        command.Code,
-				Credits:                     command.Credits,
-				PeriodNumber:                command.PeriodNumber,
-				NatureID:                    command.NatureID,
-				TypeID:                      command.TypeID,
-				IsCybersecurity:             command.IsCybersecurity,
-				ContainsCybersecurityTopics: command.ContainsCybersecurityTopics,
-				DegreeProgramID:             command.DegreeProgramID,
-				CreatedBy:                   command.CreatedBy,
+				Name:            command.Name,
+				Code:            command.Code,
+				Credits:         command.Credits,
+				PeriodNumber:    command.PeriodNumber,
+				NatureID:        command.NatureID,
+				TypeID:          command.TypeID,
+				IsCybersecurity: command.IsCybersecurity,
+				DegreeProgramID: command.DegreeProgramID,
+				CourseTopics:    courseTopics,
+				CreatedBy:       command.CreatedBy,
 			}, nil
 		},
 	)
