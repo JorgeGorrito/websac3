@@ -34,4 +34,15 @@ func (m *manager) registerReportDependencies() {
 			)
 		},
 	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.GetReportByIDUseCase](),
+		func() any {
+			return service.NewGetReportByIDService(
+				container.Inject[persistence.GetReportPort](),
+				container.Inject[message.Provider](),
+				container.Inject[db.Manager](),
+			)
+		},
+	)
 }

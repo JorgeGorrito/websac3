@@ -76,3 +76,31 @@ func (r *ReportRepository) GetByDegreeProgramID(degreeProgramID uint, ctx _db.Co
 
 	return reportEntities, nil
 }
+
+func (r *ReportRepository) GetByID(reportID uint, ctx _db.Context) (entity.Report, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return entity.Report{}, err
+	}
+
+	var report model.Report
+	if err := dbCtx.DB().
+		Model(&model.Report{}).
+		Preload("DegreeProgram").
+		Preload("DegreeProgram.DurationUnit").
+		Preload("DegreeProgram.DurationUnit.Names").
+		Preload("DegreeProgram.UserCreator").
+		Preload("DegreeProgram.UserCreator.Person").
+		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution").
+		Preload("ProfessionalRole").
+		Preload("KnowledgeAreaReports").
+		Preload("KnowledgeAreaReports.TopicReports").
+		Preload("KnowledgeAreaReports.TopicReports.Topic").
+		Preload("KnowledgeAreaReports.TopicReports.Topic.Names").
+		Where("reports.id = ?", reportID).
+		First(&report).Error; err != nil {
+		return entity.Report{}, err
+	}
+
+	return mapper.Map[model.Report, entity.Report](&report)
+}

@@ -149,6 +149,14 @@ func registerReportMappers() {
 		},
 	)
 
+	RegisterMapFunc(
+		func(req *request.GetReportByIDRequest) (query.GetReportByIDQuery, error) {
+			return query.GetReportByIDQuery{
+				ReportID: req.ReportID,
+			}, nil
+		},
+	)
+
 	// Entity to Response mappers
 	RegisterMapFunc(
 		func(reportEntity *entity.Report) (response.ListReportResponse, error) {
