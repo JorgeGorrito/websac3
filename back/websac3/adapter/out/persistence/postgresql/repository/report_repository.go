@@ -38,3 +38,41 @@ func (r *ReportRepository) Create(reportToSave *entity.Report, ctx _db.Context) 
 	// Devolver la entidad guardada
 	return reportToSave, nil
 }
+
+func (r *ReportRepository) GetByDegreeProgramID(degreeProgramID uint, ctx _db.Context) ([]entity.Report, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var reports []model.Report
+	if err := dbCtx.DB().
+		Model(&model.Report{}).
+		Preload("DegreeProgram").
+		Preload("DegreeProgram.DurationUnit").
+		Preload("DegreeProgram.DurationUnit.Names").
+		Preload("DegreeProgram.UserCreator").
+		Preload("DegreeProgram.UserCreator.Person").
+		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution").
+		Preload("ProfessionalRole").
+		Preload("KnowledgeAreaReports").
+		Preload("KnowledgeAreaReports.TopicReports").
+		Preload("KnowledgeAreaReports.TopicReports.Topic").
+		Preload("KnowledgeAreaReports.TopicReports.Topic.Names").
+		Where("degree_program_id = ?", degreeProgramID).
+		Order("created_at DESC").
+		Find(&reports).Error; err != nil {
+		return nil, err
+	}
+
+	var reportEntities []entity.Report
+	for _, reportModel := range reports {
+		reportEntity, err := mapper.Map[model.Report, entity.Report](&reportModel)
+		if err != nil {
+			return nil, err
+		}
+		reportEntities = append(reportEntities, reportEntity)
+	}
+
+	return reportEntities, nil
+}

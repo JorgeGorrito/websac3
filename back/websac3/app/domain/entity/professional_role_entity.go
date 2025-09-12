@@ -66,8 +66,8 @@ type Report struct {
 	Score                float32
 	// Información de la institución de educación superior
 	HigherEducationInstitution *HigherEducationInstitution
-	// Fecha del reporte
-	ReportDate string
+	// Fecha de creación
+	CreatedAt time.Time
 }
 
 func NewReport(
@@ -87,7 +87,7 @@ func NewReport(
 		KnowledgeAreaReports:       []KnowledgeAreaReport{},
 		Score:                      0.0,
 		HigherEducationInstitution: higherEducationInstitution,
-		ReportDate:                 time.Now().Format("02/01/2006"),
+		CreatedAt:                  time.Now(),
 	}
 }
 

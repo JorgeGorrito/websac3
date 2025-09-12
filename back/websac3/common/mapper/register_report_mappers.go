@@ -1,8 +1,11 @@
 package mapper
 
 import (
+	"websac3/adapter/in/web/request"
+	"websac3/adapter/in/web/response"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
+	"websac3/app/port/in/dto/query"
 )
 
 func registerReportMappers() {
@@ -10,11 +13,11 @@ func registerReportMappers() {
 	RegisterMapFunc(
 		func(topicReportEntity *entity.TopicReport) (model.TopicReport, error) {
 			return model.TopicReport{
-				ID:                    topicReportEntity.ID,
-				TopicID:               topicReportEntity.TopicID,
-				Name:                  topicReportEntity.Name,
-				LearnHoursExpected:    topicReportEntity.LearnHoursExpected,
-				LearnHoursActual:      topicReportEntity.LearnHoursActual,
+				ID:                 topicReportEntity.ID,
+				TopicID:            topicReportEntity.TopicID,
+				Name:               topicReportEntity.Name,
+				LearnHoursExpected: topicReportEntity.LearnHoursExpected,
+				LearnHoursActual:   topicReportEntity.LearnHoursActual,
 			}, nil
 		},
 	)
@@ -131,8 +134,69 @@ func registerReportMappers() {
 				ProfessionalRole:     professionalRole,
 				KnowledgeAreaReports: knowledgeAreaReports,
 				Score:                reportModel.Score,
-				// Note: ReportDate and HigherEducationInstitution are not stored in the model
-				// They would need to be reconstructed from related data if needed
+				CreatedAt:            reportModel.CreatedAt,
+				// Note: HigherEducationInstitution would need to be reconstructed from related data if needed
+			}, nil
+		},
+	)
+
+	// Request to Query mappers
+	RegisterMapFunc(
+		func(req *request.ListReportsByDegreeProgramRequest) (query.ListReportsByDegreeProgramQuery, error) {
+			return query.ListReportsByDegreeProgramQuery{
+				DegreeProgramID: req.DegreeProgramID,
+			}, nil
+		},
+	)
+
+	// Entity to Response mappers
+	RegisterMapFunc(
+		func(reportEntity *entity.Report) (response.ListReportResponse, error) {
+			// Map DegreeProgram
+			degreeProgramResp, err := Map[entity.DegreeProgram, response.ListDegreeProgramResponse](&reportEntity.DegreeProgram)
+			if err != nil {
+				return response.ListReportResponse{}, err
+			}
+
+			// Map ProfessionalRole
+			professionalRoleResp := response.ProfessionalRoleResponse{
+				ID:   reportEntity.ProfessionalRole.ID,
+				Name: reportEntity.ProfessionalRole.Name,
+			}
+
+			// Map KnowledgeAreaReports
+			var knowledgeAreaReports []response.KnowledgeAreaReportResponse
+			for _, kar := range reportEntity.KnowledgeAreaReports {
+				var topicReports []response.TopicReportResponse
+				for _, tr := range kar.TopicReports {
+					topicReports = append(topicReports, response.TopicReportResponse{
+						ID:                 tr.ID,
+						TopicID:            tr.TopicID,
+						Name:               tr.Name,
+						LearnHoursExpected: tr.LearnHoursExpected,
+						LearnHoursActual:   tr.LearnHoursActual,
+					})
+				}
+
+				knowledgeAreaReports = append(knowledgeAreaReports, response.KnowledgeAreaReportResponse{
+					ID:                      kar.ID,
+					Name:                    kar.Name,
+					TotalLearnHoursExpected: kar.TotalLearnHoursExpected,
+					TotalLearnHoursActual:   kar.TotalLearnHoursActual,
+					ScoreExpected:           kar.ScoreExpected,
+					ScoreGot:                kar.ScoreGot,
+					TopicReports:            topicReports,
+				})
+			}
+
+			return response.ListReportResponse{
+				ID:                   reportEntity.ID,
+				DegreeProgramID:      reportEntity.DegreeProgram.ID,
+				DegreeProgram:        degreeProgramResp,
+				ProfessionalRole:     professionalRoleResp,
+				Score:                reportEntity.Score,
+				CreatedAt:            reportEntity.CreatedAt,
+				KnowledgeAreaReports: knowledgeAreaReports,
 			}, nil
 		},
 	)
