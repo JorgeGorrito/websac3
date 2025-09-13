@@ -39,42 +39,49 @@ func (r *ReportRepository) Create(reportToSave *entity.Report, ctx _db.Context) 
 	return reportToSave, nil
 }
 
-func (r *ReportRepository) GetByDegreeProgramID(degreeProgramID uint, ctx _db.Context) ([]entity.Report, error) {
+func (r *ReportRepository) GetByDegreeProgramID(degreeProgramID uint, page, perPage uint, ctx _db.Context) ([]entity.Report, int64, error) {
 	dbCtx, err := r.CastDbContext(ctx)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
+	// Contar total de registros
+	var total int64
+	if err := dbCtx.DB().
+		Model(&model.Report{}).
+		Where("degree_program_id = ?", degreeProgramID).
+		Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Calcular offset
+	offset := (page - 1) * perPage
+
+	// Obtener reportes paginados (solo campos básicos para list)
 	var reports []model.Report
 	if err := dbCtx.DB().
 		Model(&model.Report{}).
-		Preload("DegreeProgram").
-		Preload("DegreeProgram.DurationUnit").
-		Preload("DegreeProgram.DurationUnit.Names").
-		Preload("DegreeProgram.UserCreator").
-		Preload("DegreeProgram.UserCreator.Person").
-		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution").
-		Preload("ProfessionalRole").
-		Preload("KnowledgeAreaReports").
-		Preload("KnowledgeAreaReports.TopicReports").
-		Preload("KnowledgeAreaReports.TopicReports.Topic").
-		Preload("KnowledgeAreaReports.TopicReports.Topic.Names").
+		Select("id, degree_program_id, professional_role_id, score, created_at").
 		Where("degree_program_id = ?", degreeProgramID).
 		Order("created_at DESC").
+		Limit(int(perPage)).
+		Offset(int(offset)).
 		Find(&reports).Error; err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	var reportEntities []entity.Report
 	for _, reportModel := range reports {
-		reportEntity, err := mapper.Map[model.Report, entity.Report](&reportModel)
-		if err != nil {
-			return nil, err
+		// Para list solo necesitamos campos básicos
+		reportEntity := entity.Report{
+			ID:        reportModel.ID,
+			Score:     reportModel.Score,
+			CreatedAt: reportModel.CreatedAt,
 		}
 		reportEntities = append(reportEntities, reportEntity)
 	}
 
-	return reportEntities, nil
+	return reportEntities, total, nil
 }
 
 func (r *ReportRepository) GetByID(reportID uint, ctx _db.Context) (entity.Report, error) {

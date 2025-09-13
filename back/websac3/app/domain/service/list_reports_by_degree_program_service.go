@@ -29,8 +29,9 @@ func NewListReportsByDegreeProgramService(
 	}
 }
 
-func (s *ListReportsByDegreeProgramService) Execute(degreeProgramID uint, lang string) ([]entity.Report, error) {
+func (s *ListReportsByDegreeProgramService) Execute(degreeProgramID uint, page, perPage uint, lang string) ([]entity.Report, int64, error) {
 	var reports []entity.Report
+	var total int64
 	err := s.persistenceManager.ExecuteInTransaction(func(ctx db.Context) error {
 		// Verificar que el programa de grado existe
 		degreeProgram, err := s.getDegreeProgramPort.GetByID(degreeProgramID, ctx)
@@ -41,8 +42,8 @@ func (s *ListReportsByDegreeProgramService) Execute(degreeProgramID uint, lang s
 			return errs.NewNotFoundError(s.msgProvider.WithLang(lang).GetMessage("degree_program", "not_found"))
 		}
 
-		// Obtener los reportes del programa de grado
-		reports, err = s.getReportPort.GetByDegreeProgramID(degreeProgramID, ctx)
+		// Obtener los reportes del programa de grado con paginación
+		reports, total, err = s.getReportPort.GetByDegreeProgramID(degreeProgramID, page, perPage, ctx)
 		if err != nil {
 			return err
 		}
@@ -51,8 +52,8 @@ func (s *ListReportsByDegreeProgramService) Execute(degreeProgramID uint, lang s
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return reports, nil
+	return reports, total, nil
 }

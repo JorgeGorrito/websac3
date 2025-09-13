@@ -4,12 +4,11 @@ import (
 	"net/http"
 	"websac3/adapter/in/web/handler"
 	"websac3/adapter/in/web/response"
-	"websac3/app/domain/entity"
 	"websac3/app/port/in/dto/query"
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/message"
 	"websac3/common/logging"
-	"websac3/common/mapper"
+	"websac3/common/paginator"
 	"websac3/common/validator"
 )
 
@@ -36,7 +35,7 @@ func NewListReportsByDegreeProgramQueryHandler(
 	}
 }
 
-func (h *ListReportsByDegreeProgramQueryHandler) Handle(request query.ListReportsByDegreeProgramQuery, lang string) (response.ApiResponse[[]response.ListReportResponse], error) {
+func (h *ListReportsByDegreeProgramQueryHandler) Handle(request query.ListReportsByDegreeProgramQuery, lang string) (response.ApiResponse[paginator.Page[response.ListReportSummaryResponse]], error) {
 	h.logger.Info("Inicio de consulta de reportes para el programa de grado ID: %d", request.DegreeProgramID)
 
 	if err := h.validator.ValidateFields(&request, lang); err != nil {
@@ -45,16 +44,17 @@ func (h *ListReportsByDegreeProgramQueryHandler) Handle(request query.ListReport
 		for n := range err {
 			validationErrors = append(validationErrors, err[n].Error())
 		}
-		return response.ApiResponse[[]response.ListReportResponse]{
+		return response.ApiResponse[paginator.Page[response.ListReportSummaryResponse]]{
 			HttpStatusCode: http.StatusBadRequest,
 			Errors:         validationErrors,
 		}, nil
 	}
 
-	reports, err := h.listReportsByDegreeProgramUseCase.Execute(request.DegreeProgramID, lang)
+	pagination := &request.PaginationParams
+	reports, total, err := h.listReportsByDegreeProgramUseCase.Execute(request.DegreeProgramID, pagination.Currentpage, pagination.ItemsPerpage, lang)
 	if err != nil {
 		h.logger.Error("Error al obtener reportes para el programa de grado ID: %d. Error: %v", request.DegreeProgramID, err)
-		return response.ApiResponse[[]response.ListReportResponse]{
+		return response.ApiResponse[paginator.Page[response.ListReportSummaryResponse]]{
 			HttpStatusCode: http.StatusInternalServerError,
 			Errors: []string{
 				h.msgProvider.WithLang(lang).GetMessage("base_error", "internal_error"),
@@ -62,24 +62,28 @@ func (h *ListReportsByDegreeProgramQueryHandler) Handle(request query.ListReport
 		}, nil
 	}
 
-	var reportResponses []response.ListReportResponse
+	var reportResponses []response.ListReportSummaryResponse
 	for _, report := range reports {
-		reportResponse, err := mapper.Map[entity.Report, response.ListReportResponse](&report)
-		if err != nil {
-			h.logger.Error("Error al mapear reporte a response. Error: %v", err)
-			return response.ApiResponse[[]response.ListReportResponse]{
-				HttpStatusCode: http.StatusInternalServerError,
-				Errors: []string{
-					h.msgProvider.WithLang(lang).GetMessage("base_error", "internal_error"),
-				},
-			}, nil
+		reportResponse := response.ListReportSummaryResponse{
+			ID:        report.ID,
+			Lang:      lang,
+			Score:     report.Score,
+			CreatedAt: report.CreatedAt,
 		}
 		reportResponses = append(reportResponses, reportResponse)
 	}
 
-	h.logger.Info("Consulta de reportes completada exitosamente. Se encontraron %d reportes", len(reportResponses))
-	return response.ApiResponse[[]response.ListReportResponse]{
+	// Crear página paginada
+	page := paginator.Page[response.ListReportSummaryResponse]{
+		Data:         reportResponses,
+		TotalCount:   total,
+		Currentpage:  pagination.Currentpage,
+		ItemsPerpage: pagination.ItemsPerpage,
+	}
+
+	h.logger.Info("Consulta de reportes completada exitosamente. Se encontraron %d reportes de %d totales", len(reportResponses), total)
+	return response.ApiResponse[paginator.Page[response.ListReportSummaryResponse]]{
 		HttpStatusCode: http.StatusOK,
-		Result:         reportResponses,
+		Result:         page,
 	}, nil
 }

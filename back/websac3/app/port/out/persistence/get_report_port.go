@@ -6,6 +6,6 @@ import (
 )
 
 type GetReportPort interface {
-	GetByDegreeProgramID(degreeProgramID uint, ctx db.Context) ([]entity.Report, error)
+	GetByDegreeProgramID(degreeProgramID uint, page, perPage uint, ctx db.Context) ([]entity.Report, int64, error)
 	GetByID(reportID uint, ctx db.Context) (entity.Report, error)
 }
