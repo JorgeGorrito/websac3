@@ -34,6 +34,9 @@
   "list_approved_access_request": {
     "not_found": "No se encontraron solicitudes de acceso aprobadas."
   },
+  "list_rejected_access_request": {
+    "not_found": "No se encontraron solicitudes de acceso rechazadas."
+  },
   "approve_access_request" : {
     "not_found" : "No se encontró la solicitud de acceso con el ID proporcionado.",
     "already_approved" : "La solicitud de acceso ya ha sido aprobada.",

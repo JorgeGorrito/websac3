@@ -331,3 +331,69 @@ func (a *AccessRequestRepository) GetApprovedByFilters(
 
 	return results, count, nil
 }
+
+func (a *AccessRequestRepository) GetRejectedByFilters(
+	page, perPage uint,
+	filters filter.Filters,
+	ctx _db.Context,
+) ([]entity.AccessRequest, int64, error) {
+	dbCtx, err := a.CastDbContext(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	rejectedStatus, err := a.statusEnum.GetByName(constants.Rejected)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	baseQuery := dbCtx.DB().
+		Model(&model.AccessRequest{}).
+		Joins("Applicant").
+		Joins("Applicant.IdentificationType").
+		Joins("Applicant.HigherEducationInstitution").
+		Joins("Applicant.HigherEducationInstitution.Ownership").
+		Joins("Applicant.HigherEducationInstitution.Municipality").
+		Joins("Applicant.HigherEducationInstitution.Department").
+		Joins("Status").
+		Joins("VerificationEmail").
+		Where("status_id = ?", rejectedStatus.ID)
+	dbCtx.DBSet(baseQuery)
+
+	dbCtxFiltered, err := filters.Apply(dbCtx, psqlfilter.FiltersRegistry)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	dbCtx, err = a.CastDbContext(dbCtxFiltered)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	var count int64
+	if err := dbCtx.DB().Count(&count).Error; err != nil {
+		return nil, 0, err
+	}
+
+	query := dbCtx.DB().
+		Offset(int((page - 1) * perPage)).
+		Limit(int(perPage))
+
+	dbCtx.DBSet(query)
+
+	var accessRequests []model.AccessRequest
+	if err := dbCtx.DB().Find(&accessRequests).Error; err != nil {
+		return nil, 0, err
+	}
+
+	var results []entity.AccessRequest
+	for _, accessRequest := range accessRequests {
+		var accessRequestEntity entity.AccessRequest
+		if accessRequestEntity, err = mapper.Map[model.AccessRequest, entity.AccessRequest](&accessRequest); err != nil {
+			return nil, 0, err
+		}
+		results = append(results, accessRequestEntity)
+	}
+
+	return results, count, nil
+}
