@@ -1,16 +1,17 @@
 package repository
 
 import (
-	"errors"
+	psqlfilter "websac3/adapter/out/persistence/postgresql/filter"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	_db "websac3/app/port/out/persistence/db"
+	"websac3/app/port/out/persistence/filter"
 	"websac3/common/mapper"
-
-	"gorm.io/gorm"
 )
 
-type ProfessionalRoleRepository struct{ Repository }
+type ProfessionalRoleRepository struct {
+	Repository
+}
 
 func NewProfessionalRoleRepository() *ProfessionalRoleRepository {
 	return &ProfessionalRoleRepository{}
@@ -22,25 +23,68 @@ func (r *ProfessionalRoleRepository) GetByID(id uint, lang string, ctx _db.Conte
 		return entity.ProfessionalRole{}, err
 	}
 
-	var role model.ProfessionalRole
-	if err := dbCtx.DB().
-		Model(&model.ProfessionalRole{}).
-		Preload("KnowledgeAreas").
-		Preload("KnowledgeAreas.KnowledgeArea").
-		Preload("KnowledgeAreas.KnowledgeArea.Names", "lang = ?", lang).
-		Preload("KnowledgeAreas.Topics").
-		Preload("KnowledgeAreas.Topics.Topic").
-		Preload("KnowledgeAreas.Topics.Topic.Names", "lang = ?", lang).
-		Preload("KnowledgeAreas.Topics.Topic.KnowledgeArea").
-		Preload("KnowledgeAreas.Topics.Topic.KnowledgeArea.Names", "lang = ?", lang).
-		Where("id = ?", id).
-		First(&role).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return entity.ProfessionalRole{}, nil
-		}
+	var professionalRole model.ProfessionalRole
+	if err := dbCtx.DB().Where("id = ?", id).First(&professionalRole).Error; err != nil {
 		return entity.ProfessionalRole{}, err
 	}
 
-	// Map to domain (basic fields; KnowledgeAreaExpected se arma en dominio si es necesario)
-	return mapper.Map[model.ProfessionalRole, entity.ProfessionalRole](&role)
+	var professionalRoleEntity entity.ProfessionalRole
+	if professionalRoleEntity, err = mapper.Map[model.ProfessionalRole, entity.ProfessionalRole](&professionalRole); err != nil {
+		return entity.ProfessionalRole{}, err
+	}
+
+	return professionalRoleEntity, nil
+}
+
+func (r *ProfessionalRoleRepository) GetByFilters(
+	page uint,
+	perPage uint,
+	filters filter.Filters,
+	ctx _db.Context,
+) ([]entity.ProfessionalRole, int64, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	baseQuery := dbCtx.DB().
+		Model(&model.ProfessionalRole{})
+	dbCtx.DBSet(baseQuery)
+
+	dbCtxFiltered, err := filters.Apply(dbCtx, psqlfilter.FiltersRegistry)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	dbCtx, err = r.CastDbContext(dbCtxFiltered)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	var count int64
+	if err := dbCtx.DB().Count(&count).Error; err != nil {
+		return nil, 0, err
+	}
+
+	query := dbCtx.DB().
+		Offset(int((page - 1) * perPage)).
+		Limit(int(perPage))
+
+	dbCtx.DBSet(query)
+
+	var professionalRoles []model.ProfessionalRole
+	if err := dbCtx.DB().Find(&professionalRoles).Error; err != nil {
+		return nil, 0, err
+	}
+
+	var results []entity.ProfessionalRole
+	for _, role := range professionalRoles {
+		var professionalRoleEntity entity.ProfessionalRole
+		if professionalRoleEntity, err = mapper.Map[model.ProfessionalRole, entity.ProfessionalRole](&role); err != nil {
+			return nil, 0, err
+		}
+		results = append(results, professionalRoleEntity)
+	}
+
+	return results, count, nil
 }

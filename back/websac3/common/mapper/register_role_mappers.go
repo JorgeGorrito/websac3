@@ -1,6 +1,7 @@
 package mapper
 
 import (
+	"websac3/adapter/in/web/response"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 )
@@ -55,6 +56,14 @@ func registerProfessionalRoleMappers() {
 			return role, nil
 		},
 	)
+
+	// Entity to Response mapper for ProfessionalRole
+	RegisterMapFunc(func(role *entity.ProfessionalRole) (response.ListProfessionalRoleResponse, error) {
+		return response.ListProfessionalRoleResponse{
+			ID:   role.ID,
+			Name: role.Name,
+		}, nil
+	})
 }
 
 func registerRoleMappers() {
@@ -80,6 +89,14 @@ func registerRoleMappers() {
 
 	RegisterMapFunc(func(role *entity.Role) (model.Role, error) {
 		return model.Role{
+			ID:   role.ID,
+			Name: role.Name,
+		}, nil
+	})
+
+	// Entity to Response mapper
+	RegisterMapFunc(func(role *entity.Role) (response.ListRoleResponse, error) {
+		return response.ListRoleResponse{
 			ID:   role.ID,
 			Name: role.Name,
 		}, nil

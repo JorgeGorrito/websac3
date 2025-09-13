@@ -50,5 +50,7 @@ func (m *manager) RegisterDependencies() error {
 	m.registerDegreeProgramDependencies()
 	m.registerCourseDependencies()
 	m.registerReportDependencies()
+	m.registerProfessionalRoleDependencies()
+	m.registerRoleDependencies()
 	return nil
 }
