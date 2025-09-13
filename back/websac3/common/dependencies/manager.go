@@ -52,5 +52,6 @@ func (m *manager) RegisterDependencies() error {
 	m.registerReportDependencies()
 	m.registerProfessionalRoleDependencies()
 	m.registerRoleDependencies()
+	m.registerApprovedAccessRequestDependencies()
 	return nil
 }

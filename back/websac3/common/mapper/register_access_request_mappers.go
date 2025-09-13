@@ -172,4 +172,85 @@ func registerAccessRequestMappers() {
 			RoleID: request.RoleID,
 		}, nil
 	})
+
+	// Entity to Response mapper for Approved Access Requests
+	RegisterMapFunc(func(accessRequest *entity.AccessRequest) (response.ListApprovedAccessRequestResponse, error) {
+		var applicantName, applicantLastname, applicantEmail, applicantIdentificationNumber, applicantIdentificationType, applicantJobPosition string
+		var higherEducationInstitutionSnies uint
+		var higherEducationInstitutionName, higherEducationInstitutionOwnership, municipalityName, departmentName string
+		var statusID uint
+		var statusName, approvedRoleName string
+		var approvedRoleID uint
+		var createdAt string
+
+		if accessRequest.Applicant != nil {
+			applicantName = accessRequest.Applicant.Name
+			applicantLastname = accessRequest.Applicant.Lastname
+			// Email no está disponible en Person, se obtiene del AccessRequest
+			if accessRequest.EmailValidation != nil {
+				applicantEmail = accessRequest.EmailValidation.To
+			}
+			applicantIdentificationNumber = accessRequest.Applicant.IdentificationNumber
+			applicantJobPosition = accessRequest.Applicant.JobPosition
+
+			if accessRequest.Applicant.IdentificationType != nil {
+				applicantIdentificationType = accessRequest.Applicant.IdentificationType.Name
+			}
+
+			if accessRequest.Applicant.HigherEducationInstitution != nil {
+				higherEducationInstitutionSnies = accessRequest.Applicant.HigherEducationInstitution.Snies
+				higherEducationInstitutionName = accessRequest.Applicant.HigherEducationInstitution.Name
+
+				if accessRequest.Applicant.HigherEducationInstitution.Ownership != nil {
+					higherEducationInstitutionOwnership = accessRequest.Applicant.HigherEducationInstitution.Ownership.Name
+				}
+
+				if accessRequest.Applicant.HigherEducationInstitution.Municipality != nil {
+					municipalityName = accessRequest.Applicant.HigherEducationInstitution.Municipality.Name
+				}
+
+				if accessRequest.Applicant.HigherEducationInstitution.Department != nil {
+					departmentName = accessRequest.Applicant.HigherEducationInstitution.Department.Name
+				}
+			}
+		}
+
+		if accessRequest.Status != nil {
+			statusID = accessRequest.Status.ID
+			statusName = accessRequest.Status.Name
+		}
+
+		if accessRequest.ApprovedRole != nil {
+			approvedRoleID = accessRequest.ApprovedRole.ID
+			approvedRoleName = accessRequest.ApprovedRole.Name
+		} else {
+			// Si no hay rol aprobado, usar valores por defecto
+			approvedRoleID = 0
+			approvedRoleName = "Sin rol asignado"
+		}
+
+		createdAt = accessRequest.CreatedAt.Format("2006-01-02 15:04:05")
+
+		return response.ListApprovedAccessRequestResponse{
+			ID:                   accessRequest.ID,
+			Name:                 applicantName,
+			Email:                applicantEmail,
+			Lastname:             applicantLastname,
+			IdentificationNumber: applicantIdentificationNumber,
+			IdentificationType:   applicantIdentificationType,
+			JobPosition:          applicantJobPosition,
+
+			HigherEducationInstitutionSnies:     higherEducationInstitutionSnies,
+			HigherEducationInstitutionName:      higherEducationInstitutionName,
+			HigherEducationInstitutionOwnership: higherEducationInstitutionOwnership,
+
+			MunicipalityName: municipalityName,
+			DepartmentName:   departmentName,
+			StatusID:         statusID,
+			StatusName:       statusName,
+			ApprovedRoleID:   approvedRoleID,
+			ApprovedRoleName: approvedRoleName,
+			CreatedAt:        createdAt,
+		}, nil
+	})
 }

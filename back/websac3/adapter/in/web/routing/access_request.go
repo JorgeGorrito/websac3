@@ -42,6 +42,12 @@ func registerRejectAccessRequest(routerGroup *gin.RouterGroup) {
 	routerGroup.POST("/access-request/:accessRequestID/reject", rejectAccessRequestController.Handle)
 }
 
+func registerListApprovedAccessRequest(routerGroup *gin.RouterGroup) {
+	listApprovedAccessRequestController := controller.GetListApprovedAccessRequestController()
+
+	routerGroup.GET("/access-requests/approved", listApprovedAccessRequestController.Handle)
+}
+
 func RegisterAccessRequestRoutes(routerGroup *gin.RouterGroup) {
 	authRequiredGroup := getAuthRequiredGroup(routerGroup)
 
@@ -50,6 +56,7 @@ func RegisterAccessRequestRoutes(routerGroup *gin.RouterGroup) {
 	registerCreateUserFromToken(routerGroup)
 
 	registerListAccessRequest(authRequiredGroup)
+	registerListApprovedAccessRequest(authRequiredGroup)
 	registerApproveAccessRequest(authRequiredGroup)
 	registerRejectAccessRequest(authRequiredGroup)
 }
