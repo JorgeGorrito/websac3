@@ -24,7 +24,11 @@ func (r *ProfessionalRoleRepository) GetByID(id uint, lang string, ctx _db.Conte
 	}
 
 	var professionalRole model.ProfessionalRole
-	if err := dbCtx.DB().Where("id = ?", id).First(&professionalRole).Error; err != nil {
+	if err := dbCtx.DB().
+		Preload("KnowledgeAreas.KnowledgeArea.Names").
+		Preload("KnowledgeAreas.Topics.Topic.Names").
+		Where("id = ?", id).
+		First(&professionalRole).Error; err != nil {
 		return entity.ProfessionalRole{}, err
 	}
 
@@ -67,6 +71,8 @@ func (r *ProfessionalRoleRepository) GetByFilters(
 	}
 
 	query := dbCtx.DB().
+		Preload("KnowledgeAreas.KnowledgeArea.Names").
+		Preload("KnowledgeAreas.Topics.Topic.Names").
 		Offset(int((page - 1) * perPage)).
 		Limit(int(perPage))
 

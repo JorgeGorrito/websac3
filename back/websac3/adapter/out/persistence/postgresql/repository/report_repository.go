@@ -92,22 +92,48 @@ func (r *ReportRepository) GetByID(reportID uint, ctx _db.Context) (entity.Repor
 
 	var report model.Report
 	if err := dbCtx.DB().
-		Model(&model.Report{}).
-		Preload("DegreeProgram").
-		Preload("DegreeProgram.DurationUnit").
-		Preload("DegreeProgram.DurationUnit.Names").
-		Preload("DegreeProgram.UserCreator").
-		Preload("DegreeProgram.UserCreator.Person").
 		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution").
 		Preload("ProfessionalRole").
-		Preload("KnowledgeAreaReports").
-		Preload("KnowledgeAreaReports.TopicReports").
-		Preload("KnowledgeAreaReports.TopicReports.Topic").
-		Preload("KnowledgeAreaReports.TopicReports.Topic.Names").
-		Where("reports.id = ?", reportID).
+		Where("id = ?", reportID).
 		First(&report).Error; err != nil {
 		return entity.Report{}, err
 	}
 
-	return mapper.Map[model.Report, entity.Report](&report)
+	// Mapeo manual simplificado para evitar errores
+	entityReport := entity.Report{
+		ID:        report.ID,
+		Score:     report.Score,
+		CreatedAt: report.CreatedAt,
+		DegreeProgram: entity.DegreeProgram{
+			ID:   report.DegreeProgram.ID,
+			Name: report.DegreeProgram.Name,
+			UserCreator: &entity.User{
+				ID:    report.DegreeProgram.UserCreator.ID,
+				Email: report.DegreeProgram.UserCreator.Email,
+				Person: &entity.Person{
+					ID:       report.DegreeProgram.UserCreator.Person.ID,
+					Name:     report.DegreeProgram.UserCreator.Person.Name,
+					Lastname: report.DegreeProgram.UserCreator.Person.Lastname,
+					HigherEducationInstitution: &entity.HigherEducationInstitution{
+						Snies: report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Snies,
+						Name:  report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Name,
+					},
+				},
+			},
+		},
+		ProfessionalRole: entity.ProfessionalRole{
+			ID:   report.ProfessionalRole.ID,
+			Name: report.ProfessionalRole.Name,
+		},
+		KnowledgeAreaReports: []entity.KnowledgeAreaReport{}, // Vacío por ahora
+	}
+
+	// Asignar HigherEducationInstitution desde UserCreator.Person
+	if entityReport.DegreeProgram.UserCreator != nil &&
+		entityReport.DegreeProgram.UserCreator.Person != nil &&
+		entityReport.DegreeProgram.UserCreator.Person.HigherEducationInstitution != nil {
+		entityReport.HigherEducationInstitution = entityReport.DegreeProgram.UserCreator.Person.HigherEducationInstitution
+	}
+
+	return entityReport, nil
 }

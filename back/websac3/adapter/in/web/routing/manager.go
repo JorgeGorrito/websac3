@@ -30,6 +30,7 @@ func (m *manager) RegisterRoutes(engine *gin.Engine) error {
 	RegisterDegreeProgramRoutes(routerGroup)
 	RegisterCourseRoutes(routerGroup)
 	RegisterReportRoutes(routerGroup)
+	RegisterReportFeedbackRoutes(routerGroup)
 	RegisterProfessionalRoleRoutes(routerGroup)
 	RegisterRoleRoutes(routerGroup)
 	RegisterAuthRoutes(routerGroup)

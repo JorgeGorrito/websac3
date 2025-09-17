@@ -53,5 +53,30 @@
         "id": 11,
         "module_id": 10,
         "action_id": 5
+    },
+    {
+        "id": 12,
+        "module_id": 3,
+        "action_id": 1
+    },
+    {
+        "id": 13,
+        "module_id": 3,
+        "action_id": 2
+    },
+    {
+        "id": 14,
+        "module_id": 3,
+        "action_id": 3
+    },
+    {
+        "id": 15,
+        "module_id": 3,
+        "action_id": 5
+    },
+    {
+        "id": 16,
+        "module_id": 2,
+        "action_id": 11
     }
 ]

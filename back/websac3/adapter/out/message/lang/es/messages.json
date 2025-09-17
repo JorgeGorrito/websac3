@@ -71,6 +71,9 @@
     "not_found" : "No se encontraron solicitudes de acceso.",
     "access_requests_listed" : "Solicitudes de acceso listadas correctamente."
   },
+  "list_reports_pending_feedback" : {
+    "not_found" : "No se encontraron reportes pendientes de retroalimentación."
+  },
   "validate_email" : {
     "email_validated" : "Correo electrónico validado exitosamente.",
     "email_not_found" : "No se encontró el correo electrónico con el token proporcionado."
@@ -109,5 +112,12 @@
   "base_error": {
     "internal_error": "No fue posible procesar la petición.",
     "forbidden": "No tiene permiso para realizar esta acción."
+  },
+  "report_feedback": {
+    "report_not_found": "No se encontró el reporte especificado.",
+    "auditor_not_found": "No se encontró el auditor especificado.",
+    "feedback_already_exists": "Ya existe retroalimentación para este reporte.",
+    "created_successfully": "Retroalimentación creada exitosamente.",
+    "subject": "Retroalimentación de Reporte de Evaluación"
   }
 }

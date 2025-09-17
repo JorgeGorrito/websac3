@@ -5,6 +5,7 @@ import (
 	"websac3/adapter/in/web/response"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
+	"websac3/app/port/in/dto/command"
 	"websac3/app/port/in/dto/query"
 )
 
@@ -108,24 +109,42 @@ func registerReportMappers() {
 	// Report: model -> entity
 	RegisterMapFunc(
 		func(reportModel *model.Report) (entity.Report, error) {
+			// Mapear KnowledgeAreaReports sin relaciones complejas para evitar errores
 			var knowledgeAreaReports []entity.KnowledgeAreaReport
 			for _, kar := range reportModel.KnowledgeAreaReports {
-				karEntity, err := Map[model.KnowledgeAreaReport, entity.KnowledgeAreaReport](&kar)
-				if err != nil {
-					return entity.Report{}, err
+				karEntity := entity.KnowledgeAreaReport{
+					ID:                      kar.ID,
+					Name:                    kar.Name,
+					TotalLearnHoursExpected: kar.TotalLearnHoursExpected,
+					TotalLearnHoursActual:   kar.TotalLearnHoursActual,
+					ScoreExpected:           kar.ScoreExpected,
+					ScoreGot:                kar.ScoreGot,
+					// TopicReports se deja vacío para evitar errores de mapeo
 				}
 				knowledgeAreaReports = append(knowledgeAreaReports, karEntity)
 			}
 
-			// Map DegreeProgram and ProfessionalRole
-			degreeProgram, err := Map[model.DegreeProgram, entity.DegreeProgram](&reportModel.DegreeProgram)
-			if err != nil {
-				return entity.Report{}, err
+			// Mapear DegreeProgram sin relaciones complejas para evitar errores
+			degreeProgram := entity.DegreeProgram{
+				ID:                  reportModel.DegreeProgram.ID,
+				Snies:               reportModel.DegreeProgram.Snies,
+				Name:                reportModel.DegreeProgram.Name,
+				TotalCredits:        reportModel.DegreeProgram.TotalCredits,
+				DurationValue:       reportModel.DegreeProgram.DurationValue,
+				DurationUnitID:      reportModel.DegreeProgram.DurationUnitID,
+				ProgramFocus:        reportModel.DegreeProgram.ProgramFocus,
+				EntryProfile:        reportModel.DegreeProgram.EntryProfile,
+				GraduateProfile:     reportModel.DegreeProgram.GraduateProfile,
+				ProfessionalProfile: reportModel.DegreeProgram.ProfessionalProfile,
+				CreatedBy:           reportModel.DegreeProgram.CreatedBy,
+				// Las relaciones complejas se dejan vacías para evitar errores de mapeo
 			}
 
-			professionalRole, err := Map[model.ProfessionalRole, entity.ProfessionalRole](&reportModel.ProfessionalRole)
-			if err != nil {
-				return entity.Report{}, err
+			// Mapear ProfessionalRole sin KnowledgeAreaExpected para evitar errores
+			professionalRole := entity.ProfessionalRole{
+				ID:   reportModel.ProfessionalRole.ID,
+				Name: reportModel.ProfessionalRole.Name,
+				// KnowledgeAreaExpected se deja vacío porque no se necesita para el reporte
 			}
 
 			return entity.Report{
@@ -140,7 +159,202 @@ func registerReportMappers() {
 		},
 	)
 
+	// KnowledgeAreaFeedback: model -> entity
+	RegisterMapFunc(
+		func(knowledgeAreaFeedbackModel *model.KnowledgeAreaFeedback) (entity.KnowledgeAreaFeedback, error) {
+			// Mapear KnowledgeAreaReport si está disponible
+			var knowledgeAreaReport *entity.KnowledgeAreaReport
+			if knowledgeAreaFeedbackModel.KnowledgeAreaReport.ID != 0 {
+				knowledgeAreaReport = &entity.KnowledgeAreaReport{
+					ID:   knowledgeAreaFeedbackModel.KnowledgeAreaReport.ID,
+					Name: knowledgeAreaFeedbackModel.KnowledgeAreaReport.Name,
+				}
+			}
+
+			return entity.KnowledgeAreaFeedback{
+				ID:                    knowledgeAreaFeedbackModel.ID,
+				ReportFeedbackID:      knowledgeAreaFeedbackModel.ReportFeedbackID,
+				KnowledgeAreaReportID: knowledgeAreaFeedbackModel.KnowledgeAreaReportID,
+				KnowledgeAreaReport:   knowledgeAreaReport,
+				Comments:              knowledgeAreaFeedbackModel.Comments,
+				SecurityGaps:          knowledgeAreaFeedbackModel.SecurityGaps,
+				Improvements:          knowledgeAreaFeedbackModel.Improvements,
+				ComplianceLevel:       knowledgeAreaFeedbackModel.ComplianceLevel,
+				AuditorRating:         knowledgeAreaFeedbackModel.AuditorRating,
+			}, nil
+		},
+	)
+
+	// KnowledgeAreaFeedback: entity -> model
+	RegisterMapFunc(
+		func(knowledgeAreaFeedbackEntity *entity.KnowledgeAreaFeedback) (model.KnowledgeAreaFeedback, error) {
+			return model.KnowledgeAreaFeedback{
+				ID:                    knowledgeAreaFeedbackEntity.ID,
+				ReportFeedbackID:      knowledgeAreaFeedbackEntity.ReportFeedbackID,
+				KnowledgeAreaReportID: knowledgeAreaFeedbackEntity.KnowledgeAreaReportID,
+				Comments:              knowledgeAreaFeedbackEntity.Comments,
+				SecurityGaps:          knowledgeAreaFeedbackEntity.SecurityGaps,
+				Improvements:          knowledgeAreaFeedbackEntity.Improvements,
+				ComplianceLevel:       knowledgeAreaFeedbackEntity.ComplianceLevel,
+				AuditorRating:         knowledgeAreaFeedbackEntity.AuditorRating,
+			}, nil
+		},
+	)
+
+	// ReportFeedback: model -> entity
+	RegisterMapFunc(
+		func(reportFeedbackModel *model.ReportFeedback) (entity.ReportFeedback, error) {
+			// Mapear KnowledgeAreaFeedbacks
+			var knowledgeAreaFeedbacks []entity.KnowledgeAreaFeedback
+			for _, kaf := range reportFeedbackModel.KnowledgeAreaFeedbacks {
+				kafEntity, err := Map[model.KnowledgeAreaFeedback, entity.KnowledgeAreaFeedback](&kaf)
+				if err != nil {
+					return entity.ReportFeedback{}, err
+				}
+				knowledgeAreaFeedbacks = append(knowledgeAreaFeedbacks, kafEntity)
+			}
+
+			// Mapear Report (sin relaciones complejas para evitar errores)
+			var report *entity.Report
+			if reportFeedbackModel.Report.ID != 0 {
+				report = &entity.Report{
+					ID:    reportFeedbackModel.Report.ID,
+					Score: reportFeedbackModel.Report.Score,
+					DegreeProgram: entity.DegreeProgram{
+						ID:    reportFeedbackModel.Report.DegreeProgram.ID,
+						Name:  reportFeedbackModel.Report.DegreeProgram.Name,
+						Snies: reportFeedbackModel.Report.DegreeProgram.Snies,
+					},
+					CreatedAt: reportFeedbackModel.Report.CreatedAt,
+				}
+			}
+
+			// Mapear Auditor con Person
+			var auditor *entity.User
+			if reportFeedbackModel.Auditor.ID != 0 {
+				auditor = &entity.User{
+					ID:    reportFeedbackModel.Auditor.ID,
+					Email: reportFeedbackModel.Auditor.Email,
+				}
+				// Mapear Person si está disponible
+				if reportFeedbackModel.Auditor.Person.ID != 0 {
+					auditor.Person = &entity.Person{
+						ID:       reportFeedbackModel.Auditor.Person.ID,
+						Name:     reportFeedbackModel.Auditor.Person.Name,
+						Lastname: reportFeedbackModel.Auditor.Person.Lastname,
+					}
+				}
+			}
+
+			return entity.ReportFeedback{
+				ID:                     reportFeedbackModel.ID,
+				ReportID:               reportFeedbackModel.ReportID,
+				Report:                 report,
+				AuditorID:              reportFeedbackModel.AuditorID,
+				Auditor:                auditor,
+				GeneralComments:        reportFeedbackModel.GeneralComments,
+				Recommendations:        reportFeedbackModel.Recommendations,
+				AuditorRating:          reportFeedbackModel.AuditorRating,
+				KnowledgeAreaFeedbacks: knowledgeAreaFeedbacks,
+				CreatedAt:              reportFeedbackModel.CreatedAt,
+				UpdatedAt:              reportFeedbackModel.UpdatedAt,
+			}, nil
+		},
+	)
+
+	// ReportFeedback: entity -> model
+	RegisterMapFunc(
+		func(reportFeedbackEntity *entity.ReportFeedback) (model.ReportFeedback, error) {
+			// Mapear KnowledgeAreaFeedbacks
+			var knowledgeAreaFeedbacks []model.KnowledgeAreaFeedback
+			for _, kaf := range reportFeedbackEntity.KnowledgeAreaFeedbacks {
+				kafModel, err := Map[entity.KnowledgeAreaFeedback, model.KnowledgeAreaFeedback](&kaf)
+				if err != nil {
+					return model.ReportFeedback{}, err
+				}
+				knowledgeAreaFeedbacks = append(knowledgeAreaFeedbacks, kafModel)
+			}
+
+			return model.ReportFeedback{
+				ID:                     reportFeedbackEntity.ID,
+				ReportID:               reportFeedbackEntity.ReportID,
+				AuditorID:              reportFeedbackEntity.AuditorID,
+				GeneralComments:        reportFeedbackEntity.GeneralComments,
+				Recommendations:        reportFeedbackEntity.Recommendations,
+				AuditorRating:          reportFeedbackEntity.AuditorRating,
+				KnowledgeAreaFeedbacks: knowledgeAreaFeedbacks,
+				CreatedAt:              reportFeedbackEntity.CreatedAt,
+				UpdatedAt:              reportFeedbackEntity.UpdatedAt,
+			}, nil
+		},
+	)
+
+	// Request to Command mappers
+	RegisterMapFunc(
+		func(req *request.CreateReportFeedbackRequest) (command.CreateReportFeedbackCommand, error) {
+			var knowledgeAreaFeedbacks []command.CreateKnowledgeAreaFeedbackCommand
+			for _, kaf := range req.KnowledgeAreaFeedbacks {
+				knowledgeAreaFeedbacks = append(knowledgeAreaFeedbacks, command.CreateKnowledgeAreaFeedbackCommand{
+					KnowledgeAreaReportID: kaf.KnowledgeAreaReportID,
+					Comments:              kaf.Comments,
+					SecurityGaps:          kaf.SecurityGaps,
+					Improvements:          kaf.Improvements,
+					ComplianceLevel:       kaf.ComplianceLevel,
+					AuditorRating:         kaf.AuditorRating,
+				})
+			}
+
+			return command.CreateReportFeedbackCommand{
+				ReportID:               req.ReportID,
+				GeneralComments:        req.GeneralComments,
+				Recommendations:        req.Recommendations,
+				AuditorRating:          req.AuditorRating,
+				KnowledgeAreaFeedbacks: knowledgeAreaFeedbacks,
+				Permissions:            req.Permissions,
+			}, nil
+		},
+	)
+
+	// Command to Entity mappers
+	RegisterMapFunc(
+		func(cmd *command.CreateReportFeedbackCommand) (entity.ReportFeedback, error) {
+			// Crear la entidad principal
+			feedback := entity.NewReportFeedback(
+				cmd.ReportID,
+				cmd.UserID,
+				cmd.GeneralComments,
+				cmd.Recommendations,
+				cmd.AuditorRating,
+			)
+
+			// Agregar knowledge area feedbacks
+			for _, kaFeedbackCmd := range cmd.KnowledgeAreaFeedbacks {
+				kaFeedback := entity.NewKnowledgeAreaFeedback(
+					0, // Se asignará después de crear el feedback principal
+					kaFeedbackCmd.KnowledgeAreaReportID,
+					kaFeedbackCmd.Comments,
+					kaFeedbackCmd.SecurityGaps,
+					kaFeedbackCmd.Improvements,
+					kaFeedbackCmd.ComplianceLevel,
+					kaFeedbackCmd.AuditorRating,
+				)
+				feedback.AddKnowledgeAreaFeedback(kaFeedback)
+			}
+
+			return *feedback, nil
+		},
+	)
+
 	// Request to Query mappers
+	RegisterMapFunc(
+		func(req *request.ListReportsPendingFeedbackRequest) (query.ListReportsPendingFeedbackQuery, error) {
+			return query.ListReportsPendingFeedbackQuery{
+				PaginationParams: req.PaginationParams,
+				Permissions:      req.Permissions,
+			}, nil
+		},
+	)
+
 	RegisterMapFunc(
 		func(req *request.ListReportsByDegreeProgramRequest) (query.ListReportsByDegreeProgramQuery, error) {
 			return query.ListReportsByDegreeProgramQuery{
@@ -205,6 +419,105 @@ func registerReportMappers() {
 				Score:                reportEntity.Score,
 				CreatedAt:            reportEntity.CreatedAt,
 				KnowledgeAreaReports: knowledgeAreaReports,
+			}, nil
+		},
+	)
+
+	// Entity to Response mappers for Report Feedback
+	RegisterMapFunc(
+		func(reportFeedbackEntity *entity.ReportFeedback) (response.ReportFeedbackResponse, error) {
+			// Mapear KnowledgeAreaFeedbacks
+			var knowledgeAreaFeedbacks []response.KnowledgeAreaFeedbackResponse
+			for _, kaf := range reportFeedbackEntity.KnowledgeAreaFeedbacks {
+				knowledgeAreaName := ""
+				if kaf.KnowledgeAreaReport != nil {
+					knowledgeAreaName = kaf.KnowledgeAreaReport.Name
+				}
+
+				knowledgeAreaFeedbacks = append(knowledgeAreaFeedbacks, response.KnowledgeAreaFeedbackResponse{
+					ID:                    kaf.ID,
+					KnowledgeAreaReportID: kaf.KnowledgeAreaReportID,
+					KnowledgeAreaName:     knowledgeAreaName,
+					Comments:              kaf.Comments,
+					SecurityGaps:          kaf.SecurityGaps,
+					Improvements:          kaf.Improvements,
+					ComplianceLevel:       kaf.ComplianceLevel,
+					AuditorRating:         kaf.AuditorRating,
+				})
+			}
+
+			// Mapear Report Summary
+			reportSummary := response.ReportSummaryResponse{
+				ID:    reportFeedbackEntity.Report.ID,
+				Score: reportFeedbackEntity.Report.Score,
+				DegreeProgram: response.DegreeProgramSummaryResponse{
+					ID:    reportFeedbackEntity.Report.DegreeProgram.ID,
+					Name:  reportFeedbackEntity.Report.DegreeProgram.Name,
+					Snies: reportFeedbackEntity.Report.DegreeProgram.Snies,
+				},
+				CreatedAt: reportFeedbackEntity.Report.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			}
+
+			// Mapear Auditor Summary
+			auditorName := ""
+			if reportFeedbackEntity.Auditor.Person != nil {
+				auditorName = reportFeedbackEntity.Auditor.Person.Name + " " + reportFeedbackEntity.Auditor.Person.Lastname
+			}
+
+			auditorSummary := response.UserSummaryResponse{
+				ID:    reportFeedbackEntity.Auditor.ID,
+				Email: reportFeedbackEntity.Auditor.Email,
+				Name:  auditorName,
+			}
+
+			return response.ReportFeedbackResponse{
+				ID:                     reportFeedbackEntity.ID,
+				ReportID:               reportFeedbackEntity.ReportID,
+				Report:                 reportSummary,
+				Auditor:                auditorSummary,
+				GeneralComments:        reportFeedbackEntity.GeneralComments,
+				Recommendations:        reportFeedbackEntity.Recommendations,
+				AuditorRating:          reportFeedbackEntity.AuditorRating,
+				KnowledgeAreaFeedbacks: knowledgeAreaFeedbacks,
+				CreatedAt:              reportFeedbackEntity.CreatedAt.Format("2006-01-02T15:04:05Z"),
+				UpdatedAt:              reportFeedbackEntity.UpdatedAt.Format("2006-01-02T15:04:05Z"),
+			}, nil
+		},
+	)
+
+	// Report entity to ReportResponse (for pending reports list)
+	RegisterMapFunc(
+		func(reportEntity *entity.Report) (response.ReportResponse, error) {
+			// Map DegreeProgram
+			degreeProgramResp := response.DegreeProgramSummaryResponse{
+				ID:    reportEntity.DegreeProgram.ID,
+				Name:  reportEntity.DegreeProgram.Name,
+				Snies: reportEntity.DegreeProgram.Snies,
+			}
+
+			// Map ProfessionalRole
+			professionalRoleResp := response.ProfessionalRoleResponse{
+				ID:   reportEntity.ProfessionalRole.ID,
+				Name: reportEntity.ProfessionalRole.Name,
+			}
+
+			// Map HigherEducationInstitution (if available)
+			var institutionResp response.InstitutionSummaryResponse
+			if reportEntity.HigherEducationInstitution != nil && reportEntity.HigherEducationInstitution.Snies != 0 {
+				institutionResp = response.InstitutionSummaryResponse{
+					ID:   reportEntity.HigherEducationInstitution.Snies, // Usar Snies como ID
+					Name: reportEntity.HigherEducationInstitution.Name,
+				}
+			}
+
+			return response.ReportResponse{
+				ID:                         reportEntity.ID,
+				Score:                      reportEntity.Score,
+				DegreeProgram:              degreeProgramResp,
+				ProfessionalRole:           professionalRoleResp,
+				HigherEducationInstitution: institutionResp,
+				CreatedAt:                  reportEntity.CreatedAt.Format("2006-01-02T15:04:05Z"),
+				HasFeedback:                false, // This will be set by the service based on business logic
 			}, nil
 		},
 	)

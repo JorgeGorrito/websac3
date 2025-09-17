@@ -39,5 +39,9 @@
   {
     "id": 10,
     "name": "deactivate"
+  },
+  {
+    "id": 11,
+    "name": "feedback"
   }
 ]

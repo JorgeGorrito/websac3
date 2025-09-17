@@ -40,11 +40,11 @@ func (m *manager) registerTemplateDependencies() {
 					"report:en": atemplate.NewReportTemplate(
 						baseDir + "en/report.html",
 					),
-					"degree_program_evaluation:es": atemplate.NewDegreeProgramEvaluationTemplate(
-						baseDir + "es/degree_program_evaluation.html",
+					"report_feedback:es": atemplate.NewReportFeedbackTemplate(
+						baseDir + "es/report_feedback.html",
 					),
-					"degree_program_evaluation:en": atemplate.NewDegreeProgramEvaluationTemplate(
-						baseDir + "en/degree_program_evaluation.html",
+					"report_feedback:en": atemplate.NewReportFeedbackTemplate(
+						baseDir + "en/report_feedback.html",
 					),
 				},
 			)

@@ -69,6 +69,9 @@
     "not_found": "No access requests found.",
     "access_requests_listed": "Access requests listed successfully."
   },
+  "list_reports_pending_feedback": {
+    "not_found": "No reports pending feedback found."
+  },
   "validate_email": {
     "email_validated": "Email successfully validated.",
     "email_not_found": "Email not found with the provided token."
@@ -116,5 +119,12 @@
     "report_email_regards": "Best regards,",
     "report_email_signature": "WebSAC3 System",
     "report_sent_successfully": "Evaluation report has been sent to your email successfully."
+  },
+  "report_feedback": {
+    "report_not_found": "The specified report was not found.",
+    "auditor_not_found": "The specified auditor was not found.",
+    "feedback_already_exists": "Feedback already exists for this report.",
+    "created_successfully": "Feedback created successfully.",
+    "subject": "Report Evaluation Feedback"
   }
 }

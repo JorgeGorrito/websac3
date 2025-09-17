@@ -264,6 +264,54 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(command.CreateReportFeedbackCommand{}),
+		chandler.NewCreateReportFeedbackCommandHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.CreateReportFeedbackUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.GetReportFeedbackQuery{}),
+		qhandler.NewGetReportFeedbackQueryHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.GetReportFeedbackUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.ListReportsPendingFeedbackQuery{}),
+		qhandler.NewListReportsPendingFeedbackQueryHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.ListReportsPendingFeedbackUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.ListReportFeedbacksQuery{}),
+		qhandler.NewListReportFeedbacksQueryHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.ListReportFeedbacksUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(query.ListRoleQuery{}),
 		qhandler.NewListRoleQueryHandler(
 			container.Inject[usecase.ListRoleUseCase](),
