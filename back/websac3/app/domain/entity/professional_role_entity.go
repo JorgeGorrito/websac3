@@ -58,12 +58,60 @@ func (e *KnowledgeAreaReport) AddTopicReport(topicReport *TopicReport) {
 	e.TopicReports = append(e.TopicReports, *topicReport)
 }
 
+type UnexpectedTopicReport struct {
+	ID               uint
+	TopicID          uint
+	Name             string
+	LearnHoursActual float32
+	KnowledgeAreaID  uint
+	KnowledgeArea    *KnowledgeArea
+}
+
+func NewUnexpectedTopicReport(
+	topicID uint,
+	name string,
+	learnHoursActual float32,
+	knowledgeAreaID uint,
+	knowledgeArea *KnowledgeArea,
+) *UnexpectedTopicReport {
+	return &UnexpectedTopicReport{
+		TopicID:          topicID,
+		Name:             name,
+		LearnHoursActual: learnHoursActual,
+		KnowledgeAreaID:  knowledgeAreaID,
+		KnowledgeArea:    knowledgeArea,
+	}
+}
+
+type UnexpectedKnowledgeAreaReport struct {
+	ID              uint
+	Name            string
+	TotalLearnHours float32
+	TopicReports    []UnexpectedTopicReport
+}
+
+func NewUnexpectedKnowledgeAreaReport(
+	knowledgeAreaName string,
+) *UnexpectedKnowledgeAreaReport {
+	return &UnexpectedKnowledgeAreaReport{
+		Name:            knowledgeAreaName,
+		TotalLearnHours: 0.0,
+		TopicReports:    []UnexpectedTopicReport{},
+	}
+}
+
+func (e *UnexpectedKnowledgeAreaReport) AddTopicReport(topicReport *UnexpectedTopicReport) {
+	e.TopicReports = append(e.TopicReports, *topicReport)
+	e.TotalLearnHours += topicReport.LearnHoursActual
+}
+
 type Report struct {
-	ID                   uint
-	DegreeProgram        DegreeProgram
-	ProfessionalRole     ProfessionalRole
-	KnowledgeAreaReports []KnowledgeAreaReport
-	Score                float32
+	ID                             uint
+	DegreeProgram                  DegreeProgram
+	ProfessionalRole               ProfessionalRole
+	KnowledgeAreaReports           []KnowledgeAreaReport
+	UnexpectedKnowledgeAreaReports []UnexpectedKnowledgeAreaReport
+	Score                          float32
 	// Información de la institución de educación superior
 	HigherEducationInstitution *HigherEducationInstitution
 	// Fecha de creación
@@ -82,17 +130,88 @@ func NewReport(
 	}
 
 	return &Report{
-		DegreeProgram:              degreeProgram,
-		ProfessionalRole:           professionalRole,
-		KnowledgeAreaReports:       []KnowledgeAreaReport{},
-		Score:                      0.0,
-		HigherEducationInstitution: higherEducationInstitution,
-		CreatedAt:                  time.Now(),
+		DegreeProgram:                  degreeProgram,
+		ProfessionalRole:               professionalRole,
+		KnowledgeAreaReports:           []KnowledgeAreaReport{},
+		UnexpectedKnowledgeAreaReports: []UnexpectedKnowledgeAreaReport{},
+		Score:                          0.0,
+		HigherEducationInstitution:     higherEducationInstitution,
+		CreatedAt:                      time.Now(),
 	}
 }
 
 func (e *Report) AddKnowledgeAreaReport(knowledgeAreaReport *KnowledgeAreaReport) {
 	e.KnowledgeAreaReports = append(e.KnowledgeAreaReports, *knowledgeAreaReport)
+}
+
+func (e *Report) AddUnexpectedKnowledgeAreaReport(knowledgeAreaReport *UnexpectedKnowledgeAreaReport) {
+	e.UnexpectedKnowledgeAreaReports = append(e.UnexpectedKnowledgeAreaReports, *knowledgeAreaReport)
+}
+
+func (e *Report) findAndAddUnexpectedTopics(courseTopics []CourseTopic, knowledgeAreasExpected []KnowledgeAreaExpected) {
+	// Create a map of expected topic IDs for quick lookup
+	expectedTopicIDs := make(map[uint]bool)
+	for _, knowledgeArea := range knowledgeAreasExpected {
+		for _, topicExpected := range knowledgeArea.TopicExpected {
+			expectedTopicIDs[topicExpected.TopicID] = true
+		}
+	}
+
+	// Group unexpected topics by knowledge area
+	unexpectedTopicsByArea := make(map[uint][]CourseTopic)
+	for _, courseTopic := range courseTopics {
+		// Check if this topic is not expected
+		if !expectedTopicIDs[courseTopic.TopicID] {
+			// Skip if topic information is not available
+			if courseTopic.Topic == nil {
+				continue
+			}
+
+			knowledgeAreaID := courseTopic.Topic.KnowledgeAreaID
+			unexpectedTopicsByArea[knowledgeAreaID] = append(unexpectedTopicsByArea[knowledgeAreaID], courseTopic)
+		}
+	}
+
+	// Create unexpected knowledge area reports
+	for knowledgeAreaID, topics := range unexpectedTopicsByArea {
+		// Get knowledge area name from the first topic (all topics in this area should have the same knowledge area)
+		var knowledgeAreaName string
+		var knowledgeArea *KnowledgeArea
+		if len(topics) > 0 && topics[0].Topic != nil && topics[0].Topic.KnowledgeArea != nil {
+			knowledgeAreaName = topics[0].Topic.KnowledgeArea.Name
+			knowledgeArea = topics[0].Topic.KnowledgeArea
+			// If the name is empty, provide a default
+			if knowledgeAreaName == "" {
+				knowledgeAreaName = "Área de conocimiento adicional"
+			}
+		} else {
+			knowledgeAreaName = "Área de conocimiento adicional"
+			knowledgeArea = &KnowledgeArea{ID: knowledgeAreaID, Name: knowledgeAreaName}
+		}
+
+		unexpectedAreaReport := NewUnexpectedKnowledgeAreaReport(knowledgeAreaName)
+
+		// Add topics to the unexpected knowledge area report
+		for _, topic := range topics {
+			var topicName string
+			if topic.Topic != nil && topic.Topic.Name != "" {
+				topicName = topic.Topic.Name
+			} else {
+				topicName = "Temática adicional"
+			}
+
+			topicReport := NewUnexpectedTopicReport(
+				topic.TopicID,
+				topicName,
+				topic.StudyHours,
+				knowledgeAreaID,
+				knowledgeArea,
+			)
+			unexpectedAreaReport.AddTopicReport(topicReport)
+		}
+
+		e.AddUnexpectedKnowledgeAreaReport(unexpectedAreaReport)
+	}
 }
 
 type ProfessionalRole struct {
@@ -163,6 +282,9 @@ func (e *ProfessionalRole) EvaluateDegreeProgram(degreeProgram *DegreeProgram) *
 		score += partialScore
 	}
 	report.Score = score
+
+	// Find unexpected topics (topics covered in courses but not expected in the professional role)
+	report.findAndAddUnexpectedTopics(courseTopics, knowledgeAreasExpected)
 
 	return report
 }

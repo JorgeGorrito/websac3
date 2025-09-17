@@ -3,6 +3,7 @@ package entity
 type CourseTopic struct {
 	CourseID   uint
 	TopicID    uint
+	Topic      *Topic
 	StudyHours float32
 }
 

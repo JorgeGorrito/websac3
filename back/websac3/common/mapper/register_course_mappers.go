@@ -10,9 +10,17 @@ import (
 func registerCourseMappers() {
 	RegisterMapFunc(
 		func(ct *model.CourseTopic) (entity.CourseTopic, error) {
+			var topicPtr *entity.Topic
+			if ct.Topic.ID != 0 {
+				if topic, err := Map[model.Topic, entity.Topic](&ct.Topic); err == nil {
+					topicPtr = &topic
+				}
+			}
+
 			return entity.CourseTopic{
 				CourseID:   ct.CourseID,
 				TopicID:    ct.TopicID,
+				Topic:      topicPtr,
 				StudyHours: float32(ct.StudyHours),
 			}, nil
 		},

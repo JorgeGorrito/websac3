@@ -9,9 +9,13 @@ import (
 func registerTopicMappers() {
 	RegisterMapFunc(
 		func(knowledgeAreaModel *model.KnowledgeArea) (entity.KnowledgeArea, error) {
+			var name string
+			if len(knowledgeAreaModel.Names) > 0 {
+				name = knowledgeAreaModel.Names[0].Name
+			}
 			return entity.KnowledgeArea{
 				ID:   knowledgeAreaModel.ID,
-				Name: knowledgeAreaModel.Names[0].Name,
+				Name: name,
 			}, nil
 		},
 	)
@@ -25,9 +29,14 @@ func registerTopicMappers() {
 				return entity.Topic{}, err
 			}
 
+			var name string
+			if len(topicModel.Names) > 0 {
+				name = topicModel.Names[0].Name
+			}
+
 			return entity.Topic{
 				ID:              topicModel.ID,
-				Name:            topicModel.Names[0].Name,
+				Name:            name,
 				KnowledgeAreaID: topicModel.KnowledgeAreaID,
 				KnowledgeArea:   &knowledgeArea,
 			}, nil
@@ -36,11 +45,17 @@ func registerTopicMappers() {
 
 	RegisterMapFunc(
 		func(topicEntity *entity.Topic) (response.ListTopicResponse, error) {
+			var knowledgeAreaID uint
+			var knowledgeAreaName string
+			if topicEntity.KnowledgeArea != nil {
+				knowledgeAreaID = topicEntity.KnowledgeArea.ID
+				knowledgeAreaName = topicEntity.KnowledgeArea.Name
+			}
 			return response.ListTopicResponse{
 				ID:                topicEntity.ID,
 				Name:              topicEntity.Name,
-				KnowledgeAreaID:   topicEntity.KnowledgeArea.ID,
-				KnowledgeAreaName: topicEntity.KnowledgeArea.Name,
+				KnowledgeAreaID:   knowledgeAreaID,
+				KnowledgeAreaName: knowledgeAreaName,
 			}, nil
 		},
 	)

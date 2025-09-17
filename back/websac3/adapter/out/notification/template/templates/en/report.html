@@ -179,6 +179,46 @@
                         </table>
                         {{end}}
 
+                        {{if .UnexpectedKnowledgeAreaReports}}
+                        <hr style="border: none; border-top: 2px solid #28a745; margin: 20px 0;">
+                        <h2 style="color: #28a745; margin: 0 0 16px; font-size: 20px; text-align: center;">
+                            📚 Additional Knowledge Areas
+                        </h2>
+                        <p style="font-size: 13px; color: #666; margin: 0 0 20px; text-align: center; line-height: 1.4;">
+                            Topics covered in the program that were not expected in the professional role
+                        </p>
+
+                        {{range .UnexpectedKnowledgeAreaReports}}
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin: 14px 0 10px; border: 1px solid #d4edda; border-radius: 8px; background-color: #f8fff9;">
+                            <tr>
+                                <td style="padding: 16px;">
+                                    <h3 style="color:#28a745; margin: 0 0 8px; font-size: 16px;">🌱 {{.Name}}</h3>
+                                    <p style="font-size: 13px; color:#555; margin:6px 0 12px;">
+                                        <strong>Total hours covered:</strong> {{printf "%.2f" .TotalLearnHours}}
+                                    </p>
+                                    
+                                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                                        <thead>
+                                            <tr>
+                                                <th align="left" style="background:#d4edda; color:#155724; font-size:12px; padding:8px; border:1px solid #c3e6cb;">Topic</th>
+                                                <th align="left" style="background:#d4edda; color:#155724; font-size:12px; padding:8px; border:1px solid #c3e6cb;">Hours covered</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{range .TopicReports}}
+                                            <tr>
+                                                <td style="font-size:12px; color:#333; padding:8px; border:1px solid #d4edda;">{{.Name}}</td>
+                                                <td style="font-size:12px; color:#333; padding:8px; border:1px solid #d4edda;">{{printf "%.2f" .LearnHoursActual}}</td>
+                                            </tr>
+                                            {{end}}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        {{end}}
+                        {{end}}
+
                         <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
                         <div style="text-align: center; margin: 12px 0;">
                             <img src="https://drive.google.com/uc?export=view&id=15By-VP-FG_DYjmO5Kq1byMkbQnTNguxR" alt="Universidad de los Llanos" style="width: 100px; margin: 0 10px;" />
