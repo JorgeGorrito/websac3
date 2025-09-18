@@ -19,20 +19,40 @@ export const LoginForm = () => {
   
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading, error, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isLoading, error, isAuthenticated, user } = useAppSelector((state) => state.auth);
   const [loginMutation] = useLoginMutation();
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/admin/dashboard");
-    }
-  }, [isAuthenticated, router]);
 
   // Clear error when component mounts
   useEffect(() => {
     dispatch(clearError());
   }, [dispatch]);
+
+  // Handle redirection after successful login
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      console.log("🔐 Debug - LoginForm: User authenticated, redirecting...");
+      
+      const getDashboardRoute = (role: string): string => {
+        switch (role) {
+          case 'admin':
+            return "/admin/dashboard";
+          case 'guest':
+          case 'program lead':
+            return "/director/dashboard";
+          case 'cybersecurity_auditor':
+            return "/experto/dashboard";
+          default:
+            return "/admin/dashboard";
+        }
+      };
+      
+      const dashboardRoute = getDashboardRoute(user.role);
+      console.log("🔐 Debug - LoginForm: Redirecting to:", dashboardRoute);
+      
+      // Use window.location.href for a hard redirect
+      window.location.href = dashboardRoute;
+    }
+  }, [isAuthenticated, user]);
 
   const handleSlideComplete = () => {
     setSlideCompleted(true);
@@ -50,13 +70,17 @@ export const LoginForm = () => {
     }
 
     try {
+      console.log("🔐 Debug - Starting login process");
       dispatch(loginStart());
       const result = await loginMutation({ email, password }).unwrap();
+      console.log("✅ Debug - Login API response:", result);
       
       // Decode JWT to get user information
       const tokenPayload = decodeJWT(result.access_token);
+      console.log("🔍 Debug - Decoded JWT payload:", tokenPayload);
       
       if (!tokenPayload) {
+        console.error("❌ Debug - Failed to decode JWT");
         dispatch(loginFailure("Error al procesar la respuesta del servidor"));
         return;
       }
@@ -69,22 +93,19 @@ export const LoginForm = () => {
         permissions: tokenPayload.permissions,
       };
 
+      console.log("👤 Debug - User object created:", user);
+
       dispatch(loginSuccess({
         accessToken: result.access_token,
         refreshToken: result.refresh_token,
         user,
       }));
 
-      // Redirect based on user role
-      const roleRoutes: Record<string, string> = {
-        admin: "/admin/dashboard",
-        director: "/director/dashboard",
-        experto: "/experto/dashboard",
-      };
-      
-      const dashboardRoute = roleRoutes[user.role] || "/admin/dashboard";
-      router.push(dashboardRoute);
+      console.log("✅ Debug - loginSuccess dispatched");
+
+      // The useEffect will handle the redirection based on user role
     } catch (error: any) {
+      console.error("❌ Debug - Login error:", error);
       const errorMessage = error?.data?.errors?.[0] || "Error al iniciar sesión";
       dispatch(loginFailure(errorMessage));
     }

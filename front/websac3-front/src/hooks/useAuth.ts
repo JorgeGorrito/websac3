@@ -12,7 +12,10 @@ export const useAuth = () => {
     router.push("/login");
   };
 
-  const hasRole = (role: string) => {
+  const hasRole = (role: string | string[]) => {
+    if (Array.isArray(role)) {
+      return role.includes(user?.role || "");
+    }
     return user?.role === role;
   };
 

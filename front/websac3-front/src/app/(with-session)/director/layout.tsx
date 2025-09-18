@@ -35,7 +35,7 @@ export default function DirectorLayout({
   };
 
   return (
-    <ProtectedRoute requiredRole="director">
+    <ProtectedRoute requiredRole={["guest", "program lead"]}>
       <SidebarProvider>
         <AppSidebar role={role} />
         <SidebarInset>

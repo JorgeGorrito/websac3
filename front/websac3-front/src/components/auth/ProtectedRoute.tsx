@@ -6,7 +6,7 @@ import { useAppSelector } from "@/store/hooks";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requiredRole?: string;
+  requiredRole?: string | string[];
   fallbackPath?: string;
 }
 
@@ -15,41 +15,85 @@ export const ProtectedRoute = ({
   requiredRole, 
   fallbackPath = "/login" 
 }: ProtectedRouteProps) => {
-  const { isAuthenticated, user, isLoading } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user, isLoading, isInitialized } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   useEffect(() => {
+    console.log("🛡️ Debug - ProtectedRoute useEffect:", { 
+      isLoading, 
+      isAuthenticated, 
+      user, 
+      requiredRole,
+      isInitialized
+    });
+    
+    // Don't do anything until auth is initialized
+    if (!isInitialized) {
+      console.log("🛡️ Debug - Auth not initialized yet, waiting...");
+      return;
+    }
+    
     if (!isLoading) {
       if (!isAuthenticated) {
+        console.log("🛡️ Debug - Not authenticated, redirecting to:", fallbackPath);
         router.push(fallbackPath);
         return;
       }
 
-      if (requiredRole && user?.role !== requiredRole) {
+      if (requiredRole) {
+        const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+        const hasRequiredRole = allowedRoles.includes(user?.role || "");
+        
+        console.log("🛡️ Debug - Role check:", { 
+          userRole: user?.role, 
+          allowedRoles, 
+          hasRequiredRole 
+        });
+        
+        if (!hasRequiredRole) {
         // Redirect to appropriate dashboard based on user role
-        const roleRoutes: Record<string, string> = {
-          admin: "/admin/dashboard",
-          director: "/director/dashboard",
-          experto: "/experto/dashboard",
+        const getDashboardRoute = (role: string): string => {
+          switch (role) {
+            case 'admin':
+              return "/admin/dashboard";
+            case 'guest':
+            case 'program lead': // Note: space, not underscore
+              return "/director/dashboard";
+            case 'cybersecurity_auditor':
+              return "/experto/dashboard";
+            default:
+              return "/admin/dashboard";
+          }
         };
         
-        const userDashboard = roleRoutes[user?.role || ""] || "/admin/dashboard";
-        router.push(userDashboard);
-        return;
+          const userDashboard = getDashboardRoute(user?.role || "");
+          console.log("🛡️ Debug - Role mismatch, redirecting to:", userDashboard);
+          router.push(userDashboard);
+          return;
+        }
       }
     }
-  }, [isAuthenticated, user, isLoading, requiredRole, fallbackPath, router]);
+  }, [isAuthenticated, user, isLoading, isInitialized, requiredRole, fallbackPath, router]);
 
-  // Show loading while checking authentication
-  if (isLoading) {
+  // Show loading while checking authentication or initializing
+  if (isLoading || !isInitialized) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Verificando autenticación...</p>
+          <p className="mt-4 text-gray-600">
+            {!isInitialized ? "Inicializando..." : "Verificando autenticación..."}
+          </p>
         </div>
       </div>
     );
+  }
+
+  // If authenticated but no user data, redirect to login to get user info
+  if (isAuthenticated && !user) {
+    console.log("🛡️ Debug - Authenticated but no user data, redirecting to login");
+    router.push("/login");
+    return null;
   }
 
   // Don't render children if not authenticated
@@ -58,8 +102,13 @@ export const ProtectedRoute = ({
   }
 
   // Don't render children if role doesn't match
-  if (requiredRole && user?.role !== requiredRole) {
-    return null;
+  if (requiredRole) {
+    const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+    const hasRequiredRole = allowedRoles.includes(user?.role || "");
+    
+    if (!hasRequiredRole) {
+      return null;
+    }
   }
 
   return <>{children}</>;

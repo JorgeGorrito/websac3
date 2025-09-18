@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export type UserRole = 'admin' | 'guest' | 'program lead' | 'cybersecurity_auditor';
+
 export interface User {
   id: number;
   username: string;
   email: string;
-  role: string;
+  role: UserRole;
   permissions?: Record<string, string[]>;
 }
 
@@ -14,15 +16,17 @@ export interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isInitialized: boolean; // New flag to track if auth has been initialized
   error: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
-  accessToken: typeof window !== "undefined" ? localStorage.getItem("access_token") : null,
-  refreshToken: typeof window !== "undefined" ? localStorage.getItem("refresh_token") : null,
-  isAuthenticated: typeof window !== "undefined" ? !!localStorage.getItem("access_token") : false,
+  accessToken: null,
+  refreshToken: null,
+  isAuthenticated: false,
   isLoading: false,
+  isInitialized: false, // Start as not initialized
   error: null,
 };
 
@@ -35,12 +39,20 @@ const authSlice = createSlice({
       state.error = null;
     },
     loginSuccess: (state, action: PayloadAction<{ accessToken: string; refreshToken: string; user: User }>) => {
+      console.log("🎉 Debug - loginSuccess reducer called with:", action.payload);
       state.isLoading = false;
       state.isAuthenticated = true;
+      state.isInitialized = true; // Mark as initialized
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.user = action.payload.user;
       state.error = null;
+      
+      console.log("🎉 Debug - State updated:", { 
+        isAuthenticated: state.isAuthenticated, 
+        user: state.user,
+        isInitialized: state.isInitialized
+      });
       
       // Store tokens in localStorage
       if (typeof window !== "undefined") {
@@ -82,6 +94,24 @@ const authSlice = createSlice({
         localStorage.setItem("refresh_token", action.payload.refreshToken);
       }
     },
+    initializeAuth: (state) => {
+      // Initialize auth state from localStorage on app start
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("access_token");
+        if (token) {
+          state.accessToken = token;
+          state.refreshToken = localStorage.getItem("refresh_token");
+          state.isAuthenticated = true;
+          // Note: We can't decode the user from token here since it's not available
+          // The user will be set when they navigate to a protected route
+        }
+      }
+      state.isInitialized = true; // Always mark as initialized
+    },
+    setInitialized: (state) => {
+      state.isInitialized = true;
+      console.log("🔧 Debug - setInitialized reducer called");
+    },
   },
 });
 
@@ -92,6 +122,8 @@ export const {
   logout,
   clearError,
   updateTokens,
+  initializeAuth,
+  setInitialized,
 } = authSlice.actions;
 
 export default authSlice.reducer;

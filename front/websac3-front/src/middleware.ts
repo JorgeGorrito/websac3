@@ -4,8 +4,8 @@ import type { NextRequest } from 'next/server'
 // Define protected routes and their required roles
 const protectedRoutes = {
   '/admin': 'admin',
-  '/director': 'director', 
-  '/experto': 'experto',
+  '/director': ['guest', 'program lead'], 
+  '/experto': 'cybersecurity_auditor',
 }
 
 // Define public routes that don't require authentication
@@ -16,6 +16,11 @@ const publicRoutes = [
 ]
 
 export function middleware(request: NextRequest) {
+  // TEMPORARILY DISABLED - Let client-side authentication handle everything
+  // This prevents server-side redirects that conflict with client-side auth
+  return NextResponse.next()
+  
+  /* ORIGINAL MIDDLEWARE CODE - COMMENTED OUT
   const { pathname } = request.nextUrl
   
   // Check if the route is public
@@ -49,6 +54,7 @@ export function middleware(request: NextRequest) {
   }
   
   return NextResponse.next()
+  */
 }
 
 export const config = {
