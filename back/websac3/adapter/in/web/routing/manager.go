@@ -33,6 +33,7 @@ func (m *manager) RegisterRoutes(engine *gin.Engine) error {
 	RegisterReportFeedbackRoutes(routerGroup)
 	RegisterProfessionalRoleRoutes(routerGroup)
 	RegisterRoleRoutes(routerGroup)
+	RegisterUserRoutes(routerGroup)
 	RegisterAuthRoutes(routerGroup)
 	RegisterSwagger(engine)
 

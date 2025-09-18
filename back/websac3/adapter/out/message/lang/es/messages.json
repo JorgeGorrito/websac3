@@ -71,6 +71,9 @@
     "not_found" : "No se encontraron solicitudes de acceso.",
     "access_requests_listed" : "Solicitudes de acceso listadas correctamente."
   },
+  "list_users" : {
+    "not_found" : "No se encontraron usuarios."
+  },
   "list_reports_pending_feedback" : {
     "not_found" : "No se encontraron reportes pendientes de retroalimentación."
   },

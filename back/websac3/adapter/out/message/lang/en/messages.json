@@ -69,6 +69,9 @@
     "not_found": "No access requests found.",
     "access_requests_listed": "Access requests listed successfully."
   },
+  "list_users": {
+    "not_found": "No users found."
+  },
   "list_reports_pending_feedback": {
     "not_found": "No reports pending feedback found."
   },

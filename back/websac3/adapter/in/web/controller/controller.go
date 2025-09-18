@@ -17,3 +17,11 @@ func (c *Authenticable) GetToken(ctx *gin.Context) *jwt.AccessTokenClaims {
 	}
 	return claims
 }
+
+func (a *Authenticable) GetPermissionsByModuleName(permissions map[string][]string, moduleName string) []string {
+	perms, ok := permissions[moduleName]
+	if !ok {
+		return []string{}
+	}
+	return perms
+}

@@ -346,6 +346,17 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	); err != nil {
 		*errorList = errors.Join(*errorList, err)
 	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.ListUsersQuery{}),
+		qhandler.NewListUsersQueryHandler(
+			container.Inject[usecase.ListUsersUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
 }
 
 func (m *manager) ConfigureMappers() {

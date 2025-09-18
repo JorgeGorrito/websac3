@@ -6,7 +6,9 @@ import (
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/message"
 	_db "websac3/app/port/out/persistence/db"
+	"websac3/common/filter"
 	"websac3/common/mapper"
+	"websac3/common/paginator"
 
 	"gorm.io/gorm"
 )
@@ -162,4 +164,87 @@ func (u *UserRepository) GetByID(ID uint, ctx _db.Context) (entity.User, error) 
 	}
 
 	return user, nil
+}
+
+func (u *UserRepository) ListAllWithPagination(ctx _db.Context, paginationParams paginator.PaginationParams, filters filter.Params) ([]entity.User, int64, error) {
+	dbCtx, err := u.CastDbContext(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	query := dbCtx.DB().Model(&model.User{}).
+		Preload("Role").
+		Preload("Person").
+		Preload("Person.HigherEducationInstitution").
+		Preload("Person.IdentificationType")
+
+	// Aplicar filtros
+	for field, filterData := range filters {
+		for operator, value := range filterData {
+			if value == "" {
+				continue
+			}
+
+			switch field {
+			case "email":
+				if operator == "cont" {
+					query = query.Where("users.email ILIKE ?", "%"+value+"%")
+				} else if operator == "eq" {
+					query = query.Where("users.email = ?", value)
+				}
+			case "Person.name":
+				if operator == "cont" {
+					query = query.Joins("Person").Where("\"Person\".name ILIKE ?", "%"+value+"%")
+				} else if operator == "eq" {
+					query = query.Joins("Person").Where("\"Person\".name = ?", value)
+				}
+			case "Person.lastname":
+				if operator == "cont" {
+					query = query.Joins("Person").Where("\"Person\".lastname ILIKE ?", "%"+value+"%")
+				} else if operator == "eq" {
+					query = query.Joins("Person").Where("\"Person\".lastname = ?", value)
+				}
+			case "Role.name":
+				if operator == "cont" {
+					query = query.Joins("Role").Where("\"Role\".name ILIKE ?", "%"+value+"%")
+				} else if operator == "eq" {
+					query = query.Joins("Role").Where("\"Role\".name = ?", value)
+				}
+			case "is_active":
+				if operator == "eq" {
+					if value == "true" {
+						query = query.Where("users.deactivated_at IS NULL")
+					} else if value == "false" {
+						query = query.Where("users.deactivated_at IS NOT NULL")
+					}
+				}
+			}
+		}
+	}
+
+	// Contar total
+	var total int64
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Aplicar paginación
+	var users []model.User
+	if err := query.
+		Offset(int((paginationParams.Currentpage - 1) * paginationParams.ItemsPerpage)).
+		Limit(int(paginationParams.ItemsPerpage)).
+		Find(&users).Error; err != nil {
+		return nil, 0, err
+	}
+
+	var entityUsers []entity.User
+	for _, user := range users {
+		entityUser, err := mapper.Map[model.User, entity.User](&user)
+		if err != nil {
+			return nil, 0, err
+		}
+		entityUsers = append(entityUsers, entityUser)
+	}
+
+	return entityUsers, total, nil
 }

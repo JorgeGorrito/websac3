@@ -3,6 +3,7 @@ package mapper
 import (
 	"strings"
 	"websac3/adapter/in/web/request"
+	"websac3/adapter/in/web/response"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/in/dto/command"
@@ -129,6 +130,24 @@ func registerUserMappers() {
 		func(request *request.RefreshTokenRequest) (command.RefreshTokenCommand, error) {
 			return command.RefreshTokenCommand{
 				RefreshToken: request.RefreshToken,
+			}, nil
+		},
+	)
+
+	RegisterMapFunc(
+		func(user *entity.User) (response.ListUsersResponse, error) {
+			fullName := ""
+			if user.Person != nil {
+				fullName = user.Person.Name + " " + user.Person.Lastname
+			}
+
+			isActive := user.IsActive()
+
+			return response.ListUsersResponse{
+				ID:       user.ID,
+				FullName: fullName,
+				Email:    user.Email,
+				IsActive: isActive,
 			}, nil
 		},
 	)

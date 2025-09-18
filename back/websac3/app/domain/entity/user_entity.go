@@ -27,3 +27,7 @@ func (u *User) IsRegistered() bool {
 func (u *User) IsPasswordHashEqual(hash string) bool {
 	return u.PasswordHash == hash
 }
+
+func (u *User) IsActive() bool {
+	return u.DeactivatedAt == nil
+}

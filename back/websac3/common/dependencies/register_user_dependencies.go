@@ -63,6 +63,16 @@ func (m *manager) registerUserDependencies() {
 	)
 
 	m.binder.Bind(
+		andi.GetAbstractType[usecase.ListUsersUseCase](),
+		func() any {
+			return service.NewListUsersService(
+				container.Inject[persistence.GetUserPort](),
+				container.Inject[db.Manager](),
+			)
+		},
+	)
+
+	m.binder.Bind(
 		andi.GetAbstractType[jwt.Generator](),
 		func() any {
 			return jwt.NewGenerator(
