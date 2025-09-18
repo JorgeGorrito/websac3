@@ -6,7 +6,7 @@ import * as React from "react";
 
 import { NavMain } from "@/components/sidebar/nav-main";
 import { NavSecondary } from "@/components/sidebar/nav-secondary";
-// import { NavUser } from "@/components/sidebar/nav-user";
+import { NavUser } from "@/components/sidebar/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -19,6 +19,7 @@ import {
 
 import { SIDEBAR_BY_ROLE, type RoleKey } from "@/constants/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth } from "@/hooks/useAuth";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   role?: RoleKey;
@@ -29,6 +30,14 @@ export default function AppSidebar({
   ...props
 }: AppSidebarProps) {
   const data = SIDEBAR_BY_ROLE[role];
+  const { user } = useAuth();
+  
+  // Use authenticated user data if available, otherwise fallback to role data
+  const userData = user ? {
+    name: user.username,
+    email: user.email,
+    avatar: "https://github.com/shadcn.png" // You can customize this
+  } : data.user;
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader className="border-b border-primary/20">
@@ -42,11 +51,11 @@ export default function AppSidebar({
               <a href="#" className="group">
                 <Avatar className="h-10 w-10 rounded-xl">
                   <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt={data.user.name}
+                    src={userData.avatar}
+                    alt={userData.name}
                   />
                   <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-medium">
-                    {data.user.name
+                    {userData.name
                       .split(" ")
                       .map((n) => n[0])
                       .join("")
@@ -55,7 +64,7 @@ export default function AppSidebar({
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium text-foreground">
-                    {data.user.name}
+                    {userData.name}
                   </span>
                   <span className="truncate text-xs text-primary bg-primary/5 px-2 py-1 rounded-full">
                     {data.roleLabel}
@@ -69,11 +78,12 @@ export default function AppSidebar({
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      {data.navSecondary ? (
-        <SidebarFooter>
+      <SidebarFooter>
+        {data.navSecondary ? (
           <NavSecondary items={data.navSecondary} />
-        </SidebarFooter>
-      ) : null}
+        ) : null}
+        <NavUser user={userData} />
+      </SidebarFooter>
     </Sidebar>
   );
 }

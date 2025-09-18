@@ -50,6 +50,35 @@ export type ValidateEmailRequest = {
   validation_token: string;
 };
 
+export type LoginRequest = {
+  email: string;
+  password: string;
+};
+
+export type LoginResponse = {
+  access_token: string;
+  refresh_token: string;
+};
+
+export type RefreshTokenRequest = {
+  refresh_token: string;
+};
+
+export type RefreshTokenResponse = {
+  access_token: string;
+  refresh_token: string;
+};
+
+export type CreateUserFromTokenRequest = {
+  password: string;
+  confirm_password: string;
+  create_user_token: string;
+};
+
+export type CreateUserFromTokenResponse = {
+  message: string;
+};
+
 export type IdentificationTypeItem = {
   id: number;
   name: string;
@@ -60,15 +89,15 @@ export type HigherEducationInstitutionItem = {
   name: string;
 };
 
-export const api = createApi({
-  reducerPath: "api",
-  baseQuery: fetchBaseQuery({
+// Custom base query with automatic token refresh
+const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
+  let result = await fetchBaseQuery({
     baseUrl:
       process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
       "http://localhost:8110/api/v1/es",
     credentials: "include",
     prepareHeaders: (headers) => {
-      // Attach bearer token if present (supports cookie or localStorage setups)
+      // Attach bearer token if present
       if (typeof window !== "undefined") {
         const token = window.localStorage?.getItem("access_token");
         if (token) headers.set("Authorization", `Bearer ${token}`);
@@ -76,7 +105,72 @@ export const api = createApi({
       headers.set("Accept", "application/json");
       return headers;
     },
-  }),
+  })(args, api, extraOptions);
+
+  // If we get a 401, try to refresh the token
+  if (result.error && result.error.status === 401) {
+    const refreshToken = typeof window !== "undefined" ? window.localStorage?.getItem("refresh_token") : null;
+    
+    if (refreshToken) {
+      // Try to refresh the token
+      const refreshResult = await fetchBaseQuery({
+        baseUrl:
+          process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
+          "http://localhost:8110/api/v1/es",
+        credentials: "include",
+        prepareHeaders: (headers) => {
+          headers.set("Accept", "application/json");
+          return headers;
+        },
+      })({
+        url: "/auth/refresh",
+        method: "POST",
+        body: { refresh_token: refreshToken },
+      }, api, extraOptions);
+
+      if (refreshResult.data) {
+        const { access_token, refresh_token } = refreshResult.data as RefreshTokenResponse;
+        
+        // Store the new tokens
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("access_token", access_token);
+          window.localStorage.setItem("refresh_token", refresh_token);
+        }
+
+        // Retry the original request with the new token
+        result = await fetchBaseQuery({
+          baseUrl:
+            process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
+            "http://localhost:8110/api/v1/es",
+          credentials: "include",
+          prepareHeaders: (headers) => {
+            headers.set("Authorization", `Bearer ${access_token}`);
+            headers.set("Accept", "application/json");
+            return headers;
+          },
+        })(args, api, extraOptions);
+      } else {
+        // Refresh failed, clear tokens and redirect to login
+        if (typeof window !== "undefined") {
+          window.localStorage.removeItem("access_token");
+          window.localStorage.removeItem("refresh_token");
+          window.location.href = "/login";
+        }
+      }
+    } else {
+      // No refresh token, redirect to login
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
+    }
+  }
+
+  return result;
+};
+
+export const api = createApi({
+  reducerPath: "api",
+  baseQuery: baseQueryWithReauth,
   tagTypes: ["AccessRequest"],
   endpoints: (builder) => ({
     // Catalogs
@@ -161,6 +255,19 @@ export const api = createApi({
         ],
       }
     ),
+    // Authentication endpoints
+    login: builder.mutation<LoginResponse, LoginRequest>({
+      query: (body) => ({ url: "/auth", method: "POST", body }),
+      transformResponse: (response: ApiResponse<LoginResponse>) => response.result,
+    }),
+    refreshToken: builder.mutation<RefreshTokenResponse, RefreshTokenRequest>({
+      query: (body) => ({ url: "/auth/refresh", method: "POST", body }),
+      transformResponse: (response: ApiResponse<RefreshTokenResponse>) => response.result,
+    }),
+    createUserFromToken: builder.mutation<CreateUserFromTokenResponse, CreateUserFromTokenRequest>({
+      query: (body) => ({ url: "/user/create-from-token", method: "POST", body }),
+      transformResponse: (response: ApiResponse<CreateUserFromTokenResponse>) => response.result,
+    }),
   }),
 });
 
@@ -173,6 +280,10 @@ export const {
   useValidateAccessRequestEmailMutation,
   useApproveAccessRequestMutation,
   useRejectAccessRequestMutation,
+  // authentication
+  useLoginMutation,
+  useRefreshTokenMutation,
+  useCreateUserFromTokenMutation,
 } = api;
 
 

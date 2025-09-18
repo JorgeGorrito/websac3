@@ -1,26 +1,92 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, User } from "lucide-react";
 import { SlideToSubmit } from "../SlideToSubmit";
+import { useLoginMutation } from "@/services/api";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { loginStart, loginSuccess, loginFailure, clearError } from "@/store/authSlice";
+import { decodeJWT } from "@/lib/jwt";
 
 export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [slideCompleted, setSlideCompleted] = useState(false);
+  
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { isLoading, error, isAuthenticated } = useAppSelector((state) => state.auth);
+  const [loginMutation] = useLoginMutation();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/admin/dashboard");
+    }
+  }, [isAuthenticated, router]);
+
+  // Clear error when component mounts
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   const handleSlideComplete = () => {
     setSlideCompleted(true);
   };
 
-  const handleLogin = () => {
-    if (slideCompleted) {
-      alert("¡Login exitoso!");
-    } else {
+  const handleLogin = async () => {
+    if (!slideCompleted) {
       alert("¡Debes completar el slide para iniciar sesión!");
+      return;
+    }
+
+    if (!email || !password) {
+      dispatch(loginFailure("Por favor completa todos los campos"));
+      return;
+    }
+
+    try {
+      dispatch(loginStart());
+      const result = await loginMutation({ email, password }).unwrap();
+      
+      // Decode JWT to get user information
+      const tokenPayload = decodeJWT(result.access_token);
+      
+      if (!tokenPayload) {
+        dispatch(loginFailure("Error al procesar la respuesta del servidor"));
+        return;
+      }
+
+      const user = {
+        id: tokenPayload.sub,
+        username: tokenPayload.username,
+        email: email,
+        role: tokenPayload.role,
+        permissions: tokenPayload.permissions,
+      };
+
+      dispatch(loginSuccess({
+        accessToken: result.access_token,
+        refreshToken: result.refresh_token,
+        user,
+      }));
+
+      // Redirect based on user role
+      const roleRoutes: Record<string, string> = {
+        admin: "/admin/dashboard",
+        director: "/director/dashboard",
+        experto: "/experto/dashboard",
+      };
+      
+      const dashboardRoute = roleRoutes[user.role] || "/admin/dashboard";
+      router.push(dashboardRoute);
+    } catch (error: any) {
+      const errorMessage = error?.data?.errors?.[0] || "Error al iniciar sesión";
+      dispatch(loginFailure(errorMessage));
     }
   };
 
@@ -35,17 +101,25 @@ export const LoginForm = () => {
         <User className="w-6 h-6 text-blue-500" />
       </div>
 
+      {/* Error message */}
+      {error && (
+        <div className="w-full p-3 bg-red-100 border border-red-300 rounded-md">
+          <p className="text-sm text-red-600">{error}</p>
+        </div>
+      )}
+
       {/* Formulario */}
       <div className="w-full space-y-3">
-        {/* Campo de usuario */}
+        {/* Campo de email */}
         <div className="space-y-1">
-          <label className="text-sm font-medium text-gray-700">Usuario</label>
+          <label className="text-sm font-medium text-gray-700">Email</label>
           <Input
-            type="text"
-            placeholder="Ingresa tu usuario"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="Ingresa tu email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full"
+            disabled={isLoading}
           />
         </div>
 
@@ -61,11 +135,13 @@ export const LoginForm = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full pr-10"
+              disabled={isLoading}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              disabled={isLoading}
             >
               {showPassword ? (
                 <EyeOff className="w-4 h-4" />
@@ -92,13 +168,18 @@ export const LoginForm = () => {
 
         {/* Botones */}
         <div className="flex space-x-3 pt-2">
-          <Button onClick={handleLogin} className="flex-1">
-            Iniciar sesión
+          <Button 
+            onClick={handleLogin} 
+            className="flex-1"
+            disabled={isLoading || !slideCompleted}
+          >
+            {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
           </Button>
           <Button
             onClick={handleAccessRequest}
             variant="outline"
             className="flex-1"
+            disabled={isLoading}
           >
             Solicitar acceso
           </Button>
