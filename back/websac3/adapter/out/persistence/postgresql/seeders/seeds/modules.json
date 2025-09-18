@@ -51,7 +51,7 @@
     },
     {
         "id" : 11,
-        "name" : "users",
-        "description" : "Módulo para la gestión de usuarios del sistema"
+        "name" : "profile",
+        "description" : "Módulo para la gestión de perfil de usuario"
     }
 ]

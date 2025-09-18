@@ -72,7 +72,7 @@ func (c *ListUsersController) Handle(ctx *gin.Context) {
 
 	token := c.GetToken(ctx)
 
-	permissions := c.GetPermissionsByModuleName(token.Permissions, "users")
+	permissions := c.GetPermissionsByModuleName(token.Permissions, "user-management")
 	lang := ctx.Param("lang")
 	var filters = util.ParseParamsFilter(filtersMap)
 	var requestQuery = query.ListUsersQuery{

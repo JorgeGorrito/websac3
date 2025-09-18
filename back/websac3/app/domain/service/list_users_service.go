@@ -3,7 +3,6 @@ package service
 import (
 	"websac3/app/domain/entity"
 	"websac3/app/port/in/dto/query"
-	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/persistence"
 	"websac3/app/port/out/persistence/db"
 	"websac3/common/paginator"
@@ -45,5 +44,3 @@ func (s *ListUsersService) Execute(query query.ListUsersQuery, lang string) (*pa
 
 	return page.GetPage()
 }
-
-var _ usecase.ListUsersUseCase = (*ListUsersService)(nil)

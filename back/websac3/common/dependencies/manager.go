@@ -54,5 +54,7 @@ func (m *manager) RegisterDependencies() error {
 	m.registerRoleDependencies()
 	m.registerApprovedAccessRequestDependencies()
 	m.registerRejectedAccessRequestDependencies()
+	m.registerDeactivateUserDependencies()
+	m.registerActivateUserDependencies()
 	return nil
 }

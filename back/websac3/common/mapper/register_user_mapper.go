@@ -10,6 +10,12 @@ import (
 	"websac3/common/jwt"
 )
 
+// Tipo para los mappers de activate/deactivate
+type UserActionInput struct {
+	UserID      uint
+	Permissions []string
+}
+
 func registerUserMappers() {
 	RegisterMapFunc(func(registerUserRequest *request.LoginRequest) (command.LoginCommand, error) {
 		return command.LoginCommand{
@@ -52,6 +58,9 @@ func registerUserMappers() {
 			Person:        &person,
 			DeactivatedAt: user.DeactivatedAt,
 			CreatedAt:     user.CreatedAt,
+			// UpdatedAt y DeletedAt se inicializan como nil ya que no existen en el modelo
+			UpdatedAt: nil,
+			DeletedAt: nil,
 		}, nil
 	})
 
@@ -84,6 +93,7 @@ func registerUserMappers() {
 			Person:        person,
 			DeactivatedAt: user.DeactivatedAt,
 			CreatedAt:     user.CreatedAt,
+			// UpdatedAt y DeletedAt no existen en el modelo, se manejan automáticamente por GORM
 		}, nil
 	})
 
@@ -151,4 +161,19 @@ func registerUserMappers() {
 			}, nil
 		},
 	)
+
+	// Mappers para activate/deactivate user commands
+	RegisterMapFunc(func(input *UserActionInput) (command.DeactivateUserCommand, error) {
+		return command.DeactivateUserCommand{
+			UserID:      input.UserID,
+			Permissions: input.Permissions,
+		}, nil
+	})
+
+	RegisterMapFunc(func(input *UserActionInput) (command.ActivateUserCommand, error) {
+		return command.ActivateUserCommand{
+			UserID:      input.UserID,
+			Permissions: input.Permissions,
+		}, nil
+	})
 }

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/message"
@@ -54,13 +55,19 @@ func (u *UserRepository) UpdateByID(userToUpdate *entity.User, userID uint, ctx 
 		return err
 	}
 
+	fmt.Printf("Updating user in DB: ID=%d, DeactivatedAt=%+v\n", user.ID, user.DeactivatedAt)
+
+	// Usar Select para especificar qué campos actualizar, incluyendo deactivated_at
 	if err := dbCtx.DB().
-		Model(&user).
+		Model(&model.User{}).
 		Where("id = ?", userID).
+		Select("email", "password_hash", "role_id", "person_id", "deactivated_at", "created_at").
 		Updates(&user).Error; err != nil {
+		fmt.Printf("Error updating user: %v\n", err)
 		return err
 	}
 
+	fmt.Printf("User updated successfully in DB\n")
 	return nil
 }
 

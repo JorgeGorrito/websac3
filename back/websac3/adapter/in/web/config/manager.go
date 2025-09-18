@@ -357,6 +357,30 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	); err != nil {
 		*errorList = errors.Join(*errorList, err)
 	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.DeactivateUserCommand{}),
+		chandler.NewDeactivateUserCommandHandler(
+			container.Inject[usecase.DeactivateUserUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.ActivateUserCommand{}),
+		chandler.NewActivateUserCommandHandler(
+			container.Inject[usecase.ActivateUserUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
 }
 
 func (m *manager) ConfigureMappers() {

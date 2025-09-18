@@ -72,6 +72,16 @@
   "list_users": {
     "not_found": "No users found."
   },
+  "deactivate_user": {
+    "user_not_found": "The specified user was not found.",
+    "user_already_deactivated": "The user is already deactivated.",
+    "user_deactivated_successfully": "User deactivated successfully."
+  },
+  "activate_user": {
+    "user_not_found": "The specified user was not found.",
+    "user_already_active": "The user is already active.",
+    "user_activated_successfully": "User activated successfully."
+  },
   "list_reports_pending_feedback": {
     "not_found": "No reports pending feedback found."
   },
