@@ -52,7 +52,7 @@ const AccessRequestForm = () => {
           lastname,
           name,
         },
-        register_user_url: `${origin}/register-user/token=`,
+        register_user_url: `${origin}/register-user?token=`,
         validation_email_url: `${origin}/access-request/validate-email?token=`,
       }).unwrap()
       
