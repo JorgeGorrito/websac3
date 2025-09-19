@@ -36,7 +36,7 @@ func GetListCourseByDegreeProgramController() *ListCourseByDegreeProgramControll
 // @Description - `name[cont]`
 // @Description
 // @Description Cualquier filtro no listado será ignorado automáticamente.
-// @Tags Course
+// @Tags DegreeProgram
 // @Accept json
 // @Produce json
 // @Param degree_program_id path int true "ID del programa de grado"

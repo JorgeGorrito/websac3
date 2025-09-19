@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"slices"
 	"time"
 )
 
@@ -245,22 +244,26 @@ func (e *ProfessionalRole) EvaluateDegreeProgram(degreeProgram *DegreeProgram) *
 
 		// Always include all expected topics for this knowledge area
 		for _, topicExpected := range knowledgeAreaExpected.TopicExpected {
-			iTopicFound := slices.IndexFunc(courseTopics, func(courseTopic CourseTopic) bool {
-				return topicExpected.TopicID == courseTopic.TopicID
-			})
-
+			// Find all course topics that match this topic ID and sum their hours
 			var actualHours float32 = 0.0
-			if iTopicFound != -1 {
-				// Topic found in degree program
-				topicCourse := courseTopics[iTopicFound]
-				actualHours = topicCourse.StudyHours
+			var totalTopicHours float32 = 0.0
 
-				if topicCourse.StudyHours > topicExpected.LearnHours {
+			for _, courseTopic := range courseTopics {
+				if topicExpected.TopicID == courseTopic.TopicID {
+					totalTopicHours += courseTopic.StudyHours
+				}
+			}
+
+			if totalTopicHours > 0 {
+				// Topic found in degree program (possibly in multiple courses)
+				actualHours = totalTopicHours
+
+				if totalTopicHours > topicExpected.LearnHours {
 					partialScore += float32(topicExpected.LearnHours)
 				} else {
-					partialScore += float32(topicCourse.StudyHours)
+					partialScore += float32(totalTopicHours)
 				}
-				knowledgeAreaReport.TotalLearnHoursActual += topicCourse.StudyHours
+				knowledgeAreaReport.TotalLearnHoursActual += totalTopicHours
 			}
 			// If not found, actualHours remains 0.0
 

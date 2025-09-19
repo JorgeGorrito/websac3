@@ -228,7 +228,7 @@ func registerCourseMappers() {
 				TypeID:                      courseModel.TypeID,
 				TypeName:                    typeName,
 				IsCybersecurity:             courseModel.IsCybersecurity,
-				ContainsCybersecurityTopics: courseModel.ContainsCybersecurityTopics,
+				ContainsCybersecurityTopics: len(courseModel.CourseTopics) > 0,
 				DegreeProgramID:             courseModel.DegreeProgramID,
 				DegreeProgramName:           degreeProgramName,
 				CreatedBy:                   courseModel.CreatedBy,

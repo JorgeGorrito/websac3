@@ -157,6 +157,7 @@ func (r *CourseRepository) GetModelsByDegreeProgramID(
 		}).
 		Preload("DegreeProgram").
 		Preload("UserCreator.Person").
+		Preload("CourseTopics").
 		Offset(int(offset)).
 		Limit(int(perPage)).
 		Order("period_number ASC, name ASC").
