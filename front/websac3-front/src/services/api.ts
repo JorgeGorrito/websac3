@@ -75,6 +75,26 @@ export type CreateUserFromTokenRequest = {
   create_user_token: string;
 };
 
+// Duration Unit types
+export type DurationUnitItem = {
+  id: number;
+  name: string;
+  description?: string;
+};
+
+// Degree Program types
+export type CreateDegreeProgramRequest = {
+  duration_unit_id: number;
+  duration_value: number;
+  entry_profile: string;
+  graduate_profile: string;
+  name: string;
+  professional_profile: string;
+  program_focus: string;
+  snies: number;
+  total_credits: number;
+};
+
 export type CreateUserFromTokenResponse = {
   message: string;
 };
@@ -255,6 +275,14 @@ export const api = createApi({
         ],
       }
     ),
+    // Director: Degree Programs
+    listDurationUnits: builder.query<DurationUnitItem[], void>({
+      query: () => ({ url: "/duration-unit" }),
+      transformResponse: (response: ApiResponse<{ data: DurationUnitItem[] }>) => response.result.data,
+    }),
+    createDegreeProgram: builder.mutation<ApiResponse<string>, CreateDegreeProgramRequest>({
+      query: (body) => ({ url: "/degree-program", method: "POST", body }),
+    }),
     // Authentication endpoints
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({ url: "/auth", method: "POST", body }),
@@ -280,6 +308,9 @@ export const {
   useValidateAccessRequestEmailMutation,
   useApproveAccessRequestMutation,
   useRejectAccessRequestMutation,
+  // degree programs
+  useListDurationUnitsQuery,
+  useCreateDegreeProgramMutation,
   // authentication
   useLoginMutation,
   useRefreshTokenMutation,
