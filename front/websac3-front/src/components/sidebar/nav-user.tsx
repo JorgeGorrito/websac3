@@ -1,12 +1,11 @@
 "use client"
 
 import {
-  BadgeCheck,
-  Bell,
+  User,
+  Settings,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
+  Shield,
 } from "lucide-react"
 
 import {
@@ -30,22 +29,32 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/hooks/useAuth"
+import { Badge } from "@/components/ui/badge"
 
 export function NavUser({
   user,
+  roleLabel,
 }: {
   user: {
     name: string
     email: string
     avatar: string
   }
+  roleLabel?: string
 }) {
   const { isMobile } = useSidebar()
-  const { logout } = useAuth()
+  const { logout, user: authUser } = useAuth()
 
   const handleLogout = () => {
     logout()
   }
+
+  // Get role label from auth user if available
+  const displayRole = roleLabel || (authUser?.role ? 
+    (authUser.role === 'admin' ? 'Administrador' :
+    authUser.role === 'program lead' ? 'Director de programa' :
+    authUser.role === 'cybersecurity_auditor' ? 'Experto en Ciberseguridad' :
+    authUser.role) : 'Usuario')
 
   return (
     <SidebarMenu>
@@ -54,63 +63,78 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 transition-colors"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="h-10 w-10 rounded-xl border-2 border-primary/20">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-semibold">
+                  {user.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-medium text-foreground">{user.name}</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <Badge variant="secondary" className="text-xs px-2 py-0.5 bg-primary/10 text-primary border-primary/20">
+                    {displayRole}
+                  </Badge>
+                </div>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <ChevronsUpDown className="ml-auto size-4 text-muted-foreground" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className="w-64 rounded-xl border shadow-lg"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
+              <div className="flex items-center gap-3 px-4 py-4 text-left">
+                <Avatar className="h-12 w-12 rounded-xl border-2 border-primary/20">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-semibold">
+                    {user.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                <div className="grid flex-1 text-left leading-tight">
+                  <span className="truncate font-medium text-foreground">{user.name}</span>
+                  <span className="truncate text-sm text-muted-foreground">{user.email}</span>
+                  <Badge variant="secondary" className="text-xs px-2 py-0.5 bg-primary/10 text-primary border-primary/20 w-fit mt-1">
+                    {displayRole}
+                  </Badge>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
+              <DropdownMenuItem className="gap-3 px-4 py-3">
+                <User className="h-4 w-4" />
+                <span>Mi Perfil</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="gap-3 px-4 py-3">
+                <Settings className="h-4 w-4" />
+                <span>Configuración</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="gap-3 px-4 py-3">
+                <Shield className="h-4 w-4" />
+                <span>Seguridad</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
-              <LogOut />
-              Log out
+            <DropdownMenuItem 
+              onClick={handleLogout}
+              className="gap-3 px-4 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 focus:text-red-700 focus:bg-red-50"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Cerrar Sesión</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
