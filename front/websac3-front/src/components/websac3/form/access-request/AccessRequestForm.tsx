@@ -18,6 +18,7 @@ const AccessRequestForm = () => {
   const [snies, setSnies] = useState<string>("")
   const [message, setMessage] = useState<string>("")
   const [error, setError] = useState<string>("")
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const [createAccessRequest, { isLoading }] = useCreateAccessRequestMutation()
   const { data: identificationTypes } = useListIdentificationTypesQuery()
@@ -30,6 +31,7 @@ const AccessRequestForm = () => {
     e.preventDefault()
     setMessage("")
     setError("")
+    setIsSuccess(false)
 
     const identification_type_id = Number(docType)
     const sniesNumber = Number(snies)
@@ -40,7 +42,7 @@ const AccessRequestForm = () => {
 
     const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000"
     try {
-      await createAccessRequest({
+      const response = await createAccessRequest({
         person: {
           email,
           higher_education_institution_snies: sniesNumber,
@@ -53,16 +55,31 @@ const AccessRequestForm = () => {
         register_user_url: `${origin}/register-user/token=`,
         validation_email_url: `${origin}/access-request/validate-email?token=`,
       }).unwrap()
-      setMessage("Solicitud enviada. Revisa tu correo para validar.")
-      setName("")
-      setLastname("")
-      setDocType("")
-      setIdentification("")
-      setPosition("")
-      setEmail("")
-      setSnies("")
-    } catch {
-      setError("No se pudo enviar la solicitud. Intenta de nuevo.")
+      
+      // Handle success response
+      if (response.result) {
+        setMessage(response.result)
+        setIsSuccess(true)
+        // Clear form on success
+        setName("")
+        setLastname("")
+        setDocType("")
+        setIdentification("")
+        setPosition("")
+        setEmail("")
+        setSnies("")
+      }
+    } catch (error: any) {
+      // Handle error response
+      if (error?.data?.errors && Array.isArray(error.data.errors)) {
+        // Backend sends errors as array of strings
+        setError(error.data.errors.join(", "))
+      } else if (error?.data?.result) {
+        // Sometimes errors come in result field
+        setError(error.data.result)
+      } else {
+        setError("No se pudo enviar la solicitud. Intenta de nuevo.")
+      }
     }
   }
 
@@ -182,8 +199,37 @@ const AccessRequestForm = () => {
         </Button>
       </div>
 
-      {message && <p className="text-green-600 text-sm">{message}</p>}
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {/* Success Message */}
+      {message && isSuccess && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-green-800">{message}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-red-800">{error}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   )
 }

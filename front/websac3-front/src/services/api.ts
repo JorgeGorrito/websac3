@@ -229,9 +229,9 @@ export const api = createApi({
             ]
           : [{ type: "AccessRequest" as const, id: "LIST" }],
     }),
-    createAccessRequest: builder.mutation<string, CreateAccessRequestRequest>({
+    createAccessRequest: builder.mutation<ApiResponse<string>, CreateAccessRequestRequest>({
       query: (body) => ({ url: "/access-request", method: "POST", body }),
-      transformResponse: (response: ApiResponse<string>) => response.result,
+      // Don't transform the response, return the full ApiResponse
     }),
     validateAccessRequestEmail: builder.mutation<string, ValidateEmailRequest>({
       query: (body) => ({ url: "/access-request/email/validate", method: "POST", body }),
