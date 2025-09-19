@@ -2,6 +2,9 @@
   "list_topic" : {
     "not_found" : "No se encontraron temáticas."
   },
+  "list_course_by_degree_program" : {
+    "not_found" : "No se encontraron cursos para el programa de grado especificado."
+  },
   "list_duration_unit" : {
     "not_found" : "No se encontraron unidades de duración."
   },

@@ -6,6 +6,8 @@ import (
 	"websac3/app/domain/errs"
 	_db "websac3/app/port/out/persistence/db"
 	"websac3/common/mapper"
+
+	"gorm.io/gorm"
 )
 
 type CourseRepository struct {
@@ -55,4 +57,112 @@ func (r *CourseRepository) Create(courseToSave *entity.Course, ctx _db.Context) 
 	}
 
 	return nil
+}
+
+func (r *CourseRepository) GetByDegreeProgramID(
+	degreeProgramID uint,
+	page uint,
+	perPage uint,
+	name string,
+	ctx _db.Context,
+) ([]entity.Course, int64, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	var courses []model.Course
+	var total int64
+
+	query := dbCtx.DB().Model(&model.Course{}).
+		Where("degree_program_id = ?", degreeProgramID)
+
+	// Apply name filter if provided
+	if name != "" {
+		query = query.Where("LOWER(name) LIKE LOWER(?)", "%"+name+"%")
+	}
+
+	// Get total count
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Apply pagination and get results
+	offset := (page - 1) * perPage
+	if err := query.
+		Preload("Nature", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("Type", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("DegreeProgram").
+		Preload("UserCreator.Person").
+		Offset(int(offset)).
+		Limit(int(perPage)).
+		Order("period_number ASC, name ASC").
+		Find(&courses).Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Map to entities
+	var courseEntities []entity.Course
+	for _, course := range courses {
+		courseEntity, err := mapper.Map[model.Course, entity.Course](&course)
+		if err != nil {
+			return nil, 0, err
+		}
+		courseEntities = append(courseEntities, courseEntity)
+	}
+
+	return courseEntities, total, nil
+}
+
+func (r *CourseRepository) GetModelsByDegreeProgramID(
+	degreeProgramID uint,
+	page uint,
+	perPage uint,
+	name string,
+	ctx _db.Context,
+) ([]model.Course, int64, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	var courses []model.Course
+	var total int64
+
+	query := dbCtx.DB().Model(&model.Course{}).
+		Where("degree_program_id = ?", degreeProgramID)
+
+	// Apply name filter if provided
+	if name != "" {
+		query = query.Where("LOWER(name) LIKE LOWER(?)", "%"+name+"%")
+	}
+
+	// Get total count
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Apply pagination and get results
+	offset := (page - 1) * perPage
+	if err := query.
+		Preload("Nature", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("Type", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("DegreeProgram").
+		Preload("UserCreator.Person").
+		Offset(int(offset)).
+		Limit(int(perPage)).
+		Order("period_number ASC, name ASC").
+		Find(&courses).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return courses, total, nil
 }

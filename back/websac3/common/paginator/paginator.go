@@ -14,8 +14,8 @@ type Page[T any] struct {
 }
 
 type PaginationParams struct {
-	Currentpage  uint `json:"current_page" form:"current_page"`
-	ItemsPerpage uint `json:"items_per_page" form:"items_per_page"`
+	Currentpage  uint `json:"current_page" form:"current_page,default=1"`
+	ItemsPerpage uint `json:"items_per_page" form:"items_per_page,default=10"`
 }
 
 func New[T any]() *paginator[T] {

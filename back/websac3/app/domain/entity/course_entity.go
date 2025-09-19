@@ -14,7 +14,9 @@ type Course struct {
 	Credits         uint
 	PeriodNumber    uint
 	NatureID        uint
+	Nature          *CourseNature
 	TypeID          uint
+	Type            *CourseType
 	IsCybersecurity bool
 
 	DegreeProgramID uint
