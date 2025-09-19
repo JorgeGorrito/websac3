@@ -39,7 +39,6 @@ const authSlice = createSlice({
       state.error = null;
     },
     loginSuccess: (state, action: PayloadAction<{ accessToken: string; refreshToken: string; user: User }>) => {
-      console.log("🎉 Debug - loginSuccess reducer called with:", action.payload);
       state.isLoading = false;
       state.isAuthenticated = true;
       state.isInitialized = true; // Mark as initialized
@@ -47,12 +46,6 @@ const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.user = action.payload.user;
       state.error = null;
-      
-      console.log("🎉 Debug - State updated:", { 
-        isAuthenticated: state.isAuthenticated, 
-        user: state.user,
-        isInitialized: state.isInitialized
-      });
       
       // Store tokens in localStorage
       if (typeof window !== "undefined") {
@@ -110,7 +103,6 @@ const authSlice = createSlice({
     },
     setInitialized: (state) => {
       state.isInitialized = true;
-      console.log("🔧 Debug - setInitialized reducer called");
     },
   },
 });

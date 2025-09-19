@@ -30,8 +30,6 @@ export const LoginForm = () => {
   // Handle redirection after successful login
   useEffect(() => {
     if (isAuthenticated && user) {
-      console.log("🔐 Debug - LoginForm: User authenticated, redirecting...");
-      
       const getDashboardRoute = (role: string): string => {
         switch (role) {
           case 'admin':
@@ -47,7 +45,6 @@ export const LoginForm = () => {
       };
       
       const dashboardRoute = getDashboardRoute(user.role);
-      console.log("🔐 Debug - LoginForm: Redirecting to:", dashboardRoute);
       
       // Use window.location.href for a hard redirect
       window.location.href = dashboardRoute;
@@ -70,17 +67,13 @@ export const LoginForm = () => {
     }
 
     try {
-      console.log("🔐 Debug - Starting login process");
       dispatch(loginStart());
       const result = await loginMutation({ email, password }).unwrap();
-      console.log("✅ Debug - Login API response:", result);
       
       // Decode JWT to get user information
       const tokenPayload = decodeJWT(result.access_token);
-      console.log("🔍 Debug - Decoded JWT payload:", tokenPayload);
       
       if (!tokenPayload) {
-        console.error("❌ Debug - Failed to decode JWT");
         dispatch(loginFailure("Error al procesar la respuesta del servidor"));
         return;
       }
@@ -93,19 +86,14 @@ export const LoginForm = () => {
         permissions: tokenPayload.permissions,
       };
 
-      console.log("👤 Debug - User object created:", user);
-
       dispatch(loginSuccess({
         accessToken: result.access_token,
         refreshToken: result.refresh_token,
         user,
       }));
 
-      console.log("✅ Debug - loginSuccess dispatched");
-
       // The useEffect will handle the redirection based on user role
     } catch (error: any) {
-      console.error("❌ Debug - Login error:", error);
       const errorMessage = error?.data?.errors?.[0] || "Error al iniciar sesión";
       dispatch(loginFailure(errorMessage));
     }
@@ -182,7 +170,6 @@ export const LoginForm = () => {
 
         <SlideToSubmit
           onComplete={handleSlideComplete}
-          label="Slide to Submit"
           completedText="¡Completado!"
           slideText="Arrastra para continuar"
         />

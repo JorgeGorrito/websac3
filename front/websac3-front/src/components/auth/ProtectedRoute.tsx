@@ -19,23 +19,13 @@ export const ProtectedRoute = ({
   const router = useRouter();
 
   useEffect(() => {
-    console.log("🛡️ Debug - ProtectedRoute useEffect:", { 
-      isLoading, 
-      isAuthenticated, 
-      user, 
-      requiredRole,
-      isInitialized
-    });
-    
     // Don't do anything until auth is initialized
     if (!isInitialized) {
-      console.log("🛡️ Debug - Auth not initialized yet, waiting...");
       return;
     }
     
     if (!isLoading) {
       if (!isAuthenticated) {
-        console.log("🛡️ Debug - Not authenticated, redirecting to:", fallbackPath);
         router.push(fallbackPath);
         return;
       }
@@ -43,12 +33,6 @@ export const ProtectedRoute = ({
       if (requiredRole) {
         const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
         const hasRequiredRole = allowedRoles.includes(user?.role || "");
-        
-        console.log("🛡️ Debug - Role check:", { 
-          userRole: user?.role, 
-          allowedRoles, 
-          hasRequiredRole 
-        });
         
         if (!hasRequiredRole) {
         // Redirect to appropriate dashboard based on user role
@@ -67,7 +51,6 @@ export const ProtectedRoute = ({
         };
         
           const userDashboard = getDashboardRoute(user?.role || "");
-          console.log("🛡️ Debug - Role mismatch, redirecting to:", userDashboard);
           router.push(userDashboard);
           return;
         }
@@ -91,7 +74,6 @@ export const ProtectedRoute = ({
 
   // If authenticated but no user data, redirect to login to get user info
   if (isAuthenticated && !user) {
-    console.log("🛡️ Debug - Authenticated but no user data, redirecting to login");
     router.push("/login");
     return null;
   }
