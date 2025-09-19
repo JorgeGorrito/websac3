@@ -64,10 +64,7 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
       { title: "Gestionar Modelo", url: "/experto/modelo", icon: Settings },
       { title: "Perfil", url: "/experto/perfil", icon: UserCog },
     ],
-    navSecondary: [
-      { title: "Soporte", url: "#", icon: LifeBuoy },
-      { title: "Feedback", url: "#", icon: Send },
-    ],
+    navSecondary: [],
   },
   ADMIN: {
     user: defaultUser,
@@ -95,10 +92,7 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
         icon: Inbox,
       },
     ],
-    navSecondary: [
-      { title: "Soporte", url: "#", icon: LifeBuoy },
-      { title: "Feedback", url: "#", icon: Send },
-    ],
+    navSecondary: [],
   },
   DIRECTOR: {
     user: defaultUser,
@@ -106,8 +100,8 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
     navMain: [
       { title: "Inicio", url: "/director/dashboard", icon: Home },
       {
-        title: "Registrar Programa",
-        url: "/director/registrar-programa",
+        title: "Programas de Grado",
+        url: "/director/programas",
         icon: PlusSquare,
       },
       {
@@ -132,9 +126,6 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
       },
       { title: "Perfil", url: "/director/perfil", icon: UserCog },
     ],
-    navSecondary: [
-      { title: "Soporte", url: "#", icon: LifeBuoy },
-      { title: "Feedback", url: "#", icon: Send },
-    ],
+    navSecondary: [],
   },
 };

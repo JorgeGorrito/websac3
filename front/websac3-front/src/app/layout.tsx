@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { ReduxProvider } from "@/store/ReduxProvider";
 import { AuthInitializer } from "@/components/auth/AuthInitializer";
+import { ErrorHandler } from "@/components/ErrorHandler";
 
 export const metadata: Metadata = {
   title: "WebSAC3",
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body>
         <ReduxProvider>
           <AuthInitializer />
+          <ErrorHandler />
           {children}
         </ReduxProvider>
       </body>

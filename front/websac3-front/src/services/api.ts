@@ -83,6 +83,27 @@ export type DurationUnitItem = {
 };
 
 // Degree Program types
+export type DegreeProgramItem = {
+  id: number;
+  name: string;
+  snies: number;
+  total_credits: number;
+  duration_value: number;
+  duration_unit: {
+    id: number;
+    name: string;
+  };
+  program_focus: string;
+  entry_profile: string;
+  graduate_profile: string;
+  professional_profile: string;
+  created_by: number;
+  higher_education_institution: {
+    snies: number;
+    name: string;
+  };
+};
+
 export type CreateDegreeProgramRequest = {
   duration_unit_id: number;
   duration_value: number;
@@ -185,13 +206,47 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
     }
   }
 
+  // Handle errors by checking if errors array is not empty
+  if (result.error && result.error.data && typeof result.error.data === 'object') {
+    const errorData = result.error.data as any;
+    
+    // Check if it's our API error format with non-empty errors array
+    if (errorData.errors && Array.isArray(errorData.errors) && errorData.errors.length > 0) {
+      const errorDetails = errorData.errors;
+      const errorMessage = errorDetails[0];
+      const statusCode = typeof result.error.status === 'number' ? result.error.status : undefined;
+      
+      // Determine error type based on status code
+      let errorType: "error" | "not_found" = "error";
+      
+      if (statusCode === 404) {
+        errorType = "not_found";
+      }
+      
+      // Dispatch error to Redux store
+      if (typeof window !== "undefined") {
+        // Import store dynamically to avoid circular dependency
+        import("@/store/store").then(({ store }) => {
+          import("@/store/errorSlice").then(({ showError }) => {
+            store.dispatch(showError({
+              type: errorType,
+              message: errorMessage,
+              errors: errorDetails,
+              statusCode: statusCode
+            }));
+          });
+        });
+      }
+    }
+  }
+
   return result;
 };
 
 export const api = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["AccessRequest"],
+  tagTypes: ["AccessRequest", "DegreeProgram"],
   endpoints: (builder) => ({
     // Catalogs
     listIdentificationTypes: builder.query<IdentificationTypeItem[], { current_page?: number; items_per_page?: number } | void>({
@@ -280,8 +335,37 @@ export const api = createApi({
       query: () => ({ url: "/duration-unit" }),
       transformResponse: (response: ApiResponse<{ data: DurationUnitItem[] }>) => response.result.data,
     }),
+    listDegreePrograms: builder.query<
+      PaginatedPage<DegreeProgramItem>,
+      { current_page?: number; items_per_page?: number; filters?: Record<string, string> }
+    >({
+      query: ({ current_page = 1, items_per_page = 10, filters } = {}) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        if (filters) {
+          const nested = new URLSearchParams();
+          for (const [key, value] of Object.entries(filters)) {
+            if (value !== undefined && value !== null && value !== "") {
+              nested.append(key, String(value));
+            }
+          }
+          params.set("filters", nested.toString());
+        }
+        return { url: `/degree-program?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<DegreeProgramItem>>) => response.result,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map((item) => ({ type: "DegreeProgram" as const, id: item.id })),
+              { type: "DegreeProgram" as const, id: "LIST" },
+            ]
+          : [{ type: "DegreeProgram" as const, id: "LIST" }],
+    }),
     createDegreeProgram: builder.mutation<ApiResponse<string>, CreateDegreeProgramRequest>({
       query: (body) => ({ url: "/degree-program", method: "POST", body }),
+      invalidatesTags: [{ type: "DegreeProgram", id: "LIST" }],
     }),
     // Authentication endpoints
     login: builder.mutation<LoginResponse, LoginRequest>({
@@ -310,6 +394,7 @@ export const {
   useRejectAccessRequestMutation,
   // degree programs
   useListDurationUnitsQuery,
+  useListDegreeProgramsQuery,
   useCreateDegreeProgramMutation,
   // authentication
   useLoginMutation,
