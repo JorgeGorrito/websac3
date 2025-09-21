@@ -167,3 +167,289 @@ func (r *CourseRepository) GetModelsByDegreeProgramID(
 
 	return courses, total, nil
 }
+
+func (r *CourseRepository) GetByID(
+	courseID uint,
+	ctx _db.Context,
+) (*entity.Course, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var course model.Course
+	if err := dbCtx.DB().
+		Preload("Nature", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("Type", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("DegreeProgram").
+		Preload("UserCreator.Person").
+		Preload("CourseTopics", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Topic", func(db *gorm.DB) *gorm.DB {
+				return db.Preload("KnowledgeArea", func(db *gorm.DB) *gorm.DB {
+					return db.Preload("Names")
+				}).Preload("Names")
+			})
+		}).
+		First(&course, courseID).Error; err != nil {
+		return nil, err
+	}
+
+	courseEntity, err := mapper.Map[model.Course, entity.Course](&course)
+	if err != nil {
+		return nil, err
+	}
+
+	return &courseEntity, nil
+}
+
+func (r *CourseRepository) GetModelByID(
+	courseID uint,
+	ctx _db.Context,
+) (*model.Course, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var course model.Course
+	if err := dbCtx.DB().
+		Preload("Nature", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("Type", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("DegreeProgram").
+		Preload("UserCreator.Person").
+		Preload("CourseTopics", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Topic", func(db *gorm.DB) *gorm.DB {
+				return db.Preload("KnowledgeArea", func(db *gorm.DB) *gorm.DB {
+					return db.Preload("Names")
+				}).Preload("Names")
+			})
+		}).
+		First(&course, courseID).Error; err != nil {
+		return nil, err
+	}
+
+	return &course, nil
+}
+
+func (r *CourseRepository) GetByIDWithLang(
+	courseID uint,
+	lang string,
+	ctx _db.Context,
+) (*entity.Course, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var course model.Course
+	if err := dbCtx.DB().
+		Preload("Nature", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("Type", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("DegreeProgram").
+		Preload("UserCreator.Person").
+		Preload("CourseTopics", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Topic", func(db *gorm.DB) *gorm.DB {
+				return db.Preload("KnowledgeArea", func(db *gorm.DB) *gorm.DB {
+					return db.Preload("Names")
+				}).Preload("Names")
+			})
+		}).
+		First(&course, courseID).Error; err != nil {
+		return nil, err
+	}
+
+	// Map to entity with language support using mappers
+	courseEntity, err := mapper.GetCourseMapperWithLanguage(lang)(&course)
+	if err != nil {
+		return nil, err
+	}
+
+	return &courseEntity, nil
+}
+
+func (r *CourseRepository) GetTopicsByCourseID(
+	courseID uint,
+	ctx _db.Context,
+) ([]entity.CourseTopic, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var courseTopics []model.CourseTopic
+	if err := dbCtx.DB().
+		Preload("Topic", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("KnowledgeArea", func(db *gorm.DB) *gorm.DB {
+				return db.Preload("Names")
+			}).Preload("Names")
+		}).
+		Where("course_id = ?", courseID).
+		Find(&courseTopics).Error; err != nil {
+		return nil, err
+	}
+
+	// Map to entities
+	var courseTopicEntities []entity.CourseTopic
+	for _, courseTopic := range courseTopics {
+		courseTopicEntity, err := mapper.Map[model.CourseTopic, entity.CourseTopic](&courseTopic)
+		if err != nil {
+			return nil, err
+		}
+		courseTopicEntities = append(courseTopicEntities, courseTopicEntity)
+	}
+
+	return courseTopicEntities, nil
+}
+
+func (r *CourseRepository) GetTopicsWithCourseByCourseID(
+	courseID uint,
+	ctx _db.Context,
+) ([]entity.CourseTopic, *entity.Course, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// First get the course
+	var course model.Course
+	if err := dbCtx.DB().
+		Preload("Nature", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("Type", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("DegreeProgram").
+		Preload("UserCreator.Person").
+		First(&course, courseID).Error; err != nil {
+		return nil, nil, err
+	}
+
+	// Then get the course topics
+	var courseTopics []model.CourseTopic
+	if err := dbCtx.DB().
+		Preload("Topic", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("KnowledgeArea", func(db *gorm.DB) *gorm.DB {
+				return db.Preload("Names")
+			}).Preload("Names")
+		}).
+		Where("course_id = ?", courseID).
+		Find(&courseTopics).Error; err != nil {
+		return nil, nil, err
+	}
+
+	// Map course to entity
+	courseEntity, err := mapper.Map[model.Course, entity.Course](&course)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// Map course topics to entities
+	var courseTopicEntities []entity.CourseTopic
+	for _, courseTopic := range courseTopics {
+		courseTopicEntity, err := mapper.Map[model.CourseTopic, entity.CourseTopic](&courseTopic)
+		if err != nil {
+			return nil, nil, err
+		}
+		courseTopicEntities = append(courseTopicEntities, courseTopicEntity)
+	}
+
+	return courseTopicEntities, &courseEntity, nil
+}
+
+// Helper function to get topic name by language from model
+func getTopicNameByLanguageFromModel(topicModel *model.Topic, lang string) string {
+	for _, name := range topicModel.Names {
+		if name.Lang == lang {
+			return name.Name
+		}
+	}
+	// If no name found for the language, use the first available
+	if len(topicModel.Names) > 0 {
+		return topicModel.Names[0].Name
+	}
+	return ""
+}
+
+// Helper function to get knowledge area name by language from model
+func getKnowledgeAreaNameByLanguageFromModel(kaModel *model.KnowledgeArea, lang string) string {
+	for _, name := range kaModel.Names {
+		if name.Lang == lang {
+			return name.Name
+		}
+	}
+	// If no name found for the language, use the first available
+	if len(kaModel.Names) > 0 {
+		return kaModel.Names[0].Name
+	}
+	return ""
+}
+
+func (r *CourseRepository) GetTopicsWithCourseByCourseIDAndLang(
+	courseID uint,
+	lang string,
+	ctx _db.Context,
+) ([]entity.CourseTopic, *entity.Course, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// First get the course
+	var course model.Course
+	if err := dbCtx.DB().
+		Preload("Nature", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("Type", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("DegreeProgram").
+		Preload("UserCreator.Person").
+		First(&course, courseID).Error; err != nil {
+		return nil, nil, err
+	}
+
+	// Then get the course topics
+	var courseTopics []model.CourseTopic
+	if err := dbCtx.DB().
+		Preload("Topic", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("KnowledgeArea", func(db *gorm.DB) *gorm.DB {
+				return db.Preload("Names")
+			}).Preload("Names")
+		}).
+		Where("course_id = ?", courseID).
+		Find(&courseTopics).Error; err != nil {
+		return nil, nil, err
+	}
+
+	// Map course to entity with language support using mappers
+	courseEntity, err := mapper.GetCourseMapperWithLanguage(lang)(&course)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// Map course topics to entities with language support using mappers
+	var courseTopicEntities []entity.CourseTopic
+	for _, courseTopic := range courseTopics {
+		courseTopicEntity, err := mapper.GetCourseTopicMapperWithLanguage(lang)(&courseTopic)
+		if err != nil {
+			return nil, nil, err
+		}
+		courseTopicEntities = append(courseTopicEntities, courseTopicEntity)
+	}
+
+	return courseTopicEntities, &courseEntity, nil
+}

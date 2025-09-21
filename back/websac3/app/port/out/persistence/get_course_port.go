@@ -22,4 +22,20 @@ type GetCoursePort interface {
 		name string,
 		ctx db.Context,
 	) ([]model.Course, int64, error)
+
+	GetByID(
+		courseID uint,
+		ctx db.Context,
+	) (*entity.Course, error)
+
+	GetModelByID(
+		courseID uint,
+		ctx db.Context,
+	) (*model.Course, error)
+
+	GetByIDWithLang(
+		courseID uint,
+		lang string,
+		ctx db.Context,
+	) (*entity.Course, error)
 }

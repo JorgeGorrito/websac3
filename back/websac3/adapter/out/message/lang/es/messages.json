@@ -5,6 +5,12 @@
   "list_course_by_degree_program" : {
     "not_found" : "No se encontraron cursos para el programa de grado especificado."
   },
+  "get_course_by_id" : {
+    "not_found" : "Curso no encontrado."
+  },
+  "get_course_topics_by_course_id" : {
+    "not_found" : "No se encontraron tópicos para el curso especificado."
+  },
   "list_duration_unit" : {
     "not_found" : "No se encontraron unidades de duración."
   },

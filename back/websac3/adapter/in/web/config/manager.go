@@ -276,6 +276,30 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(query.GetCourseByIDQuery{}),
+		qhandler.NewGetCourseByIDQueryHandler(
+			container.Inject[usecase.GetCourseByIDUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.GetCourseTopicsByCourseIDQuery{}),
+		qhandler.NewGetCourseTopicsByCourseIDQueryHandler(
+			container.Inject[usecase.GetCourseTopicsByCourseIDUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(command.CreateReportFeedbackCommand{}),
 		chandler.NewCreateReportFeedbackCommandHandler(
 			container.Inject[validator.Validator](),

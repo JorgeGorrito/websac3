@@ -28,6 +28,13 @@ func registerCourseMappers() {
 		},
 	)
 
+	// CourseNature mapper with language support
+	RegisterMapFunc(
+		func(cn *model.CourseNature) (entity.CourseNature, error) {
+			return mapCourseNatureWithLanguage(cn, "en") // Default to English
+		},
+	)
+
 	// CourseType mappers
 	RegisterMapFunc(
 		func(ct *model.CourseType) (entity.CourseType, error) {
@@ -44,6 +51,13 @@ func registerCourseMappers() {
 				ID:    ct.ID,
 				Names: names,
 			}, nil
+		},
+	)
+
+	// CourseType mapper with language support
+	RegisterMapFunc(
+		func(ct *model.CourseType) (entity.CourseType, error) {
+			return mapCourseTypeWithLanguage(ct, "en") // Default to English
 		},
 	)
 
@@ -236,6 +250,72 @@ func registerCourseMappers() {
 			}, nil
 		},
 	)
+
+	RegisterMapFunc(
+		func(courseEntity *entity.Course) (response.GetCourseByIDResponse, error) {
+			var natureName, typeName, degreeProgramName, creatorName string
+
+			// Get nature name if available
+			if courseEntity.Nature != nil && len(courseEntity.Nature.Names) > 0 {
+				natureName = courseEntity.Nature.Names[0].Name
+			}
+
+			// Get type name if available
+			if courseEntity.Type != nil && len(courseEntity.Type.Names) > 0 {
+				typeName = courseEntity.Type.Names[0].Name
+			}
+
+			// Get degree program name if available
+			if courseEntity.DegreeProgram != nil {
+				degreeProgramName = courseEntity.DegreeProgram.Name
+			}
+
+			// Get creator name if available
+			if courseEntity.UserCreator != nil && courseEntity.UserCreator.Person != nil {
+				creatorName = courseEntity.UserCreator.Person.Name + " " + courseEntity.UserCreator.Person.Lastname
+			}
+
+			// Map course topics
+			var courseTopicsResponse []response.CourseTopicResponse
+			for _, courseTopic := range courseEntity.CourseTopics {
+				var topicName string
+				if courseTopic.Topic != nil {
+					topicName = courseTopic.Topic.Name
+				}
+				courseTopicsResponse = append(courseTopicsResponse, response.CourseTopicResponse{
+					TopicID:    courseTopic.TopicID,
+					TopicName:  topicName,
+					StudyHours: courseTopic.StudyHours,
+				})
+			}
+
+			return response.GetCourseByIDResponse{
+				ID:                          courseEntity.ID,
+				Name:                        courseEntity.Name,
+				Code:                        courseEntity.Code,
+				Credits:                     courseEntity.Credits,
+				PeriodNumber:                courseEntity.PeriodNumber,
+				NatureID:                    courseEntity.NatureID,
+				NatureName:                  natureName,
+				TypeID:                      courseEntity.TypeID,
+				TypeName:                    typeName,
+				IsCybersecurity:             courseEntity.IsCybersecurity,
+				ContainsCybersecurityTopics: courseEntity.ContainsCybersecurityTopics(),
+				DegreeProgramID:             courseEntity.DegreeProgramID,
+				DegreeProgramName:           degreeProgramName,
+				CreatedBy:                   courseEntity.CreatedBy,
+				CreatorName:                 creatorName,
+				CourseTopics:                courseTopicsResponse,
+			}, nil
+		},
+	)
+
+	// Language-specific Course mapper
+	RegisterMapFunc(
+		func(courseModel *model.Course) (entity.Course, error) {
+			return mapCourseWithLanguage(courseModel, "en") // Default to English
+		},
+	)
 }
 
 // Helper function to get name by language
@@ -261,6 +341,262 @@ func getTypeNameByLanguage(names []entity.CourseTypeName, lang string) string {
 	// If no name found for the language, return the first available name
 	if len(names) > 0 {
 		return names[0].Name
+	}
+	return ""
+}
+
+// Helper function to map course nature with specific language
+func mapCourseNatureWithLanguage(cn *model.CourseNature, lang string) (entity.CourseNature, error) {
+	// Get name by language
+	var name string
+	for _, cnName := range cn.Names {
+		if cnName.Lang == lang {
+			name = cnName.Name
+			break
+		}
+	}
+	// If no name found for the language, use the first available
+	if name == "" && len(cn.Names) > 0 {
+		name = cn.Names[0].Name
+	}
+
+	// Create names array with the selected name
+	var names []entity.CourseNatureName
+	if name != "" {
+		names = append(names, entity.CourseNatureName{
+			ID:             cn.Names[0].ID,
+			Lang:           lang,
+			Name:           name,
+			CourseNatureID: cn.ID,
+		})
+	}
+
+	return entity.CourseNature{
+		ID:    cn.ID,
+		Names: names,
+	}, nil
+}
+
+// Helper function to map course type with specific language
+func mapCourseTypeWithLanguage(ct *model.CourseType, lang string) (entity.CourseType, error) {
+	// Get name by language
+	var name string
+	for _, ctName := range ct.Names {
+		if ctName.Lang == lang {
+			name = ctName.Name
+			break
+		}
+	}
+	// If no name found for the language, use the first available
+	if name == "" && len(ct.Names) > 0 {
+		name = ct.Names[0].Name
+	}
+
+	// Create names array with the selected name
+	var names []entity.CourseTypeName
+	if name != "" {
+		names = append(names, entity.CourseTypeName{
+			ID:           ct.Names[0].ID,
+			Lang:         lang,
+			Name:         name,
+			CourseTypeID: ct.ID,
+		})
+	}
+
+	return entity.CourseType{
+		ID:    ct.ID,
+		Names: names,
+	}, nil
+}
+
+// Language-specific mapper functions
+func GetCourseNatureMapperWithLanguage(lang string) func(*model.CourseNature) (entity.CourseNature, error) {
+	return func(cn *model.CourseNature) (entity.CourseNature, error) {
+		return mapCourseNatureWithLanguage(cn, lang)
+	}
+}
+
+func GetCourseTypeMapperWithLanguage(lang string) func(*model.CourseType) (entity.CourseType, error) {
+	return func(ct *model.CourseType) (entity.CourseType, error) {
+		return mapCourseTypeWithLanguage(ct, lang)
+	}
+}
+
+func GetCourseTopicMapperWithLanguage(lang string) func(*model.CourseTopic) (entity.CourseTopic, error) {
+	return func(ct *model.CourseTopic) (entity.CourseTopic, error) {
+		var topicPtr *entity.Topic
+		if ct.Topic.ID != 0 {
+			topic, err := mapTopicWithLanguage(&ct.Topic, lang)
+			if err == nil {
+				topicPtr = &topic
+			}
+		}
+
+		return entity.CourseTopic{
+			CourseID:   ct.CourseID,
+			TopicID:    ct.TopicID,
+			Topic:      topicPtr,
+			StudyHours: float32(ct.StudyHours),
+		}, nil
+	}
+}
+
+func GetCourseMapperWithLanguage(lang string) func(*model.Course) (entity.Course, error) {
+	return func(courseModel *model.Course) (entity.Course, error) {
+		return mapCourseWithLanguage(courseModel, lang)
+	}
+}
+
+// Helper function to map course with language support
+func mapCourseWithLanguage(courseModel *model.Course, lang string) (entity.Course, error) {
+	var natureName, typeName string
+
+	// Get nature name by language
+	if courseModel.Nature.ID != 0 {
+		natureName = getCourseNatureNameByLanguageFromModel(&courseModel.Nature, lang)
+	}
+
+	// Get type name by language
+	if courseModel.Type.ID != 0 {
+		typeName = getCourseTypeNameByLanguageFromModel(&courseModel.Type, lang)
+	}
+
+	// Map degree program
+	var degreeProgram *entity.DegreeProgram
+	if courseModel.DegreeProgram.ID != 0 {
+		dp, err := Map[model.DegreeProgram, entity.DegreeProgram](&courseModel.DegreeProgram)
+		if err != nil {
+			return entity.Course{}, err
+		}
+		degreeProgram = &dp
+	}
+
+	// Map user creator
+	var userCreator *entity.User
+	if courseModel.UserCreator.ID != 0 {
+		uc, err := Map[model.User, entity.User](&courseModel.UserCreator)
+		if err != nil {
+			return entity.Course{}, err
+		}
+		userCreator = &uc
+	}
+
+	// Map course topics with language support
+	var courseTopics []entity.CourseTopic
+	for _, courseTopic := range courseModel.CourseTopics {
+		courseTopicEntity, err := mapCourseTopicWithLanguage(&courseTopic, lang)
+		if err != nil {
+			return entity.Course{}, err
+		}
+		courseTopics = append(courseTopics, courseTopicEntity)
+	}
+
+	return entity.Course{
+		ID:              courseModel.ID,
+		Name:            courseModel.Name,
+		Code:            courseModel.Code,
+		Credits:         courseModel.Credits,
+		PeriodNumber:    courseModel.PeriodNumber,
+		NatureID:        courseModel.NatureID,
+		Nature:          &entity.CourseNature{ID: courseModel.NatureID, Names: []entity.CourseNatureName{{Lang: lang, Name: natureName}}},
+		TypeID:          courseModel.TypeID,
+		Type:            &entity.CourseType{ID: courseModel.TypeID, Names: []entity.CourseTypeName{{Lang: lang, Name: typeName}}},
+		IsCybersecurity: courseModel.IsCybersecurity,
+		DegreeProgramID: courseModel.DegreeProgramID,
+		DegreeProgram:   degreeProgram,
+		CourseTopics:    courseTopics,
+		CreatedBy:       courseModel.CreatedBy,
+		UserCreator:     userCreator,
+	}, nil
+}
+
+// Helper function to map course topic with language support
+func mapCourseTopicWithLanguage(courseTopicModel *model.CourseTopic, lang string) (entity.CourseTopic, error) {
+	var topicName, knowledgeAreaName string
+	var knowledgeAreaID uint
+
+	// Get topic name by language
+	if courseTopicModel.Topic.ID != 0 {
+		topicName = getTopicNameByLanguageFromModel(&courseTopicModel.Topic, lang)
+		knowledgeAreaID = courseTopicModel.Topic.KnowledgeAreaID
+
+		// Get knowledge area name by language
+		if courseTopicModel.Topic.KnowledgeArea.ID != 0 {
+			knowledgeAreaName = getKnowledgeAreaNameByLanguageFromModel(&courseTopicModel.Topic.KnowledgeArea, lang)
+		}
+	}
+
+	// Create topic entity with language-specific name
+	var topic *entity.Topic
+	if courseTopicModel.Topic.ID != 0 {
+		topic = &entity.Topic{
+			ID:              courseTopicModel.Topic.ID,
+			Name:            topicName,
+			KnowledgeAreaID: knowledgeAreaID,
+			KnowledgeArea: &entity.KnowledgeArea{
+				ID:   knowledgeAreaID,
+				Name: knowledgeAreaName,
+			},
+		}
+	}
+
+	return entity.CourseTopic{
+		CourseID:   courseTopicModel.CourseID,
+		TopicID:    courseTopicModel.TopicID,
+		Topic:      topic,
+		StudyHours: float32(courseTopicModel.StudyHours),
+	}, nil
+}
+
+// Helper functions to get names by language from models
+func getTopicNameByLanguageFromModel(topicModel *model.Topic, lang string) string {
+	for _, name := range topicModel.Names {
+		if name.Lang == lang {
+			return name.Name
+		}
+	}
+	// If no name found for the language, use the first available
+	if len(topicModel.Names) > 0 {
+		return topicModel.Names[0].Name
+	}
+	return ""
+}
+
+func getKnowledgeAreaNameByLanguageFromModel(kaModel *model.KnowledgeArea, lang string) string {
+	for _, name := range kaModel.Names {
+		if name.Lang == lang {
+			return name.Name
+		}
+	}
+	// If no name found for the language, use the first available
+	if len(kaModel.Names) > 0 {
+		return kaModel.Names[0].Name
+	}
+	return ""
+}
+
+func getCourseNatureNameByLanguageFromModel(cnModel *model.CourseNature, lang string) string {
+	for _, name := range cnModel.Names {
+		if name.Lang == lang {
+			return name.Name
+		}
+	}
+	// If no name found for the language, use the first available
+	if len(cnModel.Names) > 0 {
+		return cnModel.Names[0].Name
+	}
+	return ""
+}
+
+func getCourseTypeNameByLanguageFromModel(ctModel *model.CourseType, lang string) string {
+	for _, name := range ctModel.Names {
+		if name.Lang == lang {
+			return name.Name
+		}
+	}
+	// If no name found for the language, use the first available
+	if len(ctModel.Names) > 0 {
+		return ctModel.Names[0].Name
 	}
 	return ""
 }

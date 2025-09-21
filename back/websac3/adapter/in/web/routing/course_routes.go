@@ -16,8 +16,20 @@ func registerListCourseByDegreeProgramRoute(routerGroup *gin.RouterGroup) {
 	routerGroup.GET("/degree-program/:degree_program_id/courses", listCourseByDegreeProgramController.Handle)
 }
 
+func registerGetCourseByIDRoute(routerGroup *gin.RouterGroup) {
+	var getCourseByIDController = controller.GetGetCourseByIDController()
+	routerGroup.GET("/course/:course_id", getCourseByIDController.Handle)
+}
+
+func registerGetCourseTopicsByCourseIDRoute(routerGroup *gin.RouterGroup) {
+	var getCourseTopicsByCourseIDController = controller.GetGetCourseTopicsByCourseIDController()
+	routerGroup.GET("/course/:course_id/topics", getCourseTopicsByCourseIDController.Handle)
+}
+
 func RegisterCourseRoutes(routerGroup *gin.RouterGroup) {
 	authGroup := getAuthRequiredGroup(routerGroup)
 	registerCreateCourseRoute(authGroup)
 	registerListCourseByDegreeProgramRoute(authGroup)
+	registerGetCourseByIDRoute(authGroup)
+	registerGetCourseTopicsByCourseIDRoute(authGroup)
 }
