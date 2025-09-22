@@ -26,10 +26,22 @@ func registerGetCourseTopicsByCourseIDRoute(routerGroup *gin.RouterGroup) {
 	routerGroup.GET("/course/:course_id/topics", getCourseTopicsByCourseIDController.Handle)
 }
 
+func registerListCourseTypesRoute(routerGroup *gin.RouterGroup) {
+	var listCourseTypesController = controller.GetListCourseTypesController()
+	routerGroup.GET("/course-types", listCourseTypesController.Handle)
+}
+
+func registerListCourseNaturesRoute(routerGroup *gin.RouterGroup) {
+	var listCourseNaturesController = controller.GetListCourseNaturesController()
+	routerGroup.GET("/course-natures", listCourseNaturesController.Handle)
+}
+
 func RegisterCourseRoutes(routerGroup *gin.RouterGroup) {
 	authGroup := getAuthRequiredGroup(routerGroup)
 	registerCreateCourseRoute(authGroup)
 	registerListCourseByDegreeProgramRoute(authGroup)
 	registerGetCourseByIDRoute(authGroup)
 	registerGetCourseTopicsByCourseIDRoute(authGroup)
+	registerListCourseTypesRoute(authGroup)
+	registerListCourseNaturesRoute(authGroup)
 }

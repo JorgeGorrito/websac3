@@ -300,6 +300,30 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(query.ListCourseTypesQuery{}),
+		qhandler.NewListCourseTypesQueryHandler(
+			container.Inject[usecase.ListCourseTypesUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.ListCourseNaturesQuery{}),
+		qhandler.NewListCourseNaturesQueryHandler(
+			container.Inject[usecase.ListCourseNaturesUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(command.CreateReportFeedbackCommand{}),
 		chandler.NewCreateReportFeedbackCommandHandler(
 			container.Inject[validator.Validator](),

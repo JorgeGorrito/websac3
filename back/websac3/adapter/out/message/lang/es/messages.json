@@ -11,6 +11,12 @@
   "get_course_topics_by_course_id" : {
     "not_found" : "No se encontraron tópicos para el curso especificado."
   },
+  "list_course_types" : {
+    "not_found" : "No se encontraron tipos de curso."
+  },
+  "list_course_natures" : {
+    "not_found" : "No se encontraron naturalezas de curso."
+  },
   "list_duration_unit" : {
     "not_found" : "No se encontraron unidades de duración."
   },

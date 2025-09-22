@@ -49,6 +49,8 @@ func (m *manager) RegisterDependencies() error {
 	m.registerDurationUnitDependencies()
 	m.registerDegreeProgramDependencies()
 	m.registerCourseDependencies()
+	m.registerCourseTypeDependencies()
+	m.registerCourseNatureDependencies()
 	m.registerReportDependencies()
 	m.registerProfessionalRoleDependencies()
 	m.registerRoleDependencies()
@@ -57,4 +59,12 @@ func (m *manager) RegisterDependencies() error {
 	m.registerDeactivateUserDependencies()
 	m.registerActivateUserDependencies()
 	return nil
+}
+
+func (m *manager) registerCourseTypeDependencies() {
+	RegisterCourseTypeDependencies(m)
+}
+
+func (m *manager) registerCourseNatureDependencies() {
+	RegisterCourseNatureDependencies(m)
 }

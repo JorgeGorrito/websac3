@@ -35,6 +35,20 @@ func registerCourseMappers() {
 		},
 	)
 
+	// CourseNature to ListCourseNaturesResponse mapper
+	RegisterMapFunc(
+		func(courseNatureEntity *entity.CourseNature) (response.ListCourseNaturesResponse, error) {
+			var name string
+			if len(courseNatureEntity.Names) > 0 {
+				name = courseNatureEntity.Names[0].Name
+			}
+			return response.ListCourseNaturesResponse{
+				ID:   courseNatureEntity.ID,
+				Name: name,
+			}, nil
+		},
+	)
+
 	// CourseType mappers
 	RegisterMapFunc(
 		func(ct *model.CourseType) (entity.CourseType, error) {
@@ -50,6 +64,20 @@ func registerCourseMappers() {
 			return entity.CourseType{
 				ID:    ct.ID,
 				Names: names,
+			}, nil
+		},
+	)
+
+	// CourseType to ListCourseTypesResponse mapper
+	RegisterMapFunc(
+		func(courseTypeEntity *entity.CourseType) (response.ListCourseTypesResponse, error) {
+			var name string
+			if len(courseTypeEntity.Names) > 0 {
+				name = courseTypeEntity.Names[0].Name
+			}
+			return response.ListCourseTypesResponse{
+				ID:   courseTypeEntity.ID,
+				Name: name,
 			}, nil
 		},
 	)
