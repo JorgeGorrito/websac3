@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/sidebar";
 import type { RoleKey } from "@/constants/sidebar";
 import { WebSAC3Footer } from "@/components/websac3/footer/WebSAC3Footer";
-import { WebSAC3Logo } from "@/components/websac3/logos/WebSAC3Logo";
 import { usePathname } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
@@ -112,9 +111,6 @@ export default function ExpertoLayout({
                   ))}
                 </BreadcrumbList>
               </Breadcrumb>
-            </div>
-            <div className="px-4 h-10">
-              <WebSAC3Logo />
             </div>
           </header>
 

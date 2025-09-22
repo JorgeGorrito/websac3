@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/sidebar";
 import type { RoleKey } from "@/constants/sidebar";
 import { WebSAC3Footer } from "@/components/websac3/footer/WebSAC3Footer";
-import { WebSAC3Logo } from "@/components/websac3/logos/WebSAC3Logo";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 export default function AdminLayout({
@@ -45,9 +44,6 @@ export default function AdminLayout({
                 className="mr-2 data-[orientation=vertical]:h-4"
               />
               <Breadcrumbs role={role} getPageTitle={getPageTitle} />
-            </div>
-            <div className="px-4 h-10">
-              <WebSAC3Logo />
             </div>
           </header>
 

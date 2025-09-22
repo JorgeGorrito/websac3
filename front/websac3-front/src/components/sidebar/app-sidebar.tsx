@@ -20,6 +20,7 @@ import {
 import { SIDEBAR_BY_ROLE, type RoleKey } from "@/constants/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
+import { WebSAC3Logo } from "@/components/websac3/logos/WebSAC3Logo";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   role?: RoleKey;
@@ -41,39 +42,11 @@ export default function AppSidebar({
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader className="border-b border-primary/20">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              asChild
-              className="hover:bg-primary/5 transition-colors"
-            >
-              <a href="#" className="group">
-                <Avatar className="h-10 w-10 rounded-xl">
-                  <AvatarImage
-                    src={userData.avatar}
-                    alt={userData.name}
-                  />
-                  <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-medium">
-                    {userData.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium text-foreground">
-                    {userData.name}
-                  </span>
-                  <span className="truncate text-xs text-primary bg-primary/5 px-2 py-1 rounded-full">
-                    {data.roleLabel}
-                  </span>
-                </div>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="flex items-center justify-center p-2">
+          <div className="h-12 w-full">
+            <WebSAC3Logo />
+          </div>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
