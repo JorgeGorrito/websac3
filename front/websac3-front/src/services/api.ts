@@ -639,6 +639,14 @@ export const api = createApi({
                 { type: "Course", id: course_id },
               ],
             }),
+            // Delete course
+            deleteCourse: builder.mutation<ApiResponse<string>, { course_id: number }>({
+              query: ({ course_id }) => ({ url: `/course/${course_id}`, method: "DELETE" }),
+              invalidatesTags: (result, error, { course_id }) => [
+                { type: "Course", id: course_id },
+                { type: "Course", id: "LIST" },
+              ],
+            }),
     // Authentication endpoints
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({ url: "/auth", method: "POST", body }),
@@ -678,6 +686,7 @@ export const {
   useListCoursesByDegreeProgramQuery,
   useCreateCourseMutation,
   useGetCourseByIdQuery,
+  useDeleteCourseMutation,
   // authentication
   useLoginMutation,
   useRefreshTokenMutation,

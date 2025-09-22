@@ -21,7 +21,7 @@ export default function SemáforoAcadémicoPage() {
   });
 
   // Obtener cursos del programa seleccionado
-  const { data: coursesData, isLoading: coursesLoading } = useListCoursesQuery(
+  const { data: coursesData, isLoading: coursesLoading, refetch: refetchCourses } = useListCoursesQuery(
     {
       current_page: 1,
       items_per_page: 100,
@@ -62,6 +62,10 @@ export default function SemáforoAcadémicoPage() {
 
   const handleProgramSelect = (programId: number) => {
     setSelectedProgramId(programId);
+  };
+
+  const handleCourseDeleted = () => {
+    refetchCourses();
   };
 
   if (programsLoading) {
@@ -191,6 +195,7 @@ export default function SemáforoAcadémicoPage() {
           courses={coursesWithStatus}
           programName={selectedProgram?.name || ""}
           totalCredits={selectedProgram?.total_credits || 0}
+          onCourseDeleted={handleCourseDeleted}
         />
       )}
     </div>

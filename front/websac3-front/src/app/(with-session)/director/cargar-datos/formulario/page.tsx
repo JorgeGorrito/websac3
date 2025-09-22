@@ -73,7 +73,7 @@ export default function FormularioCursosPage() {
   const [createCourse, { isLoading: isCreatingCourse }] = useCreateCourseMutation();
 
   // Fetch courses for the academic semaphore
-  const { data: coursesData, isLoading: coursesLoading } = useListCoursesByDegreeProgramQuery({
+  const { data: coursesData, isLoading: coursesLoading, refetch: refetchCourses } = useListCoursesByDegreeProgramQuery({
     degree_program_id: parseInt(programId || '0'),
     current_page: 1,
     items_per_page: 100, // Get all courses for the semaphore
@@ -226,6 +226,10 @@ export default function FormularioCursosPage() {
     });
     setSelectedTopics([]);
     setCurrentStep(1);
+  };
+
+  const handleCourseDeleted = () => {
+    refetchCourses();
   };
 
   if (programsLoading || topicsLoading || courseTypesLoading || courseNaturesLoading) {
@@ -873,6 +877,7 @@ export default function FormularioCursosPage() {
               courses={coursesData.data}
               programName={selectedProgram.name}
               totalCredits={selectedProgram.total_credits}
+              onCourseDeleted={handleCourseDeleted}
             />
           ) : (
             <div className="bg-white rounded-xl shadow-sm p-6">

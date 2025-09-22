@@ -1,9 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Shield, ShieldCheck, FileText, GraduationCap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { BookOpen, Shield, ShieldCheck, FileText, GraduationCap, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useDeleteCourseMutation } from "@/services/api";
 
 export interface Course {
   id: number;
@@ -26,6 +39,7 @@ interface AcademicSemaphoreProps {
   courses: Course[];
   programName: string;
   totalCredits: number;
+  onCourseDeleted?: () => void;
 }
 
 type CourseType = 'cybersecurity' | 'with_topics' | 'regular';
@@ -56,7 +70,21 @@ const courseTypeConfig = {
 
 // Ya no necesitamos estos mapeos porque ahora recibimos los nombres directamente del API
 
-export function AcademicSemaphore({ courses, programName, totalCredits }: AcademicSemaphoreProps) {
+export function AcademicSemaphore({ courses, programName, totalCredits, onCourseDeleted }: AcademicSemaphoreProps) {
+  const [deleteCourse, { isLoading: isDeleting }] = useDeleteCourseMutation();
+  const [courseToDelete, setCourseToDelete] = useState<Course | null>(null);
+
+  const handleDeleteCourse = async () => {
+    if (!courseToDelete) return;
+    
+    try {
+      await deleteCourse({ course_id: courseToDelete.id }).unwrap();
+      setCourseToDelete(null);
+      onCourseDeleted?.();
+    } catch (error) {
+      console.error('Error deleting course:', error);
+    }
+  };
 
   // Agrupar cursos por período
   const coursesByPeriod = courses.reduce((acc, course) => {
@@ -211,10 +239,42 @@ export function AcademicSemaphore({ courses, programName, totalCredits }: Academ
                                     <span>{course.nature_name}</span>
                                   </div>
                                 </div>
-                                <div className="text-right">
+                                <div className="flex flex-col items-end gap-1">
                                   <div className="text-xs opacity-90">
                                     {config.label}
                                   </div>
+                                  <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-6 w-6 p-0 text-white/80 hover:text-white hover:bg-white/20"
+                                        onClick={() => setCourseToDelete(course)}
+                                      >
+                                        <Trash2 className="h-3 w-3" />
+                                      </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>¿Eliminar curso?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                          ¿Estás seguro de que deseas eliminar el curso <strong>{course.name}</strong> ({course.code})?
+                                          <br />
+                                          Esta acción no se puede deshacer.
+                                        </AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                        <AlertDialogAction
+                                          onClick={handleDeleteCourse}
+                                          disabled={isDeleting}
+                                          className="bg-red-600 hover:bg-red-700"
+                                        >
+                                          {isDeleting ? "Eliminando..." : "Eliminar"}
+                                        </AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
                                 </div>
                               </div>
                               
