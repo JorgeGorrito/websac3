@@ -491,3 +491,56 @@ func (r *CourseRepository) DeleteByID(courseID uint, ctx _db.Context) error {
 
 	return nil
 }
+
+func (r *CourseRepository) Update(courseToUpdate *entity.Course, ctx _db.Context) error {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	// First check if the course exists
+	var existingCourse model.Course
+	if err := dbCtx.DB().First(&existingCourse, courseToUpdate.ID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return errs.NewNotFoundError("course not found")
+		}
+		return err
+	}
+
+	// Map entity to model
+	var course model.Course
+	if course, err = mapper.Map[entity.Course, model.Course](courseToUpdate); err != nil {
+		return err
+	}
+
+	// Update the course
+	if err := dbCtx.DB().Save(&course).Error; err != nil {
+		// Check if it's a unique constraint violation
+		if IsUniqueConstraintViolation(err) {
+			return errs.NewConflictError(err.Error())
+		}
+		return err
+	}
+
+	// Delete existing course topics (hard delete to avoid constraint violations)
+	if err := dbCtx.DB().Unscoped().Where("course_id = ?", course.ID).Delete(&model.CourseTopic{}).Error; err != nil {
+		return err
+	}
+
+	// Insert new course topics if provided
+	if len(courseToUpdate.CourseTopics) > 0 {
+		var batch []model.CourseTopic
+		for _, ct := range courseToUpdate.CourseTopics {
+			batch = append(batch, model.CourseTopic{
+				CourseID:   course.ID,
+				TopicID:    ct.TopicID,
+				StudyHours: uint(ct.StudyHours),
+			})
+		}
+		if err := dbCtx.DB().Create(&batch).Error; err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

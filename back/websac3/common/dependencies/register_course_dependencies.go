@@ -35,6 +35,11 @@ func (m *manager) registerCourseDependencies() {
 	)
 
 	m.binder.Bind(
+		andi.GetAbstractType[persistence.UpdateCoursePort](),
+		func() any { return repository.NewCourseRepository() },
+	)
+
+	m.binder.Bind(
 		andi.GetAbstractType[usecase.CreateCourseUseCase](),
 		func() any {
 			return service.NewCreateCourseService(
@@ -103,6 +108,21 @@ func (m *manager) registerCourseDependencies() {
 			return domainusecase.NewDeleteCourseUseCaseImpl(
 				service.NewDeleteCourseService(
 					container.Inject[persistence.DeleteCoursePort](),
+					container.Inject[persistence.GetCoursePort](),
+					container.Inject[persistence.GetUserPort](),
+					container.Inject[db.Manager](),
+					container.Inject[message.Provider](),
+				),
+			)
+		},
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.UpdateCourseUseCase](),
+		func() any {
+			return domainusecase.NewUpdateCourseUseCaseImpl(
+				service.NewUpdateCourseService(
+					container.Inject[persistence.UpdateCoursePort](),
 					container.Inject[persistence.GetCoursePort](),
 					container.Inject[persistence.GetUserPort](),
 					container.Inject[db.Manager](),

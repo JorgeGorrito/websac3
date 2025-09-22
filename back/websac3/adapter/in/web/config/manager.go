@@ -228,6 +228,18 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(command.UpdateCourseCommand{}),
+		chandler.NewUpdateCourseCommandHandler(
+			container.Inject[usecase.UpdateCourseUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(command.CreateUserFromTokenCommand{}),
 		chandler.NewCreateUserFromTokenCommandHandler(
 			container.Inject[usecase.CreateUserFromTokenUseCase](),

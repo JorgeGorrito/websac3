@@ -22,6 +22,12 @@
     "insufficient_permissions" : "No estás autorizado para eliminar este curso. Solo el creador del curso o un administrador pueden eliminarlo.",
     "course_deleted_successfully" : "Curso eliminado exitosamente."
   },
+  "update_course" : {
+    "course_not_found" : "Curso no encontrado.",
+    "insufficient_permissions" : "No estás autorizado para actualizar este curso. Solo el creador del curso o un administrador pueden actualizarlo.",
+    "course_code_already_exists" : "Ya existe un curso con este código en el programa de grado.",
+    "course_updated_successfully" : "Curso actualizado exitosamente."
+  },
   "list_duration_unit" : {
     "not_found" : "No se encontraron unidades de duración."
   },

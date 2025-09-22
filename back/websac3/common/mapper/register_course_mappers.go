@@ -219,6 +219,32 @@ func registerCourseMappers() {
 	)
 
 	RegisterMapFunc(
+		func(request *request.UpdateCourseRequest) (command.UpdateCourseCommand, error) {
+			var courseTopics []command.UpdateCourseTopicCommand
+			for _, topic := range request.CourseTopics {
+				courseTopics = append(courseTopics, command.UpdateCourseTopicCommand{
+					TopicID:    topic.TopicID,
+					StudyHours: topic.StudyHours,
+				})
+			}
+
+			return command.UpdateCourseCommand{
+				ID:                          request.ID,
+				Name:                        request.Name,
+				Code:                        request.Code,
+				Credits:                     request.Credits,
+				PeriodNumber:                request.PeriodNumber,
+				NatureID:                    request.NatureID,
+				TypeID:                      request.TypeID,
+				IsCybersecurity:             request.IsCybersecurity,
+				ContainsCybersecurityTopics: request.ContainsCybersecurityTopics,
+				DegreeProgramID:             request.DegreeProgramID,
+				CourseTopics:                courseTopics,
+			}, nil
+		},
+	)
+
+	RegisterMapFunc(
 		func(command *command.CreateCourseCommand) (entity.Course, error) {
 			var courseTopics []entity.CourseTopic
 			for _, t := range command.CourseTopics {
@@ -238,6 +264,30 @@ func registerCourseMappers() {
 				DegreeProgramID: command.DegreeProgramID,
 				CourseTopics:    courseTopics,
 				CreatedBy:       command.CreatedBy,
+			}, nil
+		},
+	)
+
+	RegisterMapFunc(
+		func(command *command.UpdateCourseCommand) (entity.Course, error) {
+			var courseTopics []entity.CourseTopic
+			for _, t := range command.CourseTopics {
+				courseTopics = append(courseTopics, entity.CourseTopic{
+					TopicID:    t.TopicID,
+					StudyHours: float32(t.StudyHours),
+				})
+			}
+			return entity.Course{
+				ID:              command.ID,
+				Name:            command.Name,
+				Code:            command.Code,
+				Credits:         command.Credits,
+				PeriodNumber:    command.PeriodNumber,
+				NatureID:        command.NatureID,
+				TypeID:          command.TypeID,
+				IsCybersecurity: command.IsCybersecurity,
+				DegreeProgramID: command.DegreeProgramID,
+				CourseTopics:    courseTopics,
 			}, nil
 		},
 	)

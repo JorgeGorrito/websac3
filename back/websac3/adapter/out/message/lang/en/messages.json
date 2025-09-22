@@ -32,6 +32,12 @@
     "insufficient_permissions" : "You are not authorized to delete this course. Only the course creator or an admin can delete it.",
     "course_deleted_successfully" : "Course deleted successfully."
   },
+  "update_course" : {
+    "course_not_found" : "Course not found.",
+    "insufficient_permissions" : "You are not authorized to update this course. Only the course creator or an admin can update it.",
+    "course_code_already_exists" : "A course with this code already exists in the degree program.",
+    "course_updated_successfully" : "Course updated successfully."
+  },
   "list_degree_program" : {
     "not_found" : "No degree programs found."
   },
