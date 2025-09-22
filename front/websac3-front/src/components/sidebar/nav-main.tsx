@@ -51,7 +51,7 @@ export function NavMain({
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-primary/70 font-medium text-xs uppercase tracking-wider px-2 py-1">
-        Platform
+        Navegación
       </SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {

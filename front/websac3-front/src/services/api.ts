@@ -145,7 +145,29 @@ export type CourseTopic = {
   study_hours: number;
 };
 
+export type CourseTopicItem = {
+  id: number;
+  topic_id: number;
+  study_hours: number;
+  topic_name: string;
+  knowledge_area_name: string;
+};
+
 export type CreateCourseRequest = {
+  code: string;
+  name: string;
+  credits: number;
+  period_number: number;
+  type_id: number;
+  nature_id: number;
+  is_cybersecurity: boolean;
+  contains_cybersecurity_topics: boolean;
+  degree_program_id: number;
+  course_topics: CourseTopic[];
+};
+
+export type UpdateCourseRequest = {
+  id: number;
   code: string;
   name: string;
   credits: number;
@@ -639,6 +661,33 @@ export const api = createApi({
                 { type: "Course", id: course_id },
               ],
             }),
+            // Get course topics
+            getCourseTopics: builder.query<CourseTopicItem[], { course_id: number }>({
+              query: ({ course_id }) => ({ url: `/course/${course_id}/topics` }),
+              transformResponse: (response: ApiResponse<any>) => {
+                // Handle different possible response structures
+                if (Array.isArray(response.result)) {
+                  return response.result;
+                } else if (response.result && Array.isArray(response.result.data)) {
+                  return response.result.data;
+                } else if (response.result && response.result.topics && Array.isArray(response.result.topics)) {
+                  return response.result.topics;
+                }
+                return [];
+              },
+              providesTags: (result, error, { course_id }) => [
+                { type: "Course", id: course_id },
+                { type: "Course", id: `${course_id}_topics` },
+              ],
+            }),
+            // Update course
+            updateCourse: builder.mutation<ApiResponse<string>, { course_id: number; data: UpdateCourseRequest }>({
+              query: ({ course_id, data }) => ({ url: `/course/${course_id}`, method: "PUT", body: data }),
+              invalidatesTags: (result, error, { course_id }) => [
+                { type: "Course", id: course_id },
+                { type: "Course", id: "LIST" },
+              ],
+            }),
             // Delete course
             deleteCourse: builder.mutation<ApiResponse<string>, { course_id: number }>({
               query: ({ course_id }) => ({ url: `/course/${course_id}`, method: "DELETE" }),
@@ -686,6 +735,8 @@ export const {
   useListCoursesByDegreeProgramQuery,
   useCreateCourseMutation,
   useGetCourseByIdQuery,
+  useGetCourseTopicsQuery,
+  useUpdateCourseMutation,
   useDeleteCourseMutation,
   // authentication
   useLoginMutation,

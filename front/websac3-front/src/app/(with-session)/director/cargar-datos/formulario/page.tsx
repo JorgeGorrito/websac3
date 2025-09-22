@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, CheckCircle, BookOpen, Clock, GraduationCap, Target, Upload, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, CheckCircle, BookOpen, Clock, GraduationCap, Target, Upload, Search, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useListDegreeProgramsQuery, useListTopicsQuery, useCreateCourseMutation, useListCoursesByDegreeProgramQuery, useListCourseTypesQuery, useListCourseNaturesQuery } from "@/services/api";
 import { AcademicSemaphore } from "@/components/websac3/academic/AcademicSemaphore";
 
@@ -135,6 +135,10 @@ export default function FormularioCursosPage() {
     );
   };
 
+  const removeTopic = (topicId: number) => {
+    setSelectedTopics(prev => prev.filter(topic => topic.id !== topicId));
+  };
+
   // Topics pagination handlers
   const handleTopicsPageChange = (page: number) => {
     setTopicsCurrentPage(page);
@@ -230,6 +234,14 @@ export default function FormularioCursosPage() {
 
   const handleCourseDeleted = () => {
     refetchCourses();
+  };
+
+  const handleViewCourse = (courseId: number) => {
+    router.push(`/director/cursos/${courseId}`);
+  };
+
+  const handleEditCourse = (courseId: number) => {
+    router.push(`/director/cursos/${courseId}/editar`);
   };
 
   if (programsLoading || topicsLoading || courseTypesLoading || courseNaturesLoading) {
@@ -684,9 +696,26 @@ export default function FormularioCursosPage() {
                         {selectedTopics.map((topic) => (
                           <div key={topic.id} className="flex justify-between items-center text-sm">
                             <span className="text-blue-700">{topic.name}</span>
-                            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                              {topic.study_hours} horas
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  min="1"
+                                  max="999"
+                                  value={topic.study_hours}
+                                  onChange={(e) => handleStudyHoursChange(topic.id, parseInt(e.target.value) || 1)}
+                                  className="w-16 h-6 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                                />
+                                <span className="text-xs text-gray-500">horas</span>
+                              </div>
+                              <button
+                                onClick={() => removeTopic(topic.id)}
+                                className="h-6 w-6 flex items-center justify-center rounded-full hover:bg-red-100 text-gray-400 hover:text-red-600 transition-colors"
+                                title="Quitar tópico"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -755,9 +784,28 @@ export default function FormularioCursosPage() {
                         <p className="text-sm text-gray-500 font-medium mb-2">Tópicos seleccionados:</p>
                         <div className="space-y-1">
                           {selectedTopics.map((topic) => (
-                            <div key={topic.id} className="flex justify-between text-sm">
+                            <div key={topic.id} className="flex justify-between items-center text-sm">
                               <span>{topic.name}</span>
-                              <span className="text-gray-500">{topic.study_hours} horas</span>
+                              <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    min="1"
+                                    max="999"
+                                    value={topic.study_hours}
+                                    onChange={(e) => handleStudyHoursChange(topic.id, parseInt(e.target.value) || 1)}
+                                    className="w-16 h-6 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                                  />
+                                  <span className="text-xs text-gray-500">horas</span>
+                                </div>
+                                <button
+                                  onClick={() => removeTopic(topic.id)}
+                                  className="h-6 w-6 flex items-center justify-center rounded-full hover:bg-red-100 text-gray-400 hover:text-red-600 transition-colors"
+                                  title="Quitar tópico"
+                                >
+                                  <X className="h-3 w-3" />
+                                </button>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -878,6 +926,8 @@ export default function FormularioCursosPage() {
               programName={selectedProgram.name}
               totalCredits={selectedProgram.total_credits}
               onCourseDeleted={handleCourseDeleted}
+              onViewCourse={handleViewCourse}
+              onEditCourse={handleEditCourse}
             />
           ) : (
             <div className="bg-white rounded-xl shadow-sm p-6">

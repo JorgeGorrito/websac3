@@ -68,6 +68,14 @@ export default function SemáforoAcadémicoPage() {
     refetchCourses();
   };
 
+  const handleViewCourse = (courseId: number) => {
+    router.push(`/director/cursos/${courseId}`);
+  };
+
+  const handleEditCourse = (courseId: number) => {
+    router.push(`/director/cursos/${courseId}/editar`);
+  };
+
   if (programsLoading) {
     return <LoadingSkeleton />;
   }
@@ -196,6 +204,8 @@ export default function SemáforoAcadémicoPage() {
           programName={selectedProgram?.name || ""}
           totalCredits={selectedProgram?.total_credits || 0}
           onCourseDeleted={handleCourseDeleted}
+          onViewCourse={handleViewCourse}
+          onEditCourse={handleEditCourse}
         />
       )}
     </div>

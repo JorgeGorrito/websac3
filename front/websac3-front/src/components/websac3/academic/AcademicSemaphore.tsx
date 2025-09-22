@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Shield, ShieldCheck, FileText, GraduationCap, Trash2 } from "lucide-react";
+import { BookOpen, Shield, ShieldCheck, FileText, GraduationCap, Trash2, Eye, Edit } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,6 +40,8 @@ interface AcademicSemaphoreProps {
   programName: string;
   totalCredits: number;
   onCourseDeleted?: () => void;
+  onViewCourse?: (courseId: number) => void;
+  onEditCourse?: (courseId: number) => void;
 }
 
 type CourseType = 'cybersecurity' | 'with_topics' | 'regular';
@@ -70,7 +72,7 @@ const courseTypeConfig = {
 
 // Ya no necesitamos estos mapeos porque ahora recibimos los nombres directamente del API
 
-export function AcademicSemaphore({ courses, programName, totalCredits, onCourseDeleted }: AcademicSemaphoreProps) {
+export function AcademicSemaphore({ courses, programName, totalCredits, onCourseDeleted, onViewCourse, onEditCourse }: AcademicSemaphoreProps) {
   const [deleteCourse, { isLoading: isDeleting }] = useDeleteCourseMutation();
   const [courseToDelete, setCourseToDelete] = useState<Course | null>(null);
 
@@ -243,38 +245,63 @@ export function AcademicSemaphore({ courses, programName, totalCredits, onCourse
                                   <div className="text-xs opacity-90">
                                     {config.label}
                                   </div>
-                                  <AlertDialog>
-                                    <AlertDialogTrigger asChild>
+                                  <div className="flex items-center gap-1">
+                                    {onViewCourse && (
                                       <Button
                                         variant="ghost"
                                         size="sm"
                                         className="h-6 w-6 p-0 text-white/80 hover:text-white hover:bg-white/20"
-                                        onClick={() => setCourseToDelete(course)}
+                                        onClick={() => onViewCourse(course.id)}
+                                        title="Ver detalles"
                                       >
-                                        <Trash2 className="h-3 w-3" />
+                                        <Eye className="h-3 w-3" />
                                       </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                      <AlertDialogHeader>
-                                        <AlertDialogTitle>¿Eliminar curso?</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                          ¿Estás seguro de que deseas eliminar el curso <strong>{course.name}</strong> ({course.code})?
-                                          <br />
-                                          Esta acción no se puede deshacer.
-                                        </AlertDialogDescription>
-                                      </AlertDialogHeader>
-                                      <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                        <AlertDialogAction
-                                          onClick={handleDeleteCourse}
-                                          disabled={isDeleting}
-                                          className="bg-red-600 hover:bg-red-700"
+                                    )}
+                                    {onEditCourse && (
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-6 w-6 p-0 text-white/80 hover:text-white hover:bg-white/20"
+                                        onClick={() => onEditCourse(course.id)}
+                                        title="Editar curso"
+                                      >
+                                        <Edit className="h-3 w-3" />
+                                      </Button>
+                                    )}
+                                    <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                        <Button
+                                          variant="ghost"
+                                          size="sm"
+                                          className="h-6 w-6 p-0 text-white/80 hover:text-white hover:bg-white/20"
+                                          onClick={() => setCourseToDelete(course)}
+                                          title="Eliminar curso"
                                         >
-                                          {isDeleting ? "Eliminando..." : "Eliminar"}
-                                        </AlertDialogAction>
-                                      </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                  </AlertDialog>
+                                          <Trash2 className="h-3 w-3" />
+                                        </Button>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>¿Eliminar curso?</AlertDialogTitle>
+                                          <AlertDialogDescription>
+                                            ¿Estás seguro de que deseas eliminar el curso <strong>{course.name}</strong> ({course.code})?
+                                            <br />
+                                            Esta acción no se puede deshacer.
+                                          </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                          <AlertDialogAction
+                                            onClick={handleDeleteCourse}
+                                            disabled={isDeleting}
+                                            className="bg-red-600 hover:bg-red-700"
+                                          >
+                                            {isDeleting ? "Eliminando..." : "Eliminar"}
+                                          </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                  </div>
                                 </div>
                               </div>
                               
