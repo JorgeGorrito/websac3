@@ -120,6 +120,64 @@ export type CreateUserFromTokenResponse = {
   message: string;
 };
 
+// Topic types
+export type TopicItem = {
+  id: number;
+  name: string;
+  knowledge_area_id: number;
+  knowledge_area_name: string;
+};
+
+// Course Type and Nature types
+export type CourseTypeItem = {
+  id: number;
+  name: string;
+};
+
+export type CourseNatureItem = {
+  id: number;
+  name: string;
+};
+
+// Course types
+export type CourseTopic = {
+  topic_id: number;
+  study_hours: number;
+};
+
+export type CreateCourseRequest = {
+  code: string;
+  name: string;
+  credits: number;
+  period_number: number;
+  type_id: number;
+  nature_id: number;
+  is_cybersecurity: boolean;
+  contains_cybersecurity_topics: boolean;
+  degree_program_id: number;
+  course_topics: CourseTopic[];
+};
+
+export type CourseItem = {
+  id: number;
+  code: string;
+  name: string;
+  credits: number;
+  period_number: number;
+  type_id: number;
+  nature_id: number;
+  is_cybersecurity: boolean;
+  contains_cybersecurity_topics: boolean;
+  degree_program_id: number;
+  nature_name: string;
+  type_name: string;
+  degree_program_name: string;
+  created_by: number;
+  creator_name: string;
+  status?: 'completed' | 'current' | 'pending' | 'failed';
+  grade?: number;
+};
+
 export type IdentificationTypeItem = {
   id: number;
   name: string;
@@ -130,12 +188,33 @@ export type HigherEducationInstitutionItem = {
   name: string;
 };
 
+// Get language from localStorage or default to 'es'
+const getLanguage = (): string => {
+  if (typeof window !== "undefined") {
+    return window.localStorage?.getItem("language") || "es";
+  }
+  return "es";
+};
+
+// Function to set language
+export const setLanguage = (language: string): void => {
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem("language", language);
+  }
+};
+
+// Function to get current language
+export const getCurrentLanguage = (): string => {
+  return getLanguage();
+};
+
 // Custom base query with automatic token refresh
 const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
+  const language = getLanguage();
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || `http://localhost:8110/api/v1/${language}`;
+  
   let result = await fetchBaseQuery({
-    baseUrl:
-      process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
-      "http://localhost:8110/api/v1/es",
+    baseUrl,
     credentials: "include",
     prepareHeaders: (headers) => {
       // Attach bearer token if present
@@ -155,9 +234,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
     if (refreshToken) {
       // Try to refresh the token
       const refreshResult = await fetchBaseQuery({
-        baseUrl:
-          process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
-          "http://localhost:8110/api/v1/es",
+        baseUrl,
         credentials: "include",
         prepareHeaders: (headers) => {
           headers.set("Accept", "application/json");
@@ -180,9 +257,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 
         // Retry the original request with the new token
         result = await fetchBaseQuery({
-          baseUrl:
-            process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
-            "http://localhost:8110/api/v1/es",
+          baseUrl,
           credentials: "include",
           prepareHeaders: (headers) => {
             headers.set("Authorization", `Bearer ${access_token}`);
@@ -246,7 +321,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 export const api = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["AccessRequest", "DegreeProgram"],
+  tagTypes: ["AccessRequest", "DegreeProgram", "Topic", "CourseType", "CourseNature", "Course"],
   endpoints: (builder) => ({
     // Catalogs
     listIdentificationTypes: builder.query<IdentificationTypeItem[], { current_page?: number; items_per_page?: number } | void>({
@@ -367,6 +442,179 @@ export const api = createApi({
       query: (body) => ({ url: "/degree-program", method: "POST", body }),
       invalidatesTags: [{ type: "DegreeProgram", id: "LIST" }],
     }),
+    // Topics
+    listTopics: builder.query<
+      PaginatedPage<TopicItem>,
+      { current_page?: number; items_per_page?: number; filters?: Record<string, string> }
+    >({
+      query: ({ current_page = 1, items_per_page = 10, filters } = {}) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        if (filters) {
+          const nested = new URLSearchParams();
+          for (const [key, value] of Object.entries(filters)) {
+            if (value !== undefined && value !== null && value !== "") {
+              nested.append(key, String(value));
+            }
+          }
+          params.set("filters", nested.toString());
+        }
+        return { url: `/topic?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<TopicItem>>) => response.result,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map((item) => ({ type: "Topic" as const, id: item.id })),
+              { type: "Topic" as const, id: "LIST" },
+            ]
+          : [{ type: "Topic" as const, id: "LIST" }],
+    }),
+    // Course Types
+    listCourseTypes: builder.query<
+      PaginatedPage<CourseTypeItem>,
+      { current_page?: number; items_per_page?: number; filters?: Record<string, string> }
+    >({
+      query: ({ current_page = 1, items_per_page = 10, filters } = {}) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        if (filters) {
+          const nested = new URLSearchParams();
+          for (const [key, value] of Object.entries(filters)) {
+            if (value !== undefined && value !== null && value !== "") {
+              nested.append(key, String(value));
+            }
+          }
+          params.set("filters", nested.toString());
+        }
+        return { url: `/course-types?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<CourseTypeItem>>) => response.result,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map((item) => ({ type: "CourseType" as const, id: item.id })),
+              { type: "CourseType" as const, id: "LIST" },
+            ]
+          : [{ type: "CourseType" as const, id: "LIST" }],
+    }),
+    // Course Natures
+    listCourseNatures: builder.query<
+      PaginatedPage<CourseNatureItem>,
+      { current_page?: number; items_per_page?: number; filters?: Record<string, string> }
+    >({
+      query: ({ current_page = 1, items_per_page = 10, filters } = {}) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        if (filters) {
+          const nested = new URLSearchParams();
+          for (const [key, value] of Object.entries(filters)) {
+            if (value !== undefined && value !== null && value !== "") {
+              nested.append(key, String(value));
+            }
+          }
+          params.set("filters", nested.toString());
+        }
+        return { url: `/course-natures?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<CourseNatureItem>>) => response.result,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map((item) => ({ type: "CourseNature" as const, id: item.id })),
+              { type: "CourseNature" as const, id: "LIST" },
+            ]
+          : [{ type: "CourseNature" as const, id: "LIST" }],
+    }),
+            // Courses
+            listCourses: builder.query<
+              PaginatedPage<CourseItem>,
+              { 
+                current_page?: number; 
+                items_per_page?: number; 
+                filters?: Record<string, string>;
+                degree_program_id?: number;
+              }
+            >({
+              query: ({ current_page = 1, items_per_page = 50, filters, degree_program_id } = {}) => {
+                const params = new URLSearchParams();
+                params.set("current_page", String(current_page));
+                params.set("items_per_page", String(items_per_page));
+                if (degree_program_id) {
+                  params.set("degree_program_id", String(degree_program_id));
+                }
+                if (filters) {
+                  const nested = new URLSearchParams();
+                  for (const [key, value] of Object.entries(filters)) {
+                    if (value !== undefined && value !== null && value !== "") {
+                      nested.append(key, String(value));
+                    }
+                  }
+                  params.set("filters", nested.toString());
+                }
+                return { url: `/course?${params.toString()}` };
+              },
+              transformResponse: (response: ApiResponse<PaginatedPage<CourseItem>>) => response.result,
+              providesTags: (result) =>
+                result
+                  ? [
+                      ...result.data.map((item) => ({ type: "Course" as const, id: item.id })),
+                      { type: "Course" as const, id: "LIST" },
+                    ]
+                  : [{ type: "Course" as const, id: "LIST" }],
+            }),
+            // Courses by degree program (specific endpoint)
+            listCoursesByDegreeProgram: builder.query<
+              PaginatedPage<CourseItem>,
+              { 
+                degree_program_id: number;
+                current_page?: number; 
+                items_per_page?: number; 
+                filters?: Record<string, string>;
+              }
+            >({
+              query: ({ degree_program_id, current_page = 1, items_per_page = 50, filters } = {}) => {
+                const params = new URLSearchParams();
+                params.set("current_page", String(current_page));
+                params.set("items_per_page", String(items_per_page));
+                if (filters) {
+                  const nested = new URLSearchParams();
+                  for (const [key, value] of Object.entries(filters)) {
+                    if (value !== undefined && value !== null && value !== "") {
+                      nested.append(key, String(value));
+                    }
+                  }
+                  params.set("filters", nested.toString());
+                }
+                return { url: `/degree-program/${degree_program_id}/courses?${params.toString()}` };
+              },
+              transformResponse: (response: ApiResponse<PaginatedPage<CourseItem>>) => response.result,
+              providesTags: (result, error, { degree_program_id }) =>
+                result
+                  ? [
+                      ...result.data.map((item) => ({ type: "Course" as const, id: item.id })),
+                      { type: "Course" as const, id: `PROGRAM_${degree_program_id}` },
+                    ]
+                  : [{ type: "Course" as const, id: `PROGRAM_${degree_program_id}` }],
+            }),
+            createCourse: builder.mutation<ApiResponse<string>, CreateCourseRequest>({
+              query: (body) => ({ url: "/course", method: "POST", body }),
+              invalidatesTags: (result, error, { degree_program_id }) => [
+                { type: "Course", id: "LIST" },
+                { type: "Course", id: `PROGRAM_${degree_program_id}` },
+              ],
+            }),
+            // Get course by ID
+            getCourseById: builder.query<CourseItem, { course_id: number }>({
+              query: ({ course_id }) => ({ url: `/course/${course_id}` }),
+              transformResponse: (response: ApiResponse<CourseItem>) => response.result,
+              providesTags: (result, error, { course_id }) => [
+                { type: "Course", id: course_id },
+              ],
+            }),
     // Authentication endpoints
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({ url: "/auth", method: "POST", body }),
@@ -396,6 +644,16 @@ export const {
   useListDurationUnitsQuery,
   useListDegreeProgramsQuery,
   useCreateDegreeProgramMutation,
+  // topics
+  useListTopicsQuery,
+  // course types and natures
+  useListCourseTypesQuery,
+  useListCourseNaturesQuery,
+  // courses
+  useListCoursesQuery,
+  useListCoursesByDegreeProgramQuery,
+  useCreateCourseMutation,
+  useGetCourseByIdQuery,
   // authentication
   useLoginMutation,
   useRefreshTokenMutation,
