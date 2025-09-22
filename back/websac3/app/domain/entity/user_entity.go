@@ -31,3 +31,7 @@ func (u *User) IsPasswordHashEqual(hash string) bool {
 func (u *User) IsActive() bool {
 	return u.DeactivatedAt == nil
 }
+
+func (u *User) IsAdmin() bool {
+	return u.Role != nil && u.Role.Name == "admin"
+}

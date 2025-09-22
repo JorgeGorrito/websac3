@@ -36,12 +36,18 @@ func registerListCourseNaturesRoute(routerGroup *gin.RouterGroup) {
 	routerGroup.GET("/course-natures", listCourseNaturesController.Handle)
 }
 
+func registerDeleteCourseRoute(routerGroup *gin.RouterGroup) {
+	var deleteCourseController = controller.GetDeleteCourseController()
+	routerGroup.DELETE("/course/:course_id", deleteCourseController.Handle)
+}
+
 func RegisterCourseRoutes(routerGroup *gin.RouterGroup) {
 	authGroup := getAuthRequiredGroup(routerGroup)
 	registerCreateCourseRoute(authGroup)
 	registerListCourseByDegreeProgramRoute(authGroup)
 	registerGetCourseByIDRoute(authGroup)
 	registerGetCourseTopicsByCourseIDRoute(authGroup)
+	registerDeleteCourseRoute(authGroup)
 	registerListCourseTypesRoute(authGroup)
 	registerListCourseNaturesRoute(authGroup)
 }

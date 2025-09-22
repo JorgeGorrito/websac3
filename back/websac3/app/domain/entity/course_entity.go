@@ -1,5 +1,7 @@
 package entity
 
+import "time"
+
 type CourseTopic struct {
 	CourseID   uint
 	TopicID    uint
@@ -26,6 +28,8 @@ type Course struct {
 
 	CreatedBy   uint
 	UserCreator *User
+
+	DeletedAt *time.Time
 }
 
 func (e *Course) ContainsCybersecurityTopics() bool {
@@ -34,4 +38,12 @@ func (e *Course) ContainsCybersecurityTopics() bool {
 
 func (e *Course) GetCourseTopics() []CourseTopic {
 	return e.CourseTopics
+}
+
+// CanBeDeletedBy verifica si un usuario puede eliminar este curso
+// Un curso puede ser eliminado por:
+// 1. El usuario que lo creó (CreatedBy)
+// 2. Un administrador (verificado a través de User.IsAdmin())
+func (e *Course) CanBeDeletedBy(userID uint) bool {
+	return e.CreatedBy == userID
 }

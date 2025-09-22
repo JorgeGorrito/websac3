@@ -82,6 +82,15 @@ func registerCourseMappers() {
 		},
 	)
 
+	// DeleteCourseRequest to DeleteCourseCommand mapper
+	RegisterMapFunc(
+		func(req *request.DeleteCourseRequest) (command.DeleteCourseCommand, error) {
+			return command.DeleteCourseCommand{
+				CourseID: req.CourseID,
+			}, nil
+		},
+	)
+
 	// CourseType mapper with language support
 	RegisterMapFunc(
 		func(ct *model.CourseType) (entity.CourseType, error) {

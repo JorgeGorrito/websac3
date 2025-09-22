@@ -279,6 +279,44 @@ func (r *CourseRepository) GetByIDWithLang(
 	return &courseEntity, nil
 }
 
+func (r *CourseRepository) GetByIDWithDeleted(
+	courseID uint,
+	ctx _db.Context,
+) (*entity.Course, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var course model.Course
+	if err := dbCtx.DB().Unscoped().
+		Preload("Nature", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("Type", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Names")
+		}).
+		Preload("DegreeProgram").
+		Preload("UserCreator.Person").
+		Preload("CourseTopics", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("Topic", func(db *gorm.DB) *gorm.DB {
+				return db.Preload("KnowledgeArea", func(db *gorm.DB) *gorm.DB {
+					return db.Preload("Names")
+				}).Preload("Names")
+			})
+		}).
+		First(&course, courseID).Error; err != nil {
+		return nil, err
+	}
+
+	courseEntity, err := mapper.Map[model.Course, entity.Course](&course)
+	if err != nil {
+		return nil, err
+	}
+
+	return &courseEntity, nil
+}
+
 func (r *CourseRepository) GetTopicsByCourseID(
 	courseID uint,
 	ctx _db.Context,
@@ -369,34 +407,6 @@ func (r *CourseRepository) GetTopicsWithCourseByCourseID(
 	return courseTopicEntities, &courseEntity, nil
 }
 
-// Helper function to get topic name by language from model
-func getTopicNameByLanguageFromModel(topicModel *model.Topic, lang string) string {
-	for _, name := range topicModel.Names {
-		if name.Lang == lang {
-			return name.Name
-		}
-	}
-	// If no name found for the language, use the first available
-	if len(topicModel.Names) > 0 {
-		return topicModel.Names[0].Name
-	}
-	return ""
-}
-
-// Helper function to get knowledge area name by language from model
-func getKnowledgeAreaNameByLanguageFromModel(kaModel *model.KnowledgeArea, lang string) string {
-	for _, name := range kaModel.Names {
-		if name.Lang == lang {
-			return name.Name
-		}
-	}
-	// If no name found for the language, use the first available
-	if len(kaModel.Names) > 0 {
-		return kaModel.Names[0].Name
-	}
-	return ""
-}
-
 func (r *CourseRepository) GetTopicsWithCourseByCourseIDAndLang(
 	courseID uint,
 	lang string,
@@ -452,4 +462,32 @@ func (r *CourseRepository) GetTopicsWithCourseByCourseIDAndLang(
 	}
 
 	return courseTopicEntities, &courseEntity, nil
+}
+
+func (r *CourseRepository) DeleteByID(courseID uint, ctx _db.Context) error {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	// First check if the course exists (including soft deleted ones)
+	var course model.Course
+	if err := dbCtx.DB().Unscoped().First(&course, courseID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return errs.NewNotFoundError("course not found")
+		}
+		return err
+	}
+
+	// Check if the course is already deleted
+	if course.DeletedAt.Valid {
+		return errs.NewNotFoundError("course not found")
+	}
+
+	// Delete the course (GORM will handle soft delete due to DeletedAt field)
+	if err := dbCtx.DB().Delete(&course).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

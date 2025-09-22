@@ -38,4 +38,9 @@ type GetCoursePort interface {
 		lang string,
 		ctx db.Context,
 	) (*entity.Course, error)
+
+	GetByIDWithDeleted(
+		courseID uint,
+		ctx db.Context,
+	) (*entity.Course, error)
 }

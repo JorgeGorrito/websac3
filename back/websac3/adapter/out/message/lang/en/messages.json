@@ -27,13 +27,25 @@
     "course_created" : "Course created successfully.",
     "course_already_exists" : "A course with this code already exists in the degree program."
   },
+  "delete_course" : {
+    "course_not_found" : "Course not found.",
+    "insufficient_permissions" : "You are not authorized to delete this course. Only the course creator or an admin can delete it.",
+    "course_deleted_successfully" : "Course deleted successfully."
+  },
   "list_degree_program" : {
     "not_found" : "No degree programs found."
   },
   "evaluate_degree_program" : {
     "not_found" : "Degree program to evaluate was not found.",
     "professional_role_not_found": "Professional role was not found.",
-    "user_email_not_found": "The user does not have an email configured to receive the report."
+    "user_email_not_found": "The user does not have an email configured to receive the report.",
+    "report_email_subject": "Degree Program Evaluation Report",
+    "report_email_title": "Degree Program Evaluation Report",
+    "report_email_body": "The evaluation of the requested degree program has been completed successfully.",
+    "report_email_attachment_info": "Please find the detailed evaluation report attached to this email.",
+    "report_email_regards": "Best regards,",
+    "report_email_signature": "WebSAC3 System",
+    "report_sent_successfully": "Evaluation report has been sent to your email successfully."
   },
   "list_higher_education_institution": {
     "not_found": "No higher education institutions found."
@@ -138,15 +150,6 @@
   "base_error": {
     "internal_error": "The request could not be processed.",
     "forbidden": "You do not have permission to perform this action."
-  },
-  "evaluate_degree_program": {
-    "report_email_subject": "Degree Program Evaluation Report",
-    "report_email_title": "Degree Program Evaluation Report",
-    "report_email_body": "The evaluation of the requested degree program has been completed successfully.",
-    "report_email_attachment_info": "Please find the detailed evaluation report attached to this email.",
-    "report_email_regards": "Best regards,",
-    "report_email_signature": "WebSAC3 System",
-    "report_sent_successfully": "Evaluation report has been sent to your email successfully."
   },
   "report_feedback": {
     "report_not_found": "The specified report was not found.",

@@ -55,8 +55,6 @@ func (u *UserRepository) UpdateByID(userToUpdate *entity.User, userID uint, ctx 
 		return err
 	}
 
-	fmt.Printf("Updating user in DB: ID=%d, DeactivatedAt=%+v\n", user.ID, user.DeactivatedAt)
-
 	// Usar Select para especificar qué campos actualizar, incluyendo deactivated_at
 	if err := dbCtx.DB().
 		Model(&model.User{}).
@@ -67,7 +65,6 @@ func (u *UserRepository) UpdateByID(userToUpdate *entity.User, userID uint, ctx 
 		return err
 	}
 
-	fmt.Printf("User updated successfully in DB\n")
 	return nil
 }
 
