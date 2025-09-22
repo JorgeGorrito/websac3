@@ -208,6 +208,7 @@ export const getCurrentLanguage = (): string => {
   return getLanguage();
 };
 
+
 // Custom base query with automatic token refresh
 const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
   const language = getLanguage();
@@ -232,41 +233,64 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
     const refreshToken = typeof window !== "undefined" ? window.localStorage?.getItem("refresh_token") : null;
     
     if (refreshToken) {
-      // Try to refresh the token
-      const refreshResult = await fetchBaseQuery({
-        baseUrl,
-        credentials: "include",
-        prepareHeaders: (headers) => {
-          headers.set("Accept", "application/json");
-          return headers;
-        },
-      })({
-        url: "/auth/refresh",
-        method: "POST",
-        body: { refresh_token: refreshToken },
-      }, api, extraOptions);
-
-      if (refreshResult.data) {
-        const { access_token, refresh_token } = refreshResult.data as RefreshTokenResponse;
-        
-        // Store the new tokens
-        if (typeof window !== "undefined") {
-          window.localStorage.setItem("access_token", access_token);
-          window.localStorage.setItem("refresh_token", refresh_token);
-        }
-
-        // Retry the original request with the new token
-        result = await fetchBaseQuery({
+      try {
+        // Try to refresh the token
+        const refreshResult = await fetchBaseQuery({
           baseUrl,
           credentials: "include",
           prepareHeaders: (headers) => {
-            headers.set("Authorization", `Bearer ${access_token}`);
             headers.set("Accept", "application/json");
             return headers;
           },
-        })(args, api, extraOptions);
-      } else {
-        // Refresh failed, clear tokens and redirect to login
+        })({
+          url: "/auth/refresh",
+          method: "POST",
+          body: { refresh_token: refreshToken },
+        }, api, extraOptions);
+
+        if (refreshResult.data) {
+          // Try different possible field names for the tokens
+          const responseData = refreshResult.data as any;
+          
+          // Check if tokens are nested in a 'result' object
+          const tokenData = responseData.result || responseData;
+          let access_token = tokenData.access_token || tokenData.accessToken || tokenData.access;
+          let refresh_token = tokenData.refresh_token || tokenData.refreshToken || tokenData.refresh;
+          
+          if (!access_token) {
+            throw new Error("access_token is undefined in refresh response");
+          }
+          
+          // Store the new tokens
+          if (typeof window !== "undefined") {
+            window.localStorage.setItem("access_token", access_token);
+            window.localStorage.setItem("refresh_token", refresh_token);
+          }
+
+          // Retry the original request with the new token
+          result = await fetchBaseQuery({
+            baseUrl,
+            credentials: "include",
+            prepareHeaders: (headers) => {
+              // Use the new token directly, not from localStorage
+              headers.set("Authorization", `Bearer ${access_token}`);
+              headers.set("Accept", "application/json");
+              return headers;
+            },
+          })(args, api, extraOptions);
+          
+          // Don't redirect to login after successful refresh, even if retry fails
+          // The error will be handled by the normal error handling below
+        } else {
+          // Refresh failed, clear tokens and redirect to login
+          if (typeof window !== "undefined") {
+            window.localStorage.removeItem("access_token");
+            window.localStorage.removeItem("refresh_token");
+            window.location.href = "/login";
+          }
+        }
+      } catch (refreshError) {
+        // Refresh request itself failed, clear tokens and redirect to login
         if (typeof window !== "undefined") {
           window.localStorage.removeItem("access_token");
           window.localStorage.removeItem("refresh_token");
