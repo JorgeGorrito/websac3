@@ -92,43 +92,34 @@ func (r *ReportRepository) GetByID(reportID uint, ctx _db.Context) (entity.Repor
 
 	var report model.Report
 	if err := dbCtx.DB().
+		// Preload DegreeProgram with all necessary fields
+		Preload("DegreeProgram").
+		Preload("DegreeProgram.DurationUnit").
+		Preload("DegreeProgram.DurationUnit.Names").
+		Preload("DegreeProgram.UserCreator").
+		Preload("DegreeProgram.UserCreator.Person").
 		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution").
+		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution.Ownership").
+		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution.InstitutionalCategory").
+		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution.Municipality").
+		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution.Department").
+		// Preload ProfessionalRole
 		Preload("ProfessionalRole").
+		// Preload KnowledgeAreaReports with TopicReports
+		Preload("KnowledgeAreaReports").
+		Preload("KnowledgeAreaReports.TopicReports").
 		Where("id = ?", reportID).
 		First(&report).Error; err != nil {
 		return entity.Report{}, err
 	}
 
-	// Mapeo manual simplificado para evitar errores
-	entityReport := entity.Report{
-		ID:        report.ID,
-		Score:     report.Score,
-		CreatedAt: report.CreatedAt,
-		DegreeProgram: entity.DegreeProgram{
-			ID:   report.DegreeProgram.ID,
-			Name: report.DegreeProgram.Name,
-			UserCreator: &entity.User{
-				ID:    report.DegreeProgram.UserCreator.ID,
-				Email: report.DegreeProgram.UserCreator.Email,
-				Person: &entity.Person{
-					ID:       report.DegreeProgram.UserCreator.Person.ID,
-					Name:     report.DegreeProgram.UserCreator.Person.Name,
-					Lastname: report.DegreeProgram.UserCreator.Person.Lastname,
-					HigherEducationInstitution: &entity.HigherEducationInstitution{
-						Snies: report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Snies,
-						Name:  report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Name,
-					},
-				},
-			},
-		},
-		ProfessionalRole: entity.ProfessionalRole{
-			ID:   report.ProfessionalRole.ID,
-			Name: report.ProfessionalRole.Name,
-		},
-		KnowledgeAreaReports: []entity.KnowledgeAreaReport{}, // Vacío por ahora
+	// Use the mapper to get complete entity mapping
+	entityReport, err := mapper.Map[model.Report, entity.Report](&report)
+	if err != nil {
+		return entity.Report{}, err
 	}
 
-	// Asignar HigherEducationInstitution desde UserCreator.Person
+	// Set HigherEducationInstitution from UserCreator.Person if available
 	if entityReport.DegreeProgram.UserCreator != nil &&
 		entityReport.DegreeProgram.UserCreator.Person != nil &&
 		entityReport.DegreeProgram.UserCreator.Person.HigherEducationInstitution != nil {

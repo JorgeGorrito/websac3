@@ -109,9 +109,22 @@ func registerReportMappers() {
 	// Report: model -> entity
 	RegisterMapFunc(
 		func(reportModel *model.Report) (entity.Report, error) {
-			// Mapear KnowledgeAreaReports sin relaciones complejas para evitar errores
+			// Mapear KnowledgeAreaReports con TopicReports
 			var knowledgeAreaReports []entity.KnowledgeAreaReport
 			for _, kar := range reportModel.KnowledgeAreaReports {
+				// Mapear TopicReports
+				var topicReports []entity.TopicReport
+				for _, tr := range kar.TopicReports {
+					topicReport := entity.TopicReport{
+						ID:                 tr.ID,
+						TopicID:            tr.TopicID,
+						Name:               tr.Name,
+						LearnHoursExpected: tr.LearnHoursExpected,
+						LearnHoursActual:   tr.LearnHoursActual,
+					}
+					topicReports = append(topicReports, topicReport)
+				}
+
 				karEntity := entity.KnowledgeAreaReport{
 					ID:                      kar.ID,
 					Name:                    kar.Name,
@@ -119,12 +132,48 @@ func registerReportMappers() {
 					TotalLearnHoursActual:   kar.TotalLearnHoursActual,
 					ScoreExpected:           kar.ScoreExpected,
 					ScoreGot:                kar.ScoreGot,
-					// TopicReports se deja vacío para evitar errores de mapeo
+					TopicReports:            topicReports,
 				}
 				knowledgeAreaReports = append(knowledgeAreaReports, karEntity)
 			}
 
-			// Mapear DegreeProgram sin relaciones complejas para evitar errores
+			// Mapear DurationUnit si está disponible
+			var durationUnitPtr *entity.DurationUnit
+			if reportModel.DegreeProgram.DurationUnit.ID != 0 {
+				if du, err := Map[model.DurationUnit, entity.DurationUnit](&reportModel.DegreeProgram.DurationUnit); err == nil {
+					durationUnitPtr = &du
+				}
+			}
+
+			// Mapear UserCreator con Person y HigherEducationInstitution
+			var userCreatorPtr *entity.User
+			if reportModel.DegreeProgram.UserCreator.ID != 0 {
+				var personPtr *entity.Person
+				if reportModel.DegreeProgram.UserCreator.Person.ID != 0 {
+					var higherEducationInstitutionPtr *entity.HigherEducationInstitution
+					if reportModel.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Snies != 0 {
+						higherEducationInstitutionPtr = &entity.HigherEducationInstitution{
+							Snies: reportModel.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Snies,
+							Name:  reportModel.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Name,
+						}
+					}
+
+					personPtr = &entity.Person{
+						ID:                         reportModel.DegreeProgram.UserCreator.Person.ID,
+						Name:                       reportModel.DegreeProgram.UserCreator.Person.Name,
+						Lastname:                   reportModel.DegreeProgram.UserCreator.Person.Lastname,
+						HigherEducationInstitution: higherEducationInstitutionPtr,
+					}
+				}
+
+				userCreatorPtr = &entity.User{
+					ID:     reportModel.DegreeProgram.UserCreator.ID,
+					Email:  reportModel.DegreeProgram.UserCreator.Email,
+					Person: personPtr,
+				}
+			}
+
+			// Mapear DegreeProgram con DurationUnit y UserCreator
 			degreeProgram := entity.DegreeProgram{
 				ID:                  reportModel.DegreeProgram.ID,
 				Snies:               reportModel.DegreeProgram.Snies,
@@ -132,12 +181,13 @@ func registerReportMappers() {
 				TotalCredits:        reportModel.DegreeProgram.TotalCredits,
 				DurationValue:       reportModel.DegreeProgram.DurationValue,
 				DurationUnitID:      reportModel.DegreeProgram.DurationUnitID,
+				DurationUnit:        durationUnitPtr,
 				ProgramFocus:        reportModel.DegreeProgram.ProgramFocus,
 				EntryProfile:        reportModel.DegreeProgram.EntryProfile,
 				GraduateProfile:     reportModel.DegreeProgram.GraduateProfile,
 				ProfessionalProfile: reportModel.DegreeProgram.ProfessionalProfile,
 				CreatedBy:           reportModel.DegreeProgram.CreatedBy,
-				// Las relaciones complejas se dejan vacías para evitar errores de mapeo
+				UserCreator:         userCreatorPtr,
 			}
 
 			// Mapear ProfessionalRole sin KnowledgeAreaExpected para evitar errores
@@ -147,14 +197,22 @@ func registerReportMappers() {
 				// KnowledgeAreaExpected se deja vacío porque no se necesita para el reporte
 			}
 
+			// Extraer HigherEducationInstitution desde UserCreator.Person si está disponible
+			var higherEducationInstitutionPtr *entity.HigherEducationInstitution
+			if degreeProgram.UserCreator != nil &&
+				degreeProgram.UserCreator.Person != nil &&
+				degreeProgram.UserCreator.Person.HigherEducationInstitution != nil {
+				higherEducationInstitutionPtr = degreeProgram.UserCreator.Person.HigherEducationInstitution
+			}
+
 			return entity.Report{
-				ID:                   reportModel.ID,
-				DegreeProgram:        degreeProgram,
-				ProfessionalRole:     professionalRole,
-				KnowledgeAreaReports: knowledgeAreaReports,
-				Score:                reportModel.Score,
-				CreatedAt:            reportModel.CreatedAt,
-				// Note: HigherEducationInstitution would need to be reconstructed from related data if needed
+				ID:                         reportModel.ID,
+				DegreeProgram:              degreeProgram,
+				ProfessionalRole:           professionalRole,
+				KnowledgeAreaReports:       knowledgeAreaReports,
+				Score:                      reportModel.Score,
+				CreatedAt:                  reportModel.CreatedAt,
+				HigherEducationInstitution: higherEducationInstitutionPtr,
 			}, nil
 		},
 	)
