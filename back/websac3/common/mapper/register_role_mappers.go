@@ -102,3 +102,78 @@ func registerRoleMappers() {
 		}, nil
 	})
 }
+
+// GetProfessionalRoleMapperWithLanguage returns a language-specific mapper for ProfessionalRole
+func GetProfessionalRoleMapperWithLanguage(lang string) func(*model.ProfessionalRole) (entity.ProfessionalRole, error) {
+	return func(roleModel *model.ProfessionalRole) (entity.ProfessionalRole, error) {
+		role := entity.ProfessionalRole{
+			ID:   roleModel.ID,
+			Name: roleModel.Name,
+		}
+
+		var kaExpected []entity.KnowledgeAreaExpected
+		for _, ka := range roleModel.KnowledgeAreas {
+			// Map KnowledgeArea with language support
+			var eKA entity.KnowledgeArea
+			if len(ka.KnowledgeArea.Names) > 0 {
+				// Find name by language, fallback to first available
+				var name string
+				for _, nameObj := range ka.KnowledgeArea.Names {
+					if nameObj.Lang == lang {
+						name = nameObj.Name
+						break
+					}
+				}
+				if name == "" && len(ka.KnowledgeArea.Names) > 0 {
+					name = ka.KnowledgeArea.Names[0].Name
+				}
+
+				eKA = entity.KnowledgeArea{
+					ID:   ka.KnowledgeArea.ID,
+					Name: name,
+				}
+			}
+
+			var topicsExpected []entity.TopicExpected
+			for _, t := range ka.Topics {
+				var eTopic entity.Topic
+				if len(t.Topic.Names) > 0 {
+					// Find name by language, fallback to first available
+					var name string
+					for _, nameObj := range t.Topic.Names {
+						if nameObj.Lang == lang {
+							name = nameObj.Name
+							break
+						}
+					}
+					if name == "" && len(t.Topic.Names) > 0 {
+						name = t.Topic.Names[0].Name
+					}
+
+					eTopic = entity.Topic{
+						ID:              t.Topic.ID,
+						Name:            name,
+						KnowledgeAreaID: t.Topic.KnowledgeAreaID,
+					}
+				}
+				topicsExpected = append(topicsExpected, entity.TopicExpected{
+					ID:         t.ID,
+					TopicID:    t.TopicID,
+					Topic:      &eTopic,
+					LearnHours: float32(t.StudyHours),
+				})
+			}
+
+			kaExpected = append(kaExpected, entity.KnowledgeAreaExpected{
+				ID:              ka.ID,
+				KnowledgeAreaID: ka.KnowledgeAreaID,
+				KnowledgeArea:   &eKA,
+				TopicExpected:   topicsExpected,
+				PriorityWeight:  ka.PriorityWeight,
+			})
+		}
+
+		role.KnowledgeAreaExpected = kaExpected
+		return role, nil
+	}
+}

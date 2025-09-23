@@ -32,9 +32,18 @@ func (r *ProfessionalRoleRepository) GetByID(id uint, lang string, ctx _db.Conte
 		return entity.ProfessionalRole{}, err
 	}
 
+	// Use language-specific mapper if available, otherwise fallback to default
 	var professionalRoleEntity entity.ProfessionalRole
-	if professionalRoleEntity, err = mapper.Map[model.ProfessionalRole, entity.ProfessionalRole](&professionalRole); err != nil {
-		return entity.ProfessionalRole{}, err
+	if langMapper := mapper.GetProfessionalRoleMapperWithLanguage(lang); langMapper != nil {
+		professionalRoleEntity, err = langMapper(&professionalRole)
+		if err != nil {
+			return entity.ProfessionalRole{}, err
+		}
+	} else {
+		// Fallback to default mapper
+		if professionalRoleEntity, err = mapper.Map[model.ProfessionalRole, entity.ProfessionalRole](&professionalRole); err != nil {
+			return entity.ProfessionalRole{}, err
+		}
 	}
 
 	return professionalRoleEntity, nil
