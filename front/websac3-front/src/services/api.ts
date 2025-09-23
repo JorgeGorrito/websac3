@@ -126,6 +126,54 @@ export type EvaluateDegreeProgramRequest = {
   professional_role_id: number;
 };
 
+export type ReportItem = {
+  id: number;
+  created_at: string;
+  lang: string;
+  score: number; // Can be decimal (0.0875) or integer (87)
+};
+
+export type TopicReport = {
+  name: string;
+  learn_hours_expected: number;
+  learn_hours_actual: number;
+};
+
+export type KnowledgeAreaReport = {
+  name: string;
+  total_learn_hours_expected: number;
+  total_learn_hours_actual: number;
+  score_expected: number;
+  score_got: number;
+  topic_reports: TopicReport[];
+};
+
+export type UnexpectedKnowledgeAreaReport = {
+  name: string;
+  total_learn_hours: number;
+  topic_reports: TopicReport[];
+};
+
+export type ReportDetail = {
+  id: number;
+  created_at: string;
+  lang: string;
+  score: number;
+  degree_program: {
+    snies: number;
+    name: string;
+  };
+  professional_role: {
+    name: string;
+  };
+  higher_education_institution: {
+    snies: number;
+    name: string;
+  };
+  knowledge_area_reports: KnowledgeAreaReport[];
+  unexpected_knowledge_area_reports?: UnexpectedKnowledgeAreaReport[];
+};
+
 export type CreateUserFromTokenResponse = {
   message: string;
 };
@@ -715,6 +763,36 @@ export const api = createApi({
     evaluateDegreeProgram: builder.mutation<ApiResponse<string>, EvaluateDegreeProgramRequest>({
       query: (body) => ({ url: "/degree-program/evaluate", method: "POST", body }),
     }),
+    // Degree Program Reports
+    listDegreeProgramReports: builder.query<
+      PaginatedPage<ReportItem>,
+      { degree_program_id: number; current_page?: number; items_per_page?: number }
+    >({
+      query: ({ degree_program_id, current_page = 1, items_per_page = 10 }) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        return { url: `/degree-program/${degree_program_id}/reports?${params.toString()}` };
+      },
+      transformResponse: (response: any) => {
+        // Handle both formats: ApiResponse format and direct format
+        if (response.Result) {
+          return response.Result;
+        }
+        return response.result;
+      },
+    }),
+    // Report Detail
+    getReportDetail: builder.query<ReportDetail, number>({
+      query: (report_id) => ({ url: `/report/${report_id}` }),
+      transformResponse: (response: any) => {
+        // Handle both formats: ApiResponse format and direct format
+        if (response.Result) {
+          return response.Result;
+        }
+        return response.result;
+      },
+    }),
     // Authentication endpoints
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({ url: "/auth", method: "POST", body }),
@@ -761,6 +839,10 @@ export const {
   useListProfessionalRolesQuery,
   // degree program evaluation
   useEvaluateDegreeProgramMutation,
+  // degree program reports
+  useListDegreeProgramReportsQuery,
+  // report detail
+  useGetReportDetailQuery,
   // authentication
   useLoginMutation,
   useRefreshTokenMutation,
