@@ -184,132 +184,78 @@ export default function ProgramasPage() {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Compact Stats Bar */}
       {data && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-blue-500 rounded-xl shadow-md">
-                  <BookOpen className="h-8 w-8 text-white" />
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            {/* Left side - Main info */}
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-blue-600" />
+                <span className="text-sm font-medium text-gray-700">
+                  {data.total_count} programa{data.total_count !== 1 ? 's' : ''} registrado{data.total_count !== 1 ? 's' : ''}
+                </span>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-gray-500" />
+                <span className="text-sm text-gray-600">
+                  Página {data.current_page} de {Math.ceil(data.total_count / itemsPerPage)}
+                </span>
+              </div>
+            </div>
+
+            {/* Right side - Institution info */}
+            {data.data.length > 0 && (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="h-4 w-4 text-indigo-600" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {data.data[0].higher_education_institution.name}
+                  </span>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-semibold text-blue-700 uppercase tracking-wide">Total Programas</p>
-                  <p className="text-3xl font-bold text-blue-900 mt-1">{data.total_count}</p>
+                <Badge className="bg-indigo-100 text-indigo-800 border-indigo-200 text-xs">
+                  SNIES: {data.data[0].higher_education_institution.snies}
+                </Badge>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Active Filters Info */}
+      {(filters.name || filters.snies) && (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-amber-500 rounded-lg">
+                <Search className="h-4 w-4 text-white" />
+              </div>
+              <div>
+                <span className="text-sm font-semibold text-amber-800">Filtros activos:</span>
+                <div className="flex items-center gap-2 mt-1">
+                  {filters.name && (
+                    <Badge className="bg-blue-100 text-blue-800 border-blue-200 font-medium text-xs">
+                      Nombre: "{filters.name}"
+                    </Badge>
+                  )}
+                  {filters.snies && (
+                    <Badge className="bg-green-100 text-green-800 border-green-200 font-medium text-xs">
+                      SNIES: "{filters.snies}"
+                    </Badge>
+                  )}
                 </div>
               </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-green-500 rounded-xl shadow-md">
-                  <Calendar className="h-8 w-8 text-white" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-semibold text-green-700 uppercase tracking-wide">Página Actual</p>
-                  <p className="text-3xl font-bold text-green-900 mt-1">{data.current_page}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-orange-500 rounded-xl shadow-md">
-                  <Clock className="h-8 w-8 text-white" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-semibold text-orange-700 uppercase tracking-wide">Por Página</p>
-                  <p className="text-3xl font-bold text-orange-900 mt-1">{itemsPerPage}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-purple-500 rounded-xl shadow-md">
-                  <Target className="h-8 w-8 text-white" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-semibold text-purple-700 uppercase tracking-wide">Total Páginas</p>
-                  <p className="text-3xl font-bold text-purple-900 mt-1">
-                    {Math.ceil(data.total_count / itemsPerPage)}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          {/* Active Filters Info */}
-          {(filters.name || filters.snies) && (
-            <Card className="md:col-span-4 bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200 shadow-lg">
-              <CardContent className="p-5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-amber-500 rounded-lg">
-                      <Search className="h-5 w-5 text-white" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-semibold text-amber-800">Filtros activos:</span>
-                      <div className="flex items-center gap-2 mt-1">
-                        {filters.name && (
-                          <Badge className="bg-blue-100 text-blue-800 border-blue-200 font-medium">
-                            Nombre: "{filters.name}"
-                          </Badge>
-                        )}
-                        {filters.snies && (
-                          <Badge className="bg-green-100 text-green-800 border-green-200 font-medium">
-                            SNIES: "{filters.snies}"
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <Button 
-                    onClick={clearFilters} 
-                    variant="outline" 
-                    size="sm"
-                    className="border-amber-300 text-amber-700 hover:bg-amber-100"
-                  >
-                    Limpiar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-          
-          {data.data.length > 0 && (
-            <Card className="md:col-span-4 bg-gradient-to-r from-indigo-50 to-blue-50 border-indigo-200 shadow-lg py-0">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-indigo-500 rounded-xl shadow-md">
-                      <GraduationCap className="h-8 w-8 text-white" />
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-semibold text-indigo-700 uppercase tracking-wide">Institución</p>
-                      <p className="text-xl font-bold text-gray-900 mt-1">
-                        {data.data[0].higher_education_institution.name}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-semibold text-indigo-700 uppercase tracking-wide">Código SNIES</p>
-                    <div className="mt-2">
-                      <Badge className="bg-indigo-100 text-indigo-800 border-indigo-200 font-bold text-lg px-4 py-2">
-                        {data.data[0].higher_education_institution.snies}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+            </div>
+            <Button 
+              onClick={clearFilters} 
+              variant="outline" 
+              size="sm"
+              className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs"
+            >
+              Limpiar
+            </Button>
+          </div>
         </div>
       )}
 
