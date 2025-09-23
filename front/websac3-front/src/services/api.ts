@@ -116,6 +116,16 @@ export type CreateDegreeProgramRequest = {
   total_credits: number;
 };
 
+export type ProfessionalRoleItem = {
+  id: number;
+  name: string;
+};
+
+export type EvaluateDegreeProgramRequest = {
+  degree_program_id: number;
+  professional_role_id: number;
+};
+
 export type CreateUserFromTokenResponse = {
   message: string;
 };
@@ -696,6 +706,15 @@ export const api = createApi({
                 { type: "Course", id: "LIST" },
               ],
             }),
+    // Professional Roles
+    listProfessionalRoles: builder.query<PaginatedPage<ProfessionalRoleItem>, void>({
+      query: () => ({ url: "/professional-roles" }),
+      transformResponse: (response: ApiResponse<PaginatedPage<ProfessionalRoleItem>>) => response.result,
+    }),
+    // Degree Program Evaluation
+    evaluateDegreeProgram: builder.mutation<ApiResponse<string>, EvaluateDegreeProgramRequest>({
+      query: (body) => ({ url: "/degree-program/evaluate", method: "POST", body }),
+    }),
     // Authentication endpoints
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({ url: "/auth", method: "POST", body }),
@@ -738,6 +757,10 @@ export const {
   useGetCourseTopicsQuery,
   useUpdateCourseMutation,
   useDeleteCourseMutation,
+  // professional roles
+  useListProfessionalRolesQuery,
+  // degree program evaluation
+  useEvaluateDegreeProgramMutation,
   // authentication
   useLoginMutation,
   useRefreshTokenMutation,

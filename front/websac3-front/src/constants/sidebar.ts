@@ -120,7 +120,7 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
         icon: PieChart,
       },
       {
-        title: "Operar Modelo",
+        title: "Evaluar Componente de Ciberseguridad",
         url: "/director/operar-modelo",
         icon: Cog,
       },
