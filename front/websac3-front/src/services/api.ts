@@ -210,6 +210,19 @@ export type CreateUserFromTokenResponse = {
   message: string;
 };
 
+// Expert Consultation types
+export type CreateExpertConsultationRequest = {
+  degree_program_id: number;
+  report_id: number;
+  request_message: string;
+  requester_id: number;
+};
+
+export type CreateExpertConsultationResponse = {
+  id: number;
+  message: string;
+};
+
 // Topic types
 export type TopicItem = {
   id: number;
@@ -838,6 +851,12 @@ export const api = createApi({
       query: (body) => ({ url: "/user/create-from-token", method: "POST", body }),
       transformResponse: (response: ApiResponse<CreateUserFromTokenResponse>) => response.result,
     }),
+
+    // Expert Consultation
+    createExpertConsultation: builder.mutation<CreateExpertConsultationResponse, CreateExpertConsultationRequest>({
+      query: (body) => ({ url: "/expert-consultation", method: "POST", body }),
+      transformResponse: (response: ApiResponse<CreateExpertConsultationResponse>) => response.result,
+    }),
   }),
 });
 
@@ -879,6 +898,8 @@ export const {
   useLoginMutation,
   useRefreshTokenMutation,
   useCreateUserFromTokenMutation,
+  // expert consultation
+  useCreateExpertConsultationMutation,
 } = api;
 
 
