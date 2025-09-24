@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "lang": "es",
+        "name": "Pendiente",
+        "expert_consultation_status_id": 1
+    },
+    {
+        "id": 2,
+        "lang": "es",
+        "name": "Rechazada",
+        "expert_consultation_status_id": 2
+    },
+    {
+        "id": 3,
+        "lang": "es",
+        "name": "Aceptada",
+        "expert_consultation_status_id": 3
+    }
+]

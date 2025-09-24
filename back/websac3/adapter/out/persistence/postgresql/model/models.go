@@ -41,6 +41,9 @@ var registry map[string]NewBaseModel = map[string]NewBaseModel{
 	"unexpected_topic_reports":          func() any { return &UnexpectedTopicReport{} },
 	"report_feedbacks":                  func() any { return &ReportFeedback{} },
 	"knowledge_area_feedbacks":          func() any { return &KnowledgeAreaFeedback{} },
+	"expert_consultations":              func() any { return &ExpertConsultation{} },
+	"expert_consultation_statuses":      func() any { return &ExpertConsultationStatus{} },
+	"expert_consultation_status_names":  func() any { return &ExpertConsultationStatusName{} },
 }
 
 func GetRegistryAllConstructModelBase() map[string]NewBaseModel {

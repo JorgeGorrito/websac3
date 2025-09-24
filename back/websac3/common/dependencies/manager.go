@@ -34,6 +34,7 @@ func (m *manager) RegisterDependencies() error {
 	m.registerPersistenceDependencies()
 	m.registerAniseDependencies()
 	m.registerAccessRequestDependencies()
+	m.registerExpertConsultationDependencies()
 	m.registerPersonDependencies()
 	m.registerUserDependencies()
 	m.registerStatusDependencies()
@@ -67,4 +68,8 @@ func (m *manager) registerCourseTypeDependencies() {
 
 func (m *manager) registerCourseNatureDependencies() {
 	RegisterCourseNatureDependencies(m)
+}
+
+func (m *manager) registerExpertConsultationDependencies() {
+	RegisterExpertConsultationDependencies(m)
 }

@@ -2,6 +2,7 @@ package mapper
 
 func RegisterMappers() {
 	registerAccessRequestMappers()
+	registerExpertConsultationMappers()
 	registerActionMappers()
 	registerDegreeProgramMappers()
 	registerCourseMappers()

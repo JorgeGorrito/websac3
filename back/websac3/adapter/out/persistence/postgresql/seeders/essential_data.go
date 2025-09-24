@@ -10,6 +10,7 @@ func EssentialData() Seeder {
 	return &essentialData{
 		essentialSeeders: []Seeder{
 			AccessRequestStatuses(),
+			ExpertConsultationStatuses(),
 			IdentificationTypes(),
 			Municipalities(),
 			Departments(),
