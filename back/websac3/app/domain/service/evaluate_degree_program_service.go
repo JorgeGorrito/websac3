@@ -64,7 +64,7 @@ func (s *EvaluateDegreeProgramService) Execute(degreeProgramID uint, professiona
 		}
 
 		// Obtener programa de grado
-		degreeProgram, err := s.getDegreeProgramPort.GetByID(degreeProgramID, ctx)
+		degreeProgram, err := s.getDegreeProgramPort.GetByIDWithLang(degreeProgramID, lang, ctx)
 		if err != nil {
 			return err
 		}
@@ -82,7 +82,7 @@ func (s *EvaluateDegreeProgramService) Execute(degreeProgramID uint, professiona
 		}
 
 		// Generar el reporte
-		report := professionalRole.EvaluateDegreeProgram(&degreeProgram)
+		report := professionalRole.EvaluateDegreeProgram(&degreeProgram, lang)
 
 		// Guardar el reporte en la base de datos
 		savedReport, err := s.createReportPort.Create(report, ctx)

@@ -207,7 +207,7 @@
                                         <tbody>
                                             {{range .TopicReports}}
                                             <tr>
-                                                <td style="font-size:12px; color:#333; padding:8px; border:1px solid #d4edda;">{{.Name}}</td>
+                                                <td style="font-size:12px; color:#333; padding:8px; border:1px solid #d4edda;">{{.Topic.Name}}</td>
                                                 <td style="font-size:12px; color:#333; padding:8px; border:1px solid #d4edda;">{{printf "%.2f" .LearnHoursActual}}</td>
                                             </tr>
                                             {{end}}

@@ -170,3 +170,83 @@ func registerDegreeProgramMappers() {
 		},
 	)
 }
+
+// GetDegreeProgramMapperWithLanguage returns a language-specific mapper for DegreeProgram
+func GetDegreeProgramMapperWithLanguage(lang string) func(*model.DegreeProgram) (entity.DegreeProgram, error) {
+	return func(degreeProgramModel *model.DegreeProgram) (entity.DegreeProgram, error) {
+		// Map DurationUnit with language support
+		var durationUnitPtr *entity.DurationUnit
+		if degreeProgramModel.DurationUnit.ID != 0 {
+			if du, err := Map[model.DurationUnit, entity.DurationUnit](&degreeProgramModel.DurationUnit); err == nil {
+				durationUnitPtr = &du
+			}
+		}
+
+		// Map UserCreator with Person and HigherEducationInstitution
+		var userCreatorPtr *entity.User
+		if degreeProgramModel.UserCreator.ID != 0 {
+			var personPtr *entity.Person
+			if degreeProgramModel.UserCreator.Person.ID != 0 {
+				var higherEducationInstitutionPtr *entity.HigherEducationInstitution
+				if degreeProgramModel.UserCreator.Person.HigherEducationInstitution.Snies != 0 {
+					higherEducationInstitutionPtr = &entity.HigherEducationInstitution{
+						Snies: degreeProgramModel.UserCreator.Person.HigherEducationInstitution.Snies,
+						Name:  degreeProgramModel.UserCreator.Person.HigherEducationInstitution.Name,
+					}
+				}
+
+				personPtr = &entity.Person{
+					ID:                         degreeProgramModel.UserCreator.Person.ID,
+					Name:                       degreeProgramModel.UserCreator.Person.Name,
+					Lastname:                   degreeProgramModel.UserCreator.Person.Lastname,
+					HigherEducationInstitution: higherEducationInstitutionPtr,
+				}
+			}
+
+			userCreatorPtr = &entity.User{
+				ID:     degreeProgramModel.UserCreator.ID,
+				Email:  degreeProgramModel.UserCreator.Email,
+				Person: personPtr,
+			}
+		}
+
+		// Map Courses with language support
+		var courses []entity.Course
+		for _, course := range degreeProgramModel.Courses {
+			// Use language-specific mapper for Course if available
+			var courseEntity entity.Course
+			if courseLangMapper := GetCourseMapperWithLanguage(lang); courseLangMapper != nil {
+				var err error
+				courseEntity, err = courseLangMapper(&course)
+				if err != nil {
+					return entity.DegreeProgram{}, err
+				}
+			} else {
+				// Fallback to default mapper
+				if mappedCourse, err := Map[model.Course, entity.Course](&course); err == nil {
+					courseEntity = mappedCourse
+				} else {
+					return entity.DegreeProgram{}, err
+				}
+			}
+			courses = append(courses, courseEntity)
+		}
+
+		return entity.DegreeProgram{
+			ID:                  degreeProgramModel.ID,
+			Snies:               degreeProgramModel.Snies,
+			Name:                degreeProgramModel.Name,
+			TotalCredits:        degreeProgramModel.TotalCredits,
+			DurationValue:       degreeProgramModel.DurationValue,
+			DurationUnitID:      degreeProgramModel.DurationUnitID,
+			DurationUnit:        durationUnitPtr,
+			ProgramFocus:        degreeProgramModel.ProgramFocus,
+			EntryProfile:        degreeProgramModel.EntryProfile,
+			GraduateProfile:     degreeProgramModel.GraduateProfile,
+			ProfessionalProfile: degreeProgramModel.ProfessionalProfile,
+			CreatedBy:           degreeProgramModel.CreatedBy,
+			UserCreator:         userCreatorPtr,
+			Courses:             courses,
+		}, nil
+	}
+}

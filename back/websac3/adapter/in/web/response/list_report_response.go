@@ -10,7 +10,8 @@ type ListReportResponse struct {
 	Score            float32                   `json:"score"`
 	CreatedAt        time.Time                 `json:"created_at"`
 	// Knowledge area reports summary
-	KnowledgeAreaReports []KnowledgeAreaReportResponse `json:"knowledge_area_reports"`
+	KnowledgeAreaReports           []KnowledgeAreaReportResponse           `json:"knowledge_area_reports"`
+	UnexpectedKnowledgeAreaReports []UnexpectedKnowledgeAreaReportResponse `json:"unexpected_knowledge_area_reports"`
 }
 
 type ProfessionalRoleResponse struct {
@@ -34,4 +35,20 @@ type TopicReportResponse struct {
 	Name               string  `json:"name"`
 	LearnHoursExpected float32 `json:"learn_hours_expected"`
 	LearnHoursActual   float32 `json:"learn_hours_actual"`
+}
+
+type UnexpectedKnowledgeAreaReportResponse struct {
+	ID              uint                            `json:"id"`
+	Name            string                          `json:"name"`
+	Lang            string                          `json:"lang"`
+	TotalLearnHours float32                         `json:"total_learn_hours"`
+	TopicReports    []UnexpectedTopicReportResponse `json:"topic_reports"`
+}
+
+type UnexpectedTopicReportResponse struct {
+	ID               uint    `json:"id"`
+	TopicID          uint    `json:"topic_id"`
+	Name             string  `json:"name"`
+	LearnHoursActual float32 `json:"learn_hours_actual"`
+	KnowledgeAreaID  uint    `json:"knowledge_area_id"`
 }

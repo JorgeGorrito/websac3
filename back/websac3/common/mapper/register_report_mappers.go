@@ -84,6 +84,84 @@ func registerReportMappers() {
 		},
 	)
 
+	// UnexpectedTopicReport: entity -> model
+	RegisterMapFunc(
+		func(unexpectedTopicReportEntity *entity.UnexpectedTopicReport) (model.UnexpectedTopicReport, error) {
+			return model.UnexpectedTopicReport{
+				ID:               unexpectedTopicReportEntity.ID,
+				TopicID:          unexpectedTopicReportEntity.TopicID,
+				LearnHoursActual: unexpectedTopicReportEntity.LearnHoursActual,
+				KnowledgeAreaID:  unexpectedTopicReportEntity.KnowledgeAreaID,
+			}, nil
+		},
+	)
+
+	// UnexpectedTopicReport: model -> entity
+	RegisterMapFunc(
+		func(unexpectedTopicReportModel *model.UnexpectedTopicReport) (entity.UnexpectedTopicReport, error) {
+			var knowledgeAreaPtr *entity.KnowledgeArea
+			if unexpectedTopicReportModel.KnowledgeAreaID != 0 {
+				knowledgeAreaPtr = &entity.KnowledgeArea{
+					ID: unexpectedTopicReportModel.KnowledgeAreaID,
+				}
+			}
+
+			// Map Topic with language support if available
+			var topicPtr *entity.Topic
+			if unexpectedTopicReportModel.Topic.ID != 0 {
+				if topic, err := Map[model.Topic, entity.Topic](&unexpectedTopicReportModel.Topic); err == nil {
+					topicPtr = &topic
+				}
+			}
+
+			return entity.UnexpectedTopicReport{
+				ID:               unexpectedTopicReportModel.ID,
+				TopicID:          unexpectedTopicReportModel.TopicID,
+				LearnHoursActual: unexpectedTopicReportModel.LearnHoursActual,
+				KnowledgeAreaID:  unexpectedTopicReportModel.KnowledgeAreaID,
+				KnowledgeArea:    knowledgeAreaPtr,
+				Topic:            topicPtr,
+			}, nil
+		},
+	)
+
+	// UnexpectedKnowledgeAreaReport: entity -> model
+	RegisterMapFunc(
+		func(unexpectedKnowledgeAreaReportEntity *entity.UnexpectedKnowledgeAreaReport) (model.UnexpectedKnowledgeAreaReport, error) {
+			// No incluir TopicReports en el mapeo inicial para evitar problemas de FK
+			// Se guardarán por separado después
+			return model.UnexpectedKnowledgeAreaReport{
+				ID:              unexpectedKnowledgeAreaReportEntity.ID,
+				Name:            unexpectedKnowledgeAreaReportEntity.Name,
+				Lang:            unexpectedKnowledgeAreaReportEntity.Lang,
+				TotalLearnHours: unexpectedKnowledgeAreaReportEntity.TotalLearnHours,
+				// TopicReports se manejarán por separado
+			}, nil
+		},
+	)
+
+	// UnexpectedKnowledgeAreaReport: model -> entity
+	RegisterMapFunc(
+		func(unexpectedKnowledgeAreaReportModel *model.UnexpectedKnowledgeAreaReport) (entity.UnexpectedKnowledgeAreaReport, error) {
+			var topicReports []entity.UnexpectedTopicReport
+			for _, tr := range unexpectedKnowledgeAreaReportModel.TopicReports {
+				trEntity, err := Map[model.UnexpectedTopicReport, entity.UnexpectedTopicReport](&tr)
+				if err != nil {
+					return entity.UnexpectedKnowledgeAreaReport{}, err
+				}
+				topicReports = append(topicReports, trEntity)
+			}
+
+			return entity.UnexpectedKnowledgeAreaReport{
+				ID:              unexpectedKnowledgeAreaReportModel.ID,
+				Name:            unexpectedKnowledgeAreaReportModel.Name,
+				Lang:            unexpectedKnowledgeAreaReportModel.Lang,
+				TotalLearnHours: unexpectedKnowledgeAreaReportModel.TotalLearnHours,
+				TopicReports:    topicReports,
+			}, nil
+		},
+	)
+
 	// Report: entity -> model
 	RegisterMapFunc(
 		func(reportEntity *entity.Report) (model.Report, error) {
@@ -96,12 +174,16 @@ func registerReportMappers() {
 				knowledgeAreaReports = append(knowledgeAreaReports, karModel)
 			}
 
+			// No incluir UnexpectedKnowledgeAreaReports en el mapeo inicial
+			// Se guardarán por separado después de que el reporte principal esté guardado
+
 			return model.Report{
 				ID:                   reportEntity.ID,
 				ProfessionalRoleID:   reportEntity.ProfessionalRole.ID,
 				DegreeProgramID:      reportEntity.DegreeProgram.ID,
 				Score:                reportEntity.Score,
 				KnowledgeAreaReports: knowledgeAreaReports,
+				// UnexpectedKnowledgeAreaReports se manejarán por separado
 			}, nil
 		},
 	)
@@ -135,6 +217,29 @@ func registerReportMappers() {
 					TopicReports:            topicReports,
 				}
 				knowledgeAreaReports = append(knowledgeAreaReports, karEntity)
+			}
+
+			// Mapear UnexpectedKnowledgeAreaReports con UnexpectedTopicReports
+			var unexpectedKnowledgeAreaReports []entity.UnexpectedKnowledgeAreaReport
+			for _, ukar := range reportModel.UnexpectedKnowledgeAreaReports {
+				// Mapear UnexpectedTopicReports usando el idioma específico de la base de datos
+				var unexpectedTopicReports []entity.UnexpectedTopicReport
+				for _, utr := range ukar.TopicReports {
+					// Use the language stored in the UnexpectedKnowledgeAreaReport
+					unexpectedTopicReport, err := MapUnexpectedTopicReportWithLanguage(&utr, ukar.Lang)
+					if err != nil {
+						return entity.Report{}, err
+					}
+					unexpectedTopicReports = append(unexpectedTopicReports, unexpectedTopicReport)
+				}
+
+				ukarEntity := entity.UnexpectedKnowledgeAreaReport{
+					ID:              ukar.ID,
+					Name:            ukar.Name,
+					TotalLearnHours: ukar.TotalLearnHours,
+					TopicReports:    unexpectedTopicReports,
+				}
+				unexpectedKnowledgeAreaReports = append(unexpectedKnowledgeAreaReports, ukarEntity)
 			}
 
 			// Mapear DurationUnit si está disponible
@@ -206,13 +311,14 @@ func registerReportMappers() {
 			}
 
 			return entity.Report{
-				ID:                         reportModel.ID,
-				DegreeProgram:              degreeProgram,
-				ProfessionalRole:           professionalRole,
-				KnowledgeAreaReports:       knowledgeAreaReports,
-				Score:                      reportModel.Score,
-				CreatedAt:                  reportModel.CreatedAt,
-				HigherEducationInstitution: higherEducationInstitutionPtr,
+				ID:                             reportModel.ID,
+				DegreeProgram:                  degreeProgram,
+				ProfessionalRole:               professionalRole,
+				KnowledgeAreaReports:           knowledgeAreaReports,
+				UnexpectedKnowledgeAreaReports: unexpectedKnowledgeAreaReports,
+				Score:                          reportModel.Score,
+				CreatedAt:                      reportModel.CreatedAt,
+				HigherEducationInstitution:     higherEducationInstitutionPtr,
 			}, nil
 		},
 	)
@@ -469,14 +575,43 @@ func registerReportMappers() {
 				})
 			}
 
+			// Map UnexpectedKnowledgeAreaReports
+			var unexpectedKnowledgeAreaReports []response.UnexpectedKnowledgeAreaReportResponse
+			for _, ukar := range reportEntity.UnexpectedKnowledgeAreaReports {
+				var unexpectedTopicReports []response.UnexpectedTopicReportResponse
+				for _, utr := range ukar.TopicReports {
+					var topicName string
+					if utr.Topic != nil {
+						topicName = utr.Topic.Name
+					}
+
+					unexpectedTopicReports = append(unexpectedTopicReports, response.UnexpectedTopicReportResponse{
+						ID:               utr.ID,
+						TopicID:          utr.TopicID,
+						Name:             topicName,
+						LearnHoursActual: utr.LearnHoursActual,
+						KnowledgeAreaID:  utr.KnowledgeAreaID,
+					})
+				}
+
+				unexpectedKnowledgeAreaReports = append(unexpectedKnowledgeAreaReports, response.UnexpectedKnowledgeAreaReportResponse{
+					ID:              ukar.ID,
+					Name:            ukar.Name,
+					Lang:            ukar.Lang,
+					TotalLearnHours: ukar.TotalLearnHours,
+					TopicReports:    unexpectedTopicReports,
+				})
+			}
+
 			return response.ListReportResponse{
-				ID:                   reportEntity.ID,
-				DegreeProgramID:      reportEntity.DegreeProgram.ID,
-				DegreeProgram:        degreeProgramResp,
-				ProfessionalRole:     professionalRoleResp,
-				Score:                reportEntity.Score,
-				CreatedAt:            reportEntity.CreatedAt,
-				KnowledgeAreaReports: knowledgeAreaReports,
+				ID:                             reportEntity.ID,
+				DegreeProgramID:                reportEntity.DegreeProgram.ID,
+				DegreeProgram:                  degreeProgramResp,
+				ProfessionalRole:               professionalRoleResp,
+				Score:                          reportEntity.Score,
+				CreatedAt:                      reportEntity.CreatedAt,
+				KnowledgeAreaReports:           knowledgeAreaReports,
+				UnexpectedKnowledgeAreaReports: unexpectedKnowledgeAreaReports,
 			}, nil
 		},
 	)
@@ -579,4 +714,38 @@ func registerReportMappers() {
 			}, nil
 		},
 	)
+}
+
+// MapUnexpectedTopicReportWithLanguage maps UnexpectedTopicReport using the specific language stored in the database
+func MapUnexpectedTopicReportWithLanguage(unexpectedTopicReportModel *model.UnexpectedTopicReport, lang string) (entity.UnexpectedTopicReport, error) {
+	var knowledgeAreaPtr *entity.KnowledgeArea
+	if unexpectedTopicReportModel.KnowledgeAreaID != 0 {
+		knowledgeAreaPtr = &entity.KnowledgeArea{
+			ID: unexpectedTopicReportModel.KnowledgeAreaID,
+		}
+	}
+
+	// Map Topic with the specific language
+	var topicPtr *entity.Topic
+	if unexpectedTopicReportModel.Topic.ID != 0 {
+		if langMapper := GetTopicMapperWithLanguage(lang); langMapper != nil {
+			if topic, err := langMapper(&unexpectedTopicReportModel.Topic); err == nil {
+				topicPtr = &topic
+			}
+		} else {
+			// Fallback to default mapper
+			if topic, err := Map[model.Topic, entity.Topic](&unexpectedTopicReportModel.Topic); err == nil {
+				topicPtr = &topic
+			}
+		}
+	}
+
+	return entity.UnexpectedTopicReport{
+		ID:               unexpectedTopicReportModel.ID,
+		TopicID:          unexpectedTopicReportModel.TopicID,
+		LearnHoursActual: unexpectedTopicReportModel.LearnHoursActual,
+		KnowledgeAreaID:  unexpectedTopicReportModel.KnowledgeAreaID,
+		KnowledgeArea:    knowledgeAreaPtr,
+		Topic:            topicPtr,
+	}, nil
 }

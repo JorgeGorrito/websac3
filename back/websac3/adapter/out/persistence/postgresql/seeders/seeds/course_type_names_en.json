@@ -10,5 +10,11 @@
     "lang": "en",
     "name": "Laboratory",
     "course_type_id": 2
+  },
+  {
+    "id": 6,
+    "lang": "en",
+    "name": "Theoretical Practice",
+    "course_type_id": 3
   }
 ]

@@ -60,7 +60,7 @@ func (e *KnowledgeAreaReport) AddTopicReport(topicReport *TopicReport) {
 type UnexpectedTopicReport struct {
 	ID               uint
 	TopicID          uint
-	Name             string
+	Topic            *Topic
 	LearnHoursActual float32
 	KnowledgeAreaID  uint
 	KnowledgeArea    *KnowledgeArea
@@ -68,14 +68,14 @@ type UnexpectedTopicReport struct {
 
 func NewUnexpectedTopicReport(
 	topicID uint,
-	name string,
 	learnHoursActual float32,
 	knowledgeAreaID uint,
 	knowledgeArea *KnowledgeArea,
+	topic *Topic,
 ) *UnexpectedTopicReport {
 	return &UnexpectedTopicReport{
 		TopicID:          topicID,
-		Name:             name,
+		Topic:            topic,
 		LearnHoursActual: learnHoursActual,
 		KnowledgeAreaID:  knowledgeAreaID,
 		KnowledgeArea:    knowledgeArea,
@@ -85,15 +85,18 @@ func NewUnexpectedTopicReport(
 type UnexpectedKnowledgeAreaReport struct {
 	ID              uint
 	Name            string
+	Lang            string
 	TotalLearnHours float32
 	TopicReports    []UnexpectedTopicReport
 }
 
 func NewUnexpectedKnowledgeAreaReport(
 	knowledgeAreaName string,
+	lang string,
 ) *UnexpectedKnowledgeAreaReport {
 	return &UnexpectedKnowledgeAreaReport{
 		Name:            knowledgeAreaName,
+		Lang:            lang,
 		TotalLearnHours: 0.0,
 		TopicReports:    []UnexpectedTopicReport{},
 	}
@@ -147,7 +150,7 @@ func (e *Report) AddUnexpectedKnowledgeAreaReport(knowledgeAreaReport *Unexpecte
 	e.UnexpectedKnowledgeAreaReports = append(e.UnexpectedKnowledgeAreaReports, *knowledgeAreaReport)
 }
 
-func (e *Report) findAndAddUnexpectedTopics(courseTopics []CourseTopic, knowledgeAreasExpected []KnowledgeAreaExpected) {
+func (e *Report) findAndAddUnexpectedTopics(courseTopics []CourseTopic, knowledgeAreasExpected []KnowledgeAreaExpected, lang string) {
 	// Create a map of expected topic IDs for quick lookup
 	expectedTopicIDs := make(map[uint]bool)
 	for _, knowledgeArea := range knowledgeAreasExpected {
@@ -156,8 +159,8 @@ func (e *Report) findAndAddUnexpectedTopics(courseTopics []CourseTopic, knowledg
 		}
 	}
 
-	// Group unexpected topics by knowledge area
-	unexpectedTopicsByArea := make(map[uint][]CourseTopic)
+	// Collect all unexpected topics in a single list
+	var unexpectedTopics []CourseTopic
 	for _, courseTopic := range courseTopics {
 		// Check if this topic is not expected
 		if !expectedTopicIDs[courseTopic.TopicID] {
@@ -165,46 +168,28 @@ func (e *Report) findAndAddUnexpectedTopics(courseTopics []CourseTopic, knowledg
 			if courseTopic.Topic == nil {
 				continue
 			}
-
-			knowledgeAreaID := courseTopic.Topic.KnowledgeAreaID
-			unexpectedTopicsByArea[knowledgeAreaID] = append(unexpectedTopicsByArea[knowledgeAreaID], courseTopic)
+			unexpectedTopics = append(unexpectedTopics, courseTopic)
 		}
 	}
 
-	// Create unexpected knowledge area reports
-	for knowledgeAreaID, topics := range unexpectedTopicsByArea {
-		// Get knowledge area name from the first topic (all topics in this area should have the same knowledge area)
-		var knowledgeAreaName string
-		var knowledgeArea *KnowledgeArea
-		if len(topics) > 0 && topics[0].Topic != nil && topics[0].Topic.KnowledgeArea != nil {
-			knowledgeAreaName = topics[0].Topic.KnowledgeArea.Name
-			knowledgeArea = topics[0].Topic.KnowledgeArea
-			// If the name is empty, provide a default
-			if knowledgeAreaName == "" {
-				knowledgeAreaName = "Área de conocimiento adicional"
-			}
-		} else {
-			knowledgeAreaName = "Área de conocimiento adicional"
-			knowledgeArea = &KnowledgeArea{ID: knowledgeAreaID, Name: knowledgeAreaName}
-		}
+	// Create a single unexpected knowledge area report with all topics
+	if len(unexpectedTopics) > 0 {
+		unexpectedAreaReport := NewUnexpectedKnowledgeAreaReport("Área de conocimiento adicional", lang)
 
-		unexpectedAreaReport := NewUnexpectedKnowledgeAreaReport(knowledgeAreaName)
-
-		// Add topics to the unexpected knowledge area report
-		for _, topic := range topics {
-			var topicName string
-			if topic.Topic != nil && topic.Topic.Name != "" {
-				topicName = topic.Topic.Name
-			} else {
-				topicName = "Temática adicional"
+		// Add all topics to the single unexpected knowledge area report
+		for _, topic := range unexpectedTopics {
+			knowledgeAreaID := topic.Topic.KnowledgeAreaID
+			knowledgeArea := topic.Topic.KnowledgeArea
+			if knowledgeArea == nil {
+				knowledgeArea = &KnowledgeArea{ID: knowledgeAreaID, Name: "Área de conocimiento adicional"}
 			}
 
 			topicReport := NewUnexpectedTopicReport(
 				topic.TopicID,
-				topicName,
 				topic.StudyHours,
 				knowledgeAreaID,
 				knowledgeArea,
+				topic.Topic,
 			)
 			unexpectedAreaReport.AddTopicReport(topicReport)
 		}
@@ -223,7 +208,7 @@ func (e *ProfessionalRole) IsRegistered() bool {
 	return e.ID != 0
 }
 
-func (e *ProfessionalRole) EvaluateDegreeProgram(degreeProgram *DegreeProgram) *Report {
+func (e *ProfessionalRole) EvaluateDegreeProgram(degreeProgram *DegreeProgram, lang string) *Report {
 	report := NewReport(
 		*degreeProgram,
 		*e,
@@ -287,7 +272,7 @@ func (e *ProfessionalRole) EvaluateDegreeProgram(degreeProgram *DegreeProgram) *
 	report.Score = score
 
 	// Find unexpected topics (topics covered in courses but not expected in the professional role)
-	report.findAndAddUnexpectedTopics(courseTopics, knowledgeAreasExpected)
+	report.findAndAddUnexpectedTopics(courseTopics, knowledgeAreasExpected, lang)
 
 	return report
 }

@@ -17,7 +17,8 @@ type Report struct {
 
 	Score float32 `gorm:"not null" json:"score"`
 
-	KnowledgeAreaReports []KnowledgeAreaReport `gorm:"foreignKey:ReportID" json:"knowledge_area_reports"`
+	KnowledgeAreaReports           []KnowledgeAreaReport           `gorm:"foreignKey:ReportID" json:"knowledge_area_reports"`
+	UnexpectedKnowledgeAreaReports []UnexpectedKnowledgeAreaReport `gorm:"foreignKey:ReportID" json:"unexpected_knowledge_area_reports"`
 
 	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"updated_at"`

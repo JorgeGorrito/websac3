@@ -10,5 +10,11 @@
     "lang": "es",
     "name": "Laboratorio",
     "course_type_id": 2
+  },
+  {
+    "id": 5,
+    "lang": "es",
+    "name": "Teórico Práctica",
+    "course_type_id": 3
   }
 ]

@@ -35,6 +35,37 @@ func (r *ReportRepository) Create(reportToSave *entity.Report, ctx _db.Context) 
 	// Actualizar el ID en la entidad original
 	reportToSave.ID = reportModel.ID
 
+	// Guardar UnexpectedKnowledgeAreaReports por separado
+	if len(reportToSave.UnexpectedKnowledgeAreaReports) > 0 {
+		for _, ukar := range reportToSave.UnexpectedKnowledgeAreaReports {
+			// Mapear UnexpectedKnowledgeAreaReport
+			ukarModel, err := mapper.Map[entity.UnexpectedKnowledgeAreaReport, model.UnexpectedKnowledgeAreaReport](&ukar)
+			if err != nil {
+				return nil, err
+			}
+			ukarModel.ReportID = reportModel.ID
+
+			// Guardar UnexpectedKnowledgeAreaReport
+			if err := dbCtx.DB().Create(&ukarModel).Error; err != nil {
+				return nil, err
+			}
+
+			// Guardar UnexpectedTopicReports
+			for _, utr := range ukar.TopicReports {
+				utrModel, err := mapper.Map[entity.UnexpectedTopicReport, model.UnexpectedTopicReport](&utr)
+				if err != nil {
+					return nil, err
+				}
+				utrModel.ReportID = reportModel.ID
+				utrModel.UnexpectedKnowledgeAreaReportID = ukarModel.ID
+
+				if err := dbCtx.DB().Create(&utrModel).Error; err != nil {
+					return nil, err
+				}
+			}
+		}
+	}
+
 	// Devolver la entidad guardada
 	return reportToSave, nil
 }
@@ -108,6 +139,12 @@ func (r *ReportRepository) GetByID(reportID uint, ctx _db.Context) (entity.Repor
 		// Preload KnowledgeAreaReports with TopicReports
 		Preload("KnowledgeAreaReports").
 		Preload("KnowledgeAreaReports.TopicReports").
+		// Preload UnexpectedKnowledgeAreaReports with UnexpectedTopicReports
+		Preload("UnexpectedKnowledgeAreaReports").
+		Preload("UnexpectedKnowledgeAreaReports.TopicReports").
+		// Preload Topic information for UnexpectedTopicReports to get localized names
+		Preload("UnexpectedKnowledgeAreaReports.TopicReports.Topic").
+		Preload("UnexpectedKnowledgeAreaReports.TopicReports.Topic.Names").
 		Where("id = ?", reportID).
 		First(&report).Error; err != nil {
 		return entity.Report{}, err
