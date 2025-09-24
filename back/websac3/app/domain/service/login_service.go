@@ -40,7 +40,7 @@ func (ls *LoginService) Execute(user entity.User, lang string) (entity.User, err
 		pwdHash := sha256.Sum256([]byte(user.Password))
 		pwdHashHex := hex.EncodeToString(pwdHash[:])
 
-		if !userFound.IsRegistered() || !userFound.IsPasswordHashEqual(pwdHashHex) {
+		if !userFound.IsRegistered() || !userFound.IsPasswordHashEqual(pwdHashHex) || !userFound.IsActive() {
 			return errs.NewValidationError(
 				ls.msgProvider.
 					WithLang(lang).
