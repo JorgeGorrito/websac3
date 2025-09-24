@@ -52,8 +52,8 @@ const AccessRequestForm = () => {
           lastname,
           name,
         },
-        register_user_url: `${origin}/register-user?token=`,
-        validation_email_url: `${origin}/access-request/validate-email?token=`,
+        register_user_url: `${origin}/registrar-usuario?token=`,
+        validation_email_url: `${origin}/solicitar-acceso/validar-email?token=`,
       }).unwrap()
       
       // Handle success response

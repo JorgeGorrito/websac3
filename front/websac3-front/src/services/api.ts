@@ -134,12 +134,15 @@ export type ReportItem = {
 };
 
 export type TopicReport = {
+  id: number;
   name: string;
+  topic_id: number;
   learn_hours_expected: number;
   learn_hours_actual: number;
 };
 
 export type KnowledgeAreaReport = {
+  id: number;
   name: string;
   total_learn_hours_expected: number;
   total_learn_hours_actual: number;
@@ -149,27 +152,56 @@ export type KnowledgeAreaReport = {
 };
 
 export type UnexpectedKnowledgeAreaReport = {
+  id: number;
   name: string;
   total_learn_hours: number;
-  topic_reports: TopicReport[];
+  topic_reports: UnexpectedTopicReport[];
+};
+
+export type UnexpectedTopicReport = {
+  id: number;
+  name: string;
+  topic_id: number;
+  learn_hours_actual: number;
+  topic: {
+    id: number;
+    name: string;
+  };
 };
 
 export type ReportDetail = {
   id: number;
   created_at: string;
-  lang: string;
-  score: number;
+  degree_program_id: number;
   degree_program: {
-    snies: number;
+    id: number;
     name: string;
+    snies: number;
+    total_credits: number;
+    duration_value: number;
+    duration_unit: {
+      id: number;
+      name: string;
+    };
+    entry_profile: string;
+    graduate_profile: string;
+    professional_profile: string;
+    program_focus: string;
+    created_by: number;
+    higher_education_institution: {
+      name: string;
+      snies: number;
+      department: string;
+      municipality: string;
+      ownership: string;
+      institutional_category: string;
+    };
   };
   professional_role: {
+    id: number;
     name: string;
   };
-  higher_education_institution: {
-    snies: number;
-    name: string;
-  };
+  score: number;
   knowledge_area_reports: KnowledgeAreaReport[];
   unexpected_knowledge_area_reports?: UnexpectedKnowledgeAreaReport[];
 };

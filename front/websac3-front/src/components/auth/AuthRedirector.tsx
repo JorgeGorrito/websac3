@@ -34,7 +34,7 @@ export const AuthRedirector = () => {
       console.log("🔄 Debug - AuthRedirector: Current path:", currentPath, "Dashboard route:", dashboardRoute);
       
       // Only redirect if we're on a public route (login, register, etc.)
-      const publicRoutes = ['/login', '/access-request', '/register-user'];
+      const publicRoutes = ['/login', '/solicitar-acceso', '/registrar-usuario'];
       const isOnPublicRoute = publicRoutes.some(route => currentPath.startsWith(route));
       
       if (isOnPublicRoute) {

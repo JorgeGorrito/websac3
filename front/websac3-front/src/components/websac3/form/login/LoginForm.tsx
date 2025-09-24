@@ -100,7 +100,7 @@ export const LoginForm = () => {
   };
 
   const handleAccessRequest = () => {
-    window.location.href = "/access-request";
+    window.location.href = "/solicitar-acceso";
   };
 
   return (

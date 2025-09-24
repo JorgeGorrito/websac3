@@ -59,7 +59,7 @@ export const AuthInitializer = () => {
           const currentPath = window.location.pathname;
           
           // Only redirect if we're on a public route
-          const publicRoutes = ['/login', '/access-request', '/register-user', '/'];
+          const publicRoutes = ['/login', '/solicitar-acceso', '/registrar-usuario', '/'];
           const isOnPublicRoute = publicRoutes.some(route => currentPath === route || currentPath.startsWith(route + '/'));
           
           if (isOnPublicRoute) {

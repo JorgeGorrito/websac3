@@ -11,7 +11,7 @@ const protectedRoutes = {
 // Define public routes that don't require authentication
 const publicRoutes = [
   '/login',
-  '/access-request',
+  '/solicitar-acceso',
   '/',
 ]
 

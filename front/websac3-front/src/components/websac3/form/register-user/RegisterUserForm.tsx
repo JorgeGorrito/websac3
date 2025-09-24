@@ -81,7 +81,7 @@ export const RegisterUserForm = () => {
   };
 
   const handleAccessRequest = () => {
-    router.push("/access-request");
+    router.push("/solicitar-acceso");
   };
 
   return (
