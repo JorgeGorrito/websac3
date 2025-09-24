@@ -5,6 +5,8 @@ import { RootState } from "@/store/store";
 import { hideError } from "@/store/errorSlice";
 import { ErrorModal } from "@/components/ui/error-modal";
 import { NotFoundModal } from "@/components/ui/not-found-modal";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { CheckCircle } from "lucide-react";
 
 export function ErrorHandler() {
   const dispatch = useDispatch();
@@ -23,7 +25,7 @@ export function ErrorHandler() {
 
   if (!isOpen) return null;
 
-  // Show different modals based on error type
+  // Show different modals based on type
   if (type === "not_found") {
     return (
       <NotFoundModal
@@ -34,6 +36,24 @@ export function ErrorHandler() {
         message={message}
         searchTerm={searchTerm}
       />
+    );
+  }
+
+  if (type === "success") {
+    return (
+      <Dialog open={isOpen} onOpenChange={handleClose}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-green-600">
+              <CheckCircle className="h-5 w-5" />
+              {title || "Éxito"}
+            </DialogTitle>
+            <DialogDescription className="text-gray-600">
+              {message}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     );
   }
 

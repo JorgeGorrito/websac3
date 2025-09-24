@@ -223,6 +223,57 @@ export type CreateExpertConsultationResponse = {
   message: string;
 };
 
+// Access Request types
+export type AccessRequestItem = {
+  id: number;
+  name: string;
+  lastname: string;
+  email: string;
+  identification_number: string;
+  identification_type: string;
+  job_position: string;
+  department_name: string;
+  municipality_name: string;
+  higher_education_institution_name: string;
+  higher_education_institution_snies: number;
+  higher_education_institution_ownership: string;
+  status_id: number;
+  status_name: string;
+};
+
+// Role types
+export type RoleItem = {
+  id: number;
+  name: string;
+};
+
+// Access Request Actions
+export type ApproveAccessRequestRequest = {
+  id: number;
+  role_id: number;
+};
+
+export type RejectAccessRequestRequest = {
+  id: number;
+};
+
+// User types
+export type UserItem = {
+  id: number;
+  email: string;
+  full_name: string;
+  is_active: boolean;
+};
+
+// User Actions
+export type ActivateUserRequest = {
+  id: number;
+};
+
+export type DeactivateUserRequest = {
+  id: number;
+};
+
 // Topic types
 export type TopicItem = {
   id: number;
@@ -435,8 +486,11 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
     const errorData = result.error.data as any;
     
     // Check if it's our API error format with non-empty errors array
-    if (errorData.errors && Array.isArray(errorData.errors) && errorData.errors.length > 0) {
-      const errorDetails = errorData.errors;
+    // Try both 'Errors' (capital E) and 'errors' (lowercase e) for compatibility
+    const errorsArray = errorData.Errors || errorData.errors;
+    
+    if (errorsArray && Array.isArray(errorsArray) && errorsArray.length > 0) {
+      const errorDetails = errorsArray;
       const errorMessage = errorDetails[0];
       const statusCode = typeof result.error.status === 'number' ? result.error.status : undefined;
       
@@ -447,8 +501,19 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
         errorType = "not_found";
       }
       
-      // Dispatch error to Redux store
-      if (typeof window !== "undefined") {
+      // Don't show error modal for 404 on certain endpoints that can have empty results
+      const url = args?.url || '';
+      const shouldShow404Modal = !(
+        statusCode === 404 && (
+          url.includes('/access-request') || // Access requests can be empty
+          url.includes('/users') || // Users list can be empty
+          url.includes('/degree-program') || // Degree programs can be empty
+          url.includes('/reports') // Reports can be empty
+        )
+      );
+      
+      // Dispatch error to Redux store only if we should show the modal
+      if (shouldShow404Modal && typeof window !== "undefined") {
         // Import store dynamically to avoid circular dependency
         import("@/store/store").then(({ store }) => {
           import("@/store/errorSlice").then(({ showError }) => {
@@ -470,7 +535,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 export const api = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["AccessRequest", "DegreeProgram", "Topic", "CourseType", "CourseNature", "Course"],
+  tagTypes: ["AccessRequest", "DegreeProgram", "Topic", "CourseType", "CourseNature", "Course", "User"],
   endpoints: (builder) => ({
     // Catalogs
     listIdentificationTypes: builder.query<IdentificationTypeItem[], { current_page?: number; items_per_page?: number } | void>({
@@ -536,16 +601,20 @@ export const api = createApi({
       query: (body) => ({ url: "/access-request/email/validate", method: "POST", body }),
       transformResponse: (response: ApiResponse<string>) => response.result,
     }),
-    approveAccessRequest: builder.mutation<{ message: string }, { id: number }>(
+    approveAccessRequest: builder.mutation<{ message: string }, ApproveAccessRequestRequest>(
       {
-        query: ({ id }) => ({ url: `/access-request/${id}/approve`, method: "POST" }),
+        query: ({ id, role_id }) => ({ 
+          url: `/access-request/${id}/approve`, 
+          method: "POST", 
+          body: { role_id } 
+        }),
         invalidatesTags: (_result, _error, { id }) => [
           { type: "AccessRequest", id },
           { type: "AccessRequest", id: "LIST" },
         ],
       }
     ),
-    rejectAccessRequest: builder.mutation<{ message: string }, { id: number }>(
+    rejectAccessRequest: builder.mutation<{ message: string }, RejectAccessRequestRequest>(
       {
         query: ({ id }) => ({ url: `/access-request/${id}/reject`, method: "POST" }),
         invalidatesTags: (_result, _error, { id }) => [
@@ -554,6 +623,50 @@ export const api = createApi({
         ],
       }
     ),
+    // Admin: Users
+    listUsers: builder.query<
+      PaginatedPage<UserItem>,
+      { current_page?: number; items_per_page?: number; filters?: Record<string, string> }
+    >({
+      query: ({ current_page = 1, items_per_page = 10, filters } = {}) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        
+        // Add filters to query params
+        if (filters) {
+          Object.entries(filters).forEach(([key, value]) => {
+            if (value.trim()) {
+              params.set(key, value.trim());
+            }
+          });
+        }
+        
+        return { url: `/users?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<UserItem>>) => response.result,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map(({ id }) => ({ type: "User" as const, id })),
+              { type: "User", id: "LIST" },
+            ]
+          : [{ type: "User", id: "LIST" }],
+    }),
+    activateUser: builder.mutation<{ message: string }, ActivateUserRequest>({
+      query: ({ id }) => ({ url: `/users/${id}/activate`, method: "PUT" }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: "User", id },
+        { type: "User", id: "LIST" },
+      ],
+    }),
+    deactivateUser: builder.mutation<{ message: string }, DeactivateUserRequest>({
+      query: ({ id }) => ({ url: `/users/${id}/deactivate`, method: "PUT" }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: "User", id },
+        { type: "User", id: "LIST" },
+      ],
+    }),
     // Director: Degree Programs
     listDurationUnits: builder.query<DurationUnitItem[], void>({
       query: () => ({ url: "/duration-unit" }),
@@ -804,6 +917,16 @@ export const api = createApi({
       query: () => ({ url: "/professional-roles" }),
       transformResponse: (response: ApiResponse<PaginatedPage<ProfessionalRoleItem>>) => response.result,
     }),
+    // System Roles
+    listRoles: builder.query<PaginatedPage<RoleItem>, { current_page?: number; items_per_page?: number } | void>({
+      query: (args) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(args?.current_page ?? 1));
+        params.set("items_per_page", String(args?.items_per_page ?? 100));
+        return { url: `/roles?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<RoleItem>>) => response.result,
+    }),
     // Degree Program Evaluation
     evaluateDegreeProgram: builder.mutation<ApiResponse<string>, EvaluateDegreeProgramRequest>({
       query: (body) => ({ url: "/degree-program/evaluate", method: "POST", body }),
@@ -869,6 +992,10 @@ export const {
   useValidateAccessRequestEmailMutation,
   useApproveAccessRequestMutation,
   useRejectAccessRequestMutation,
+  // admin users
+  useListUsersQuery,
+  useActivateUserMutation,
+  useDeactivateUserMutation,
   // degree programs
   useListDurationUnitsQuery,
   useListDegreeProgramsQuery,
@@ -888,6 +1015,8 @@ export const {
   useDeleteCourseMutation,
   // professional roles
   useListProfessionalRolesQuery,
+  // system roles
+  useListRolesQuery,
   // degree program evaluation
   useEvaluateDegreeProgramMutation,
   // degree program reports

@@ -24,8 +24,6 @@ export default function AdminLayout({
     const titles: Record<string, string> = {
       dashboard: "Dashboard",
       usuarios: "Gestionar Usuarios",
-      reportes: "Gestionar Reportes",
-      asesoria: "Gestionar Solicitudes de Asesoría",
       accesos: "Gestionar Solicitudes de Acceso",
     };
     return titles[page] || page.charAt(0).toUpperCase() + page.slice(1);

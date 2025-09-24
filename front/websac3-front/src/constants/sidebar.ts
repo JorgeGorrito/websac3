@@ -77,16 +77,6 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
         icon: Users,
       },
       {
-        title: "Gestionar Reportes",
-        url: "/admin/reportes",
-        icon: FileText,
-      },
-      {
-        title: "Gestionar Solicitudes De Asesoria",
-        url: "/admin/asesoria",
-        icon: Headphones,
-      },
-      {
         title: "Gestionar Solicitudes De Acceso",
         url: "/admin/accesos",
         icon: Inbox,

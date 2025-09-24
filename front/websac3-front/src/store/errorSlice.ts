@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type ErrorType = "error" | "not_found";
+export type ErrorType = "error" | "not_found" | "success";
 
 type ErrorState = {
   isOpen: boolean;
@@ -42,6 +42,19 @@ export const errorSlice = createSlice({
       state.searchTerm = action.payload.searchTerm;
       state.onRetry = action.payload.onRetry;
     },
+    showSuccess: (state, action: PayloadAction<{ 
+      message: string; 
+      title?: string;
+    }>) => {
+      state.isOpen = true;
+      state.type = "success";
+      state.message = action.payload.message;
+      state.title = action.payload.title || "Éxito";
+      state.errors = [];
+      state.statusCode = undefined;
+      state.searchTerm = undefined;
+      state.onRetry = undefined;
+    },
     hideError: (state) => {
       state.isOpen = false;
       state.type = "error";
@@ -55,5 +68,5 @@ export const errorSlice = createSlice({
   },
 });
 
-export const { showError, hideError } = errorSlice.actions;
+export const { showError, showSuccess, hideError } = errorSlice.actions;
 export default errorSlice.reducer;
