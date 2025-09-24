@@ -204,7 +204,7 @@ export default function OperarModeloPage() {
     return <LoadingSkeleton />;
   }
 
-  if (error) {
+  if (error && error.status !== 404) {
     return (
       <div className="space-y-6">
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
@@ -241,7 +241,7 @@ export default function OperarModeloPage() {
       </div>
 
       {/* Compact Stats Bar */}
-      {data && (
+      {data && !(error && error.status === 404) && (
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Left side - Main info */}
@@ -262,7 +262,7 @@ export default function OperarModeloPage() {
             </div>
 
             {/* Right side - Institution info */}
-            {data.data.length > 0 && (
+            {data.data && data.data.length > 0 && (
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="h-4 w-4 text-indigo-600" />
@@ -279,41 +279,6 @@ export default function OperarModeloPage() {
         </div>
       )}
 
-      {/* Active Filters Info */}
-      {(filters.name || filters.snies) && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500 rounded-lg">
-                <Search className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <span className="text-sm font-semibold text-amber-800">Filtros activos:</span>
-                <div className="flex items-center gap-2 mt-1">
-                  {filters.name && (
-                    <Badge className="bg-blue-100 text-blue-800 border-blue-200 font-medium text-xs">
-                      Nombre: "{filters.name}"
-                    </Badge>
-                  )}
-                  {filters.snies && (
-                    <Badge className="bg-green-100 text-green-800 border-green-200 font-medium text-xs">
-                      SNIES: "{filters.snies}"
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            </div>
-            <Button 
-              onClick={clearFilters} 
-              variant="outline" 
-              size="sm"
-              className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs"
-            >
-              Limpiar
-            </Button>
-          </div>
-        </div>
-      )}
 
       {/* Filters Panel */}
       {showFilters && (
@@ -417,7 +382,7 @@ export default function OperarModeloPage() {
               </Card>
             ))}
           </div>
-        ) : data && data.data.length > 0 ? (
+        ) : data && data.data.length > 0 && !(error && error.status === 404) ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.data.map((program) => (
               <Card key={program.id} className="bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 py-0">
@@ -529,7 +494,7 @@ export default function OperarModeloPage() {
         )}
         
         {/* Pagination - Always visible when not loading */}
-        {!isLoading && (
+        {!isLoading && !(error && error.status === 404) && (
           <ProgramsPagination
             currentPage={currentPage}
             totalPages={data ? Math.ceil(data.total_count / itemsPerPage) : 1}

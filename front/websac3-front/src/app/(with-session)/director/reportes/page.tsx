@@ -15,9 +15,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { 
   FileText, 
-  Eye, 
-  Download, 
-  Star, 
+  Eye,
+  Download,
+  Star,
   Calendar as CalendarIcon,
   Search, 
   Settings, 
@@ -88,13 +88,13 @@ export default function ReportsPage() {
   console.log('Current selectedProgramId:', selectedProgramId);
   const { data: reportsData, isLoading: reportsLoading, error: reportsError } = useListDegreeProgramReportsQuery(
     { 
-      degree_program_id: selectedProgramId!,
-      current_page: reportsCurrentPage,
-      items_per_page: reportsItemsPerPage
+      degree_program_id: selectedProgramId!, 
+      current_page: reportsCurrentPage, 
+      items_per_page: reportsItemsPerPage 
     },
     { skip: !selectedProgramId }
   );
-  
+
 
   // Function to update URL with current parameters
   const updateURL = (newParams: {
@@ -221,7 +221,7 @@ export default function ReportsPage() {
     );
   }
 
-  if (error) {
+  if (error && error.status !== 404) {
     return (
       <div className="space-y-6">
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
@@ -258,7 +258,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Compact Stats Bar */}
-      {data && (
+      {data && !(error && error.status === 404) && (
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Left side - Main info */}
@@ -279,7 +279,7 @@ export default function ReportsPage() {
             </div>
 
             {/* Right side - Institution info */}
-            {data.data.length > 0 && (
+            {data.data && data.data.length > 0 && (
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="h-4 w-4 text-indigo-600" />
@@ -296,41 +296,6 @@ export default function ReportsPage() {
         </div>
       )}
 
-      {/* Active Filters Info */}
-      {(filters.name || filters.snies) && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500 rounded-lg">
-                <Search className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <span className="text-sm font-semibold text-amber-800">Filtros activos:</span>
-                <div className="flex items-center gap-2 mt-1">
-                  {filters.name && (
-                    <Badge className="bg-blue-100 text-blue-800 border-blue-200 font-medium text-xs">
-                      Nombre: "{filters.name}"
-                    </Badge>
-                  )}
-                  {filters.snies && (
-                    <Badge className="bg-green-100 text-green-800 border-green-200 font-medium text-xs">
-                      SNIES: "{filters.snies}"
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            </div>
-            <Button 
-              onClick={clearFilters} 
-              variant="outline" 
-              size="sm"
-              className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs"
-            >
-              Limpiar
-            </Button>
-          </div>
-        </div>
-      )}
 
       {/* Filters Panel */}
       {showFilters && (
@@ -416,7 +381,7 @@ export default function ReportsPage() {
 
       {/* Programs List */}
       <div>
-        {data && data.data.length > 0 ? (
+        {data && data.data.length > 0 && !(error && error.status === 404) ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.data.map((program) => (
               <Card key={program.id} className="bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 py-0">
@@ -516,7 +481,7 @@ export default function ReportsPage() {
                   No se encontraron programas que coincidan con los filtros aplicados
                 </p>
                 <Button 
-                  onClick={clearFilters}
+                  onClick={clearFilters} 
                   variant="outline"
                   className="mt-2"
                 >
@@ -527,16 +492,16 @@ export default function ReportsPage() {
           </Card>
         )}
       </div>
-
+        
       {/* Pagination */}
-      {data && data.data.length > 0 && (
+      {data && !(error && error.status === 404) && (
         <div className="mt-8">
-          <ProgramsPagination 
+          <ProgramsPagination
             currentPage={data.current_page}
             totalPages={Math.ceil(data.total_count / itemsPerPage)}
             onPageChange={handlePageChange}
           />
-        </div>
+      </div>
       )}
 
       {/* Reports Modal */}
@@ -574,10 +539,10 @@ export default function ReportsPage() {
               return reportsData?.data && reportsData.data.length > 0;
             })() ? (
               <div className="space-y-4">
-                {reportsData.data.map((report) => (
-                  <Card key={report.id} className="hover:shadow-md transition-shadow">
+                  {reportsData.data.map((report) => (
+                    <Card key={report.id} className="hover:shadow-md transition-shadow">
                     <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
                             <h3 className="text-lg font-semibold text-gray-900">
@@ -587,29 +552,29 @@ export default function ReportsPage() {
                               variant="outline" 
                               className={getScoreColor(report.score)}
                             >
-                              {getScoreLabel(report.score)}
-                            </Badge>
-                          </div>
+                                  {getScoreLabel(report.score)}
+                                </Badge>
+                              </div>
                           <div className="space-y-1 text-sm text-gray-600">
                             <p><strong>Rol profesional:</strong> {report.professional_role?.name || 'N/A'}</p>
                             <p><strong>Puntaje:</strong> {formatScore(report.score)}</p>
                             <p><strong>Fecha:</strong> {new Date(report.created_at).toLocaleDateString('es-ES')}</p>
-                          </div>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
+                                </div>
+                                </div>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
                           onClick={() => handleReportClick(report.id)}
                           className="flex items-center gap-2"
-                        >
+                            >
                           <Eye className="h-4 w-4" />
                           Ver Detalle
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                            </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
             ) : (
               <div className="flex items-center justify-center py-12">
                 <div className="text-center text-gray-500">
@@ -621,7 +586,7 @@ export default function ReportsPage() {
             )}
 
             {/* Reports Pagination */}
-            {reportsData?.data && reportsData.data.length > 0 && (
+            {reportsData && (
               <div className="mt-6">
                 <ProgramsPagination
                   currentPage={reportsCurrentPage}
@@ -629,8 +594,8 @@ export default function ReportsPage() {
                   itemsPerPage={reportsItemsPerPage}
                   onPageChange={handleReportsPageChange}
                   onItemsPerPageChange={handleReportsItemsPerPageChange}
-                />
-              </div>
+                  />
+                </div>
             )}
           </div>
         </DialogContent>
