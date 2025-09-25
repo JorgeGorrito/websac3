@@ -53,7 +53,12 @@ func (r *HigherEducationInstitutionRepository) GetByFilters(
 	dbCtx.DBSet(query)
 
 	var higherEducationInstitutions []model.HigherEducationInstitution
-	if err := dbCtx.DB().Find(&higherEducationInstitutions).Error; err != nil {
+	if err := dbCtx.DB().
+		Preload("Department").
+		Preload("Municipality").
+		Preload("Ownership").
+		Preload("InstitutionalCategory").
+		Find(&higherEducationInstitutions).Error; err != nil {
 		return nil, 0, err
 	}
 

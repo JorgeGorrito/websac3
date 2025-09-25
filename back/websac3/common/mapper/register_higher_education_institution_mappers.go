@@ -71,9 +71,22 @@ func registerHigherEducationInstitutionMappers() {
 	})
 
 	RegisterMapFunc(func(higherEducationInstitution *entity.HigherEducationInstitution) (response.ListHigherEducationInstitutionResponse, error) {
+		var departmentName string
+		var municipalityName string
+
+		if higherEducationInstitution.Department != nil {
+			departmentName = higherEducationInstitution.Department.Name
+		}
+
+		if higherEducationInstitution.Municipality != nil {
+			municipalityName = higherEducationInstitution.Municipality.Name
+		}
+
 		return response.ListHigherEducationInstitutionResponse{
-			Snies: higherEducationInstitution.Snies,
-			Name:  higherEducationInstitution.Name,
+			Snies:        higherEducationInstitution.Snies,
+			Name:         higherEducationInstitution.Name,
+			Department:   departmentName,
+			Municipality: municipalityName,
 		}, nil
 	})
 }
