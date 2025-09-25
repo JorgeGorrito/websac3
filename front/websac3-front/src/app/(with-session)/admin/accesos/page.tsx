@@ -33,7 +33,7 @@ import {
 import { ProgramsPagination } from "@/components/websac3/program/ProgramsPagination";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useDispatch } from "react-redux";
-import { showError } from "@/store/errorSlice";
+import { showError, showSuccess } from "@/store/errorSlice";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function GestionarAccesosPage() {
@@ -189,10 +189,16 @@ export default function GestionarAccesosPage() {
           id: selectedRequestId,
           role_id: parseInt(selectedRoleId)
         }).unwrap();
-        dispatch(showError('Solicitud aprobada exitosamente.'));
+        dispatch(showSuccess({ 
+          message: 'Solicitud aprobada exitosamente.',
+          title: 'Solicitud Aprobada'
+        }));
       } else {
         await rejectRequest({ id: selectedRequestId }).unwrap();
-        dispatch(showError('Solicitud rechazada exitosamente.'));
+        dispatch(showSuccess({ 
+          message: 'Solicitud rechazada exitosamente.',
+          title: 'Solicitud Rechazada'
+        }));
       }
       
       setIsActionModalOpen(false);

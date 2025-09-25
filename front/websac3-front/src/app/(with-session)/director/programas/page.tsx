@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useListDegreeProgramsQuery } from "@/services/api";
 import { Plus, BookOpen, Calendar, Clock, GraduationCap, Target, Search, Settings } from "lucide-react";
-import { DegreeProgramCard } from "@/components/websac3/program/DegreeProgramCard";
+import { DegreeProgramCard, ActionButton } from "@/components/websac3/program/DegreeProgramCard";
 import { ProgramsPagination } from "@/components/websac3/program/ProgramsPagination";
 import { useDispatch } from "react-redux";
 import { showError } from "@/store/errorSlice";
@@ -329,9 +329,32 @@ export default function ProgramasPage() {
         ) : data && data.data.length > 0 && !(error && error.status === 404) ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {data.data.map((program) => (
-                <DegreeProgramCard key={program.id} program={program} />
-              ))}
+              {data.data.map((program) => {
+                const actions: ActionButton[] = [
+                  {
+                    label: "Ver",
+                    icon: BookOpen,
+                    variant: "outline",
+                    className: "flex-1 border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-400 transition-all duration-200",
+                    onClick: () => router.push(`/director/cursos/${program.id}`)
+                  },
+                  {
+                    label: "Editar",
+                    icon: Target,
+                    variant: "outline",
+                    className: "flex-1 border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 transition-all duration-200",
+                    onClick: () => router.push(`/director/cursos/${program.id}/editar`)
+                  }
+                ];
+
+                return (
+                  <DegreeProgramCard
+                    key={program.id}
+                    program={program}
+                    actions={actions}
+                  />
+                );
+              })}
             </div>
           </>
         ) : (

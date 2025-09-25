@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useListDegreeProgramsQuery, useListDegreeProgramReportsQuery, useCreateExpertConsultationMutation } from "@/services/api";
 import { ProgramsPagination } from "@/components/websac3/program/ProgramsPagination";
+import { DegreeProgramCard, ActionButton } from "@/components/websac3/program/DegreeProgramCard";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useDispatch } from "react-redux";
 import { showError } from "@/store/errorSlice";
@@ -431,80 +432,25 @@ export default function AsesoriaExpertoPage() {
           </div>
         ) : data && data.data.length > 0 && !(error && error.status === 404) ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.data.map((program) => (
-              <Card key={program.id} className="bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 py-0">
-                <CardHeader className="pb-3 pt-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
-                        {program.name}
-                      </CardTitle>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge className="bg-blue-100 text-blue-800 border-blue-200 text-xs">
-                          SNIES: {program.snies}
-                        </Badge>
-                        <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
-                          {program.duration_unit.name}
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-4">
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="flex items-center gap-2">
-                      <GraduationCap className="h-4 w-4 text-blue-600" />
-                      <div>
-                        <div className="text-xs text-gray-500">CRÉDITOS</div>
-                        <div className="text-sm font-semibold text-gray-900">{program.total_credits}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-green-600" />
-                      <div>
-                        <div className="text-xs text-gray-500">DURACIÓN</div>
-                        <div className="text-sm font-semibold text-gray-900">
-                          {program.duration_value} {program.duration_unit.name.toLowerCase()}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-start gap-2">
-                      <Target className="h-4 w-4 text-purple-600 mt-0.5" />
-                      <div>
-                        <div className="text-xs text-gray-500">ENFOQUE</div>
-                        <div className="text-sm text-gray-700 line-clamp-2">{program.program_focus}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <BookOpen className="h-4 w-4 text-orange-600 mt-0.5" />
-                      <div>
-                        <div className="text-xs text-gray-500">PERFIL DE INGRESO</div>
-                        <div className="text-sm text-gray-700 line-clamp-2">{program.entry_profile}</div>
-                      </div>
-                    </div>
-                  </div>
+            {data.data.map((program) => {
+              const actions: ActionButton[] = [
+                {
+                  label: "Ver Reportes",
+                  icon: FileText,
+                  variant: "default",
+                  className: "w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl transition-all duration-200",
+                  onClick: () => handleProgramClick(program.id, program.name)
+                }
+              ];
 
-                  <div className="flex items-center gap-2 mb-4">
-                    <GraduationCap className="h-4 w-4 text-indigo-600" />
-                    <div>
-                      <div className="text-xs text-gray-500">INSTITUCIÓN</div>
-                      <div className="text-sm font-medium text-gray-900">{program.higher_education_institution.name}</div>
-                    </div>
-                  </div>
-
-                  <Button
-                    onClick={() => handleProgramClick(program.id, program.name)}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
-                  >
-                    <FileText className="h-4 w-4" />
-                    Ver Reportes
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+              return (
+                <DegreeProgramCard
+                  key={program.id}
+                  program={program}
+                  actions={actions}
+                />
+              );
+            })}
           </div>
         ) : (
           <Card>

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ProgramPeriodicitySelect } from "./ProgramPeriodicitySelect";
+import { ProgramFormationLevelSelect } from "./ProgramFormationLevelSelect";
 import { useCreateDegreeProgramMutation } from "@/services/api";
 import {
   BookOpen,
@@ -18,6 +19,7 @@ import {
   CheckCircle,
   XCircle,
   X,
+  Award,
 } from "lucide-react";
 
 type RegisterProgramFormProps = {
@@ -37,6 +39,7 @@ export function RegisterProgramForm({
     snies: "",
     duration_unit_id: "",
     duration_value: "",
+    formation_level_id: "",
     entry_profile: "",
     graduate_profile: "",
     professional_profile: "",
@@ -71,6 +74,7 @@ export function RegisterProgramForm({
         snies: parseInt(formData.snies),
         duration_unit_id: parseInt(formData.duration_unit_id),
         duration_value: parseInt(formData.duration_value),
+        formation_level_id: parseInt(formData.formation_level_id),
         entry_profile: formData.entry_profile,
         graduate_profile: formData.graduate_profile,
         professional_profile: formData.professional_profile,
@@ -93,6 +97,7 @@ export function RegisterProgramForm({
           snies: "",
           duration_unit_id: "",
           duration_value: "",
+          formation_level_id: "",
           entry_profile: "",
           graduate_profile: "",
           professional_profile: "",
@@ -236,6 +241,25 @@ export function RegisterProgramForm({
                 onChange={(e) => handleInputChange("duration_value", e.target.value)}
                 className="h-11 border-input focus:border-ring focus:ring-ring/20 transition-all duration-200"
                 placeholder="Ej. 5"
+              />
+            </div>
+
+            <div className="group space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-muted rounded-lg group-hover:bg-secondary/20 transition-colors">
+                  <Award className="w-4 h-4 text-primary" />
+                </div>
+                <Label
+                  htmlFor="nivel-formacion"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Nivel de formación
+                </Label>
+              </div>
+              <ProgramFormationLevelSelect 
+                id="nivel-formacion"
+                value={formData.formation_level_id}
+                onValueChange={(value) => handleInputChange("formation_level_id", value)}
               />
             </div>
 

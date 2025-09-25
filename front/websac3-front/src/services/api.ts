@@ -82,6 +82,12 @@ export type DurationUnitItem = {
   description?: string;
 };
 
+// Formation Level types
+export type FormationLevelItem = {
+  id: number;
+  name: string;
+};
+
 // Degree Program types
 export type DegreeProgramItem = {
   id: number;
@@ -90,6 +96,10 @@ export type DegreeProgramItem = {
   total_credits: number;
   duration_value: number;
   duration_unit: {
+    id: number;
+    name: string;
+  };
+  formation_level: {
     id: number;
     name: string;
   };
@@ -108,6 +118,7 @@ export type CreateDegreeProgramRequest = {
   duration_unit_id: number;
   duration_value: number;
   entry_profile: string;
+  formation_level_id: number;
   graduate_profile: string;
   name: string;
   professional_profile: string;
@@ -672,6 +683,10 @@ export const api = createApi({
       query: () => ({ url: "/duration-unit" }),
       transformResponse: (response: ApiResponse<{ data: DurationUnitItem[] }>) => response.result.data,
     }),
+    listFormationLevels: builder.query<FormationLevelItem[], void>({
+      query: () => ({ url: "/formation-level" }),
+      transformResponse: (response: ApiResponse<PaginatedPage<FormationLevelItem>>) => response.result.data,
+    }),
     listDegreePrograms: builder.query<
       PaginatedPage<DegreeProgramItem>,
       { current_page?: number; items_per_page?: number; filters?: Record<string, string> }
@@ -998,6 +1013,7 @@ export const {
   useDeactivateUserMutation,
   // degree programs
   useListDurationUnitsQuery,
+  useListFormationLevelsQuery,
   useListDegreeProgramsQuery,
   useCreateDegreeProgramMutation,
   // topics
