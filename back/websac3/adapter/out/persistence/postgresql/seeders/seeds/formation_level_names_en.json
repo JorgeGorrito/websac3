@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Professional Technical", "lang": "en", "formation_level_id": 1 },
+  { "id": 2, "name": "Technological", "lang": "en", "formation_level_id": 2 },
+  { "id": 3, "name": "Undergraduate Professional", "lang": "en", "formation_level_id": 3 },
+  { "id": 4, "name": "Specialization", "lang": "en", "formation_level_id": 4 },
+  { "id": 5, "name": "Master's Degree", "lang": "en", "formation_level_id": 5 },
+  { "id": 6, "name": "Doctorate", "lang": "en", "formation_level_id": 6 }
+]

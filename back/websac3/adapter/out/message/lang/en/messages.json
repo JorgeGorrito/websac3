@@ -20,6 +20,9 @@
   "list_duration_unit" : {
     "not_found" : "No duration units found."
   },
+  "list_formation_level" : {
+    "not_found" : "No formation levels found."
+  },
   "create_degree_program" : {
     "degree_program_created" : "Degree program created successfully."
   },

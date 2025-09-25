@@ -27,6 +27,7 @@ func EssentialData() Seeder {
 			DurationUnits(),
 			CourseTypes(),
 			CourseNatures(),
+			FormationLevels(),
 		},
 	}
 }

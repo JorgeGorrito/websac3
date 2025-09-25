@@ -24,6 +24,8 @@ var registry map[string]NewBaseModel = map[string]NewBaseModel{
 	"topics":                            func() any { return &Topic{} },
 	"duration_units":                    func() any { return &DurationUnit{} },
 	"duration_unit_names":               func() any { return &DurationUnitName{} },
+	"formation_levels":                  func() any { return &FormationLevel{} },
+	"formation_level_names":             func() any { return &FormationLevelName{} },
 	"degree_programs":                   func() any { return &DegreeProgram{} },
 	"course_types":                      func() any { return &CourseType{} },
 	"course_type_names":                 func() any { return &CourseTypeName{} },

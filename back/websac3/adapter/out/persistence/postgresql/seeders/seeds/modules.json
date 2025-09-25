@@ -53,5 +53,10 @@
         "id" : 11,
         "name" : "profile",
         "description" : "Módulo para la gestión de perfil de usuario"
+    },
+    {
+        "id" : 12,
+        "name" : "formation-level",
+        "description" : "Módulo para la gestión de niveles de formación"
     }
 ]

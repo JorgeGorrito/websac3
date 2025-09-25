@@ -28,6 +28,7 @@ func (m *manager) RegisterRoutes(engine *gin.Engine) error {
 	RegisterHigherEducationInstitutionRoutes(routerGroup)
 	RegisterTopicRoutes(routerGroup)
 	RegisterDurationUnitRoutes(routerGroup)
+	RegisterFormationLevelRoutes(routerGroup)
 	RegisterDegreeProgramRoutes(routerGroup)
 	RegisterCourseRoutes(routerGroup)
 	RegisterReportRoutes(routerGroup)

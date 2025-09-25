@@ -1,0 +1,8 @@
+[
+  { "id": 7, "name": "Técnico profesional", "lang": "es", "formation_level_id": 1 },
+  { "id": 8, "name": "Tecnológico", "lang": "es", "formation_level_id": 2 },
+  { "id": 9, "name": "Universitario de pregrado (profesional)", "lang": "es", "formation_level_id": 3 },
+  { "id": 10, "name": "Especialización", "lang": "es", "formation_level_id": 4 },
+  { "id": 11, "name": "Maestría", "lang": "es", "formation_level_id": 5 },
+  { "id": 12, "name": "Doctorado", "lang": "es", "formation_level_id": 6 }
+]

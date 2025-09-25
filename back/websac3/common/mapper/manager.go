@@ -9,6 +9,7 @@ func RegisterMappers() {
 	registerProfessionalRoleMappers()
 	registerDurationUnitMappers()
 	registerEmailMappers()
+	registerFormationLevelMappers()
 	registerHigherEducationInstitutionMappers()
 	registerIdentificationTypeMappers()
 	registerModuleMappers()

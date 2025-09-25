@@ -180,6 +180,18 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(query.ListFormationLevelQuery{}),
+		qhandler.NewListFormationLevelQueryHandler(
+			container.Inject[usecase.ListFormationLevelUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(command.CreateDegreeProgramCommand{}),
 		chandler.NewCreateDegreeProgramCommandHandler(
 			container.Inject[usecase.CreateDegreeProgramUseCase](),
