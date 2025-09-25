@@ -180,9 +180,18 @@ const AccessRequestForm = () => {
         </Label>
         <SelectWithSearch
           placeHolderDefault="Seleccionar institución"
-          placeHolderSearch="Buscar..."
+          placeHolderSearch="Buscar institución..."
           placeHolderNoResults="Sin resultados"
-          items={(institutions ?? []).map((i) => ({ value: String(i.snies), label: i.name }))}
+          items={(institutions ?? []).map((i) => {
+            const locationInfo = i.department && i.municipality 
+              ? `${i.municipality}, ${i.department}`
+              : '';
+            return { 
+              value: String(i.snies), 
+              label: i.name,
+              subtitle: locationInfo
+            };
+          })}
           value={snies}
           onChange={setSnies}
           onSearch={setInstitutionQuery}
