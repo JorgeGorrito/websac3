@@ -49,6 +49,8 @@ func (r *DegreeProgramRepository) GetByID(id uint, ctx _db.Context) (entity.Degr
 		Model(&model.DegreeProgram{}).
 		Preload("DurationUnit").
 		Preload("DurationUnit.Names").
+		Preload("FormationLevel").
+		Preload("FormationLevel.Names").
 		Preload("UserCreator").
 		Preload("UserCreator.Person").
 		Preload("UserCreator.Person.HigherEducationInstitution").
@@ -81,6 +83,8 @@ func (r *DegreeProgramRepository) GetByIDWithLang(id uint, lang string, ctx _db.
 		Model(&model.DegreeProgram{}).
 		Preload("DurationUnit").
 		Preload("DurationUnit.Names").
+		Preload("FormationLevel").
+		Preload("FormationLevel.Names").
 		Preload("UserCreator").
 		Preload("UserCreator.Person").
 		Preload("UserCreator.Person.HigherEducationInstitution").
@@ -126,6 +130,8 @@ func (r *DegreeProgramRepository) GetByFilters(page, perPage uint, filters filte
 		Model(&model.DegreeProgram{}).
 		Preload("DurationUnit").
 		Preload("DurationUnit.Names").
+		Preload("FormationLevel").
+		Preload("FormationLevel.Names").
 		Preload("UserCreator").
 		Preload("UserCreator.Person").
 		Preload("UserCreator.Person.HigherEducationInstitution")
@@ -180,6 +186,8 @@ func (r *DegreeProgramRepository) GetByUserIDAndFilters(page, perPage uint, user
 		Model(&model.DegreeProgram{}).
 		Preload("DurationUnit").
 		Preload("DurationUnit.Names").
+		Preload("FormationLevel").
+		Preload("FormationLevel.Names").
 		Preload("UserCreator").
 		Preload("UserCreator.Person").
 		Preload("UserCreator.Person.HigherEducationInstitution").

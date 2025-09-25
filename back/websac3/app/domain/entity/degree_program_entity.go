@@ -8,6 +8,8 @@ type DegreeProgram struct {
 	DurationValue       uint
 	DurationUnitID      uint
 	DurationUnit        *DurationUnit
+	FormationLevelID    uint
+	FormationLevel      *FormationLevel
 	ProgramFocus        string
 	EntryProfile        string
 	GraduateProfile     string

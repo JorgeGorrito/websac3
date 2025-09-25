@@ -18,6 +18,13 @@ func registerDegreeProgramMappers() {
 				}
 			}
 
+			var formationLevelPtr *entity.FormationLevel
+			if degreeProgramModel.FormationLevel.ID != 0 {
+				if fl, err := Map[model.FormationLevel, entity.FormationLevel](&degreeProgramModel.FormationLevel); err == nil {
+					formationLevelPtr = &fl
+				}
+			}
+
 			var userCreatorPtr *entity.User
 			if degreeProgramModel.UserCreator.ID != 0 {
 				if uc, err := Map[model.User, entity.User](&degreeProgramModel.UserCreator); err == nil {
@@ -42,6 +49,8 @@ func registerDegreeProgramMappers() {
 				DurationValue:       degreeProgramModel.DurationValue,
 				DurationUnitID:      degreeProgramModel.DurationUnitID,
 				DurationUnit:        durationUnitPtr,
+				FormationLevelID:    degreeProgramModel.FormationLevelID,
+				FormationLevel:      formationLevelPtr,
 				ProgramFocus:        degreeProgramModel.ProgramFocus,
 				EntryProfile:        degreeProgramModel.EntryProfile,
 				GraduateProfile:     degreeProgramModel.GraduateProfile,
@@ -62,6 +71,7 @@ func registerDegreeProgramMappers() {
 				TotalCredits:        degreeProgramEntity.TotalCredits,
 				DurationValue:       degreeProgramEntity.DurationValue,
 				DurationUnitID:      degreeProgramEntity.DurationUnitID,
+				FormationLevelID:    degreeProgramEntity.FormationLevelID,
 				ProgramFocus:        degreeProgramEntity.ProgramFocus,
 				EntryProfile:        degreeProgramEntity.EntryProfile,
 				GraduateProfile:     degreeProgramEntity.GraduateProfile,
@@ -79,6 +89,7 @@ func registerDegreeProgramMappers() {
 				TotalCredits:        request.TotalCredits,
 				DurationValue:       request.DurationValue,
 				DurationUnitID:      request.DurationUnitID,
+				FormationLevelID:    request.FormationLevelID,
 				ProgramFocus:        request.ProgramFocus,
 				EntryProfile:        request.EntryProfile,
 				GraduateProfile:     request.GraduateProfile,
@@ -95,6 +106,7 @@ func registerDegreeProgramMappers() {
 				TotalCredits:        command.TotalCredits,
 				DurationValue:       command.DurationValue,
 				DurationUnitID:      command.DurationUnitID,
+				FormationLevelID:    command.FormationLevelID,
 				ProgramFocus:        command.ProgramFocus,
 				EntryProfile:        command.EntryProfile,
 				GraduateProfile:     command.GraduateProfile,
@@ -111,6 +123,14 @@ func registerDegreeProgramMappers() {
 				durResp = response.ListDurationUnitResponse{
 					ID:   degreeProgramEntity.DurationUnit.ID,
 					Name: degreeProgramEntity.DurationUnit.Name,
+				}
+			}
+
+			var flResp response.ListFormationLevelsResponse
+			if degreeProgramEntity.FormationLevel != nil {
+				flResp = response.ListFormationLevelsResponse{
+					ID:   degreeProgramEntity.FormationLevel.ID,
+					Name: degreeProgramEntity.FormationLevel.Name,
 				}
 			}
 
@@ -150,6 +170,7 @@ func registerDegreeProgramMappers() {
 				TotalCredits:               degreeProgramEntity.TotalCredits,
 				DurationValue:              degreeProgramEntity.DurationValue,
 				DurationUnit:               durResp,
+				FormationLevel:             flResp,
 				ProgramFocus:               degreeProgramEntity.ProgramFocus,
 				EntryProfile:               degreeProgramEntity.EntryProfile,
 				GraduateProfile:            degreeProgramEntity.GraduateProfile,

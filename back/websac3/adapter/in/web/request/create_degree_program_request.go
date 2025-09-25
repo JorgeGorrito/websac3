@@ -6,6 +6,7 @@ type CreateDegreeProgramRequest struct {
 	TotalCredits        uint   `json:"total_credits" example:"160"`
 	DurationValue       uint   `json:"duration_value" example:"5"`
 	DurationUnitID      uint   `json:"duration_unit_id" example:"1"`
+	FormationLevelID    uint   `json:"formation_level_id" example:"3"`
 	ProgramFocus        string `json:"program_focus" example:"Desarrollo de software"`
 	EntryProfile        string `json:"entry_profile" example:"Bachiller con conocimientos básicos en matemáticas"`
 	GraduateProfile     string `json:"graduate_profile" example:"Ingeniero capaz de desarrollar sistemas informáticos"`
