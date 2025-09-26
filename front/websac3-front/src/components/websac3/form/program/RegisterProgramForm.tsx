@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ProgramPeriodicitySelect } from "./ProgramPeriodicitySelect";
 import { ProgramFormationLevelSelect } from "./ProgramFormationLevelSelect";
+import { ProgramProfessionalRolesSelect } from "./ProgramProfessionalRolesSelect";
 import { useCreateDegreeProgramMutation } from "@/services/api";
 import {
   BookOpen,
@@ -40,6 +41,7 @@ export function RegisterProgramForm({
     duration_unit_id: "",
     duration_value: "",
     formation_level_id: "",
+    professional_role_ids: [] as number[],
     entry_profile: "",
     graduate_profile: "",
     professional_profile: "",
@@ -75,6 +77,7 @@ export function RegisterProgramForm({
         duration_unit_id: parseInt(formData.duration_unit_id),
         duration_value: parseInt(formData.duration_value),
         formation_level_id: parseInt(formData.formation_level_id),
+        professional_role_ids: formData.professional_role_ids,
         entry_profile: formData.entry_profile,
         graduate_profile: formData.graduate_profile,
         professional_profile: formData.professional_profile,
@@ -98,6 +101,7 @@ export function RegisterProgramForm({
           duration_unit_id: "",
           duration_value: "",
           formation_level_id: "",
+          professional_role_ids: [],
           entry_profile: "",
           graduate_profile: "",
           professional_profile: "",
@@ -260,6 +264,25 @@ export function RegisterProgramForm({
                 id="nivel-formacion"
                 value={formData.formation_level_id}
                 onValueChange={(value) => handleInputChange("formation_level_id", value)}
+              />
+            </div>
+
+            <div className="group space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-muted rounded-lg group-hover:bg-secondary/20 transition-colors">
+                  <Briefcase className="w-4 h-4 text-primary" />
+                </div>
+                <Label
+                  htmlFor="roles-profesionales"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Roles Profesionales de Ciberseguridad
+                </Label>
+              </div>
+              <ProgramProfessionalRolesSelect
+                id="roles-profesionales"
+                value={formData.professional_role_ids}
+                onValueChange={(value) => handleInputChange("professional_role_ids", value)}
               />
             </div>
 

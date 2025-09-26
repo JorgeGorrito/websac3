@@ -88,6 +88,12 @@ export type FormationLevelItem = {
   name: string;
 };
 
+// Professional Role types
+export type ProfessionalRoleItem = {
+  id: number;
+  name: string;
+};
+
 // Degree Program types
 export type DegreeProgramItem = {
   id: number;
@@ -103,10 +109,15 @@ export type DegreeProgramItem = {
     id: number;
     name: string;
   };
+  professional_roles: {
+    id: number;
+    name: string;
+  }[];
   program_focus: string;
   entry_profile: string;
   graduate_profile: string;
   professional_profile: string;
+  professional_role_ids: number[];
   created_by: number;
   higher_education_institution: {
     snies: number;
@@ -123,6 +134,7 @@ export type CreateDegreeProgramRequest = {
   name: string;
   professional_profile: string;
   program_focus: string;
+  professional_role_ids: number[];
   snies: number;
   total_credits: number;
 };
@@ -687,6 +699,38 @@ export const api = createApi({
       query: () => ({ url: "/formation-level" }),
       transformResponse: (response: ApiResponse<PaginatedPage<FormationLevelItem>>) => response.result.data,
     }),
+    listProfessionalRoles: builder.query<
+      PaginatedPage<ProfessionalRoleItem>,
+      { current_page?: number; items_per_page?: number; filters?: Record<string, string> }
+    >({
+      query: ({ current_page = 1, items_per_page = 10, filters } = {}) => {
+        const params = new URLSearchParams();
+        params.append('current_page', current_page.toString());
+        params.append('items_per_page', items_per_page.toString());
+        
+        // Agregar filtros dinámicos
+        if (filters) {
+          Object.entries(filters).forEach(([key, value]) => {
+            if (value && value.trim()) {
+              params.append(key, value.trim());
+            }
+          });
+        }
+        
+        return { url: `/professional-roles?${params.toString()}` };
+      },
+      transformResponse: (response: any) => {
+        // La respuesta viene como { errors: null, result: { data: [...], total_count: 1, ... } }
+        if (response && response.result) {
+          return response.result;
+        }
+        // Si no tiene la estructura result, puede que venga directamente como { data: [...] }
+        if (response && response.data) {
+          return response;
+        }
+        return { data: [], total_count: 0, current_page: 1, items_per_page: 10 };
+      },
+    }),
     listDegreePrograms: builder.query<
       PaginatedPage<DegreeProgramItem>,
       { current_page?: number; items_per_page?: number; filters?: Record<string, string> }
@@ -1014,6 +1058,7 @@ export const {
   // degree programs
   useListDurationUnitsQuery,
   useListFormationLevelsQuery,
+  useListProfessionalRolesQuery,
   useListDegreeProgramsQuery,
   useCreateDegreeProgramMutation,
   // topics
@@ -1029,8 +1074,6 @@ export const {
   useGetCourseTopicsQuery,
   useUpdateCourseMutation,
   useDeleteCourseMutation,
-  // professional roles
-  useListProfessionalRolesQuery,
   // system roles
   useListRolesQuery,
   // degree program evaluation

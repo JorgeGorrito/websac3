@@ -15,7 +15,8 @@ import {
   Upload,
   MessageSquare,
   FileText,
-  Shield
+  Shield,
+  Briefcase
 } from "lucide-react";
 
 export type ActionButton = {
@@ -145,6 +146,32 @@ export function DegreeProgramCard({
             </div>
           </div>
         </div>
+
+        {/* Cybersecurity Professional Roles */}
+        {program.professional_roles && program.professional_roles.length > 0 && (
+          <div className="p-4 bg-cyan-50 rounded-lg border border-cyan-100">
+            <div className="flex items-start mb-2">
+              <div className="p-2 bg-cyan-500 rounded-lg mr-3 flex-shrink-0">
+                <Shield className="h-4 w-4 text-white" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <span className="text-sm font-semibold text-cyan-700 uppercase tracking-wide block mb-2">Perfil de Ciberseguridad</span>
+                <div className="flex flex-wrap gap-2">
+                  {program.professional_roles.map((role) => (
+                    <Badge
+                      key={role.id}
+                      variant="secondary"
+                      className="bg-cyan-100 text-cyan-800 border-cyan-200 text-xs px-2 py-1"
+                    >
+                      <Briefcase className="h-3 w-3 mr-1" />
+                      {role.name}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Institution */}
         <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-100">
