@@ -41,6 +41,15 @@ func registerDegreeProgramMappers() {
 				courses = append(courses, ce)
 			}
 
+			var professionalRoles []entity.ProfessionalRole
+			for _, prm := range degreeProgramModel.ProfessionalRoles {
+				pre, err := Map[model.ProfessionalRole, entity.ProfessionalRole](&prm)
+				if err != nil {
+					return entity.DegreeProgram{}, err
+				}
+				professionalRoles = append(professionalRoles, pre)
+			}
+
 			return entity.DegreeProgram{
 				ID:                  degreeProgramModel.ID,
 				Snies:               degreeProgramModel.Snies,
@@ -56,6 +65,7 @@ func registerDegreeProgramMappers() {
 				GraduateProfile:     degreeProgramModel.GraduateProfile,
 				ProfessionalProfile: degreeProgramModel.ProfessionalProfile,
 				Courses:             courses,
+				ProfessionalRoles:   professionalRoles,
 				CreatedBy:           degreeProgramModel.CreatedBy,
 				UserCreator:         userCreatorPtr,
 			}, nil
@@ -90,6 +100,7 @@ func registerDegreeProgramMappers() {
 				DurationValue:       request.DurationValue,
 				DurationUnitID:      request.DurationUnitID,
 				FormationLevelID:    request.FormationLevelID,
+				ProfessionalRoleIDs: request.ProfessionalRoleIDs,
 				ProgramFocus:        request.ProgramFocus,
 				EntryProfile:        request.EntryProfile,
 				GraduateProfile:     request.GraduateProfile,
@@ -134,6 +145,14 @@ func registerDegreeProgramMappers() {
 				}
 			}
 
+			var professionalRolesResp []response.ListProfessionalRoleResponse
+			for _, pr := range degreeProgramEntity.ProfessionalRoles {
+				professionalRolesResp = append(professionalRolesResp, response.ListProfessionalRoleResponse{
+					ID:   pr.ID,
+					Name: pr.Name,
+				})
+			}
+
 			var heiResp *response.HigherEducationInstitutionInfo
 			if degreeProgramEntity.UserCreator != nil &&
 				degreeProgramEntity.UserCreator.Person != nil &&
@@ -171,6 +190,7 @@ func registerDegreeProgramMappers() {
 				DurationValue:              degreeProgramEntity.DurationValue,
 				DurationUnit:               durResp,
 				FormationLevel:             flResp,
+				ProfessionalRoles:          professionalRolesResp,
 				ProgramFocus:               degreeProgramEntity.ProgramFocus,
 				EntryProfile:               degreeProgramEntity.EntryProfile,
 				GraduateProfile:            degreeProgramEntity.GraduateProfile,
@@ -231,6 +251,24 @@ func GetDegreeProgramMapperWithLanguage(lang string) func(*model.DegreeProgram) 
 			}
 		}
 
+		// Map FormationLevel with language support
+		var formationLevelPtr *entity.FormationLevel
+		if degreeProgramModel.FormationLevel.ID != 0 {
+			if fl, err := Map[model.FormationLevel, entity.FormationLevel](&degreeProgramModel.FormationLevel); err == nil {
+				formationLevelPtr = &fl
+			}
+		}
+
+		// Map ProfessionalRoles
+		var professionalRoles []entity.ProfessionalRole
+		for _, prm := range degreeProgramModel.ProfessionalRoles {
+			pre, err := Map[model.ProfessionalRole, entity.ProfessionalRole](&prm)
+			if err != nil {
+				return entity.DegreeProgram{}, err
+			}
+			professionalRoles = append(professionalRoles, pre)
+		}
+
 		// Map Courses with language support
 		var courses []entity.Course
 		for _, course := range degreeProgramModel.Courses {
@@ -261,6 +299,8 @@ func GetDegreeProgramMapperWithLanguage(lang string) func(*model.DegreeProgram) 
 			DurationValue:       degreeProgramModel.DurationValue,
 			DurationUnitID:      degreeProgramModel.DurationUnitID,
 			DurationUnit:        durationUnitPtr,
+			FormationLevelID:    degreeProgramModel.FormationLevelID,
+			FormationLevel:      formationLevelPtr,
 			ProgramFocus:        degreeProgramModel.ProgramFocus,
 			EntryProfile:        degreeProgramModel.EntryProfile,
 			GraduateProfile:     degreeProgramModel.GraduateProfile,
@@ -268,6 +308,7 @@ func GetDegreeProgramMapperWithLanguage(lang string) func(*model.DegreeProgram) 
 			CreatedBy:           degreeProgramModel.CreatedBy,
 			UserCreator:         userCreatorPtr,
 			Courses:             courses,
+			ProfessionalRoles:   professionalRoles,
 		}, nil
 	}
 }

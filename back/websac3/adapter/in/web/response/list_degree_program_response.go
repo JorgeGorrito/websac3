@@ -1,18 +1,19 @@
 package response
 
 type ListDegreeProgramResponse struct {
-	ID                  uint                        `json:"id"`
-	Snies               uint                        `json:"snies"`
-	Name                string                      `json:"name"`
-	TotalCredits        uint                        `json:"total_credits"`
-	DurationValue       uint                        `json:"duration_value"`
-	DurationUnit        ListDurationUnitResponse    `json:"duration_unit"`
-	FormationLevel      ListFormationLevelsResponse `json:"formation_level"`
-	ProgramFocus        string                      `json:"program_focus"`
-	EntryProfile        string                      `json:"entry_profile"`
-	GraduateProfile     string                      `json:"graduate_profile"`
-	ProfessionalProfile string                      `json:"professional_profile"`
-	CreatedBy           uint                        `json:"created_by"`
+	ID                  uint                           `json:"id"`
+	Snies               uint                           `json:"snies"`
+	Name                string                         `json:"name"`
+	TotalCredits        uint                           `json:"total_credits"`
+	DurationValue       uint                           `json:"duration_value"`
+	DurationUnit        ListDurationUnitResponse       `json:"duration_unit"`
+	FormationLevel      ListFormationLevelsResponse    `json:"formation_level"`
+	ProfessionalRoles   []ListProfessionalRoleResponse `json:"professional_roles"`
+	ProgramFocus        string                         `json:"program_focus"`
+	EntryProfile        string                         `json:"entry_profile"`
+	GraduateProfile     string                         `json:"graduate_profile"`
+	ProfessionalProfile string                         `json:"professional_profile"`
+	CreatedBy           uint                           `json:"created_by"`
 	// Información de la institución de educación superior
 	HigherEducationInstitution *HigherEducationInstitutionInfo `json:"higher_education_institution,omitempty"`
 }

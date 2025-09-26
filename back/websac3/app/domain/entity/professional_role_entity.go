@@ -202,6 +202,7 @@ type ProfessionalRole struct {
 	ID                    uint
 	Name                  string
 	KnowledgeAreaExpected []KnowledgeAreaExpected
+	DegreePrograms        []DegreeProgram
 }
 
 func (e *ProfessionalRole) IsRegistered() bool {

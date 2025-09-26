@@ -35,6 +35,7 @@ var registry map[string]NewBaseModel = map[string]NewBaseModel{
 	"course_topics":                     func() any { return &CourseTopic{} },
 	"professional_roles":                func() any { return &ProfessionalRole{} },
 	"professional_role_knowledge_areas": func() any { return &ProfessionalRoleKnowledgeArea{} },
+	"degree_program_professional_roles": func() any { return &DegreeProgramProfessionalRole{} },
 	"professional_role_knowledge_area_topics": func() any { return &ProfessionalRoleKnowledgeAreaTopic{} },
 	"reports":                           func() any { return &Report{} },
 	"knowledge_area_reports":            func() any { return &KnowledgeAreaReport{} },

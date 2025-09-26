@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"websac3/app/domain/entity"
+	"websac3/app/port/in/dto/command"
 )
 
 type CreateDegreeProgramUseCase interface {
-	Execute(degreeProgram entity.DegreeProgram, lang string) error
+	Execute(command command.CreateDegreeProgramCommand, lang string) error
 }

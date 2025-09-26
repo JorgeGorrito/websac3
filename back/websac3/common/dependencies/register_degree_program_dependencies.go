@@ -58,6 +58,7 @@ func (m *manager) registerDegreeProgramDependencies() {
 		func() any {
 			return service.NewCreateDegreeProgramService(
 				container.Inject[persistence.CreateDegreeProgramPort](),
+				container.Inject[persistence.GetProfessionalRolePort](),
 				container.Inject[db.Manager](),
 				container.Inject[message.Provider](),
 			)

@@ -23,6 +23,8 @@ type DegreeProgram struct {
 
 	Courses []Course `gorm:"foreignKey:DegreeProgramID" json:"courses"`
 
+	ProfessionalRoles []ProfessionalRole `gorm:"many2many:degree_program_professional_roles;" json:"professional_roles"`
+
 	CreatedBy   uint `gorm:"not null" json:"created_by"`
 	UserCreator User `gorm:"foreignKey:CreatedBy"`
 

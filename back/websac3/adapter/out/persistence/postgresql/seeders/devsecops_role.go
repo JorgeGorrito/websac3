@@ -133,5 +133,29 @@ func (s *devsecopsRole) Seed(ctx _db.Context) error {
 		}
 	}
 
+	// 4) Assign DevSecOps role to all existing degree programs
+	var degreePrograms []model.DegreeProgram
+	if err := dbCtx.DB().Find(&degreePrograms).Error; err != nil {
+		return fmt.Errorf("cannot find degree programs: %w", err)
+	}
+
+	for _, dp := range degreePrograms {
+		// Check if the relationship already exists
+		var existingRelation model.DegreeProgramProfessionalRole
+		err := dbCtx.DB().Where("degree_program_id = ? AND professional_role_id = ?",
+			dp.ID, role.ID).First(&existingRelation).Error
+
+		if err != nil {
+			// Relationship doesn't exist, create it
+			relation := model.DegreeProgramProfessionalRole{
+				DegreeProgramID:    dp.ID,
+				ProfessionalRoleID: role.ID,
+			}
+			if err := dbCtx.DB().Create(&relation).Error; err != nil {
+				return fmt.Errorf("cannot create relationship for degree program %d: %w", dp.ID, err)
+			}
+		}
+	}
+
 	return nil
 }

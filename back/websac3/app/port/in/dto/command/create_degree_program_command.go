@@ -7,6 +7,7 @@ type CreateDegreeProgramCommand struct {
 	DurationValue       uint   `validations:"required"`
 	DurationUnitID      uint   `validations:"required"`
 	FormationLevelID    uint   `validations:"required"`
+	ProfessionalRoleIDs []uint `validations:"required"`
 	ProgramFocus        string `validations:"required"`
 	EntryProfile        string `validations:"required"`
 	GraduateProfile     string `validations:"required"`

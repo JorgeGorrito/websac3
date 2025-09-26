@@ -25,6 +25,9 @@ func GetCreateDegreeProgramController() *CreateDegreeProgramController {
 // CreateDegreeProgram manejador para crear un programa de grado
 // @Summary Crear Programa de Grado
 // @Description Crea un nuevo programa de grado con toda la información académica necesaria.
+// @Description El programa de grado incluye información sobre duración, nivel de formación, enfoque del programa,
+// @Description perfiles de entrada y egreso, y roles profesionales asociados.
+// @Description Los roles profesionales deben ser IDs válidos de roles existentes en el sistema.
 // @Tags DegreeProgram
 // @Accept json
 // @Produce json

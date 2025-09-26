@@ -53,6 +53,17 @@ func registerProfessionalRoleMappers() {
 			}
 
 			role.KnowledgeAreaExpected = kaExpected
+
+			var degreePrograms []entity.DegreeProgram
+			for _, dpm := range roleModel.DegreePrograms {
+				dpe, err := Map[model.DegreeProgram, entity.DegreeProgram](&dpm)
+				if err != nil {
+					return entity.ProfessionalRole{}, err
+				}
+				degreePrograms = append(degreePrograms, dpe)
+			}
+			role.DegreePrograms = degreePrograms
+
 			return role, nil
 		},
 	)
@@ -174,6 +185,17 @@ func GetProfessionalRoleMapperWithLanguage(lang string) func(*model.Professional
 		}
 
 		role.KnowledgeAreaExpected = kaExpected
+
+		var degreePrograms []entity.DegreeProgram
+		for _, dpm := range roleModel.DegreePrograms {
+			dpe, err := Map[model.DegreeProgram, entity.DegreeProgram](&dpm)
+			if err != nil {
+				return entity.ProfessionalRole{}, err
+			}
+			degreePrograms = append(degreePrograms, dpe)
+		}
+		role.DegreePrograms = degreePrograms
+
 		return role, nil
 	}
 }

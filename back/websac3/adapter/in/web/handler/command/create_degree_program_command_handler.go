@@ -5,12 +5,10 @@ import (
 	"websac3/adapter/in/web/handler"
 	"websac3/adapter/in/web/response"
 	"websac3/adapter/in/web/util"
-	"websac3/app/domain/entity"
 	"websac3/app/port/in/dto/command"
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/message"
 	"websac3/common/logging"
-	"websac3/common/mapper"
 	"websac3/common/validator"
 )
 
@@ -63,20 +61,7 @@ func (h *CreateDegreeProgramCommandHandler) Handle(request command.CreateDegreeP
 		}, nil
 	}
 
-	degreeProgram, err := mapper.Map[command.CreateDegreeProgramCommand, entity.DegreeProgram](&request)
-	if err != nil {
-		h.logger.Error("Error al mapear datos de entrada a entidad DegreeProgram. Error: %s", err.Error())
-		return response.ApiResponse[string]{
-			HttpStatusCode: http.StatusInternalServerError,
-			Errors: []string{
-				h.msgProvider.
-					WithLang(lang).
-					GetMessage("base_error", "internal_error"),
-			},
-		}, nil
-	}
-
-	if err := h.createDegreeProgramUseCase.Execute(degreeProgram, lang); err != nil {
+	if err := h.createDegreeProgramUseCase.Execute(request, lang); err != nil {
 		h.logger.Error("Error al crear programa de grado %s. Error: %s", request.Name, err.Error())
 		var httpStatusCode int = util.GetHttpStatusCodeByErr(err)
 		return response.ApiResponse[string]{

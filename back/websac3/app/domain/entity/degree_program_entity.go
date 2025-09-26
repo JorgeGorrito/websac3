@@ -17,7 +17,8 @@ type DegreeProgram struct {
 	CreatedBy           uint
 	UserCreator         *User
 
-	Courses []Course
+	Courses           []Course
+	ProfessionalRoles []ProfessionalRole
 }
 
 func (e *DegreeProgram) IsRegistered() bool {

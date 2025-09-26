@@ -28,12 +28,31 @@ func (r *DegreeProgramRepository) Create(degreeProgramToSave *entity.DegreeProgr
 		return err
 	}
 
+	// Crear el programa de grado sin las relaciones
 	if err := dbCtx.DB().
+		Select("snies", "name", "total_credits", "duration_value", "duration_unit_id", "formation_level_id", "program_focus", "entry_profile", "graduate_profile", "professional_profile", "created_by", "created_at", "updated_at").
 		Create(&degreeProgram).
 		Error; err != nil {
 		return err
 	}
 	degreeProgramToSave.ID = degreeProgram.ID
+
+	// Asignar roles profesionales si existen
+	if len(degreeProgramToSave.ProfessionalRoles) > 0 {
+		var professionalRoleModels []model.ProfessionalRole
+		for _, pr := range degreeProgramToSave.ProfessionalRoles {
+			professionalRoleModels = append(professionalRoleModels, model.ProfessionalRole{
+				ID: pr.ID,
+			})
+		}
+
+		if err := dbCtx.DB().
+			Model(&degreeProgram).
+			Association("ProfessionalRoles").
+			Append(professionalRoleModels); err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
@@ -51,6 +70,7 @@ func (r *DegreeProgramRepository) GetByID(id uint, ctx _db.Context) (entity.Degr
 		Preload("DurationUnit.Names").
 		Preload("FormationLevel").
 		Preload("FormationLevel.Names").
+		Preload("ProfessionalRoles").
 		Preload("UserCreator").
 		Preload("UserCreator.Person").
 		Preload("UserCreator.Person.HigherEducationInstitution").
@@ -85,6 +105,7 @@ func (r *DegreeProgramRepository) GetByIDWithLang(id uint, lang string, ctx _db.
 		Preload("DurationUnit.Names").
 		Preload("FormationLevel").
 		Preload("FormationLevel.Names").
+		Preload("ProfessionalRoles").
 		Preload("UserCreator").
 		Preload("UserCreator.Person").
 		Preload("UserCreator.Person.HigherEducationInstitution").
@@ -132,6 +153,7 @@ func (r *DegreeProgramRepository) GetByFilters(page, perPage uint, filters filte
 		Preload("DurationUnit.Names").
 		Preload("FormationLevel").
 		Preload("FormationLevel.Names").
+		Preload("ProfessionalRoles").
 		Preload("UserCreator").
 		Preload("UserCreator.Person").
 		Preload("UserCreator.Person.HigherEducationInstitution")
@@ -188,6 +210,7 @@ func (r *DegreeProgramRepository) GetByUserIDAndFilters(page, perPage uint, user
 		Preload("DurationUnit.Names").
 		Preload("FormationLevel").
 		Preload("FormationLevel.Names").
+		Preload("ProfessionalRoles").
 		Preload("UserCreator").
 		Preload("UserCreator.Person").
 		Preload("UserCreator.Person.HigherEducationInstitution").
