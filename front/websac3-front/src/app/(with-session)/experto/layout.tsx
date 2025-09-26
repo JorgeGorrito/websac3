@@ -114,8 +114,8 @@ export default function ExpertoLayout({
             </div>
           </header>
 
-          <div className="flex flex-1 flex-col h-[calc(100vh-4rem)]">
-            <div className="flex-1 overflow-y-auto p-4">{children}</div>
+          <div className="flex flex-1 flex-col h-[calc(100vh-4rem)] overflow-x-hidden">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">{children}</div>
 
             <WebSAC3Footer applyShadow={false} />
           </div>
