@@ -43,11 +43,6 @@ export default function ExpertoDashboardPage() {
             </div>
             
             <div className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-              <h4 className="font-medium text-gray-900">Gestionar Modelo</h4>
-              <p className="text-sm text-gray-600 mt-1">Configurar y optimizar el modelo</p>
-            </div>
-            
-            <div className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
               <h4 className="font-medium text-gray-900">Perfil</h4>
               <p className="text-sm text-gray-600 mt-1">Gestionar información personal</p>
             </div>

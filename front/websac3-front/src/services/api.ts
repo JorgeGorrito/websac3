@@ -1039,6 +1039,63 @@ export const api = createApi({
       query: (body) => ({ url: "/expert-consultation", method: "POST", body }),
       transformResponse: (response: ApiResponse<CreateExpertConsultationResponse>) => response.result,
     }),
+
+    // Pending Reports for Expert
+    listPendingReports: builder.query<
+      {
+        data: Array<{
+          id: number;
+          created_at: string;
+          score: number;
+          has_feedback: boolean;
+          degree_program: {
+            id: number;
+            name: string;
+            snies: number;
+          };
+          higher_education_institution: {
+            id: number;
+            name: string;
+          };
+          professional_role: {
+            id: number;
+            name: string;
+          };
+        }>;
+        items_per_page: number;
+        current_page: number;
+        total_count: number;
+      },
+      { page?: number; limit?: number }
+    >({
+      query: ({ page = 1, limit = 10 } = {}) => ({
+        url: `/report-feedbacks/pending-reports?page=${page}&limit=${limit}`,
+      }),
+      transformResponse: (response: ApiResponse<{
+        data: Array<{
+          id: number;
+          created_at: string;
+          score: number;
+          has_feedback: boolean;
+          degree_program: {
+            id: number;
+            name: string;
+            snies: number;
+          };
+          higher_education_institution: {
+            id: number;
+            name: string;
+          };
+          professional_role: {
+            id: number;
+            name: string;
+          };
+        }>;
+        items_per_page: number;
+        current_page: number;
+        total_count: number;
+      }>) => response.result,
+    }),
   }),
 });
 
@@ -1088,6 +1145,8 @@ export const {
   useCreateUserFromTokenMutation,
   // expert consultation
   useCreateExpertConsultationMutation,
+  // pending reports
+  useListPendingReportsQuery,
 } = api;
 
 

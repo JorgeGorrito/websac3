@@ -61,7 +61,6 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
         url: "/experto/asesoria/solicitudes",
         icon: Headphones,
       },
-      { title: "Gestionar Modelo", url: "/experto/modelo", icon: Settings },
       { title: "Perfil", url: "/experto/perfil", icon: UserCog },
     ],
     navSecondary: [],
