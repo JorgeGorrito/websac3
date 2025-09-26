@@ -229,6 +229,9 @@ func (r *ReportFeedbackRepository) GetReportsWithoutFeedback(paginationParams pa
 	// Query principal para obtener reportes sin feedback
 	query := dbCtx.DB().Model(&model.Report{}).
 		Preload("DegreeProgram").
+		Preload("DegreeProgram.UserCreator").
+		Preload("DegreeProgram.UserCreator.Person").
+		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution").
 		Preload("ProfessionalRole").
 		Where("id NOT IN (?)", subQuery)
 

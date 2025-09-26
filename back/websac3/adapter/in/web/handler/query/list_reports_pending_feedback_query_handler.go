@@ -11,6 +11,7 @@ import (
 	"websac3/app/port/out/message"
 	"websac3/common/logging"
 	"websac3/common/mapper"
+	"websac3/common/paginator"
 	"websac3/common/validator"
 )
 
@@ -39,7 +40,7 @@ func NewListReportsPendingFeedbackQueryHandler(
 	}
 }
 
-func (h *ListReportsPendingFeedbackQueryHandler) Handle(req query.ListReportsPendingFeedbackQuery, lang string) (response.ApiResponse[response.PaginatedResponse[response.ReportResponse]], error) {
+func (h *ListReportsPendingFeedbackQueryHandler) Handle(req query.ListReportsPendingFeedbackQuery, lang string) (response.ApiResponse[paginator.Page[response.ReportResponse]], error) {
 	h.logger.Info("Listando reportes pendientes de retroalimentación para auditor ID: %d", req.UserID)
 
 	// Validar request
@@ -49,7 +50,7 @@ func (h *ListReportsPendingFeedbackQueryHandler) Handle(req query.ListReportsPen
 		for n := range err {
 			validationErrors = append(validationErrors, err[n].Error())
 		}
-		return response.ApiResponse[response.PaginatedResponse[response.ReportResponse]]{
+		return response.ApiResponse[paginator.Page[response.ReportResponse]]{
 			HttpStatusCode: http.StatusBadRequest,
 			Errors:         validationErrors,
 		}, nil
@@ -58,7 +59,7 @@ func (h *ListReportsPendingFeedbackQueryHandler) Handle(req query.ListReportsPen
 	// Validar permisos
 	if !h.ValidatePermissions(req.Permissions) {
 		h.logger.Warn("El usuario con ID: %d no tiene permisos para listar reportes pendientes de retroalimentación", req.UserID)
-		return response.ApiResponse[response.PaginatedResponse[response.ReportResponse]]{
+		return response.ApiResponse[paginator.Page[response.ReportResponse]]{
 			HttpStatusCode: http.StatusForbidden,
 			Errors: []string{
 				h.msgProvider.
@@ -72,7 +73,7 @@ func (h *ListReportsPendingFeedbackQueryHandler) Handle(req query.ListReportsPen
 	reports, total, err := h.listReportsPendingFeedbackUseCase.Execute(req.UserID, req.PaginationParams, lang)
 	if err != nil {
 		h.logger.Error("Error al obtener reportes pendientes: %v", err)
-		return response.ApiResponse[response.PaginatedResponse[response.ReportResponse]]{
+		return response.ApiResponse[paginator.Page[response.ReportResponse]]{
 			HttpStatusCode: util.GetHttpStatusCodeByErr(err),
 			Errors: []string{
 				util.GetResultMessageByErr(
@@ -94,16 +95,15 @@ func (h *ListReportsPendingFeedbackQueryHandler) Handle(req query.ListReportsPen
 		reportResponses = append(reportResponses, reportResponse)
 	}
 
-	paginatedResponse := response.PaginatedResponse[response.ReportResponse]{
-		Data:       reportResponses,
-		Total:      total,
-		Page:       req.PaginationParams.Currentpage,
-		Limit:      req.PaginationParams.ItemsPerpage,
-		TotalPages: (total + req.PaginationParams.ItemsPerpage - 1) / req.PaginationParams.ItemsPerpage,
+	paginatedResponse := paginator.Page[response.ReportResponse]{
+		Data:         reportResponses,
+		TotalCount:   int64(total),
+		Currentpage:  req.PaginationParams.Currentpage,
+		ItemsPerpage: req.PaginationParams.ItemsPerpage,
 	}
 
 	h.logger.Info("Listado de reportes pendientes completado. Total: %d", total)
-	return response.ApiResponse[response.PaginatedResponse[response.ReportResponse]]{
+	return response.ApiResponse[paginator.Page[response.ReportResponse]]{
 		HttpStatusCode: http.StatusOK,
 		Result:         paginatedResponse,
 	}, nil
