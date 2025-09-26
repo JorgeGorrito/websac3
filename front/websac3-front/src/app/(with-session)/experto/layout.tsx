@@ -80,7 +80,7 @@ export default function ExpertoLayout({
   const breadcrumbs = generateBreadcrumbs();
 
   return (
-    <ProtectedRoute requiredRole="cybersecurity_auditor">
+    <ProtectedRoute requiredRole={["cybersecurity_auditor", "cybersecurity auditor"]}>
       <SidebarProvider>
         <AppSidebar role={role} />
         <SidebarInset>

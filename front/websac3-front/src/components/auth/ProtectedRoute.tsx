@@ -32,18 +32,23 @@ export const ProtectedRoute = ({
 
       if (requiredRole) {
         const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
-        const hasRequiredRole = allowedRoles.includes(user?.role || "");
+        const userRole = user?.role?.toLowerCase().trim() || "";
+        const hasRequiredRole = allowedRoles.some(role => 
+          role.toLowerCase().trim() === userRole
+        );
         
         if (!hasRequiredRole) {
         // Redirect to appropriate dashboard based on user role
         const getDashboardRoute = (role: string): string => {
-          switch (role) {
+          const normalizedRole = role?.toLowerCase().trim();
+          switch (normalizedRole) {
             case 'admin':
               return "/admin/dashboard";
             case 'guest':
-            case 'program lead': // Note: space, not underscore
+            case 'program lead':
               return "/director/dashboard";
             case 'cybersecurity_auditor':
+            case 'cybersecurity auditor':
               return "/experto/dashboard";
             default:
               return "/admin/dashboard";
@@ -86,7 +91,10 @@ export const ProtectedRoute = ({
   // Don't render children if role doesn't match
   if (requiredRole) {
     const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
-    const hasRequiredRole = allowedRoles.includes(user?.role || "");
+    const userRole = user?.role?.toLowerCase().trim() || "";
+    const hasRequiredRole = allowedRoles.some(role => 
+      role.toLowerCase().trim() === userRole
+    );
     
     if (!hasRequiredRole) {
       return null;

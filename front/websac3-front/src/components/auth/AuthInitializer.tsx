@@ -42,13 +42,15 @@ export const AuthInitializer = () => {
           
           // Handle redirection here to avoid multiple components competing
           const getDashboardRoute = (role: string): string => {
-            switch (role) {
+            const normalizedRole = role?.toLowerCase().trim();
+            switch (normalizedRole) {
               case 'admin':
                 return "/admin/dashboard";
               case 'guest':
               case 'program lead':
                 return "/director/dashboard";
               case 'cybersecurity_auditor':
+              case 'cybersecurity auditor':
                 return "/experto/dashboard";
               default:
                 return "/admin/dashboard";

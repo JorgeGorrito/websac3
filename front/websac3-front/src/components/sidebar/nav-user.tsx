@@ -63,9 +63,9 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 transition-colors"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 transition-colors h-auto py-4"
             >
-              <Avatar className="h-10 w-10 rounded-xl border-2 border-primary/20">
+              <Avatar className="h-12 w-12 rounded-xl border-2 border-primary/20">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-semibold">
                   {user.name
@@ -75,15 +75,15 @@ export function NavUser({
                     .toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
+              <div className="grid flex-1 text-left text-sm leading-tight min-w-0 space-y-2">
                 <span className="truncate font-medium text-foreground">{user.name}</span>
-                <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="secondary" className="text-xs px-2 py-0.5 bg-primary/10 text-primary border-primary/20">
+                <div className="flex items-center gap-1 min-w-0">
+                  <Badge variant="secondary" className="text-xs px-2 py-1 bg-primary/10 text-primary border-primary/20 break-words leading-tight">
                     {displayRole}
                   </Badge>
                 </div>
               </div>
-              <ChevronsUpDown className="ml-auto size-4 text-muted-foreground" />
+              <ChevronsUpDown className="ml-auto size-4 text-muted-foreground flex-shrink-0" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -104,7 +104,7 @@ export function NavUser({
                       .toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <div className="grid flex-1 text-left leading-tight">
+                <div className="grid flex-1 text-left leading-tight min-w-0">
                   <span className="truncate font-medium text-foreground">{user.name}</span>
                   <span className="truncate text-sm text-muted-foreground">{user.email}</span>
                   <Badge variant="secondary" className="text-xs px-2 py-0.5 bg-primary/10 text-primary border-primary/20 w-fit mt-1">

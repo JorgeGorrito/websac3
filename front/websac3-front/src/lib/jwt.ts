@@ -3,6 +3,7 @@
 export interface JWTPayload {
   sub: number; // user ID
   username: string;
+  email?: string; // Make email optional
   role: string;
   permissions?: Record<string, string[]>;
   iat: number; // issued at

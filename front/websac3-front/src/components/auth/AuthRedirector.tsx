@@ -15,13 +15,15 @@ export const AuthRedirector = () => {
     // Only redirect if we're not loading, have complete auth data, and haven't redirected yet
     if (!isLoading && isAuthenticated && user && !hasRedirected.current) {
       const getDashboardRoute = (role: string): string => {
-        switch (role) {
+        const normalizedRole = role?.toLowerCase().trim();
+        switch (normalizedRole) {
           case 'admin':
             return "/admin/dashboard";
           case 'guest':
           case 'program lead':
             return "/director/dashboard";
           case 'cybersecurity_auditor':
+          case 'cybersecurity auditor':
             return "/experto/dashboard";
           default:
             return "/admin/dashboard";
@@ -34,8 +36,8 @@ export const AuthRedirector = () => {
       console.log("🔄 Debug - AuthRedirector: Current path:", currentPath, "Dashboard route:", dashboardRoute);
       
       // Only redirect if we're on a public route (login, register, etc.)
-      const publicRoutes = ['/login', '/solicitar-acceso', '/registrar-usuario'];
-      const isOnPublicRoute = publicRoutes.some(route => currentPath.startsWith(route));
+      const publicRoutes = ['/login', '/solicitar-acceso', '/registrar-usuario', '/'];
+      const isOnPublicRoute = publicRoutes.some(route => currentPath === route || currentPath.startsWith(route + '/'));
       
       if (isOnPublicRoute) {
         console.log("🔄 Debug - AuthRedirector: On public route, redirecting to dashboard");

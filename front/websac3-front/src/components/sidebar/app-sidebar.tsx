@@ -20,7 +20,7 @@ import {
 import { SIDEBAR_BY_ROLE, type RoleKey } from "@/constants/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
-import { WebSAC3Logo } from "@/components/websac3/logos/WebSAC3Logo";
+import { WebSAC3DashboardLogo } from "@/components/websac3/logos/WebSAC3DashboardLogo";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   role?: RoleKey;
@@ -43,9 +43,7 @@ export default function AppSidebar({
     <Sidebar variant="inset" {...props}>
       <SidebarHeader className="border-b border-primary/20">
         <div className="flex items-center justify-center p-2">
-          <div className="h-12 w-full">
-            <WebSAC3Logo />
-          </div>
+          <WebSAC3DashboardLogo />
         </div>
       </SidebarHeader>
       <SidebarContent>
