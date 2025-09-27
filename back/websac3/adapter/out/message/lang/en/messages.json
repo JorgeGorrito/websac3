@@ -163,6 +163,7 @@
   "report_feedback": {
     "report_not_found": "The specified report was not found.",
     "auditor_not_found": "The specified auditor was not found.",
+    "feedback_not_found": "No feedback found for this report.",
     "feedback_already_exists": "Feedback already exists for this report.",
     "created_successfully": "Feedback created successfully.",
     "subject": "Report Evaluation Feedback"

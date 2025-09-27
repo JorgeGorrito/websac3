@@ -91,6 +91,7 @@ func (m *manager) registerReportDependencies() {
 			return service.NewGetReportFeedbackService(
 				container.Inject[persistence.GetReportFeedbackPort](),
 				container.Inject[db.Manager](),
+				container.Inject[message.Provider](),
 			)
 		},
 	)

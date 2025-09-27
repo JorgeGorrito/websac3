@@ -17,8 +17,6 @@ type ReportFeedback struct {
 	GeneralComments string `gorm:"type:text" json:"general_comments"`
 	Recommendations string `gorm:"type:text" json:"recommendations"`
 
-	AuditorRating float32 `gorm:"type:decimal(2,1);check:auditor_rating >= 1 AND auditor_rating <= 5" json:"auditor_rating"`
-
 	KnowledgeAreaFeedbacks []KnowledgeAreaFeedback `gorm:"foreignKey:ReportFeedbackID" json:"knowledge_area_feedbacks"`
 
 	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`

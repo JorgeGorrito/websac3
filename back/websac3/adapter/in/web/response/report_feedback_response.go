@@ -7,21 +7,16 @@ type ReportFeedbackResponse struct {
 	Auditor                UserSummaryResponse             `json:"auditor"`
 	GeneralComments        string                          `json:"general_comments"`
 	Recommendations        string                          `json:"recommendations"`
-	AuditorRating          float32                         `json:"auditor_rating"`
 	KnowledgeAreaFeedbacks []KnowledgeAreaFeedbackResponse `json:"knowledge_area_feedbacks"`
 	CreatedAt              string                          `json:"created_at"`
 	UpdatedAt              string                          `json:"updated_at"`
 }
 
 type KnowledgeAreaFeedbackResponse struct {
-	ID                    uint    `json:"id"`
-	KnowledgeAreaReportID uint    `json:"knowledge_area_report_id"`
-	KnowledgeAreaName     string  `json:"knowledge_area_name"`
-	Comments              string  `json:"comments"`
-	SecurityGaps          string  `json:"security_gaps"`
-	Improvements          string  `json:"improvements"`
-	ComplianceLevel       string  `json:"compliance_level"`
-	AuditorRating         float32 `json:"auditor_rating"`
+	ID                    uint   `json:"id"`
+	KnowledgeAreaReportID uint   `json:"knowledge_area_report_id"`
+	KnowledgeAreaName     string `json:"knowledge_area_name"`
+	Comments              string `json:"comments"`
 }
 
 type ReportSummaryResponse struct {

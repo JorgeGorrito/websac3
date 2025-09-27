@@ -28,8 +28,9 @@ func (r *ReportFeedbackRepository) Create(feedback *entity.ReportFeedback, ctx _
 		return err
 	}
 
-	// Crear el feedback principal
+	// Crear el feedback principal (sin knowledge area feedbacks para evitar duplicación)
 	if err := dbCtx.DB().
+		Omit("KnowledgeAreaFeedbacks").
 		Create(&feedbackModel).
 		Error; err != nil {
 		return err
@@ -128,10 +129,11 @@ func (r *ReportFeedbackRepository) Update(feedback *entity.ReportFeedback, ctx _
 		return err
 	}
 
-	// Actualizar el feedback principal
+	// Actualizar el feedback principal (sin knowledge area feedbacks para evitar duplicación)
 	if err := dbCtx.DB().
 		Model(&feedbackModel).
 		Where("id = ?", feedback.ID).
+		Omit("KnowledgeAreaFeedbacks").
 		Updates(feedbackModel).
 		Error; err != nil {
 		return err

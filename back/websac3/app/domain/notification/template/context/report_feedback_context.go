@@ -5,7 +5,6 @@ type ReportFeedbackContext struct {
 	AuditorName       string
 	DegreeProgramName string
 	ReportScore       float32
-	AuditorRating     float32
 	GeneralComments   string
 	Recommendations   string
 	InstitutionName   string

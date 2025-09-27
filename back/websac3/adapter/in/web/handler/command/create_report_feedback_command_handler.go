@@ -55,18 +55,6 @@ func (h *CreateReportFeedbackCommandHandler) Handle(req command.CreateReportFeed
 		}, nil
 	}
 
-	if !h.ValidatePermissions(req.Permissions) {
-		h.logger.Warn("El usuario con ID: %d no tiene permisos para crear retroalimentación de reportes", req.UserID)
-		return response.ApiResponse[string]{
-			HttpStatusCode: http.StatusForbidden,
-			Errors: []string{
-				h.msgProvider.
-					WithLang(lang).
-					GetMessage("base_error", "forbidden"),
-			},
-		}, nil
-	}
-
 	// Mapear comando a entidad usando el mapper
 	feedback, err := mapper.Map[command.CreateReportFeedbackCommand, entity.ReportFeedback](&req)
 	if err != nil {

@@ -341,10 +341,6 @@ func registerReportMappers() {
 				KnowledgeAreaReportID: knowledgeAreaFeedbackModel.KnowledgeAreaReportID,
 				KnowledgeAreaReport:   knowledgeAreaReport,
 				Comments:              knowledgeAreaFeedbackModel.Comments,
-				SecurityGaps:          knowledgeAreaFeedbackModel.SecurityGaps,
-				Improvements:          knowledgeAreaFeedbackModel.Improvements,
-				ComplianceLevel:       knowledgeAreaFeedbackModel.ComplianceLevel,
-				AuditorRating:         knowledgeAreaFeedbackModel.AuditorRating,
 			}, nil
 		},
 	)
@@ -357,10 +353,6 @@ func registerReportMappers() {
 				ReportFeedbackID:      knowledgeAreaFeedbackEntity.ReportFeedbackID,
 				KnowledgeAreaReportID: knowledgeAreaFeedbackEntity.KnowledgeAreaReportID,
 				Comments:              knowledgeAreaFeedbackEntity.Comments,
-				SecurityGaps:          knowledgeAreaFeedbackEntity.SecurityGaps,
-				Improvements:          knowledgeAreaFeedbackEntity.Improvements,
-				ComplianceLevel:       knowledgeAreaFeedbackEntity.ComplianceLevel,
-				AuditorRating:         knowledgeAreaFeedbackEntity.AuditorRating,
 			}, nil
 		},
 	)
@@ -418,7 +410,6 @@ func registerReportMappers() {
 				Auditor:                auditor,
 				GeneralComments:        reportFeedbackModel.GeneralComments,
 				Recommendations:        reportFeedbackModel.Recommendations,
-				AuditorRating:          reportFeedbackModel.AuditorRating,
 				KnowledgeAreaFeedbacks: knowledgeAreaFeedbacks,
 				CreatedAt:              reportFeedbackModel.CreatedAt,
 				UpdatedAt:              reportFeedbackModel.UpdatedAt,
@@ -445,7 +436,6 @@ func registerReportMappers() {
 				AuditorID:              reportFeedbackEntity.AuditorID,
 				GeneralComments:        reportFeedbackEntity.GeneralComments,
 				Recommendations:        reportFeedbackEntity.Recommendations,
-				AuditorRating:          reportFeedbackEntity.AuditorRating,
 				KnowledgeAreaFeedbacks: knowledgeAreaFeedbacks,
 				CreatedAt:              reportFeedbackEntity.CreatedAt,
 				UpdatedAt:              reportFeedbackEntity.UpdatedAt,
@@ -461,10 +451,6 @@ func registerReportMappers() {
 				knowledgeAreaFeedbacks = append(knowledgeAreaFeedbacks, command.CreateKnowledgeAreaFeedbackCommand{
 					KnowledgeAreaReportID: kaf.KnowledgeAreaReportID,
 					Comments:              kaf.Comments,
-					SecurityGaps:          kaf.SecurityGaps,
-					Improvements:          kaf.Improvements,
-					ComplianceLevel:       kaf.ComplianceLevel,
-					AuditorRating:         kaf.AuditorRating,
 				})
 			}
 
@@ -472,9 +458,7 @@ func registerReportMappers() {
 				ReportID:               req.ReportID,
 				GeneralComments:        req.GeneralComments,
 				Recommendations:        req.Recommendations,
-				AuditorRating:          req.AuditorRating,
 				KnowledgeAreaFeedbacks: knowledgeAreaFeedbacks,
-				Permissions:            req.Permissions,
 			}, nil
 		},
 	)
@@ -488,7 +472,6 @@ func registerReportMappers() {
 				cmd.UserID,
 				cmd.GeneralComments,
 				cmd.Recommendations,
-				cmd.AuditorRating,
 			)
 
 			// Agregar knowledge area feedbacks
@@ -497,10 +480,6 @@ func registerReportMappers() {
 					0, // Se asignará después de crear el feedback principal
 					kaFeedbackCmd.KnowledgeAreaReportID,
 					kaFeedbackCmd.Comments,
-					kaFeedbackCmd.SecurityGaps,
-					kaFeedbackCmd.Improvements,
-					kaFeedbackCmd.ComplianceLevel,
-					kaFeedbackCmd.AuditorRating,
 				)
 				feedback.AddKnowledgeAreaFeedback(kaFeedback)
 			}
@@ -632,10 +611,6 @@ func registerReportMappers() {
 					KnowledgeAreaReportID: kaf.KnowledgeAreaReportID,
 					KnowledgeAreaName:     knowledgeAreaName,
 					Comments:              kaf.Comments,
-					SecurityGaps:          kaf.SecurityGaps,
-					Improvements:          kaf.Improvements,
-					ComplianceLevel:       kaf.ComplianceLevel,
-					AuditorRating:         kaf.AuditorRating,
 				})
 			}
 
@@ -670,7 +645,6 @@ func registerReportMappers() {
 				Auditor:                auditorSummary,
 				GeneralComments:        reportFeedbackEntity.GeneralComments,
 				Recommendations:        reportFeedbackEntity.Recommendations,
-				AuditorRating:          reportFeedbackEntity.AuditorRating,
 				KnowledgeAreaFeedbacks: knowledgeAreaFeedbacks,
 				CreatedAt:              reportFeedbackEntity.CreatedAt.Format("2006-01-02T15:04:05Z"),
 				UpdatedAt:              reportFeedbackEntity.UpdatedAt.Format("2006-01-02T15:04:05Z"),

@@ -158,6 +158,7 @@
   "report_feedback": {
     "report_not_found": "No se encontró el reporte especificado.",
     "auditor_not_found": "No se encontró el auditor especificado.",
+    "feedback_not_found": "No se encontró retroalimentación para este reporte.",
     "feedback_already_exists": "Ya existe retroalimentación para este reporte.",
     "created_successfully": "Retroalimentación creada exitosamente.",
     "subject": "Retroalimentación de Reporte de Evaluación"

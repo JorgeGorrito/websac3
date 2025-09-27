@@ -15,9 +15,6 @@ type ReportFeedback struct {
 	GeneralComments string
 	Recommendations string
 
-	// Calificación general del auditor (1-5)
-	AuditorRating float32
-
 	// Retroalimentación específica por área de conocimiento
 	KnowledgeAreaFeedbacks []KnowledgeAreaFeedback
 
@@ -30,14 +27,12 @@ func NewReportFeedback(
 	auditorID uint,
 	generalComments string,
 	recommendations string,
-	auditorRating float32,
 ) *ReportFeedback {
 	return &ReportFeedback{
 		ReportID:        reportID,
 		AuditorID:       auditorID,
 		GeneralComments: generalComments,
 		Recommendations: recommendations,
-		AuditorRating:   auditorRating,
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 	}
@@ -56,31 +51,17 @@ type KnowledgeAreaFeedback struct {
 	KnowledgeAreaReport   *KnowledgeAreaReport
 
 	// Comentarios específicos del área
-	Comments        string
-	SecurityGaps    string
-	Improvements    string
-	ComplianceLevel string
-
-	// Calificación del auditor para esta área (1-5)
-	AuditorRating float32
+	Comments string
 }
 
 func NewKnowledgeAreaFeedback(
 	reportFeedbackID uint,
 	knowledgeAreaReportID uint,
 	comments string,
-	securityGaps string,
-	improvements string,
-	complianceLevel string,
-	auditorRating float32,
 ) *KnowledgeAreaFeedback {
 	return &KnowledgeAreaFeedback{
 		ReportFeedbackID:      reportFeedbackID,
 		KnowledgeAreaReportID: knowledgeAreaReportID,
 		Comments:              comments,
-		SecurityGaps:          securityGaps,
-		Improvements:          improvements,
-		ComplianceLevel:       complianceLevel,
-		AuditorRating:         auditorRating,
 	}
 }

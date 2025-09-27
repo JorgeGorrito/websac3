@@ -53,7 +53,6 @@ func (s *CreateReportFeedbackService) sendFeedbackNotification(report *entity.Re
 		AuditorName:       auditor.Person.Name + " " + auditor.Person.Lastname,
 		DegreeProgramName: report.DegreeProgram.Name,
 		ReportScore:       report.Score,
-		AuditorRating:     feedback.AuditorRating,
 		GeneralComments:   feedback.GeneralComments,
 		Recommendations:   feedback.Recommendations,
 		InstitutionName:   report.HigherEducationInstitution.Name,

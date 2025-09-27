@@ -55,7 +55,6 @@ func (c *CreateReportFeedbackController) Handle(ctx *gin.Context) {
 		return
 	}
 
-	req.Permissions = token.Permissions["reporting-feedback"]
 	var cmd command.CreateReportFeedbackCommand
 	cmd, err = mapper.Map[request.CreateReportFeedbackRequest, command.CreateReportFeedbackCommand](&req)
 	if err != nil {
