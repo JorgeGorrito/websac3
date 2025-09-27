@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertTriangle, Calendar, GraduationCap, Building, User, Star } from "lucide-react";
 import { useListPendingReportsQuery } from "@/services/api";
+import { useRouter } from "next/navigation";
 
 interface PendingReport {
   id: number;
@@ -29,6 +30,7 @@ interface PendingReport {
 }
 
 export default function PendingReportsPage() {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit] = useState(10);
 
@@ -164,7 +166,11 @@ export default function PendingReportsPage() {
         </div>
         
         <div className="pt-3 border-t">
-          <Button className="w-full" variant="outline">
+          <Button 
+            className="w-full" 
+            variant="outline"
+            onClick={() => router.push(`/experto/reportes/${report.id}`)}
+          >
             Revisar Reporte
           </Button>
         </div>

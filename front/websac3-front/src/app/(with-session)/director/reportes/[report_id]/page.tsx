@@ -12,6 +12,7 @@ import { showError } from '@/store/errorSlice';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import ReportHTMLView from '@/components/websac3/report/ReportHTMLView';
+import ReportFeedbackView from '@/components/websac3/report/ReportFeedbackView';
 
 export default function ReportDetailPage() {
   const params = useParams();
@@ -241,9 +242,18 @@ export default function ReportDetailPage() {
           </div>
         </div>
 
-        {/* Report Content */}
-        <div ref={reportRef} className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <ReportHTMLView reportDetail={reportDetail} />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Report Content */}
+          <div className="lg:col-span-2">
+            <div ref={reportRef} className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <ReportHTMLView reportDetail={reportDetail} />
+            </div>
+          </div>
+
+          {/* Expert Feedback */}
+          <div className="lg:col-span-1">
+            <ReportFeedbackView reportId={reportId} />
+          </div>
         </div>
       </div>
     </div>

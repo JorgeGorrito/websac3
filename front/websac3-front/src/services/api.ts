@@ -558,7 +558,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 export const api = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["AccessRequest", "DegreeProgram", "Topic", "CourseType", "CourseNature", "Course", "User"],
+  tagTypes: ["AccessRequest", "DegreeProgram", "Topic", "CourseType", "CourseNature", "Course", "User", "ReportFeedback"],
   endpoints: (builder) => ({
     // Catalogs
     listIdentificationTypes: builder.query<IdentificationTypeItem[], { current_page?: number; items_per_page?: number } | void>({
@@ -1096,6 +1096,78 @@ export const api = createApi({
         total_count: number;
       }>) => response.result,
     }),
+
+    // Submit Report Feedback
+    submitReportFeedback: builder.mutation<
+      { message: string },
+      {
+        report_id: number;
+        general_comments: string;
+        recommendations: string;
+        knowledge_area_feedbacks: Array<{
+          knowledge_area_report_id: number;
+          comments: string;
+        }>;
+      }
+    >({
+      query: (body) => ({
+        url: "/report-feedbacks",
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response: ApiResponse<{ message: string }>) => response.result,
+      invalidatesTags: (result, error, { report_id }) => [
+        { type: "ReportFeedback", id: report_id },
+      ],
+    }),
+
+    // Get Report Feedback
+    getReportFeedback: builder.query<
+      {
+        id: number;
+        report_id: number;
+        general_comments: string;
+        recommendations: string;
+        created_at: string;
+        knowledge_area_feedbacks: Array<{
+          id: number;
+          knowledge_area_report_id: number;
+          knowledge_area_name: string;
+          comments: string;
+        }>;
+        auditor: {
+          id: number;
+          email: string;
+          name: string;
+        };
+      },
+      number
+    >({
+      query: (reportId) => ({
+        url: `/report-feedbacks/report/${reportId}`,
+      }),
+      transformResponse: (response: ApiResponse<{
+        id: number;
+        report_id: number;
+        general_comments: string;
+        recommendations: string;
+        created_at: string;
+        knowledge_area_feedbacks: Array<{
+          id: number;
+          knowledge_area_report_id: number;
+          knowledge_area_name: string;
+          comments: string;
+        }>;
+        auditor: {
+          id: number;
+          email: string;
+          name: string;
+        };
+      }>) => response.result,
+      providesTags: (result, error, reportId) => [
+        { type: "ReportFeedback", id: reportId },
+      ],
+    }),
   }),
 });
 
@@ -1147,6 +1219,9 @@ export const {
   useCreateExpertConsultationMutation,
   // pending reports
   useListPendingReportsQuery,
+  // report feedback
+  useSubmitReportFeedbackMutation,
+  useGetReportFeedbackQuery,
 } = api;
 
 
