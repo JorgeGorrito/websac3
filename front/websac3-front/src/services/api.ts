@@ -1168,6 +1168,104 @@ export const api = createApi({
         { type: "ReportFeedback", id: reportId },
       ],
     }),
+
+    // List Report Feedbacks with filters and pagination
+    listReportFeedbacks: builder.query<
+      PaginatedPage<{
+        id: number;
+        report_id: number;
+        general_comments: string;
+        recommendations: string;
+        created_at: string;
+        updated_at: string;
+        auditor: {
+          id: number;
+          email: string;
+          name: string;
+        };
+        knowledge_area_feedbacks: Array<{
+          id: number;
+          knowledge_area_name: string;
+          knowledge_area_report_id: number;
+          comments: string;
+        }>;
+        report: {
+          id: number;
+          created_at: string;
+          score: number;
+          degree_program: {
+            id: number;
+            name: string;
+            snies: number;
+          };
+          higher_education_institution: {
+            id: number;
+            name: string;
+          };
+        };
+      }>,
+      { 
+        current_page?: number; 
+        items_per_page?: number; 
+        filters?: Record<string, string> 
+      }
+    >({
+      query: ({ current_page = 1, items_per_page = 10, filters } = {}) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        
+        if (filters) {
+          Object.entries(filters).forEach(([key, value]) => {
+            if (value && value.trim()) {
+              params.set(key, value.trim());
+            }
+          });
+        }
+        
+        return { url: `/report-feedbacks?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedPage<{
+        id: number;
+        report_id: number;
+        general_comments: string;
+        recommendations: string;
+        created_at: string;
+        updated_at: string;
+        auditor: {
+          id: number;
+          email: string;
+          name: string;
+        };
+        knowledge_area_feedbacks: Array<{
+          id: number;
+          knowledge_area_name: string;
+          knowledge_area_report_id: number;
+          comments: string;
+        }>;
+        report: {
+          id: number;
+          created_at: string;
+          score: number;
+          degree_program: {
+            id: number;
+            name: string;
+            snies: number;
+          };
+          higher_education_institution: {
+            id: number;
+            name: string;
+          };
+        };
+      }>>) => response.result,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map((item) => ({ type: "ReportFeedback" as const, id: item.id })),
+              { type: "ReportFeedback" as const, id: "LIST" },
+            ]
+          : [{ type: "ReportFeedback" as const, id: "LIST" }],
+    }),
   }),
 });
 
@@ -1222,6 +1320,7 @@ export const {
   // report feedback
   useSubmitReportFeedbackMutation,
   useGetReportFeedbackQuery,
+  useListReportFeedbacksQuery,
 } = api;
 
 

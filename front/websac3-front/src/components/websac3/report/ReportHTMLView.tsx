@@ -20,7 +20,7 @@ const ReportHTMLView: React.FC<ReportHTMLViewProps> = ({ reportDetail }) => {
     return 'Por mejorar';
   };
 
-  const percentage = Math.round(reportDetail.score * 100);
+  const percentage = (Math.floor(reportDetail.score * 10000) / 100).toFixed(2);
   const scoreColor = getScoreColor(reportDetail.score);
   const scoreStatus = getScoreStatus(reportDetail.score);
   
@@ -211,7 +211,7 @@ const ReportHTMLView: React.FC<ReportHTMLViewProps> = ({ reportDetail }) => {
         {/* Knowledge Areas */}
         {reportDetail.knowledge_area_reports?.map((area, index) => {
           const areaProgress = area.score_got / area.score_expected;
-          const areaPercentage = Math.round(areaProgress * 100);
+          const areaPercentage = (Math.floor(areaProgress * 10000) / 100).toFixed(2);
           const areaScoreColor = getScoreColor(areaProgress);
           const areaScoreStatus = getScoreStatus(areaProgress);
           

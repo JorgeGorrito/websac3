@@ -191,7 +191,7 @@ export default function ExpertReportReviewPage() {
 
   const formatScore = (score: number) => {
     const percentage = Math.floor(score * 10000) / 100;
-    return percentage % 1 === 0 ? percentage.toFixed(0) : percentage.toFixed(2);
+    return percentage.toFixed(2);
   };
 
   if (isLoading) {
