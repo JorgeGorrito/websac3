@@ -116,6 +116,9 @@
   "list_reports_pending_feedback" : {
     "not_found" : "No se encontraron reportes pendientes de retroalimentación."
   },
+  "list_report_feedbacks" : {
+    "not_found" : "No se encontraron retroalimentaciones de reportes."
+  },
   "validate_email" : {
     "email_validated" : "Correo electrónico validado exitosamente.",
     "email_not_found" : "No se encontró el correo electrónico con el token proporcionado."

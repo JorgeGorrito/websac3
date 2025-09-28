@@ -24,6 +24,8 @@ type ListReportFeedbacksQueryHandler struct {
 	logger                     logging.Logger
 	listReportFeedbacksUseCase usecase.ListReportFeedbacksUseCase
 	msgProvider                message.Provider
+
+	validFilters []string
 }
 
 func NewListReportFeedbacksQueryHandler(
@@ -38,6 +40,12 @@ func NewListReportFeedbacksQueryHandler(
 		logger:                     logger,
 		listReportFeedbacksUseCase: listReportFeedbacksUseCase,
 		msgProvider:                msgProvider,
+		validFilters: []string{
+			"Report.DegreeProgram.name",
+			"Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.name",
+			"Auditor.Person.name",
+			"Auditor.Person.lastname",
+		},
 	}
 }
 
@@ -72,6 +80,9 @@ func (h *ListReportFeedbacksQueryHandler) Handle(req query.ListReportFeedbacksQu
 
 	// Transformar filtros
 	filters := filter.Transform(req.Filters, []psqlfilter.Operator{psqlfilter.EqualOperator, psqlfilter.ContainsOperator})
+
+	// Limpiar filtros inválidos
+	filters.Purge(h.validFilters)
 
 	// Convertir filtros a map[string]interface{} para el use case
 	filtersMap := make(map[string]interface{})

@@ -2,6 +2,8 @@ package service
 
 import (
 	"websac3/app/domain/entity"
+	"websac3/app/domain/errs"
+	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
 	"websac3/app/port/out/persistence/db"
 	"websac3/common/paginator"
@@ -10,15 +12,18 @@ import (
 type ListReportFeedbacksService struct {
 	listReportFeedbacksPort persistence.ListReportFeedbacksPort
 	persistenceManager      db.Manager
+	messageProvider         message.Provider
 }
 
 func NewListReportFeedbacksService(
 	listReportFeedbacksPort persistence.ListReportFeedbacksPort,
 	persistenceManager db.Manager,
+	messageProvider message.Provider,
 ) *ListReportFeedbacksService {
 	return &ListReportFeedbacksService{
 		listReportFeedbacksPort: listReportFeedbacksPort,
 		persistenceManager:      persistenceManager,
+		messageProvider:         messageProvider,
 	}
 }
 
@@ -38,9 +43,17 @@ func (s *ListReportFeedbacksService) Execute(filters map[string]interface{}, pag
 			return err
 		}
 
+		if len(feedbacks) == 0 {
+			err = errs.NewNotFoundError(
+				s.messageProvider.
+					WithLang(lang).
+					GetMessage("list_report_feedbacks", "not_found"),
+			)
+		}
+
 		result = feedbacks
 		total = totalCount
-		return nil
+		return err
 	})
 	return result, total, err
 }

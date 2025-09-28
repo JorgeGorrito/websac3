@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"math"
 	"time"
 )
 
@@ -265,12 +266,14 @@ func (e *ProfessionalRole) EvaluateDegreeProgram(degreeProgram *DegreeProgram, l
 		knowledgeAreaReport.ScoreExpected = knowledgeAreaExpected.PriorityWeight
 
 		partialScore = (partialScore / totalLearnHoursExpected) * float32(knowledgeAreaExpected.PriorityWeight)
-		knowledgeAreaReport.ScoreGot = partialScore
+		// Round ScoreGot to 4 decimal places
+		knowledgeAreaReport.ScoreGot = float32(math.Round(float64(partialScore)*10000) / 10000)
 		report.AddKnowledgeAreaReport(knowledgeAreaReport)
 
 		score += partialScore
 	}
-	report.Score = score
+	// Round score to 4 decimal places
+	report.Score = float32(math.Round(float64(score)*10000) / 10000)
 
 	// Find unexpected topics (topics covered in courses but not expected in the professional role)
 	report.findAndAddUnexpectedTopics(courseTopics, knowledgeAreasExpected, lang)

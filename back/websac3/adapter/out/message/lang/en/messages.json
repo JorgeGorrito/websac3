@@ -121,6 +121,9 @@
   "list_reports_pending_feedback": {
     "not_found": "No reports pending feedback found."
   },
+  "list_report_feedbacks": {
+    "not_found": "No report feedbacks found."
+  },
   "validate_email": {
     "email_validated": "Email successfully validated.",
     "email_not_found": "Email not found with the provided token."

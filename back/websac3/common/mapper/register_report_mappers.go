@@ -1,6 +1,7 @@
 package mapper
 
 import (
+	"math"
 	"websac3/adapter/in/web/request"
 	"websac3/adapter/in/web/response"
 	"websac3/adapter/out/persistence/postgresql/model"
@@ -8,6 +9,11 @@ import (
 	"websac3/app/port/in/dto/command"
 	"websac3/app/port/in/dto/query"
 )
+
+// roundScore rounds a float32 score to 4 decimal places
+func roundScore(score float32) float32 {
+	return float32(math.Round(float64(score)*10000) / 10000)
+}
 
 func registerReportMappers() {
 	// TopicReport: entity -> model
@@ -53,8 +59,8 @@ func registerReportMappers() {
 				Name:                    knowledgeAreaReportEntity.Name,
 				TotalLearnHoursExpected: knowledgeAreaReportEntity.TotalLearnHoursExpected,
 				TotalLearnHoursActual:   knowledgeAreaReportEntity.TotalLearnHoursActual,
-				ScoreExpected:           knowledgeAreaReportEntity.ScoreExpected,
-				ScoreGot:                knowledgeAreaReportEntity.ScoreGot,
+				ScoreExpected:           roundScore(knowledgeAreaReportEntity.ScoreExpected),
+				ScoreGot:                roundScore(knowledgeAreaReportEntity.ScoreGot),
 				TopicReports:            topicReports,
 			}, nil
 		},
@@ -77,8 +83,8 @@ func registerReportMappers() {
 				Name:                    knowledgeAreaReportModel.Name,
 				TotalLearnHoursExpected: knowledgeAreaReportModel.TotalLearnHoursExpected,
 				TotalLearnHoursActual:   knowledgeAreaReportModel.TotalLearnHoursActual,
-				ScoreExpected:           knowledgeAreaReportModel.ScoreExpected,
-				ScoreGot:                knowledgeAreaReportModel.ScoreGot,
+				ScoreExpected:           roundScore(knowledgeAreaReportModel.ScoreExpected),
+				ScoreGot:                roundScore(knowledgeAreaReportModel.ScoreGot),
 				TopicReports:            topicReports,
 			}, nil
 		},
@@ -181,7 +187,7 @@ func registerReportMappers() {
 				ID:                   reportEntity.ID,
 				ProfessionalRoleID:   reportEntity.ProfessionalRole.ID,
 				DegreeProgramID:      reportEntity.DegreeProgram.ID,
-				Score:                reportEntity.Score,
+				Score:                roundScore(reportEntity.Score),
 				KnowledgeAreaReports: knowledgeAreaReports,
 				// UnexpectedKnowledgeAreaReports se manejarán por separado
 			}, nil
@@ -212,8 +218,8 @@ func registerReportMappers() {
 					Name:                    kar.Name,
 					TotalLearnHoursExpected: kar.TotalLearnHoursExpected,
 					TotalLearnHoursActual:   kar.TotalLearnHoursActual,
-					ScoreExpected:           kar.ScoreExpected,
-					ScoreGot:                kar.ScoreGot,
+					ScoreExpected:           roundScore(kar.ScoreExpected),
+					ScoreGot:                roundScore(kar.ScoreGot),
 					TopicReports:            topicReports,
 				}
 				knowledgeAreaReports = append(knowledgeAreaReports, karEntity)
@@ -316,7 +322,7 @@ func registerReportMappers() {
 				ProfessionalRole:               professionalRole,
 				KnowledgeAreaReports:           knowledgeAreaReports,
 				UnexpectedKnowledgeAreaReports: unexpectedKnowledgeAreaReports,
-				Score:                          reportModel.Score,
+				Score:                          roundScore(reportModel.Score),
 				CreatedAt:                      reportModel.CreatedAt,
 				HigherEducationInstitution:     higherEducationInstitutionPtr,
 			}, nil
@@ -382,6 +388,31 @@ func registerReportMappers() {
 						Snies: reportFeedbackModel.Report.DegreeProgram.Snies,
 					},
 					CreatedAt: reportFeedbackModel.Report.CreatedAt,
+				}
+
+				// Mapear UserCreator con Person y HigherEducationInstitution
+				if reportFeedbackModel.Report.DegreeProgram.UserCreator.ID != 0 {
+					report.DegreeProgram.UserCreator = &entity.User{
+						ID:    reportFeedbackModel.Report.DegreeProgram.UserCreator.ID,
+						Email: reportFeedbackModel.Report.DegreeProgram.UserCreator.Email,
+					}
+
+					// Mapear Person si está disponible
+					if reportFeedbackModel.Report.DegreeProgram.UserCreator.Person.ID != 0 {
+						report.DegreeProgram.UserCreator.Person = &entity.Person{
+							ID:       reportFeedbackModel.Report.DegreeProgram.UserCreator.Person.ID,
+							Name:     reportFeedbackModel.Report.DegreeProgram.UserCreator.Person.Name,
+							Lastname: reportFeedbackModel.Report.DegreeProgram.UserCreator.Person.Lastname,
+						}
+
+						// Mapear HigherEducationInstitution si está disponible
+						if reportFeedbackModel.Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Snies != 0 {
+							report.DegreeProgram.UserCreator.Person.HigherEducationInstitution = &entity.HigherEducationInstitution{
+								Snies: reportFeedbackModel.Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Snies,
+								Name:  reportFeedbackModel.Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Name,
+							}
+						}
+					}
 				}
 			}
 
@@ -548,8 +579,8 @@ func registerReportMappers() {
 					Name:                    kar.Name,
 					TotalLearnHoursExpected: kar.TotalLearnHoursExpected,
 					TotalLearnHoursActual:   kar.TotalLearnHoursActual,
-					ScoreExpected:           kar.ScoreExpected,
-					ScoreGot:                kar.ScoreGot,
+					ScoreExpected:           roundScore(kar.ScoreExpected),
+					ScoreGot:                roundScore(kar.ScoreGot),
 					TopicReports:            topicReports,
 				})
 			}
@@ -587,7 +618,7 @@ func registerReportMappers() {
 				DegreeProgramID:                reportEntity.DegreeProgram.ID,
 				DegreeProgram:                  degreeProgramResp,
 				ProfessionalRole:               professionalRoleResp,
-				Score:                          reportEntity.Score,
+				Score:                          roundScore(reportEntity.Score),
 				CreatedAt:                      reportEntity.CreatedAt,
 				KnowledgeAreaReports:           knowledgeAreaReports,
 				UnexpectedKnowledgeAreaReports: unexpectedKnowledgeAreaReports,
@@ -617,13 +648,23 @@ func registerReportMappers() {
 			// Mapear Report Summary
 			reportSummary := response.ReportSummaryResponse{
 				ID:    reportFeedbackEntity.Report.ID,
-				Score: reportFeedbackEntity.Report.Score,
+				Score: roundScore(reportFeedbackEntity.Report.Score),
 				DegreeProgram: response.DegreeProgramSummaryResponse{
 					ID:    reportFeedbackEntity.Report.DegreeProgram.ID,
 					Name:  reportFeedbackEntity.Report.DegreeProgram.Name,
 					Snies: reportFeedbackEntity.Report.DegreeProgram.Snies,
 				},
 				CreatedAt: reportFeedbackEntity.Report.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			}
+
+			// Mapear HigherEducationInstitution si está disponible
+			if reportFeedbackEntity.Report.DegreeProgram.UserCreator != nil &&
+				reportFeedbackEntity.Report.DegreeProgram.UserCreator.Person != nil &&
+				reportFeedbackEntity.Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution != nil {
+				reportSummary.HigherEducationInstitution = response.InstitutionSummaryResponse{
+					ID:   reportFeedbackEntity.Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Snies,
+					Name: reportFeedbackEntity.Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.Name,
+				}
 			}
 
 			// Mapear Auditor Summary
@@ -679,7 +720,7 @@ func registerReportMappers() {
 
 			return response.ReportResponse{
 				ID:                         reportEntity.ID,
-				Score:                      reportEntity.Score,
+				Score:                      roundScore(reportEntity.Score),
 				DegreeProgram:              degreeProgramResp,
 				ProfessionalRole:           professionalRoleResp,
 				HigherEducationInstitution: institutionResp,

@@ -20,10 +20,11 @@ type KnowledgeAreaFeedbackResponse struct {
 }
 
 type ReportSummaryResponse struct {
-	ID            uint                         `json:"id"`
-	Score         float32                      `json:"score"`
-	DegreeProgram DegreeProgramSummaryResponse `json:"degree_program"`
-	CreatedAt     string                       `json:"created_at"`
+	ID                         uint                         `json:"id"`
+	Score                      float32                      `json:"score"`
+	DegreeProgram              DegreeProgramSummaryResponse `json:"degree_program"`
+	HigherEducationInstitution InstitutionSummaryResponse   `json:"higher_education_institution"`
+	CreatedAt                  string                       `json:"created_at"`
 }
 
 type DegreeProgramSummaryResponse struct {

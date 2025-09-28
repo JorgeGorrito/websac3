@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"net/url"
+	"strings"
 	"websac3/adapter/in/web/response"
 	"websac3/adapter/in/web/util"
 	"websac3/app/port/in/dto/query"
@@ -31,6 +32,7 @@ func NewListReportFeedbacksController() *ListReportFeedbacksController {
 // @Description
 // @Description **Filtros válidos:**
 // @Description - `Report.DegreeProgram.name[eq|cont]`
+// @Description - `Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.name[eq|cont]`
 // @Description - `Auditor.Person.name[eq|cont]`
 // @Description - `Auditor.Person.lastname[eq|cont]`
 // @Description - `AuditorRating[eq]`
@@ -59,12 +61,17 @@ func (c *ListReportFeedbacksController) Handle(ctx *gin.Context) {
 		return
 	}
 
-	rawFilters := ctx.Request.URL.Query().Get("filters")
-	filtersMap, err := url.ParseQuery(rawFilters)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid filters format"})
-		return
+	// Los filtros vienen como parámetros individuales en la query string
+	allParams := ctx.Request.URL.Query()
+	filtersMap := make(url.Values)
+
+	// Filtrar solo los parámetros que contienen operadores (filtros)
+	for key, values := range allParams {
+		if strings.Contains(key, "[") && strings.HasSuffix(key, "]") {
+			filtersMap[key] = values
+		}
 	}
+
 	var filters = util.ParseParamsFilter(filtersMap)
 	var lang string = ctx.Param("lang")
 	var token = c.GetToken(ctx)

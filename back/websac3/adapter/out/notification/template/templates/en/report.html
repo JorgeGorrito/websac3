@@ -79,7 +79,7 @@
                                                         </td>
                                                         <td style="width:20%; vertical-align:top;">
                                                             <div style="font-size:11px; color:#6c757d; margin-bottom: 4px; font-weight: 500;">Total score</div>
-                                                            <div style="font-size:15px; font-weight:700; color:#2c3e50;">{{printf "%.2f" .Score}}</div>
+                                                            <div style="font-size:15px; font-weight:700; color:#2c3e50;">{{printf "%.4f" .Score}}</div>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -91,7 +91,7 @@
                                 <!-- Right Column: Chart -->
                                 <td style="vertical-align: middle; width: 30%; text-align: center; padding-left: 20px;">
                                     {{$score := .Score}}
-                                    {{$percentage := printf "%.0f" (mul $score 100)}}
+                                    {{$percentage := printf "%.2f" (mul $score 100)}}
                                     {{$strokeColor := "#dc3545"}}
                                     {{$statusText := "Needs Improvement"}}
                                     {{if ge $score 0.9}}
@@ -130,13 +130,13 @@
                                         <strong>Expected hours:</strong> {{printf "%.2f" .TotalLearnHoursExpected}} ·
                                         <strong>Actual hours:</strong> {{printf "%.2f" .TotalLearnHoursActual}} ·
                                         <strong>Weight (0–1):</strong> {{printf "%.2f" .ScoreExpected}} ·
-                                        <strong>Weighted (got):</strong> {{printf "%.2f" .ScoreGot}}
+                                        <strong>Weighted (got):</strong> {{printf "%.4f" .ScoreGot}}
                                     </p>
                                 </td>
                                 <td style="vertical-align: top; text-align: right; width: 100px;">
                                     {{$kaScore := .ScoreGot}}
                                     {{$kaExpected := .ScoreExpected}}
-                                    {{$kaPercentage := printf "%.0f" (mul (div $kaScore $kaExpected) 100)}}
+                                    {{$kaPercentage := printf "%.2f" (mul (div $kaScore $kaExpected) 100)}}
                                     {{$kaStrokeColor := "#dc3545"}}
                                     {{$kaStatusText := "Needs Improvement"}}
                                     {{$kaProgress := div $kaScore $kaExpected}}

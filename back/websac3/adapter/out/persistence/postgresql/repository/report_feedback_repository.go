@@ -178,6 +178,9 @@ func (r *ReportFeedbackRepository) GetWithFilters(filters map[string]interface{}
 	query := dbCtx.DB().Model(&model.ReportFeedback{}).
 		Preload("Report").
 		Preload("Report.DegreeProgram").
+		Preload("Report.DegreeProgram.UserCreator").
+		Preload("Report.DegreeProgram.UserCreator.Person").
+		Preload("Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution").
 		Preload("Auditor").
 		Preload("Auditor.Person").
 		Preload("KnowledgeAreaFeedbacks").
@@ -185,7 +188,26 @@ func (r *ReportFeedbackRepository) GetWithFilters(filters map[string]interface{}
 
 	// Aplicar filtros
 	for key, value := range filters {
-		query = query.Where(key+" = ?", value)
+		if key == "Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.name.cont" {
+			query = query.Where("report_id IN (SELECT r.id FROM reports r JOIN degree_programs dp ON r.degree_program_id = dp.id JOIN users u ON dp.created_by = u.id JOIN people p ON u.person_id = p.id JOIN higher_education_institutions hei ON p.higher_education_institution_snies = hei.snies WHERE hei.name ILIKE ?)", "%"+value.(string)+"%")
+		} else if key == "Report.DegreeProgram.UserCreator.Person.HigherEducationInstitution.name.eq" {
+			query = query.Where("report_id IN (SELECT r.id FROM reports r JOIN degree_programs dp ON r.degree_program_id = dp.id JOIN users u ON dp.created_by = u.id JOIN people p ON u.person_id = p.id JOIN higher_education_institutions hei ON p.higher_education_institution_snies = hei.snies WHERE hei.name = ?)", value)
+		} else if key == "Report.DegreeProgram.name.cont" {
+			query = query.Where("report_id IN (SELECT r.id FROM reports r JOIN degree_programs dp ON r.degree_program_id = dp.id WHERE dp.name ILIKE ?)", "%"+value.(string)+"%")
+		} else if key == "Report.DegreeProgram.name.eq" {
+			query = query.Where("report_id IN (SELECT r.id FROM reports r JOIN degree_programs dp ON r.degree_program_id = dp.id WHERE dp.name = ?)", value)
+		} else if key == "Auditor.Person.name.cont" {
+			query = query.Where("auditor_id IN (SELECT u.id FROM users u JOIN people p ON u.person_id = p.id WHERE p.name ILIKE ?)", "%"+value.(string)+"%")
+		} else if key == "Auditor.Person.name.eq" {
+			query = query.Where("auditor_id IN (SELECT u.id FROM users u JOIN people p ON u.person_id = p.id WHERE p.name = ?)", value)
+		} else if key == "Auditor.Person.lastname.cont" {
+			query = query.Where("auditor_id IN (SELECT u.id FROM users u JOIN people p ON u.person_id = p.id WHERE p.lastname ILIKE ?)", "%"+value.(string)+"%")
+		} else if key == "Auditor.Person.lastname.eq" {
+			query = query.Where("auditor_id IN (SELECT u.id FROM users u JOIN people p ON u.person_id = p.id WHERE p.lastname = ?)", value)
+		} else {
+			// Filtro por defecto (igualdad)
+			query = query.Where(key+" = ?", value)
+		}
 	}
 
 	// Contar total
