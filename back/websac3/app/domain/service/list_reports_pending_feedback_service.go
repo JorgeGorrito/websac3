@@ -6,6 +6,7 @@ import (
 	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
 	"websac3/app/port/out/persistence/db"
+	"websac3/common/filter"
 	"websac3/common/paginator"
 )
 
@@ -30,13 +31,13 @@ func NewListReportsPendingFeedbackService(
 	}
 }
 
-func (s *ListReportsPendingFeedbackService) Execute(auditorID uint, paginationParams paginator.PaginationParams, lang string) ([]entity.Report, uint, error) {
+func (s *ListReportsPendingFeedbackService) Execute(auditorID uint, paginationParams paginator.PaginationParams, filters filter.Params, sortBy, sortOrder, lang string) ([]entity.Report, uint, error) {
 	var reports []entity.Report = make([]entity.Report, 0)
 	var total uint
 	err := s.persistenceManager.ExecuteInTransaction(func(ctx db.Context) error {
 		// Obtener reportes que no tienen feedback
 		var err error
-		reports, total, err = s.listReportsPendingFeedbackPort.GetReportsWithoutFeedback(paginationParams, ctx)
+		reports, total, err = s.listReportsPendingFeedbackPort.GetReportsWithoutFeedback(paginationParams, filters, sortBy, sortOrder, ctx)
 		if err != nil {
 			reports = nil
 			return err

@@ -1,9 +1,12 @@
 package repository
 
 import (
+	"fmt"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
 	_db "websac3/app/port/out/persistence/db"
+	psqlfilter "websac3/app/port/out/persistence/filter"
+	"websac3/common/filter"
 	"websac3/common/mapper"
 	"websac3/common/paginator"
 )
@@ -239,7 +242,7 @@ func (r *ReportFeedbackRepository) GetWithFilters(filters map[string]interface{}
 }
 
 // GetReportsWithoutFeedback implements ListReportsPendingFeedbackPort
-func (r *ReportFeedbackRepository) GetReportsWithoutFeedback(paginationParams paginator.PaginationParams, ctx _db.Context) ([]entity.Report, uint, error) {
+func (r *ReportFeedbackRepository) GetReportsWithoutFeedback(paginationParams paginator.PaginationParams, filters filter.Params, sortBy, sortOrder string, ctx _db.Context) ([]entity.Report, uint, error) {
 	dbCtx, err := r.CastDbContext(ctx)
 	if err != nil {
 		return nil, 0, err
@@ -258,6 +261,54 @@ func (r *ReportFeedbackRepository) GetReportsWithoutFeedback(paginationParams pa
 		Preload("DegreeProgram.UserCreator.Person.HigherEducationInstitution").
 		Preload("ProfessionalRole").
 		Where("id NOT IN (?)", subQuery)
+
+	// Transformar filtros
+	psqlfilter := filter.Transform(filters, []psqlfilter.Operator{psqlfilter.EqualOperator, psqlfilter.ContainsOperator})
+
+	// Aplicar filtros
+	for _, f := range psqlfilter {
+		key := f.Field + "." + string(f.Operator)
+		if key == "DegreeProgram.UserCreator.Person.HigherEducationInstitution.name.cont" {
+			query = query.Where("id IN (SELECT r.id FROM reports r JOIN degree_programs dp ON r.degree_program_id = dp.id JOIN users u ON dp.created_by = u.id JOIN people p ON u.person_id = p.id JOIN higher_education_institutions hei ON p.higher_education_institution_snies = hei.snies WHERE hei.name ILIKE ?)", "%"+f.Value.(string)+"%")
+		} else if key == "DegreeProgram.UserCreator.Person.HigherEducationInstitution.name.eq" {
+			query = query.Where("id IN (SELECT r.id FROM reports r JOIN degree_programs dp ON r.degree_program_id = dp.id JOIN users u ON dp.created_by = u.id JOIN people p ON u.person_id = p.id JOIN higher_education_institutions hei ON p.higher_education_institution_snies = hei.snies WHERE hei.name = ?)", f.Value)
+		} else if key == "DegreeProgram.UserCreator.Person.HigherEducationInstitution.snies.eq" {
+			query = query.Where("id IN (SELECT r.id FROM reports r JOIN degree_programs dp ON r.degree_program_id = dp.id JOIN users u ON dp.created_by = u.id JOIN people p ON u.person_id = p.id JOIN higher_education_institutions hei ON p.higher_education_institution_snies = hei.snies WHERE hei.snies = ?)", f.Value)
+		} else if key == "DegreeProgram.UserCreator.Person.HigherEducationInstitution.snies.cont" {
+			// Convertir el valor a string de forma segura
+			var searchValue string
+			switch v := f.Value.(type) {
+			case string:
+				searchValue = v
+			case int:
+				searchValue = fmt.Sprintf("%d", v)
+			case int64:
+				searchValue = fmt.Sprintf("%d", v)
+			case float64:
+				searchValue = fmt.Sprintf("%.0f", v)
+			default:
+				searchValue = fmt.Sprintf("%v", v)
+			}
+			query = query.Where("id IN (SELECT r.id FROM reports r JOIN degree_programs dp ON r.degree_program_id = dp.id JOIN users u ON dp.created_by = u.id JOIN people p ON u.person_id = p.id JOIN higher_education_institutions hei ON p.higher_education_institution_snies = hei.snies WHERE CAST(hei.snies AS TEXT) ILIKE ?)", "%"+searchValue+"%")
+		} else {
+			// Para otros filtros que no sean de institución educativa, usar el campo directamente
+			query = query.Where(f.Field+" = ?", f.Value)
+		}
+	}
+
+	// Aplicar ordenamiento
+	if sortBy != "" {
+		orderClause := sortBy
+		if sortOrder == "desc" {
+			orderClause += " DESC"
+		} else {
+			orderClause += " ASC"
+		}
+		query = query.Order(orderClause)
+	} else {
+		// Ordenamiento por defecto: fecha de creación descendente
+		query = query.Order("created_at DESC")
+	}
 
 	// Contar total
 	var total int64

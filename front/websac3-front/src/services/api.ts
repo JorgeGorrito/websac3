@@ -1066,11 +1066,40 @@ export const api = createApi({
         current_page: number;
         total_count: number;
       },
-      { page?: number; limit?: number }
+      { 
+        current_page?: number; 
+        items_per_page?: number; 
+        sort_by?: string;
+        sort_order?: string;
+        filters?: Record<string, string>;
+        lang?: string;
+      }
     >({
-      query: ({ page = 1, limit = 10 } = {}) => ({
-        url: `/report-feedbacks/pending-reports?page=${page}&limit=${limit}`,
-      }),
+      query: ({ 
+        current_page = 1, 
+        items_per_page = 10, 
+        sort_by = 'created_at',
+        sort_order = 'desc',
+        filters,
+        lang = 'es'
+      } = {}) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        params.set("sort_by", sort_by);
+        params.set("sort_order", sort_order);
+        params.set("lang", lang);
+        
+        if (filters) {
+          Object.entries(filters).forEach(([key, value]) => {
+            if (value && value.trim()) {
+              params.set(key, value.trim());
+            }
+          });
+        }
+        
+        return { url: `/report-feedbacks/pending-reports?${params.toString()}` };
+      },
       transformResponse: (response: ApiResponse<{
         data: Array<{
           id: number;

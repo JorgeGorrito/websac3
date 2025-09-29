@@ -9,6 +9,8 @@ import (
 	"websac3/app/port/in/dto/query"
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/message"
+	psqlfilter "websac3/app/port/out/persistence/filter"
+	"websac3/common/filter"
 	"websac3/common/logging"
 	"websac3/common/mapper"
 	"websac3/common/paginator"
@@ -21,6 +23,7 @@ type ListReportsPendingFeedbackQueryHandler struct {
 	logger                            logging.Logger
 	listReportsPendingFeedbackUseCase usecase.ListReportsPendingFeedbackUseCase
 	msgProvider                       message.Provider
+	validFilters                      []string
 }
 
 func NewListReportsPendingFeedbackQueryHandler(
@@ -37,6 +40,10 @@ func NewListReportsPendingFeedbackQueryHandler(
 		logger:                            logger,
 		listReportsPendingFeedbackUseCase: listReportsPendingFeedbackUseCase,
 		msgProvider:                       msgProvider,
+		validFilters: []string{
+			"DegreeProgram.UserCreator.Person.HigherEducationInstitution.name",
+			"DegreeProgram.UserCreator.Person.HigherEducationInstitution.snies",
+		},
 	}
 }
 
@@ -69,8 +76,12 @@ func (h *ListReportsPendingFeedbackQueryHandler) Handle(req query.ListReportsPen
 		}, nil
 	}
 
+	// Validar y limpiar filtros
+	transformedFilters := filter.Transform(req.Filters, []psqlfilter.Operator{psqlfilter.EqualOperator, psqlfilter.ContainsOperator})
+	transformedFilters.Purge(h.validFilters)
+
 	// Ejecutar caso de uso
-	reports, total, err := h.listReportsPendingFeedbackUseCase.Execute(req.UserID, req.PaginationParams, lang)
+	reports, total, err := h.listReportsPendingFeedbackUseCase.Execute(req.UserID, req.PaginationParams, req.Filters, req.SortBy, req.SortOrder, lang)
 	if err != nil {
 		h.logger.Error("Error al obtener reportes pendientes: %v", err)
 		return response.ApiResponse[paginator.Page[response.ReportResponse]]{

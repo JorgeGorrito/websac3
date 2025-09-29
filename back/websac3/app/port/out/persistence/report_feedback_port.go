@@ -3,6 +3,7 @@ package persistence
 import (
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/persistence/db"
+	"websac3/common/filter"
 	"websac3/common/paginator"
 )
 
@@ -24,5 +25,5 @@ type ListReportFeedbacksPort interface {
 }
 
 type ListReportsPendingFeedbackPort interface {
-	GetReportsWithoutFeedback(paginationParams paginator.PaginationParams, ctx db.Context) ([]entity.Report, uint, error)
+	GetReportsWithoutFeedback(paginationParams paginator.PaginationParams, filters filter.Params, sortBy, sortOrder string, ctx db.Context) ([]entity.Report, uint, error)
 }
