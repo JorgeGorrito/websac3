@@ -33,4 +33,70 @@ func RegisterExpertConsultationDependencies(m *manager) {
 			)
 		},
 	)
+
+	// Get Expert Consultation Port
+	m.binder.Bind(
+		andi.GetAbstractType[persistence.GetExpertConsultationPort](),
+		func() any {
+			return repository.NewExpertConsultationRepository()
+		},
+	)
+
+	// List User Expert Consultations Use Case
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.ListUserExpertConsultationsUseCase](),
+		func() any {
+			return service.NewListUserExpertConsultationsService(
+				container.Inject[persistence.GetExpertConsultationPort](),
+				container.Inject[db.Manager](),
+				container.Inject[message.Provider](),
+			)
+		},
+	)
+
+	// List Pending Expert Consultations Use Case
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.ListPendingExpertConsultationsUseCase](),
+		func() any {
+			return service.NewListPendingExpertConsultationsService(
+				container.Inject[persistence.GetExpertConsultationPort](),
+				container.Inject[db.Manager](),
+				container.Inject[message.Provider](),
+			)
+		},
+	)
+
+	// Update Expert Consultation Port
+	m.binder.Bind(
+		andi.GetAbstractType[persistence.UpdateExpertConsultationPort](),
+		func() any {
+			return repository.NewExpertConsultationRepository()
+		},
+	)
+
+	// Accept Expert Consultation Use Case
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.AcceptExpertConsultationUseCase](),
+		func() any {
+			return service.NewAcceptExpertConsultationService(
+				container.Inject[persistence.GetExpertConsultationPort](),
+				container.Inject[persistence.UpdateExpertConsultationPort](),
+				container.Inject[message.Provider](),
+				container.Inject[db.Manager](),
+			)
+		},
+	)
+
+	// Reject Expert Consultation Use Case
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.RejectExpertConsultationUseCase](),
+		func() any {
+			return service.NewRejectExpertConsultationService(
+				container.Inject[persistence.GetExpertConsultationPort](),
+				container.Inject[persistence.UpdateExpertConsultationPort](),
+				container.Inject[message.Provider](),
+				container.Inject[db.Manager](),
+			)
+		},
+	)
 }

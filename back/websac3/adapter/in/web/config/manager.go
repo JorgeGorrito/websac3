@@ -108,6 +108,18 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(query.ListUserAccessRequestsQuery{}),
+		qhandler.NewListUserAccessRequestsQueryHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.ListUserAccessRequestsUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(command.ApproveAccessRequestCommand{}),
 		chandler.NewApproveAccessRequestCommandHandler(
 			container.Inject[usecase.ApproveAccessRequestUseCase](),
@@ -473,6 +485,66 @@ func (m *manager) ConfigureMediator(errorList *error) {
 			container.Inject[message.Provider](),
 			container.Inject[logging.Logger](),
 			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.ListUserExpertConsultationsQuery{}),
+		qhandler.NewListUserExpertConsultationsQueryHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.ListUserExpertConsultationsUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.CreateExpertConsultationCommand{}),
+		chandler.NewCreateExpertConsultationCommandHandler(
+			container.Inject[usecase.CreateExpertConsultationUseCase](),
+			container.Inject[validator.Validator](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.ListPendingExpertConsultationsQuery{}),
+		qhandler.NewListPendingExpertConsultationsQueryHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.ListPendingExpertConsultationsUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.AcceptExpertConsultationCommand{}),
+		chandler.NewAcceptExpertConsultationCommandHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.AcceptExpertConsultationUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.RejectExpertConsultationCommand{}),
+		chandler.NewRejectExpertConsultationCommandHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.RejectExpertConsultationUseCase](),
+			container.Inject[message.Provider](),
 		),
 	); err != nil {
 		*errorList = errors.Join(*errorList, err)

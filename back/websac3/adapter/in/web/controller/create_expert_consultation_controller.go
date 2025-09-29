@@ -53,6 +53,10 @@ func (c *CreateExpertConsultationController) CreateExpertConsultation(context *g
 
 	lang := context.Param("lang")
 
-	result, _ := mediator.Send[command.CreateExpertConsultationCommand, response.ApiResponse[string]](createExpertConsultationCommand, lang)
+	result, err := mediator.Send[command.CreateExpertConsultationCommand, response.ApiResponse[string]](createExpertConsultationCommand, lang)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	context.JSON(result.HttpStatusCode, result.ToResponseFormat())
 }

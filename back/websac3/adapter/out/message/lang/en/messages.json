@@ -105,6 +105,25 @@
     "not_found": "No access requests found.",
     "access_requests_listed": "Access requests listed successfully."
   },
+  "list_user_access_requests": {
+    "not_found": "No access requests found for this user."
+  },
+    "list_user_expert_consultations": {
+        "not_found": "No expert consultation requests found for this user."
+    },
+    "list_pending_expert_consultations": {
+        "not_found": "No pending expert consultation requests found."
+    },
+    "accept_expert_consultation": {
+        "success": "Expert consultation request accepted successfully.",
+        "not_pending": "The expert consultation request is not in pending status.",
+        "already_assigned": "The expert consultation request already has an expert assigned."
+    },
+    "reject_expert_consultation": {
+        "success": "Expert consultation request rejected successfully.",
+        "not_pending": "The expert consultation request is not in pending status.",
+        "already_assigned": "The expert consultation request already has an expert assigned."
+    },
   "list_users": {
     "not_found": "No users found."
   },

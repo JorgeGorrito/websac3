@@ -4,6 +4,8 @@ import (
 	"websac3/app/domain/entity"
 	"websac3/app/port/out/persistence/db"
 	"websac3/app/port/out/persistence/filter"
+	commonfilter "websac3/common/filter"
+	"websac3/common/paginator"
 )
 
 type GetAccessRequestPort interface {
@@ -12,4 +14,5 @@ type GetAccessRequestPort interface {
 	GetLastCreatedByIdentificationAndEmail(identificationTypeID uint, identificationNumber string, email string, db db.Context) (entity.AccessRequest, error)
 	GetUnvalidatedEmailByToken(validationToken string, db db.Context) (entity.AccessRequest, error)
 	GetByCreateUserToken(createUserToken string, db db.Context) (entity.AccessRequest, error)
+	GetByUserID(userID uint, paginationParams paginator.PaginationParams, filters commonfilter.Params, ctx db.Context) ([]entity.AccessRequest, uint, error)
 }

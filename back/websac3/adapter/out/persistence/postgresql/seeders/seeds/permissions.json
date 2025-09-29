@@ -113,5 +113,15 @@
         "id": 23,
         "module_id": 12,
         "action_id": 5
+    },
+    {
+        "id": 24,
+        "module_id": 4,
+        "action_id": 1
+    },
+    {
+        "id": 25,
+        "module_id": 4,
+        "action_id": 5
     }
 ]

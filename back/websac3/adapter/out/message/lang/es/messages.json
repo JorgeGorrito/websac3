@@ -100,6 +100,25 @@
     "not_found" : "No se encontraron solicitudes de acceso.",
     "access_requests_listed" : "Solicitudes de acceso listadas correctamente."
   },
+  "list_user_access_requests" : {
+    "not_found" : "No se encontraron solicitudes de acceso para este usuario."
+  },
+    "list_user_expert_consultations" : {
+        "not_found" : "No se encontraron solicitudes de asesoría para este usuario."
+    },
+    "list_pending_expert_consultations" : {
+        "not_found" : "No se encontraron solicitudes de asesoría pendientes."
+    },
+    "accept_expert_consultation" : {
+        "success" : "Solicitud de asesoría aceptada exitosamente.",
+        "not_pending" : "La solicitud de asesoría no está en estado pendiente.",
+        "already_assigned" : "La solicitud de asesoría ya tiene un experto asignado."
+    },
+    "reject_expert_consultation" : {
+        "success" : "Solicitud de asesoría rechazada exitosamente.",
+        "not_pending" : "La solicitud de asesoría no está en estado pendiente.",
+        "already_assigned" : "La solicitud de asesoría ya tiene un experto asignado."
+    },
   "list_users" : {
     "not_found" : "No se encontraron usuarios."
   },

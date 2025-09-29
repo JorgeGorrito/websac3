@@ -142,7 +142,6 @@ func registerAccessRequestMappers() {
 	})
 
 	RegisterMapFunc(func(accessRequest *entity.AccessRequest) (response.ListAccessRequestResponse, error) {
-		var errorList error
 		var listAccessRequestResponse response.ListAccessRequestResponse = response.ListAccessRequestResponse{
 			ID:                                  accessRequest.ID,
 			Name:                                accessRequest.Applicant.Name,
@@ -158,10 +157,6 @@ func registerAccessRequestMappers() {
 			DepartmentName:                      accessRequest.Applicant.HigherEducationInstitution.Department.Name,
 			StatusID:                            accessRequest.Status.ID,
 			StatusName:                          accessRequest.Status.Name,
-		}
-
-		if errorList != nil {
-			return response.ListAccessRequestResponse{}, errorList
 		}
 
 		return listAccessRequestResponse, nil
@@ -321,5 +316,57 @@ func registerAccessRequestMappers() {
 			StatusName:       statusName,
 			CreatedAt:        createdAt,
 		}, nil
+	})
+
+	RegisterMapFunc(func(accessRequest *entity.AccessRequest) (response.UserAccessRequestResponse, error) {
+		var errorList error
+		var userAccessRequestResponse response.UserAccessRequestResponse = response.UserAccessRequestResponse{
+			ID:                   accessRequest.ID,
+			Name:                 accessRequest.Applicant.Name,
+			Lastname:             accessRequest.Applicant.Lastname,
+			IdentificationNumber: accessRequest.Applicant.IdentificationNumber,
+			JobPosition:          accessRequest.Applicant.JobPosition,
+			IsVerified:           accessRequest.IsVerified,
+			CreatedAt:            accessRequest.CreatedAt.Format("2006-01-02T15:04:05Z"),
+		}
+
+		// Mapear email
+		if accessRequest.EmailValidation != nil {
+			userAccessRequestResponse.Email = accessRequest.EmailValidation.To
+		}
+
+		// Mapear tipo de identificación
+		if accessRequest.Applicant.IdentificationType != nil {
+			userAccessRequestResponse.IdentificationType = accessRequest.Applicant.IdentificationType.Name
+		}
+
+		// Mapear institución de educación superior
+		if accessRequest.Applicant.HigherEducationInstitution != nil {
+			userAccessRequestResponse.HigherEducationInstitutionSnies = accessRequest.Applicant.HigherEducationInstitution.Snies
+			userAccessRequestResponse.HigherEducationInstitutionName = accessRequest.Applicant.HigherEducationInstitution.Name
+
+			// Mapear ownership
+			if accessRequest.Applicant.HigherEducationInstitution.Ownership != nil {
+				userAccessRequestResponse.HigherEducationInstitutionOwnership = accessRequest.Applicant.HigherEducationInstitution.Ownership.Name
+			}
+
+			// Mapear municipio y departamento
+			if accessRequest.Applicant.HigherEducationInstitution.Municipality != nil {
+				userAccessRequestResponse.MunicipalityName = accessRequest.Applicant.HigherEducationInstitution.Municipality.Name
+			}
+
+			// Mapear departamento directamente desde la institución
+			if accessRequest.Applicant.HigherEducationInstitution.Department != nil {
+				userAccessRequestResponse.DepartmentName = accessRequest.Applicant.HigherEducationInstitution.Department.Name
+			}
+		}
+
+		// Mapear estado
+		if accessRequest.Status != nil {
+			userAccessRequestResponse.StatusID = accessRequest.Status.ID
+			userAccessRequestResponse.StatusName = accessRequest.Status.Name
+		}
+
+		return userAccessRequestResponse, errorList
 	})
 }

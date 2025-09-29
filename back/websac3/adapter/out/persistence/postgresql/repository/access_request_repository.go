@@ -9,7 +9,9 @@ import (
 	_db "websac3/app/port/out/persistence/db"
 	"websac3/app/port/out/persistence/enum"
 	"websac3/app/port/out/persistence/filter"
+	commonfilter "websac3/common/filter"
 	"websac3/common/mapper"
+	"websac3/common/paginator"
 
 	"gorm.io/gorm"
 )
@@ -330,6 +332,73 @@ func (a *AccessRequestRepository) GetApprovedByFilters(
 	}
 
 	return results, count, nil
+}
+
+// GetByUserID obtiene las solicitudes de acceso de un usuario específico
+func (a *AccessRequestRepository) GetByUserID(userID uint, paginationParams paginator.PaginationParams, filters commonfilter.Params, ctx _db.Context) ([]entity.AccessRequest, uint, error) {
+	dbCtx, err := a.CastDbContext(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	// Query base para obtener solicitudes del usuario
+	query := dbCtx.DB().Model(&model.AccessRequest{}).
+		Joins("Applicant").
+		Joins("Applicant.IdentificationType").
+		Joins("Applicant.HigherEducationInstitution").
+		Joins("Applicant.HigherEducationInstitution.Municipality").
+		Joins("Applicant.HigherEducationInstitution.Department").
+		Joins("Status").
+		Joins("VerificationEmail").
+		Where("applicant_id = ?", userID)
+
+	// Transformar filtros
+	psqlfilter := commonfilter.Transform(filters, []filter.Operator{filter.EqualOperator, filter.ContainsOperator})
+
+	// Aplicar filtros
+	for _, f := range psqlfilter {
+		key := f.Field + "." + string(f.Operator)
+		if key == "Status.name.eq" {
+			query = query.Where("status_id IN (SELECT id FROM statuses WHERE name = ?)", f.Value)
+		} else if key == "Status.name.cont" {
+			query = query.Where("status_id IN (SELECT id FROM statuses WHERE name ILIKE ?)", "%"+f.Value.(string)+"%")
+		} else if key == "Applicant.HigherEducationInstitution.name.cont" {
+			query = query.Where("applicant_id IN (SELECT id FROM people WHERE higher_education_institution_snies IN (SELECT snies FROM higher_education_institutions WHERE name ILIKE ?))", "%"+f.Value.(string)+"%")
+		} else if key == "Applicant.HigherEducationInstitution.name.eq" {
+			query = query.Where("applicant_id IN (SELECT id FROM people WHERE higher_education_institution_snies IN (SELECT snies FROM higher_education_institutions WHERE name = ?))", f.Value)
+		} else {
+			query = query.Where(f.Field+" = ?", f.Value)
+		}
+	}
+
+	// Contar total
+	var total int64
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Aplicar paginación y ordenamiento
+	var accessRequests []model.AccessRequest
+	if err := query.
+		Order("created_at DESC").
+		Offset(int((paginationParams.Currentpage - 1) * paginationParams.ItemsPerpage)).
+		Limit(int(paginationParams.ItemsPerpage)).
+		Find(&accessRequests).
+		Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Mapear a entidades
+	var results []entity.AccessRequest
+	for _, accessRequest := range accessRequests {
+		var accessRequestEntity entity.AccessRequest
+		if accessRequestEntity, err = mapper.Map[model.AccessRequest, entity.AccessRequest](&accessRequest); err != nil {
+			return nil, 0, err
+		}
+		results = append(results, accessRequestEntity)
+	}
+
+	return results, uint(total), nil
 }
 
 func (a *AccessRequestRepository) GetRejectedByFilters(

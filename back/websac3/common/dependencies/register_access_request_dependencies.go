@@ -131,4 +131,15 @@ func (m *manager) registerAccessRequestDependencies() {
 			)
 		},
 	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.ListUserAccessRequestsUseCase](),
+		func() any {
+			return service.NewListUserAccessRequestsService(
+				container.Inject[persistence.GetAccessRequestPort](),
+				container.Inject[db.Manager](),
+				container.Inject[message.Provider](),
+			)
+		},
+	)
 }
