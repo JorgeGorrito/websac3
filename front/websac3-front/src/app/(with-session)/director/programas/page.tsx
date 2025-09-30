@@ -336,14 +336,14 @@ export default function ProgramasPage() {
                     icon: BookOpen,
                     variant: "outline",
                     className: "flex-1 border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-400 transition-all duration-200",
-                    onClick: () => router.push(`/director/cursos/${program.id}`)
+                    onClick: () => router.push(`/director/programas/${program.id}`)
                   },
                   {
                     label: "Editar",
                     icon: Target,
                     variant: "outline",
                     className: "flex-1 border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 transition-all duration-200",
-                    onClick: () => router.push(`/director/cursos/${program.id}/editar`)
+                    onClick: () => router.push(`/director/editar-programa/${program.id}`)
                   }
                 ];
 

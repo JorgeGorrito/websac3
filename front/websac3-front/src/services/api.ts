@@ -139,6 +139,20 @@ export type CreateDegreeProgramRequest = {
   total_credits: number;
 };
 
+export type UpdateDegreeProgramRequest = {
+  duration_unit_id: number;
+  duration_value: number;
+  entry_profile: string;
+  formation_level_id: number;
+  graduate_profile: string;
+  name: string;
+  professional_profile: string;
+  program_focus: string;
+  professional_role_ids: number[];
+  snies: number;
+  total_credits: number;
+};
+
 export type ProfessionalRoleItem = {
   id: number;
   name: string;
@@ -528,8 +542,8 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
     // Try both 'Errors' (capital E) and 'errors' (lowercase e) for compatibility
     const errorsArray = errorData.Errors || errorData.errors;
     
-    if (errorsArray && Array.isArray(errorsArray) && errorsArray.length > 0) {
-      const errorDetails = errorsArray;
+    if (errorsArray && Array.isArray(errorsArray) && errorsArray.length > 0 && errorsArray.some(error => error && error.trim() !== "")) {
+      const errorDetails = errorsArray.filter(error => error && error.trim() !== "");
       const errorMessage = errorDetails[0];
       const statusCode = typeof result.error.status === 'number' ? result.error.status : undefined;
       
@@ -778,6 +792,13 @@ export const api = createApi({
     createDegreeProgram: builder.mutation<ApiResponse<string>, CreateDegreeProgramRequest>({
       query: (body) => ({ url: "/degree-program", method: "POST", body }),
       invalidatesTags: [{ type: "DegreeProgram", id: "LIST" }],
+    }),
+    updateDegreeProgram: builder.mutation<ApiResponse<string>, { degree_program_id: number; body: UpdateDegreeProgramRequest }>({
+      query: ({ degree_program_id, body }) => ({ url: `/degree-program/${degree_program_id}`, method: "PUT", body }),
+      invalidatesTags: (result, error, { degree_program_id }) => [
+        { type: "DegreeProgram", id: degree_program_id },
+        { type: "DegreeProgram", id: "LIST" },
+      ],
     }),
     // Topics
     listTopics: builder.query<
@@ -1086,6 +1107,124 @@ export const api = createApi({
       query: ({ lang = 'es' } = {}) => ({ url: `/expert-consultation-statuses` }),
       transformResponse: (response: ApiResponse<{
         data: ExpertConsultationStatus[];
+        current_page: number;
+        items_per_page: number;
+        total_count: number;
+      }>) => response.result,
+    }),
+
+    // Get Degree Program Detail
+    getDegreeProgram: builder.query<{
+      id: number;
+      name: string;
+      snies: number;
+      total_credits: number;
+      duration_value: number;
+      duration_unit: {
+        id: number;
+        name: string;
+      };
+      formation_level: {
+        id: number;
+        name: string;
+      };
+      entry_profile: string;
+      graduate_profile: string;
+      professional_profile: string;
+      program_focus: string;
+      higher_education_institution: {
+        name: string;
+        snies: number;
+        department: string;
+        municipality: string;
+        ownership: string;
+        institutional_category: string;
+      };
+      professional_roles: Array<{
+        id: number;
+        name: string;
+      }>;
+      created_at: string;
+      updated_at: string;
+      created_by: number;
+    }, { degree_program_id: number; lang?: string }>({
+      query: ({ degree_program_id, lang = 'es' }) => ({ url: `/degree-program/${degree_program_id}` }),
+      transformResponse: (response: ApiResponse<{
+        id: number;
+        name: string;
+        snies: number;
+        total_credits: number;
+        duration_value: number;
+        duration_unit: {
+          id: number;
+          name: string;
+        };
+        formation_level: {
+          id: number;
+          name: string;
+        };
+        entry_profile: string;
+        graduate_profile: string;
+        professional_profile: string;
+        program_focus: string;
+        higher_education_institution: {
+          name: string;
+          snies: number;
+          department: string;
+          municipality: string;
+          ownership: string;
+          institutional_category: string;
+        };
+        professional_roles: Array<{
+          id: number;
+          name: string;
+        }>;
+        created_at: string;
+        updated_at: string;
+        created_by: number;
+      }>) => response.result,
+    }),
+
+    // Get Degree Program Courses
+    getDegreeProgramCourses: builder.query<{
+      data: Array<{
+        id: number;
+        code: string;
+        name: string;
+        credits: number;
+        period_number: number;
+        type_id: number;
+        nature_id: number;
+        is_cybersecurity: boolean;
+        contains_cybersecurity_topics: boolean;
+        nature_name: string;
+        type_name: string;
+        degree_program_name: string;
+        created_by: number;
+        creator_name: string;
+      }>;
+      current_page: number;
+      items_per_page: number;
+      total_count: number;
+    }, { degree_program_id: number; lang?: string }>({
+      query: ({ degree_program_id, lang = 'es' }) => ({ url: `/degree-program/${degree_program_id}/courses` }),
+      transformResponse: (response: ApiResponse<{
+        data: Array<{
+          id: number;
+          code: string;
+          name: string;
+          credits: number;
+          period_number: number;
+          type_id: number;
+          nature_id: number;
+          is_cybersecurity: boolean;
+          contains_cybersecurity_topics: boolean;
+          nature_name: string;
+          type_name: string;
+          degree_program_name: string;
+          created_by: number;
+          creator_name: string;
+        }>;
         current_page: number;
         items_per_page: number;
         total_count: number;
@@ -1525,6 +1664,7 @@ export const {
   useListProfessionalRolesQuery,
   useListDegreeProgramsQuery,
   useCreateDegreeProgramMutation,
+  useUpdateDegreeProgramMutation,
   // topics
   useListTopicsQuery,
   // course types and natures
@@ -1564,6 +1704,9 @@ export const {
   // expert consultation
   useListUserExpertConsultationsQuery,
   useListPendingExpertConsultationsQuery,
+  // degree program detail
+  useGetDegreeProgramQuery,
+  useGetDegreeProgramCoursesQuery,
 } = api;
 
 

@@ -20,9 +20,15 @@ export function ProgramFormationLevelSelect({
 }: ProgramFormationLevelSelectProps) {
   const { data: formationLevels, isLoading, error } = useListFormationLevelsQuery();
 
+  // Determine the current value to display
+  const currentValue = value || defaultValue;
+  
+  // Find the selected level for display
+  const selectedLevel = formationLevels?.find(level => level.id.toString() === currentValue);
+
   if (isLoading) {
     return (
-      <Select disabled>
+      <Select disabled value={currentValue}>
         <SelectTrigger id={id}>
           <SelectValue placeholder="Cargando..." />
         </SelectTrigger>
@@ -32,7 +38,7 @@ export function ProgramFormationLevelSelect({
 
   if (error) {
     return (
-      <Select disabled>
+      <Select disabled value={currentValue}>
         <SelectTrigger id={id}>
           <SelectValue placeholder="Error al cargar" />
         </SelectTrigger>
@@ -42,12 +48,13 @@ export function ProgramFormationLevelSelect({
 
   return (
     <Select 
-      defaultValue={defaultValue} 
-      value={value} 
+      value={currentValue} 
       onValueChange={onValueChange}
     >
       <SelectTrigger id={id}>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={placeholder}>
+          {selectedLevel ? selectedLevel.name : placeholder}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {formationLevels?.map((level) => (

@@ -12,9 +12,15 @@ type ProgramPeriodicitySelectProps = {
 export function ProgramPeriodicitySelect({ id, placeholder = "Seleccionar", defaultValue, value, onValueChange }: ProgramPeriodicitySelectProps) {
   const { data: durationUnits, isLoading, error } = useListDurationUnitsQuery();
 
+  // Determine the current value to display
+  const currentValue = value || defaultValue;
+  
+  // Find the selected unit for display
+  const selectedUnit = durationUnits?.find(unit => unit.id.toString() === currentValue);
+
   if (isLoading) {
     return (
-      <Select disabled>
+      <Select disabled value={currentValue}>
         <SelectTrigger id={id} className="h-10">
           <SelectValue placeholder="Cargando..." />
         </SelectTrigger>
@@ -24,7 +30,7 @@ export function ProgramPeriodicitySelect({ id, placeholder = "Seleccionar", defa
 
   if (error) {
     return (
-      <Select disabled>
+      <Select disabled value={currentValue}>
         <SelectTrigger id={id} className="h-10">
           <SelectValue placeholder="Error al cargar" />
         </SelectTrigger>
@@ -33,9 +39,11 @@ export function ProgramPeriodicitySelect({ id, placeholder = "Seleccionar", defa
   }
 
   return (
-    <Select value={value} defaultValue={defaultValue} onValueChange={onValueChange}>
+    <Select value={currentValue} onValueChange={onValueChange}>
       <SelectTrigger id={id} className="h-10">
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={placeholder}>
+          {selectedUnit ? selectedUnit.name : placeholder}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {durationUnits?.map((unit) => (
