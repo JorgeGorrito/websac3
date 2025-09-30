@@ -125,6 +125,9 @@
   "list_users" : {
     "not_found" : "No se encontraron usuarios."
   },
+  "get_user_profile" : {
+    "user_not_found" : "No se encontró el perfil del usuario."
+  },
   "deactivate_user" : {
     "user_not_found" : "No se encontró el usuario especificado.",
     "user_already_deactivated" : "El usuario ya está desactivado.",

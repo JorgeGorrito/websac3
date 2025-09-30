@@ -491,6 +491,17 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(query.GetUserProfileQuery{}),
+		qhandler.NewGetUserProfileQueryHandler(
+			container.Inject[usecase.GetUserProfileUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(command.DeactivateUserCommand{}),
 		chandler.NewDeactivateUserCommandHandler(
 			container.Inject[usecase.DeactivateUserUseCase](),

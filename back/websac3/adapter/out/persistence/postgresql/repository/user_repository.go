@@ -146,6 +146,8 @@ func (u *UserRepository) GetByID(ID uint, ctx _db.Context) (entity.User, error) 
 		Model(&userFound).
 		Preload("Role.Permissions.Action").
 		Preload("Role.Permissions.Module").
+		Preload("Person.IdentificationType").
+		Preload("Person.HigherEducationInstitution").
 		Joins("Role").
 		Joins("Person").
 		Where("users.id = ?", ID).

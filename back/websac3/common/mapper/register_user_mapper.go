@@ -162,6 +162,40 @@ func registerUserMappers() {
 		},
 	)
 
+	RegisterMapFunc(
+		func(user *entity.User) (response.GetUserProfileResponse, error) {
+			profileResponse := response.GetUserProfileResponse{
+				ID:       user.ID,
+				Email:    user.Email,
+				IsActive: user.IsActive(),
+			}
+
+			if user.Person != nil {
+				profileResponse.Name = user.Person.Name
+				profileResponse.Lastname = user.Person.Lastname
+				profileResponse.IdentificationNumber = user.Person.IdentificationNumber
+				profileResponse.JobPosition = user.Person.JobPosition
+
+				if user.Person.IdentificationType != nil {
+					profileResponse.IdentificationTypeID = user.Person.IdentificationType.ID
+					profileResponse.IdentificationTypeName = user.Person.IdentificationType.Name
+				}
+
+				if user.Person.HigherEducationInstitution != nil {
+					profileResponse.InstitutionSnies = user.Person.HigherEducationInstitution.Snies
+					profileResponse.InstitutionName = user.Person.HigherEducationInstitution.Name
+				}
+			}
+
+			if user.Role != nil {
+				profileResponse.RoleID = user.Role.ID
+				profileResponse.RoleName = user.Role.Name
+			}
+
+			return profileResponse, nil
+		},
+	)
+
 	// Mappers para activate/deactivate user commands
 	RegisterMapFunc(func(input *UserActionInput) (command.DeactivateUserCommand, error) {
 		return command.DeactivateUserCommand{

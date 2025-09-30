@@ -130,6 +130,9 @@
   "list_users": {
     "not_found": "No users found."
   },
+  "get_user_profile": {
+    "user_not_found": "User profile not found."
+  },
   "deactivate_user": {
     "user_not_found": "The specified user was not found.",
     "user_already_deactivated": "The user is already deactivated.",

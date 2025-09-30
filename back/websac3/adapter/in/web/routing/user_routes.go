@@ -21,10 +21,19 @@ func registerActivateUserRoute(routerGroup *gin.RouterGroup) {
 	routerGroup.PUT("/:user_id/activate", activateUserController.Handle)
 }
 
+func registerGetUserProfileRoute(routerGroup *gin.RouterGroup) {
+	getUserProfileController := controller.GetGetUserProfileController()
+	routerGroup.GET("/profile", getUserProfileController.GetUserProfile)
+}
+
 func RegisterUserRoutes(routerGroup *gin.RouterGroup) {
 	userGroup := routerGroup.Group("/users")
 	authGroup := getAuthRequiredGroup(userGroup)
 	registerListUsersRoute(authGroup)
 	registerDeactivateUserRoute(authGroup)
 	registerActivateUserRoute(authGroup)
+
+	// Profile route at root level (not under /users)
+	authGroupRoot := getAuthRequiredGroup(routerGroup)
+	registerGetUserProfileRoute(authGroupRoot)
 }
