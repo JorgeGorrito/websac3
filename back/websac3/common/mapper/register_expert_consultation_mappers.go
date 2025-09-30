@@ -14,18 +14,30 @@ func registerExpertConsultationMappers() {
 	// Registrar mapper de ExpertConsultationStatus primero
 	RegisterMapFunc(func(expertConsultationStatus *model.ExpertConsultationStatus) (entity.ExpertConsultationStatus, error) {
 		var name string
+		var names []entity.ExpertConsultationStatusName
+
 		if len(expertConsultationStatus.Names) > 0 {
 			name = expertConsultationStatus.Names[0].Name
+			// Mapear todos los nombres
+			for _, statusName := range expertConsultationStatus.Names {
+				names = append(names, entity.ExpertConsultationStatusName{
+					ID:   statusName.ID,
+					Lang: statusName.Lang,
+					Name: statusName.Name,
+				})
+			}
 		}
+
 		return entity.ExpertConsultationStatus{
-			ID:   expertConsultationStatus.ID,
-			Name: name,
+			ID:    expertConsultationStatus.ID,
+			Name:  name,
+			Names: names,
 		}, nil
 	})
 
 	RegisterMapFunc(func(createExpertConsultationRequest *request.CreateExpertConsultationRequest) (command.CreateExpertConsultationCommand, error) {
 		return command.CreateExpertConsultationCommand{
-			RequesterID:     createExpertConsultationRequest.RequesterID,
+			// RequesterID se asigna en el controlador desde el token JWT
 			DegreeProgramID: createExpertConsultationRequest.DegreeProgramID,
 			ReportID:        createExpertConsultationRequest.ReportID,
 			RequestMessage:  createExpertConsultationRequest.RequestMessage,
@@ -225,12 +237,12 @@ func registerExpertConsultationMappers() {
 			if expertConsultation.Requester.Person != nil {
 				pendingExpertConsultationResponse.RequesterName = expertConsultation.Requester.Person.Name + " " + expertConsultation.Requester.Person.Lastname
 				pendingExpertConsultationResponse.RequesterJobPosition = expertConsultation.Requester.Person.JobPosition
-				
+
 				// Mapear información de la institución educativa
 				if expertConsultation.Requester.Person.HigherEducationInstitution != nil {
 					pendingExpertConsultationResponse.RequesterInstitutionSnies = expertConsultation.Requester.Person.HigherEducationInstitution.Snies
 					pendingExpertConsultationResponse.RequesterInstitutionName = expertConsultation.Requester.Person.HigherEducationInstitution.Name
-					
+
 					// Mapear ownership de la institución
 					if expertConsultation.Requester.Person.HigherEducationInstitution.Ownership != nil {
 						pendingExpertConsultationResponse.RequesterInstitutionOwnership = expertConsultation.Requester.Person.HigherEducationInstitution.Ownership.Name

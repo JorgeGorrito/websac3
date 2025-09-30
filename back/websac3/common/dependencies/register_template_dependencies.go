@@ -52,6 +52,12 @@ func (m *manager) registerTemplateDependencies() {
 					"degree_program_evaluation:en": atemplate.NewDegreeProgramEvaluationTemplate(
 						baseDir + "en/degree_program_evaluation.html",
 					),
+					"expert_consultation_notification:es": atemplate.NewExpertConsultationNotificationTemplate(
+						baseDir + "es/expert_consultation_notification.html",
+					),
+					"expert_consultation_notification:en": atemplate.NewExpertConsultationNotificationTemplate(
+						baseDir + "en/expert_consultation_notification.html",
+					),
 				},
 			)
 		},

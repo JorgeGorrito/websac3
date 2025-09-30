@@ -50,6 +50,8 @@ func (e *ExpertConsultationRepository) GetByID(id uint, ctx _db.Context) (entity
 	if err := dbCtx.DB().
 		Preload("Requester").
 		Preload("Requester.Person").
+		Preload("Requester.Person.HigherEducationInstitution").
+		Preload("Requester.Person.HigherEducationInstitution.Ownership").
 		Preload("DegreeProgram").
 		Preload("Report").
 		Preload("Expert").
@@ -162,40 +164,30 @@ func (e *ExpertConsultationRepository) GetByUserID(userID uint, paginationParams
 
 	// Query base para obtener solicitudes de asesoría del usuario
 	query := dbCtx.DB().Model(&model.ExpertConsultation{}).
-		Preload("Requester").
-		Preload("Requester.Person").
-		Preload("DegreeProgram").
-		Preload("Report").
-		Preload("Expert").
-		Preload("Expert.Person").
-		Preload("Status").
-		Preload("Status.Names").
 		Where("requester_id = ?", userID)
 
-	// Aplicar filtros básicos
+	// Aplicar filtros básicos usando subqueries para evitar problemas con JOINs
 	for field, filterData := range filters {
 		for operator, value := range filterData {
 			if value == "" {
 				continue
 			}
 
-			if field == "Status.name" {
+			if field == "status_id" {
 				if operator == "eq" {
-					query = query.Joins("JOIN expert_consultation_statuses ON expert_consultations.status_id = expert_consultation_statuses.id").
-						Joins("JOIN expert_consultation_status_names ON expert_consultation_statuses.id = expert_consultation_status_names.expert_consultation_status_id").
-						Where("expert_consultation_status_names.name = ?", value)
+					query = query.Where("status_id = ?", value)
+				}
+			} else if field == "Status.name" {
+				if operator == "eq" {
+					query = query.Where("status_id IN (SELECT ecs.id FROM expert_consultation_statuses ecs JOIN expert_consultation_status_names ecsn ON ecs.id = ecsn.expert_consultation_status_id WHERE ecsn.name = ?)", value)
 				} else if operator == "cont" {
-					query = query.Joins("JOIN expert_consultation_statuses ON expert_consultations.status_id = expert_consultation_statuses.id").
-						Joins("JOIN expert_consultation_status_names ON expert_consultation_statuses.id = expert_consultation_status_names.expert_consultation_status_id").
-						Where("expert_consultation_status_names.name ILIKE ?", "%"+value+"%")
+					query = query.Where("status_id IN (SELECT ecs.id FROM expert_consultation_statuses ecs JOIN expert_consultation_status_names ecsn ON ecs.id = ecsn.expert_consultation_status_id WHERE ecsn.name ILIKE ?)", "%"+value+"%")
 				}
 			} else if field == "DegreeProgram.name" {
 				if operator == "eq" {
-					query = query.Joins("JOIN degree_programs ON expert_consultations.degree_program_id = degree_programs.id").
-						Where("degree_programs.name = ?", value)
+					query = query.Where("degree_program_id IN (SELECT id FROM degree_programs WHERE name = ?)", value)
 				} else if operator == "cont" {
-					query = query.Joins("JOIN degree_programs ON expert_consultations.degree_program_id = degree_programs.id").
-						Where("degree_programs.name ILIKE ?", "%"+value+"%")
+					query = query.Where("degree_program_id IN (SELECT id FROM degree_programs WHERE name ILIKE ?)", "%"+value+"%")
 				}
 			}
 		}
@@ -207,9 +199,17 @@ func (e *ExpertConsultationRepository) GetByUserID(userID uint, paginationParams
 		return nil, 0, err
 	}
 
-	// Aplicar paginación y ordenamiento
+	// Aplicar paginación y ordenamiento con Preloads
 	var expertConsultations []model.ExpertConsultation
 	if err := query.
+		Preload("Requester").
+		Preload("Requester.Person").
+		Preload("DegreeProgram").
+		Preload("Report").
+		Preload("Expert").
+		Preload("Expert.Person").
+		Preload("Status").
+		Preload("Status.Names").
 		Order("created_at DESC").
 		Offset(int((paginationParams.Currentpage - 1) * paginationParams.ItemsPerpage)).
 		Limit(int(paginationParams.ItemsPerpage)).
@@ -375,4 +375,66 @@ func (e *ExpertConsultationRepository) RejectConsultation(consultationID uint, e
 	}
 
 	return nil
+}
+
+// GetAll obtiene todos los estados de asesorías de experto con paginación y filtros
+func (e *ExpertConsultationRepository) GetAll(paginationParams paginator.PaginationParams, filters commonfilter.Params, ctx _db.Context) ([]entity.ExpertConsultationStatus, uint, error) {
+	dbCtx, err := e.CastDbContext(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	// Query base para obtener estados de asesorías de experto
+	query := dbCtx.DB().Model(&model.ExpertConsultationStatus{})
+
+	// Aplicar filtros básicos usando subqueries para evitar problemas con JOINs
+	for field, filterData := range filters {
+		for operator, value := range filterData {
+			if value == "" {
+				continue
+			}
+
+			if field == "Names.name" {
+				if operator == "eq" {
+					query = query.Where("id IN (SELECT expert_consultation_status_id FROM expert_consultation_status_names WHERE name = ?)", value)
+				} else if operator == "cont" {
+					query = query.Where("id IN (SELECT expert_consultation_status_id FROM expert_consultation_status_names WHERE name ILIKE ?)", "%"+value+"%")
+				}
+			} else if field == "Names.lang" {
+				if operator == "eq" {
+					query = query.Where("id IN (SELECT expert_consultation_status_id FROM expert_consultation_status_names WHERE lang = ?)", value)
+				}
+			}
+		}
+	}
+
+	// Contar total
+	var total int64
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Aplicar paginación y ordenamiento con Preloads
+	var expertConsultationStatuses []model.ExpertConsultationStatus
+	if err := query.
+		Preload("Names").
+		Order("id ASC").
+		Offset(int((paginationParams.Currentpage - 1) * paginationParams.ItemsPerpage)).
+		Limit(int(paginationParams.ItemsPerpage)).
+		Find(&expertConsultationStatuses).
+		Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Mapear a entidades
+	var results []entity.ExpertConsultationStatus
+	for _, status := range expertConsultationStatuses {
+		var statusEntity entity.ExpertConsultationStatus
+		if statusEntity, err = mapper.Map[model.ExpertConsultationStatus, entity.ExpertConsultationStatus](&status); err != nil {
+			return nil, 0, err
+		}
+		results = append(results, statusEntity)
+	}
+
+	return results, uint(total), nil
 }

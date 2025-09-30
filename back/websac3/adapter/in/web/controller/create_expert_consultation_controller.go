@@ -11,7 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CreateExpertConsultationController struct{}
+type CreateExpertConsultationController struct {
+	Authenticable
+}
 
 var instanceCreateExpertConsultationController *CreateExpertConsultationController = nil
 
@@ -44,12 +46,22 @@ func (c *CreateExpertConsultationController) CreateExpertConsultation(context *g
 		return
 	}
 
+	// Obtener el usuario autenticado del token JWT
+	token := c.GetToken(context)
+	if token == nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "Token inválido"})
+		return
+	}
+
 	var createExpertConsultationCommand command.CreateExpertConsultationCommand
 	createExpertConsultationCommand, err = mapper.Map[request.CreateExpertConsultationRequest, command.CreateExpertConsultationCommand](&createExpertConsultationRequest)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"result": err.Error()})
 		return
 	}
+
+	// Asignar el usuario autenticado como requester
+	createExpertConsultationCommand.RequesterID = token.Sub
 
 	lang := context.Param("lang")
 

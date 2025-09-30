@@ -36,6 +36,12 @@ func registerRejectExpertConsultation(routerGroup *gin.RouterGroup) {
 	routerGroup.PUT("/expert-consultations/:consultation_id/reject", rejectExpertConsultationController.Handle)
 }
 
+func registerListExpertConsultationStatuses(routerGroup *gin.RouterGroup) {
+	listExpertConsultationStatusController := controller.GetListExpertConsultationStatusController()
+
+	routerGroup.GET("/expert-consultation-statuses", listExpertConsultationStatusController.Handle)
+}
+
 func RegisterExpertConsultationRoutes(routerGroup *gin.RouterGroup) {
 	authRequiredGroup := getAuthRequiredGroup(routerGroup)
 
@@ -44,4 +50,5 @@ func RegisterExpertConsultationRoutes(routerGroup *gin.RouterGroup) {
 	registerListPendingExpertConsultations(authRequiredGroup)
 	registerAcceptExpertConsultation(authRequiredGroup)
 	registerRejectExpertConsultation(authRequiredGroup)
+	registerListExpertConsultationStatuses(routerGroup) // Sin autenticación requerida
 }

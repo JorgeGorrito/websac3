@@ -3,6 +3,7 @@ package main
 import (
 	"websac3/common/dependencies"
 	"websac3/common/dependencies/container"
+
 	_ "websac3/docs"
 
 	"github.com/JorgeGorrito/anise-with-gin/anise"

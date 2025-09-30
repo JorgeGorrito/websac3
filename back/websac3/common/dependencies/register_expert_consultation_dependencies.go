@@ -5,6 +5,8 @@ import (
 	"websac3/app/domain/service"
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/message"
+	"websac3/app/port/out/notification"
+	"websac3/app/port/out/notification/template"
 	"websac3/app/port/out/persistence"
 	"websac3/app/port/out/persistence/db"
 	"websac3/common/dependencies/container"
@@ -83,6 +85,8 @@ func RegisterExpertConsultationDependencies(m *manager) {
 				container.Inject[persistence.UpdateExpertConsultationPort](),
 				container.Inject[message.Provider](),
 				container.Inject[db.Manager](),
+				container.Inject[template.Provider](),
+				container.Inject[notification.SendMailPort](),
 			)
 		},
 	)
@@ -94,6 +98,28 @@ func RegisterExpertConsultationDependencies(m *manager) {
 			return service.NewRejectExpertConsultationService(
 				container.Inject[persistence.GetExpertConsultationPort](),
 				container.Inject[persistence.UpdateExpertConsultationPort](),
+				container.Inject[message.Provider](),
+				container.Inject[db.Manager](),
+				container.Inject[template.Provider](),
+				container.Inject[notification.SendMailPort](),
+			)
+		},
+	)
+
+	// Get Expert Consultation Status Port
+	m.binder.Bind(
+		andi.GetAbstractType[persistence.GetExpertConsultationStatusPort](),
+		func() any {
+			return repository.NewExpertConsultationRepository()
+		},
+	)
+
+	// List Expert Consultation Status Use Case
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.ListExpertConsultationStatusUseCase](),
+		func() any {
+			return service.NewListExpertConsultationStatusService(
+				container.Inject[persistence.GetExpertConsultationStatusPort](),
 				container.Inject[message.Provider](),
 				container.Inject[db.Manager](),
 			)

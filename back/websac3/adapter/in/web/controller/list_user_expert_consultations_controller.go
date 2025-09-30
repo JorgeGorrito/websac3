@@ -24,15 +24,24 @@ func NewListUserExpertConsultationsController() *ListUserExpertConsultationsCont
 // ListUserExpertConsultations godoc
 // @Summary Listar solicitudes de asesoría del usuario autenticado
 // @Description Permite a un usuario autenticado obtener la lista de sus propias solicitudes de asesoría con expertos
+// @Description Los filtros deben enviarse como query params con formato: `campo[operador]=valor`. Por ejemplo: `status_id[eq]=1`.
+// @Description
+// @Description **Operadores disponibles:**
+// @Description - `[eq]`: igual a (exact match)
+// @Description - `[cont]`: contiene (subcadena, case-insensitive)
+// @Description
+// @Description **Filtros válidos:**
+// @Description - `status_id[eq]`: filtrar por ID del estado de la consulta
+// @Description - `Status.name[eq|cont]`: filtrar por nombre del estado
+// @Description - `DegreeProgram.name[eq|cont]`: filtrar por nombre del programa académico
+// @Description
+// @Description Cualquier filtro no listado será ignorado automáticamente.
 // @Tags ExpertConsultation
 // @Accept json
 // @Produce json
 // @Param current_page query int false "Número de página (por defecto: 1)" default(1)
 // @Param items_per_page query int false "Items por página (por defecto: 10)" default(10)
-// @Param Status.name[eq] query string false "Filtro por estado exacto"
-// @Param Status.name[cont] query string false "Filtro por estado que contiene"
-// @Param DegreeProgram.name[eq] query string false "Filtro por nombre exacto de programa de grado"
-// @Param DegreeProgram.name[cont] query string false "Filtro por nombre de programa de grado que contiene"
+// @Param filters query string false "Filtros dinámicos: formato campo[operador]=valor (ej: status_id[eq]=1, DegreeProgram.name[cont]=ingeniería)"
 // @Param lang path string true "Código de idioma" default(en) Enums(en, es)
 // @Success 200 {object} response.ApiResponse[paginator.Page[response.UserExpertConsultationResponse]] "Lista de solicitudes de asesoría del usuario"
 // @Failure 400 {object} response.ApiResponse[paginator.Page[response.UserExpertConsultationResponse]] "Error de validación"
