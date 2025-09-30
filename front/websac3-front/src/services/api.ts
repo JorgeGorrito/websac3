@@ -153,6 +153,23 @@ export type UpdateDegreeProgramRequest = {
   total_credits: number;
 };
 
+// Profile types
+export type ProfileData = {
+  email: string;
+  id: number;
+  identification_number: string;
+  identification_type_id: number;
+  identification_type_name: string;
+  institution_name: string;
+  institution_snies: number;
+  is_active: boolean;
+  job_position: string;
+  lastname: string;
+  name: string;
+  role_id: number;
+  role_name: string;
+};
+
 export type ProfessionalRoleItem = {
   id: number;
   name: string;
@@ -1185,6 +1202,12 @@ export const api = createApi({
       }>) => response.result,
     }),
 
+    // Get User Profile
+    getProfile: builder.query<ProfileData, { lang?: string }>({
+      query: ({ lang = 'es' } = {}) => ({ url: '/profile' }),
+      transformResponse: (response: ApiResponse<ProfileData>) => response.result,
+    }),
+
     // Get Degree Program Courses
     getDegreeProgramCourses: builder.query<{
       data: Array<{
@@ -1707,6 +1730,8 @@ export const {
   // degree program detail
   useGetDegreeProgramQuery,
   useGetDegreeProgramCoursesQuery,
+  // profile
+  useGetProfileQuery,
 } = api;
 
 

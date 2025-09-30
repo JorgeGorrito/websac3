@@ -80,6 +80,7 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
         url: "/admin/accesos",
         icon: Inbox,
       },
+      { title: "Perfil", url: "/admin/perfil", icon: UserCog },
     ],
     navSecondary: [],
   },
