@@ -201,6 +201,25 @@ func registerDegreeProgramMappers() {
 		},
 	)
 
+	// Update Degree Program mappers
+	RegisterMapFunc(
+		func(request *request.UpdateDegreeProgramRequest) (command.UpdateDegreeProgramCommand, error) {
+			return command.UpdateDegreeProgramCommand{
+				Snies:               request.Snies,
+				Name:                request.Name,
+				TotalCredits:        request.TotalCredits,
+				DurationValue:       request.DurationValue,
+				DurationUnitID:      request.DurationUnitID,
+				FormationLevelID:    request.FormationLevelID,
+				ProfessionalRoleIDs: request.ProfessionalRoleIDs,
+				ProgramFocus:        request.ProgramFocus,
+				EntryProfile:        request.EntryProfile,
+				GraduateProfile:     request.GraduateProfile,
+				ProfessionalProfile: request.ProfessionalProfile,
+			}, nil
+		},
+	)
+
 	// Evaluate Degree Program mappers
 	RegisterMapFunc(
 		func(req *request.EvaluateDegreeProgramRequest) (command.EvaluateDegreeProgramCommand, error) {

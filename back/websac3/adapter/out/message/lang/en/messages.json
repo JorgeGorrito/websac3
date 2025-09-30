@@ -26,6 +26,9 @@
   "create_degree_program" : {
     "degree_program_created" : "Degree program created successfully."
   },
+  "update_degree_program" : {
+    "degree_program_updated" : "Degree program updated successfully."
+  },
   "create_course" : {
     "course_created" : "Course created successfully.",
     "course_already_exists" : "A course with this code already exists in the degree program."

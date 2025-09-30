@@ -57,6 +57,66 @@ func (r *DegreeProgramRepository) Create(degreeProgramToSave *entity.DegreeProgr
 	return nil
 }
 
+func (r *DegreeProgramRepository) Update(degreeProgramToUpdate *entity.DegreeProgram, ctx _db.Context) error {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	var degreeProgram model.DegreeProgram
+	if degreeProgram, err = mapper.Map[entity.DegreeProgram, model.DegreeProgram](degreeProgramToUpdate); err != nil {
+		return err
+	}
+
+	// Actualizar el programa de grado sin las relaciones
+	if err := dbCtx.DB().
+		Model(&model.DegreeProgram{}).
+		Where("id = ?", degreeProgram.ID).
+		Updates(map[string]interface{}{
+			"snies":                degreeProgram.Snies,
+			"name":                 degreeProgram.Name,
+			"total_credits":        degreeProgram.TotalCredits,
+			"duration_value":       degreeProgram.DurationValue,
+			"duration_unit_id":     degreeProgram.DurationUnitID,
+			"formation_level_id":   degreeProgram.FormationLevelID,
+			"program_focus":        degreeProgram.ProgramFocus,
+			"entry_profile":        degreeProgram.EntryProfile,
+			"graduate_profile":     degreeProgram.GraduateProfile,
+			"professional_profile": degreeProgram.ProfessionalProfile,
+		}).
+		Error; err != nil {
+		return err
+	}
+
+	// Actualizar roles profesionales si existen
+	if len(degreeProgramToUpdate.ProfessionalRoles) > 0 {
+		var professionalRoleModels []model.ProfessionalRole
+		for _, pr := range degreeProgramToUpdate.ProfessionalRoles {
+			professionalRoleModels = append(professionalRoleModels, model.ProfessionalRole{
+				ID: pr.ID,
+			})
+		}
+
+		// Primero eliminar todas las asociaciones existentes
+		if err := dbCtx.DB().
+			Model(&degreeProgram).
+			Association("ProfessionalRoles").
+			Clear(); err != nil {
+			return err
+		}
+
+		// Luego agregar las nuevas asociaciones
+		if err := dbCtx.DB().
+			Model(&degreeProgram).
+			Association("ProfessionalRoles").
+			Append(professionalRoleModels); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (r *DegreeProgramRepository) GetByID(id uint, ctx _db.Context) (entity.DegreeProgram, error) {
 	dbCtx, err := r.CastDbContext(ctx)
 	if err != nil {

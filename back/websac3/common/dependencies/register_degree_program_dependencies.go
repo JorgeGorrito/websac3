@@ -54,6 +54,11 @@ func (m *manager) registerDegreeProgramDependencies() {
 	)
 
 	m.binder.Bind(
+		andi.GetAbstractType[persistence.UpdateDegreeProgramPort](),
+		func() any { return container.Inject[persistence.DegreeProgramPort]() },
+	)
+
+	m.binder.Bind(
 		andi.GetAbstractType[usecase.CreateDegreeProgramUseCase](),
 		func() any {
 			return service.NewCreateDegreeProgramService(
@@ -73,6 +78,30 @@ func (m *manager) registerDegreeProgramDependencies() {
 				container.Inject[enum.RoleEnum](),
 				container.Inject[db.Manager](),
 				container.Inject[message.Provider](),
+			)
+		},
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.GetDegreeProgramByIDUseCase](),
+		func() any {
+			return service.NewGetDegreeProgramByIDService(
+				container.Inject[persistence.GetDegreeProgramPort](),
+				container.Inject[message.Provider](),
+				container.Inject[db.Manager](),
+			)
+		},
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.UpdateDegreeProgramUseCase](),
+		func() any {
+			return service.NewUpdateDegreeProgramService(
+				container.Inject[persistence.UpdateDegreeProgramPort](),
+				container.Inject[persistence.GetDegreeProgramPort](),
+				container.Inject[persistence.GetProfessionalRolePort](),
+				container.Inject[message.Provider](),
+				container.Inject[db.Manager](),
 			)
 		},
 	)

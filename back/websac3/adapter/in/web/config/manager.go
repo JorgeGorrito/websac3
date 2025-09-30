@@ -216,12 +216,36 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(command.UpdateDegreeProgramCommand{}),
+		chandler.NewUpdateDegreeProgramCommandHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.UpdateDegreeProgramUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(query.ListDegreeProgramQuery{}),
 		qhandler.NewListDegreeProgramQueryHandler(
 			container.Inject[usecase.ListDegreeProgramUseCase](),
 			container.Inject[message.Provider](),
 			container.Inject[logging.Logger](),
 			container.Inject[validator.Validator](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.GetDegreeProgramByIDQuery{}),
+		qhandler.NewGetDegreeProgramByIDQueryHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.GetDegreeProgramByIDUseCase](),
+			container.Inject[message.Provider](),
 		),
 	); err != nil {
 		*errorList = errors.Join(*errorList, err)
