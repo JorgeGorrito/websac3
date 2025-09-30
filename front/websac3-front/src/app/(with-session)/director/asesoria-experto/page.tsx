@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,84 +8,179 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { 
   MessageSquare, 
   BookOpen, 
   Clock, 
   GraduationCap, 
-  Target, 
   Search, 
   Settings, 
   Calendar,
-  Plus,
   User,
-  FileText
+  FileText,
+  CheckCircle,
+  AlertTriangle,
+  Eye,
+  Filter,
+  Plus
 } from "lucide-react";
-import { useListDegreeProgramsQuery, useListDegreeProgramReportsQuery, useCreateExpertConsultationMutation } from "@/services/api";
-import { ProgramsPagination } from "@/components/websac3/program/ProgramsPagination";
-import { DegreeProgramCard, ActionButton } from "@/components/websac3/program/DegreeProgramCard";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useListDegreeProgramsQuery, useListDegreeProgramReportsQuery } from "@/services/api";
 import { useDispatch } from "react-redux";
 import { showError } from "@/store/errorSlice";
+import { useListUserExpertConsultationsQuery, useCreateExpertConsultationMutation, useListExpertConsultationStatusesQuery } from "@/services/api";
+
+interface ExpertConsultation {
+  id: number;
+  degree_program_id: number;
+  degree_program_name: string;
+  degree_program_snies: number;
+  report_id: number;
+  report_score: number;
+  requester_id: number;
+  requester_name: string;
+  requester_email: string;
+  expert_id: number;
+  expert_name: string;
+  expert_email: string;
+  request_message: string;
+  expert_response: string;
+  status_id: number;
+  status_name: string;
+  created_at: string;
+  updated_at: string;
+  answered_at: string;
+  closed_at: string;
+}
+
+// Componente memoizado para los inputs de filtro
+const FilterInput = memo(({ 
+  id, 
+  label, 
+  placeholder, 
+  value, 
+  onChange, 
+  icon: Icon, 
+  className 
+}: {
+  id: string;
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+  icon: React.ComponentType<{ className?: string }>;
+  className?: string;
+}) => (
+  <div className="space-y-2">
+    <Label htmlFor={id} className="text-sm font-medium text-gray-700 flex items-center gap-2">
+      <Icon className="h-4 w-4 text-blue-500" />
+      {label}
+    </Label>
+    <Input
+      id={id}
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={`h-10 border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${className || ''}`}
+    />
+  </div>
+));
 
 export default function AsesoriaExpertoPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
-  
-  // Get parameters from URL or use defaults
-  const [currentPage, setCurrentPage] = useState(() => {
-    const page = searchParams.get('page');
-    return page ? parseInt(page, 10) : 1;
-  });
-  
-  const [itemsPerPage, setItemsPerPage] = useState(() => {
-    const perPage = searchParams.get('per_page');
-    return perPage ? parseInt(perPage, 10) : 6;
-  });
-  
-  const [filters, setFilters] = useState(() => {
-    const name = searchParams.get('name') || '';
-    const snies = searchParams.get('snies') || '';
-    return { name, snies };
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [filters, setFilters] = useState({
+    programName: "",
+    status: ""
   });
   
   const [showFilters, setShowFilters] = useState(false);
+  
+  // Estados para el modal de creación
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedProgramId, setSelectedProgramId] = useState<number | null>(null);
-  const [selectedProgramName, setSelectedProgramName] = useState<string>('');
-  const [isReportsModalOpen, setIsReportsModalOpen] = useState(false);
-  const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
-  const [consultationMessage, setConsultationMessage] = useState('');
   const [selectedReportId, setSelectedReportId] = useState<number | null>(null);
+  const [consultationMessage, setConsultationMessage] = useState('');
   const [reportsCurrentPage, setReportsCurrentPage] = useState(1);
   const [reportsItemsPerPage, setReportsItemsPerPage] = useState(10);
 
-  // Build query parameters with proper filter format
-  const buildFilters = () => {
-    const filterParams: Record<string, string> = {};
+  // Initialize filters from URL on component mount
+  React.useEffect(() => {
+    const urlFilters = {
+      programName: searchParams.get('programName') || "",
+      status: searchParams.get('status') || ""
+    };
     
-    if (filters.name.trim()) {
-      filterParams['name[cont]'] = filters.name.trim();
+    const urlPage = parseInt(searchParams.get('page') || '1');
+    const urlItemsPerPage = parseInt(searchParams.get('itemsPerPage') || '10');
+    
+    setFilters(urlFilters);
+    setCurrentPage(urlPage);
+    setItemsPerPage(urlItemsPerPage);
+  }, [searchParams]);
+
+  // Function to update URL with current filters and pagination
+  const updateURL = useCallback((newFilters: typeof filters, newPage: number, newItemsPerPage: number) => {
+    const params = new URLSearchParams();
+    
+    // Add pagination params
+    params.set('page', newPage.toString());
+    params.set('itemsPerPage', newItemsPerPage.toString());
+    
+    // Add filter params only if they have values
+    if (newFilters.programName.trim()) {
+      params.set('programName', newFilters.programName.trim());
+    }
+    if (newFilters.status.trim()) {
+      params.set('status', newFilters.status.trim());
     }
     
-    if (filters.snies.trim()) {
-      filterParams['snies[cont]'] = filters.snies.trim();
+    // Update URL without causing a page reload
+    const newURL = `${window.location.pathname}?${params.toString()}`;
+    router.replace(newURL, { scroll: false });
+  }, [router]);
+
+  // Build query parameters with proper filter format - memoized to prevent unnecessary re-renders
+  const buildFilters = useMemo(() => {
+    const filterParams: Record<string, string> = {};
+    
+    if (filters.programName.trim()) {
+      filterParams['DegreeProgram.name[cont]'] = filters.programName.trim();
+    }
+    
+    if (filters.status.trim()) {
+      filterParams['status_id[eq]'] = filters.status.trim();
     }
     
     return filterParams;
-  };
+  }, [filters]);
 
-  const queryParams = {
+  const queryParams = useMemo(() => ({
     current_page: currentPage,
     items_per_page: itemsPerPage,
-    filters: buildFilters()
-  };
+    filters: buildFilters,
+    lang: 'es'
+  }), [currentPage, itemsPerPage, buildFilters]);
 
-  const { data, isLoading, error, refetch } = useListDegreeProgramsQuery(queryParams);
+  const { data: consultationsData, isLoading: loading, error: queryError, refetch } = useListUserExpertConsultationsQuery(queryParams);
   const [createConsultation, { isLoading: isCreatingConsultation }] = useCreateExpertConsultationMutation();
+  
+  // Get consultation statuses
+  const { data: statusesData, isLoading: statusesLoading } = useListExpertConsultationStatusesQuery({ lang: 'es' });
 
-  // Fetch reports for selected program
+  // Query para obtener programas de grado
+  const { data: programsData, isLoading: programsLoading } = useListDegreeProgramsQuery({
+    current_page: 1,
+    items_per_page: 100, // Obtener todos los programas
+    filters: {}
+  });
+
+  // Query para obtener reportes del programa seleccionado
   const { data: reportsData, isLoading: reportsLoading, error: reportsError } = useListDegreeProgramReportsQuery(
     { 
       degree_program_id: selectedProgramId!,
@@ -95,84 +190,56 @@ export default function AsesoriaExpertoPage() {
     { skip: !selectedProgramId }
   );
 
-  // Function to update URL with current parameters
-  const updateURL = (newParams: {
-    page?: number;
-    per_page?: number;
-    name?: string;
-    snies?: string;
-  }) => {
-    const params = new URLSearchParams();
-    const page = newParams.page ?? currentPage;
-    const perPage = newParams.per_page ?? itemsPerPage;
-    const name = newParams.name ?? filters.name;
-    const snies = newParams.snies ?? filters.snies;
-    
-    if (page !== 1) params.set('page', page.toString());
-    if (perPage !== 6) params.set('per_page', perPage.toString());
-    if (name.trim()) params.set('name', name.trim());
-    if (snies.trim()) params.set('snies', snies.trim());
-    
-    const newURL = params.toString() 
-      ? `/director/asesoria-experto?${params.toString()}`
-      : '/director/asesoria-experto';
-    
-    router.push(newURL, { scroll: false });
-  };
-
-  // Handle page change
-  const handlePageChange = (page: number) => {
+  const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
-    updateURL({ page });
-  };
+    updateURL(filters, page, itemsPerPage);
+  }, [filters, itemsPerPage, updateURL]);
 
-  // Handle items per page change
-  const handleItemsPerPageChange = (perPage: number) => {
+  const handleItemsPerPageChange = useCallback((perPage: number) => {
     setItemsPerPage(perPage);
+    setCurrentPage(1); // Reset to first page
+    updateURL(filters, 1, perPage);
+  }, [filters, updateURL]);
+
+  // Handle filter changes - memoized to prevent unnecessary re-renders
+  const handleFilterChange = useCallback((key: string, value: string) => {
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+    setCurrentPage(1); // Reset to first page
+    updateURL(newFilters, 1, itemsPerPage);
+  }, [filters, itemsPerPage, updateURL]);
+
+  // Specific handlers for each filter to prevent unnecessary re-renders
+  const handleProgramNameChange = useCallback((value: string) => {
+    handleFilterChange('programName', value);
+  }, [handleFilterChange]);
+
+
+  const handleStatusChange = useCallback((value: string) => {
+    // Convert "all" to empty string for filtering logic
+    const filterValue = value === "all" ? "" : value;
+    handleFilterChange('status', filterValue);
+  }, [handleFilterChange]);
+
+  // Clear all filters - memoized to prevent unnecessary re-renders
+  const clearFilters = useCallback(() => {
+    const clearedFilters = {
+      programName: "",
+      status: ""
+    };
+    setFilters(clearedFilters);
     setCurrentPage(1);
-    updateURL({ per_page: perPage, page: 1 });
-  };
+    updateURL(clearedFilters, 1, itemsPerPage);
+  }, [itemsPerPage, updateURL]);
 
-  // Handle filter changes
-  const handleFilterChange = (key: keyof typeof filters, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-    setCurrentPage(1);
-    updateURL({ [key]: value, page: 1 });
-  };
+  const toggleFilters = useCallback(() => {
+    setShowFilters(prev => !prev);
+  }, []);
 
-  // Clear all filters
-  const clearFilters = () => {
-    setFilters({ name: '', snies: '' });
-    setCurrentPage(1);
-    updateURL({ name: '', snies: '', page: 1 });
-  };
-
-  const handleProgramClick = (programId: number, programName: string) => {
-    setSelectedProgramId(programId);
-    setSelectedProgramName(programName);
-    setReportsCurrentPage(1); // Reset reports pagination
-    setIsReportsModalOpen(true);
-  };
-
-  const handleReportClick = (reportId: number) => {
-    setSelectedReportId(reportId);
-    setIsReportsModalOpen(false);
-    setIsConsultationModalOpen(true);
-  };
-
-  // Handle reports pagination
-  const handleReportsPageChange = (page: number) => {
-    setReportsCurrentPage(page);
-  };
-
-  const handleReportsItemsPerPageChange = (itemsPerPage: number) => {
-    setReportsItemsPerPage(itemsPerPage);
-    setReportsCurrentPage(1); // Reset to first page when changing items per page
-  };
-
+  // Funciones para el modal de creación
   const handleCreateConsultation = async () => {
     if (!selectedProgramId || !selectedReportId || !consultationMessage.trim()) {
-      dispatch(showError('Por favor completa todos los campos requeridos.'));
+      dispatch(showError({ type: 'error', message: 'Por favor completa todos los campos requeridos.' }));
       return;
     }
 
@@ -184,147 +251,313 @@ export default function AsesoriaExpertoPage() {
         requester_id: 1 // TODO: Get from auth context
       }).unwrap();
 
-      dispatch(showError('Solicitud de asesoría enviada exitosamente.'));
-      setIsConsultationModalOpen(false);
+      dispatch(showError({ type: 'success', message: 'Solicitud de asesoría enviada exitosamente.' }));
+      setIsCreateModalOpen(false);
       setConsultationMessage('');
+      setSelectedProgramId(null);
       setSelectedReportId(null);
+      refetch(); // Refrescar la lista de asesorías
     } catch (error: any) {
       const errorMessage = error?.data?.errors?.[0] || 'Error al enviar la solicitud de asesoría';
-      dispatch(showError(errorMessage));
+      dispatch(showError({ type: 'error', message: errorMessage }));
     }
   };
 
-  const getScoreColor = (score: number) => {
-    const percentage = score * 100;
-    if (percentage >= 80) return 'text-green-600';
-    if (percentage >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+  const handleProgramChange = (programId: string) => {
+    setSelectedProgramId(parseInt(programId));
+    setSelectedReportId(null); // Reset report selection
+    setReportsCurrentPage(1); // Reset reports pagination
   };
 
-  const getScoreLabel = (score: number) => {
-    const percentage = score * 100;
-    if (percentage >= 80) return 'Excelente';
-    if (percentage >= 60) return 'Aceptable';
-    return 'Por mejorar';
+  const handleReportChange = (reportId: string) => {
+    setSelectedReportId(parseInt(reportId));
   };
 
-  const formatScore = (score: number) => {
-    return `${(score * 100).toFixed(1)}%`;
+  const handleReportsPageChange = (page: number) => {
+    setReportsCurrentPage(page);
   };
 
-  // Loading skeleton component
-  const LoadingSkeleton = () => (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <Skeleton className="h-8 w-64" />
-          <Skeleton className="h-4 w-96 mt-2" />
+  const handleReportsItemsPerPageChange = (itemsPerPage: number) => {
+    setReportsItemsPerPage(itemsPerPage);
+    setReportsCurrentPage(1);
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const getStatusColor = (statusName: string) => {
+    switch (statusName.toLowerCase()) {
+      case 'pendiente':
+        return "bg-yellow-100 text-yellow-800";
+      case 'respondida':
+        return "bg-green-100 text-green-800";
+      case 'cerrada':
+        return "bg-gray-100 text-gray-800";
+      default:
+        return "bg-blue-100 text-blue-800";
+    }
+  };
+
+  const getStatusIcon = (statusName: string) => {
+    switch (statusName.toLowerCase()) {
+      case 'pendiente':
+        return AlertTriangle;
+      case 'respondida':
+        return CheckCircle;
+      case 'cerrada':
+        return Clock;
+      default:
+        return MessageSquare;
+    }
+  };
+
+  // Extract data from the query result
+  const consultations = consultationsData?.data || [];
+  const totalCount = consultationsData?.total_count || 0;
+  const currentPageFromAPI = consultationsData?.current_page || 1;
+  const itemsPerPageFromAPI = consultationsData?.items_per_page || 10;
+  
+  // Calculate total pages based on total count and items per page
+  const totalPages = Math.ceil(totalCount / itemsPerPageFromAPI);
+  
+  // Check if it's a 404 error (no consultations found) vs a real error
+  const is404Error = queryError && 'status' in queryError && queryError.status === 404;
+  const error = queryError && !is404Error ? "Error al cargar las asesorías" : null;
+
+  const Pagination = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant={i === currentPage ? "default" : "outline"}
+          size="sm"
+          onClick={() => handlePageChange(i)}
+          className="mx-1"
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    return (
+      <div className="flex items-center justify-center space-x-2 mt-6">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </Button>
+        {pages}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Siguiente
+        </Button>
+        <div className="ml-4 text-sm text-gray-600">
+          Página {currentPage} de {totalPages} ({totalCount} asesorías)
         </div>
-        <Skeleton className="h-10 w-32" />
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <Card key={index}>
-            <CardHeader>
-              <Skeleton className="h-6 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-2/3" />
-                <Skeleton className="h-4 w-1/2" />
+    );
+  };
+
+  const ConsultationCard = ({ consultation }: { consultation: ExpertConsultation }) => {
+    const StatusIcon = getStatusIcon(consultation.status_name);
+    
+    return (
+      <Card className="hover:shadow-md transition-shadow">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center space-x-2">
+              <StatusIcon className="h-5 w-5 text-blue-500" />
+              <CardTitle className="text-lg">Asesoría #{consultation.id}</CardTitle>
+            </div>
+            <Badge className={getStatusColor(consultation.status_name)}>
+              {consultation.status_name}
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center space-x-2">
+              <GraduationCap className="h-4 w-4 text-gray-500" />
+              <div>
+                <p className="text-sm font-medium">{consultation.degree_program_name}</p>
+                <p className="text-xs text-gray-500">SNIES: {consultation.degree_program_snies}</p>
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <User className="h-4 w-4 text-gray-500" />
+              <p className="text-sm">{consultation.expert_name}</p>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <FileText className="h-4 w-4 text-gray-500" />
+              <p className="text-sm">Reporte #{consultation.report_id}</p>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <Calendar className="h-4 w-4 text-gray-500" />
+              <p className="text-sm">{formatDate(consultation.created_at)}</p>
+            </div>
+          </div>
+
+          {/* Request Message Preview */}
+          <div className="bg-gray-50 rounded-lg p-3">
+            <h4 className="text-xs font-medium text-gray-700 mb-1 flex items-center gap-1">
+              <MessageSquare className="h-3 w-3" />
+              Solicitud
+            </h4>
+            <p className="text-xs text-gray-600 line-clamp-2">
+              {consultation.request_message}
+            </p>
+          </div>
+
+          {/* Expert Response Preview (if exists) */}
+          {consultation.expert_response && (
+            <div className="bg-green-50 rounded-lg p-3">
+              <h4 className="text-xs font-medium text-gray-700 mb-1 flex items-center gap-1">
+                <CheckCircle className="h-3 w-3" />
+                Respuesta del Experto
+              </h4>
+              <p className="text-xs text-gray-600 line-clamp-2">
+                {consultation.expert_response}
+              </p>
+            </div>
+          )}
+          
+          <div className="pt-3 border-t">
+            <Button 
+              className="w-full" 
+              variant="outline"
+              onClick={() => router.push(`/director/asesoria-experto/${consultation.id}`)}
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              Ver Detalles
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const LoadingSkeleton = () => (
+    <div className="space-y-4">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <Card key={index}>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-6 w-16" />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+            </div>
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 
-  if (isLoading) {
-    return <LoadingSkeleton />;
-  }
-
-  if (error && error.status !== 404) {
-    return (
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Asesoría con Experto</h1>
-            <p className="text-gray-600 mt-2">Solicita asesoría especializada en ciberseguridad</p>
-          </div>
-        </div>
-        
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-center text-gray-500">
-              <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p>No se pudieron cargar los programas de grado</p>
-              <p className="text-sm mt-2">Los errores se mostrarán en un modal automáticamente</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
+  const FiltersSection = useMemo(() => (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header with Toggle Button */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Asesoría con Experto</h1>
-          <p className="text-gray-600 mt-2">Solicita asesoría especializada en ciberseguridad para tu programa de grado</p>
+          <h1 className="text-3xl font-bold text-gray-900">Asesorías con Experto</h1>
+          <p className="text-gray-600 mt-2">Revisa las asesorías solicitadas a expertos en ciberseguridad</p>
         </div>
-        <Button 
-          onClick={() => setShowFilters(!showFilters)}
-          variant="outline"
-          className={`flex items-center border-2 transition-all duration-200 ${
-            showFilters 
-              ? 'border-slate-500 bg-slate-100 text-slate-700' 
-              : 'border-slate-300 hover:border-slate-400 hover:bg-slate-50'
-          }`}
-        >
-          <Settings className="h-4 w-4 mr-2" />
-          {showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros'}
-        </Button>
+        <div className="flex gap-3">
+          <Button 
+            onClick={() => setIsCreateModalOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Nueva Asesoría
+          </Button>
+          <Button 
+            onClick={toggleFilters}
+            variant="outline"
+            className={`flex items-center border-2 transition-all duration-200 ${
+              showFilters 
+                ? 'border-slate-500 bg-slate-100 text-slate-700' 
+                : 'border-slate-300 hover:border-slate-400 hover:bg-slate-50'
+            }`}
+          >
+            <Settings className="h-4 w-4 mr-2" />
+            {showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros'}
+          </Button>
+        </div>
       </div>
 
       {/* Compact Stats Bar */}
-      {data && !(error && error.status === 404) && (
+      {consultationsData && !(queryError && 'status' in queryError && queryError.status === 404) && (
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Left side - Main info */}
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
-                <BookOpen className="h-4 w-4 text-blue-600" />
+                <MessageSquare className="h-4 w-4 text-blue-600" />
                 <span className="text-sm font-medium text-gray-700">
-                  {data.total_count} programa{data.total_count !== 1 ? 's' : ''} disponible{data.total_count !== 1 ? 's' : ''}
+                  {consultationsData.total_count} asesoría{consultationsData.total_count !== 1 ? 's' : ''}
                 </span>
               </div>
               
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-gray-500" />
                 <span className="text-sm text-gray-600">
-                  Página {data.current_page} de {Math.ceil(data.total_count / itemsPerPage)}
+                  Página {consultationsData.current_page} de {Math.ceil(consultationsData.total_count / itemsPerPage)}
                 </span>
               </div>
             </div>
 
-            {/* Right side - Institution info */}
-            {data.data && data.data.length > 0 && (
+            {/* Right side - Active filters info */}
+            {(filters.programName || filters.status) && (
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
-                  <GraduationCap className="h-4 w-4 text-indigo-600" />
+                  <Filter className="h-4 w-4 text-indigo-600" />
                   <span className="text-sm font-medium text-gray-700">
-                    {data.data[0].higher_education_institution.name}
+                    Filtros activos
                   </span>
                 </div>
-                <Badge className="bg-indigo-100 text-indigo-800 border-indigo-200 text-xs">
-                  SNIES: {data.data[0].higher_education_institution.snies}
-                </Badge>
+                <div className="flex gap-2 flex-wrap">
+                  {filters.programName && (
+                    <Badge className="bg-blue-100 text-blue-800 border-blue-200 text-xs">
+                      Programa: {filters.programName}
+                    </Badge>
+                  )}
+                  {filters.status && (
+                    <Badge className="bg-purple-100 text-purple-800 border-purple-200 text-xs">
+                      Estado: {statusesData?.data?.find(s => s.id.toString() === filters.status)?.name || filters.status}
+                    </Badge>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -342,60 +575,72 @@ export default function AsesoriaExpertoPage() {
               Filtros y Configuración
             </CardTitle>
             <CardDescription className="text-gray-600 mt-1">
-              Personaliza tu búsqueda y visualización de programas
+              Personaliza tu búsqueda y visualización de asesorías
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Program Name Filter */}
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                  Nombre del Programa
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Buscar por nombre..."
-                  value={filters.name}
-                  onChange={(e) => handleFilterChange('name', e.target.value)}
-                  className="w-full"
-                />
-              </div>
+              <FilterInput
+                id="program-filter"
+                label="Programa Académico"
+                placeholder="Buscar por programa..."
+                value={filters.programName}
+                onChange={handleProgramNameChange}
+                icon={GraduationCap}
+                className="focus:border-blue-500 focus:ring-blue-500"
+              />
 
-              {/* SNIES Filter */}
-              <div className="space-y-2">
-                <Label htmlFor="snies" className="text-sm font-medium text-gray-700">
-                  Código SNIES
-                </Label>
-                <Input
-                  id="snies"
-                  type="text"
-                  placeholder="Buscar por SNIES..."
-                  value={filters.snies}
-                  onChange={(e) => handleFilterChange('snies', e.target.value)}
-                  className="w-full"
-                />
-              </div>
 
-              {/* Items per page */}
+              {/* Status Filter */}
               <div className="space-y-2">
-                <Label htmlFor="itemsPerPage" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="status-filter" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-purple-500" />
+                  Estado
+                </Label>
+                <Select value={filters.status || "all"} onValueChange={handleStatusChange}>
+                  <SelectTrigger className="h-10">
+                    <SelectValue placeholder="Seleccionar estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos los estados</SelectItem>
+                    {statusesLoading ? (
+                      <SelectItem value="loading" disabled>Cargando estados...</SelectItem>
+                    ) : statusesData?.data ? (
+                      statusesData.data.map((status) => (
+                        <SelectItem key={status.id} value={status.id.toString()}>
+                          {status.name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="no-data" disabled>No hay estados disponibles</SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {/* Items Per Page */}
+              <div className="space-y-2">
+                <Label htmlFor="per-page" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-indigo-500" />
                   Elementos por página
                 </Label>
                 <select
-                  id="itemsPerPage"
+                  id="per-page"
                   value={itemsPerPage}
                   onChange={(e) => handleItemsPerPageChange(parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
                 >
-                  <option value={6}>6 por página</option>
-                  <option value={12}>12 por página</option>
-                  <option value={24}>24 por página</option>
-                  <option value={48}>48 por página</option>
+                  <option value={5}>5 por página</option>
+                  <option value={10}>10 por página</option>
+                  <option value={15}>15 por página</option>
+                  <option value={20}>20 por página</option>
+                  <option value={25}>25 por página</option>
                 </select>
               </div>
             </div>
             
+            {/* Clear Filters */}
             <div className="flex justify-end mt-6 pt-4 border-t border-gray-100">
               <Button 
                 onClick={clearFilters} 
@@ -409,202 +654,181 @@ export default function AsesoriaExpertoPage() {
           </CardContent>
         </Card>
       )}
+    </div>
+  ), [showFilters, filters, consultationsData, queryError, itemsPerPage, toggleFilters, clearFilters, handleItemsPerPageChange, handleProgramNameChange, handleStatusChange]);
 
-      {/* Programs List */}
-      <div className="space-y-4">
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <Skeleton className="h-6 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-2/3" />
-                    <Skeleton className="h-4 w-1/2" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="text-center">
+            <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-red-600 mb-2">Error al cargar asesorías</h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <Button onClick={() => refetch()}>
+              Reintentar
+            </Button>
           </div>
-        ) : data && data.data.length > 0 && !(error && error.status === 404) ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.data.map((program) => {
-              const actions: ActionButton[] = [
-                {
-                  label: "Ver Reportes",
-                  icon: FileText,
-                  variant: "default",
-                  className: "w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl transition-all duration-200",
-                  onClick: () => handleProgramClick(program.id, program.name)
-                }
-              ];
+        </div>
+      </div>
+    );
+  }
 
-              return (
-                <DegreeProgramCard
-                  key={program.id}
-                  program={program}
-                  actions={actions}
-                />
-              );
-            })}
+  return (
+    <div className="space-y-6">
+      {FiltersSection}
+
+      {/* Content */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        {loading ? (
+          <LoadingSkeleton />
+        ) : (consultations.length === 0 || is404Error) ? (
+          <div className="text-center py-12">
+            <div className="bg-blue-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+              <MessageSquare className="h-10 w-10 text-blue-500" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-3">
+              No hay asesorías
+            </h3>
+            <p className="text-gray-600 mb-2">
+              No se encontraron asesorías con los filtros aplicados.
+            </p>
+            <p className="text-sm text-gray-500">
+              Intenta ajustar los filtros o verifica si hay asesorías disponibles.
+            </p>
           </div>
         ) : (
-          <Card>
-            <CardContent className="p-12">
-              <div className="text-center">
-                <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  No hay programas disponibles
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  No se encontraron programas de grado para solicitar asesoría
-                </p>
-                <Button onClick={clearFilters} className="bg-blue-600 hover:bg-blue-700">
-                  <Search className="h-4 w-4 mr-2" />
-                  Limpiar Filtros
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-        
-        {/* Pagination - Always visible when not loading */}
-        {!isLoading && !(error && error.status === 404) && (
-          <ProgramsPagination
-            currentPage={currentPage}
-            totalPages={data ? Math.ceil(data.total_count / itemsPerPage) : 1}
-            onPageChange={handlePageChange}
-          />
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {consultations.map((consultation) => (
+                <ConsultationCard key={consultation.id} consultation={consultation} />
+              ))}
+            </div>
+            
+            {totalCount > 0 && <Pagination />}
+          </>
         )}
       </div>
 
-      {/* Reports Modal */}
-      <Dialog open={isReportsModalOpen} onOpenChange={setIsReportsModalOpen}>
+      {/* Modal para crear nueva asesoría */}
+      <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
         <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-blue-600" />
-              Reportes de {selectedProgramName}
+              <Plus className="h-5 w-5 text-blue-600" />
+              Nueva Solicitud de Asesoría
             </DialogTitle>
             <DialogDescription>
-              Selecciona un reporte para solicitar asesoría especializada
+              Solicita asesoría especializada en ciberseguridad para tu programa de grado
             </DialogDescription>
           </DialogHeader>
           
-          <div className="flex-1 overflow-y-auto">
-            {reportsLoading ? (
-              <div className="space-y-4">
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <Card key={index}>
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <Skeleton className="h-6 w-32 mb-2" />
-                          <Skeleton className="h-4 w-48" />
-                        </div>
-                        <Skeleton className="h-8 w-24" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : reportsError ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="text-center text-gray-500">
-                  <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p>Error al cargar los reportes</p>
-                  <p className="text-sm mt-2">Inténtalo de nuevo más tarde</p>
-                </div>
-              </div>
-            ) : reportsData?.data && reportsData.data.length > 0 ? (
-              <div className="space-y-4">
-                {reportsData.data.map((report) => (
-                  <Card key={report.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-lg font-semibold text-gray-900">
-                              Reporte #{report.id}
-                            </h3>
-                            <Badge 
-                              variant="outline" 
-                              className={getScoreColor(report.score)}
-                            >
-                              {getScoreLabel(report.score)}
-                            </Badge>
-                          </div>
-                          <div className="space-y-1 text-sm text-gray-600">
-                            <p><strong>Rol profesional:</strong> {report.professional_role?.name || 'N/A'}</p>
-                            <p><strong>Puntaje:</strong> {formatScore(report.score)}</p>
-                            <p><strong>Fecha:</strong> {new Date(report.created_at).toLocaleDateString('es-ES')}</p>
-                          </div>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleReportClick(report.id)}
-                          className="flex items-center gap-2"
-                        >
-                          <MessageSquare className="h-4 w-4" />
-                          Solicitar Asesoría
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <div className="flex items-center justify-center py-12">
-                <div className="text-center text-gray-500">
-                  <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p>No hay reportes disponibles</p>
-                  <p className="text-sm mt-2">Este programa no tiene reportes de evaluación</p>
-                </div>
-              </div>
-            )}
-
-            {/* Reports Pagination */}
-            {reportsData && (
-              <div className="mt-6">
-                <ProgramsPagination
-                  currentPage={reportsCurrentPage}
-                  totalCount={reportsData.total_count || 0}
-                  itemsPerPage={reportsItemsPerPage}
-                  onPageChange={handleReportsPageChange}
-                  onItemsPerPageChange={handleReportsItemsPerPageChange}
-                />
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Consultation Request Modal */}
-      <Dialog open={isConsultationModalOpen} onOpenChange={setIsConsultationModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-blue-600" />
-              Solicitar Asesoría
-            </DialogTitle>
-            <DialogDescription>
-              Envía una solicitud de asesoría especializada para: <strong>{selectedProgramName}</strong>
-              {selectedReportId && (
-                <span className="block mt-1">
-                  Reporte seleccionado: <strong>#{selectedReportId}</strong>
-                </span>
-              )}
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="space-y-4">
+          <div className="flex-1 overflow-y-auto space-y-6">
+            {/* Selección de Programa */}
             <div className="space-y-2">
-              <Label htmlFor="consultation-message" className="text-sm font-medium text-gray-700">
+              <Label htmlFor="program-select" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <GraduationCap className="h-4 w-4 text-blue-500" />
+                Programa Académico *
+              </Label>
+              <Select value={selectedProgramId?.toString() || ""} onValueChange={handleProgramChange}>
+                <SelectTrigger className="h-10">
+                  <SelectValue placeholder="Selecciona un programa académico" />
+                </SelectTrigger>
+                <SelectContent>
+                  {programsLoading ? (
+                    <SelectItem value="" disabled>Cargando programas...</SelectItem>
+                  ) : programsData?.data ? (
+                    programsData.data.map((program) => (
+                      <SelectItem key={program.id} value={program.id.toString()}>
+                        {program.name} (SNIES: {program.snies})
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="" disabled>No hay programas disponibles</SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Selección de Reporte */}
+            {selectedProgramId && (
+              <div className="space-y-2">
+                <Label htmlFor="report-select" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-green-500" />
+                  Reporte de Evaluación *
+                </Label>
+                {reportsLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="text-center text-gray-500">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                      <p>Cargando reportes...</p>
+                    </div>
+                  </div>
+                ) : reportsError ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="text-center text-gray-500">
+                      <AlertTriangle className="h-8 w-8 text-red-500 mx-auto mb-2" />
+                      <p>Error al cargar los reportes</p>
+                    </div>
+                  </div>
+                ) : reportsData?.data && reportsData.data.length > 0 ? (
+                  <div className="space-y-4">
+                    <Select value={selectedReportId?.toString() || ""} onValueChange={handleReportChange}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue placeholder="Selecciona un reporte" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {reportsData.data.map((report) => (
+                          <SelectItem key={report.id} value={report.id.toString()}>
+                            Reporte #{report.id} - {(report as any).professional_role?.name || 'N/A'} 
+                            ({(report.score * 100).toFixed(1)}%)
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    
+                    {/* Paginación de reportes */}
+                    {reportsData.total_count > reportsItemsPerPage && (
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-gray-600">
+                          Mostrando {((reportsCurrentPage - 1) * reportsItemsPerPage) + 1} - {Math.min(reportsCurrentPage * reportsItemsPerPage, reportsData.total_count)} de {reportsData.total_count} reportes
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleReportsPageChange(reportsCurrentPage - 1)}
+                            disabled={reportsCurrentPage === 1}
+                          >
+                            Anterior
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleReportsPageChange(reportsCurrentPage + 1)}
+                            disabled={reportsCurrentPage >= Math.ceil(reportsData.total_count / reportsItemsPerPage)}
+                          >
+                            Siguiente
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="text-center text-gray-500">
+                      <FileText className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                      <p>No hay reportes disponibles para este programa</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Mensaje de solicitud */}
+            <div className="space-y-2">
+              <Label htmlFor="consultation-message" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <MessageSquare className="h-4 w-4 text-purple-500" />
                 Mensaje de solicitud *
               </Label>
               <Textarea
@@ -617,33 +841,39 @@ export default function AsesoriaExpertoPage() {
               />
             </div>
             
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <div className="flex items-start gap-2">
-                <User className="h-4 w-4 text-blue-600 mt-0.5" />
+            {/* Información adicional */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <User className="h-5 w-5 text-blue-600 mt-0.5" />
                 <div className="text-sm text-blue-800">
-                  <p className="font-medium">Información adicional:</p>
-                  <p className="text-xs mt-1">
-                    • Tu solicitud será revisada por un experto en ciberseguridad<br/>
-                    • Se te notificará al correo la respuesta del experto a tu solicitud
-                  </p>
+                  <p className="font-medium mb-2">Información importante:</p>
+                  <ul className="space-y-1 text-xs">
+                    <li>• Tu solicitud será revisada por un experto en ciberseguridad</li>
+                    <li>• Se te notificará al correo la respuesta del experto</li>
+                    <li>• El tiempo de respuesta puede variar según la complejidad de la consulta</li>
+                    <li>• Asegúrate de proporcionar información clara y específica</li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-3 justify-end">
+          {/* Botones de acción */}
+          <div className="flex gap-3 justify-end pt-4 border-t">
             <Button
               variant="outline"
               onClick={() => {
-                setIsConsultationModalOpen(false);
+                setIsCreateModalOpen(false);
                 setConsultationMessage('');
+                setSelectedProgramId(null);
+                setSelectedReportId(null);
               }}
             >
               Cancelar
             </Button>
             <Button
               onClick={handleCreateConsultation}
-              disabled={isCreatingConsultation || !consultationMessage.trim()}
+              disabled={isCreatingConsultation || !selectedProgramId || !selectedReportId || !consultationMessage.trim()}
               className="bg-blue-600 hover:bg-blue-700"
             >
               {isCreatingConsultation ? (
