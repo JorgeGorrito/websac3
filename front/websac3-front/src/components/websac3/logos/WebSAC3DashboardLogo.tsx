@@ -24,7 +24,7 @@ export function WebSAC3DashboardLogo() {
 
   return (
     <div
-      className="h-12 w-full cursor-pointer transition-transform hover:scale-105"
+      className="h-16 w-full cursor-pointer transition-transform hover:scale-105"
       onClick={handleLogoClick}
     >
       <WebSAC3Logo />

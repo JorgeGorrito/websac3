@@ -2,11 +2,11 @@
 
 import {
   User,
-  Settings,
   ChevronsUpDown,
   LogOut,
-  Shield,
+  KeyRound,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 import {
   Avatar,
@@ -44,9 +44,18 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const { logout, user: authUser } = useAuth()
+  const router = useRouter()
 
   const handleLogout = () => {
     logout()
+  }
+
+  // Get base URL based on user role
+  const getBaseUrl = () => {
+    if (authUser?.role === 'admin') return '/admin';
+    if (authUser?.role === 'program lead') return '/director';
+    if (authUser?.role === 'cybersecurity auditor') return '/experto';
+    return '/director'; // Default fallback
   }
 
   // Get role label from auth user if available
@@ -115,23 +124,25 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="gap-3 px-4 py-3">
+              <DropdownMenuItem 
+                onClick={() => router.push(`${getBaseUrl()}/perfil`)}
+                className="gap-3 px-4 py-3 cursor-pointer"
+              >
                 <User className="h-4 w-4" />
-                <span>Mi Perfil</span>
+                <span>Perfil</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="gap-3 px-4 py-3">
-                <Settings className="h-4 w-4" />
-                <span>Configuración</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gap-3 px-4 py-3">
-                <Shield className="h-4 w-4" />
-                <span>Seguridad</span>
+              <DropdownMenuItem 
+                onClick={() => router.push(`${getBaseUrl()}/cambiar-contrasena`)}
+                className="gap-3 px-4 py-3 cursor-pointer"
+              >
+                <KeyRound className="h-4 w-4" />
+                <span>Cambiar Contraseña</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem 
               onClick={handleLogout}
-              className="gap-3 px-4 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 focus:text-red-700 focus:bg-red-50"
+              className="gap-3 px-4 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 focus:text-red-700 focus:bg-red-50 cursor-pointer"
             >
               <LogOut className="h-4 w-4" />
               <span>Cerrar Sesión</span>

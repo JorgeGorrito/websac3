@@ -170,6 +170,40 @@ export type ProfileData = {
   role_name: string;
 };
 
+// Change Password types
+export type ChangePasswordRequest = {
+  current_password: string;
+  new_password: string;
+  confirm_new_password: string;
+};
+
+// Statistics types
+export type AdminStats = {
+  active_users: number;
+  total_access_requests: number;
+  total_consultations: number;
+  total_reports: number;
+};
+
+export type CybersecurityAuditorStats = {
+  consultation_requests: number;
+  feedback_reports: number;
+  pending_reports: number;
+};
+
+export type ProgramLeadStats = {
+  active_consultations: number;
+  generated_reports: number;
+  registered_programs: number;
+};
+
+export type StatisticsData = {
+  admin_stats: AdminStats;
+  cybersecurity_auditor_stats: CybersecurityAuditorStats;
+  program_lead_stats: ProgramLeadStats;
+  role: string;
+};
+
 export type ProfessionalRoleItem = {
   id: number;
   name: string;
@@ -1208,6 +1242,17 @@ export const api = createApi({
       transformResponse: (response: ApiResponse<ProfileData>) => response.result,
     }),
 
+    // Change Password
+    changePassword: builder.mutation<ApiResponse<string>, ChangePasswordRequest>({
+      query: (body) => ({ url: '/change-password', method: 'PUT', body }),
+    }),
+
+    // Get Statistics
+    getStatistics: builder.query<StatisticsData, { lang?: string }>({
+      query: ({ lang = 'es' } = {}) => ({ url: '/statistics' }),
+      transformResponse: (response: ApiResponse<StatisticsData>) => response.result,
+    }),
+
     // Get Degree Program Courses
     getDegreeProgramCourses: builder.query<{
       data: Array<{
@@ -1732,6 +1777,9 @@ export const {
   useGetDegreeProgramCoursesQuery,
   // profile
   useGetProfileQuery,
+  useChangePasswordMutation,
+  // statistics
+  useGetStatisticsQuery,
 } = api;
 
 
