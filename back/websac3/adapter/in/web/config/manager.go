@@ -526,12 +526,35 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(command.ChangePasswordCommand{}),
+		chandler.NewChangePasswordCommandHandler(
+			container.Inject[usecase.ChangePasswordUseCase](),
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(query.ListUserExpertConsultationsQuery{}),
 		qhandler.NewListUserExpertConsultationsQueryHandler(
 			container.Inject[validator.Validator](),
 			container.Inject[logging.Logger](),
 			container.Inject[usecase.ListUserExpertConsultationsUseCase](),
 			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(query.GetUserStatisticsQuery{}),
+		qhandler.NewGetUserStatisticsQueryHandler(
+			container.Inject[usecase.GetUserStatisticsUseCase](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
 		),
 	); err != nil {
 		*errorList = errors.Join(*errorList, err)
@@ -592,6 +615,18 @@ func (m *manager) ConfigureMediator(errorList *error) {
 			container.Inject[logging.Logger](),
 			container.Inject[usecase.ListExpertConsultationStatusUseCase](),
 			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
+		reflect.TypeOf(command.BulkCreateDegreeProgramCommand{}),
+		chandler.NewBulkCreateDegreeProgramCommandHandler(
+			container.Inject[usecase.BulkCreateDegreeProgramUseCase](),
+			container.Inject[validator.Validator](),
+			container.Inject[message.Provider](),
+			container.Inject[logging.Logger](),
 		),
 	); err != nil {
 		*errorList = errors.Join(*errorList, err)

@@ -60,6 +60,8 @@ func (m *manager) RegisterDependencies() error {
 	m.registerRejectedAccessRequestDependencies()
 	m.registerDeactivateUserDependencies()
 	m.registerActivateUserDependencies()
+	m.registerChangePasswordDependencies()
+	m.registerStatisticsDependencies()
 	return nil
 }
 

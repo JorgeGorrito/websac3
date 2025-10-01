@@ -36,6 +36,16 @@ func registerUpdateDegreeProgramRoute(routerGroup *gin.RouterGroup) {
 	routerGroup.PUT("/degree-program/:degree_program_id", updateDegreeProgramController.UpdateDegreeProgram)
 }
 
+func registerDownloadDegreeProgramTemplateRoute(routerGroup *gin.RouterGroup) {
+	var downloadTemplateController = controller.GetDownloadDegreeProgramTemplateController()
+	routerGroup.GET("/degree-program/template", downloadTemplateController.DownloadTemplate)
+}
+
+func registerBulkCreateDegreeProgramRoute(routerGroup *gin.RouterGroup) {
+	var bulkCreateController = controller.GetBulkCreateDegreeProgramController()
+	routerGroup.POST("/degree-program/bulk", bulkCreateController.BulkCreateDegreeProgram)
+}
+
 func RegisterDegreeProgramRoutes(routerGroup *gin.RouterGroup) {
 	authGroup := getAuthRequiredGroup(routerGroup)
 	registerCreateDegreeProgramRoute(authGroup)
@@ -43,5 +53,7 @@ func RegisterDegreeProgramRoutes(routerGroup *gin.RouterGroup) {
 	registerEvaluateDegreeProgramRoute(authGroup)
 	registerListReportsByDegreeProgramRoute(authGroup)
 	registerUpdateDegreeProgramRoute(authGroup)
-	registerGetDegreeProgramByIDRoute(routerGroup) // Sin autenticación requerida
+	registerDownloadDegreeProgramTemplateRoute(authGroup)
+	registerBulkCreateDegreeProgramRoute(authGroup)
+	registerGetDegreeProgramByIDRoute(routerGroup)
 }

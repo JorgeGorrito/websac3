@@ -91,11 +91,12 @@ func AuthMiddleware(jwtSecret []byte) gin.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token inválido"})
+			fmt.Println("err", err)
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			c.Abort()
 			return
 		}
-
+		fmt.Println("token", token)
 		c.Next()
 	}
 }

@@ -3,6 +3,7 @@ package dependencies
 import (
 	"websac3/adapter/out/persistence/postgresql/repository"
 	"websac3/app/domain/service"
+	domainusecase "websac3/app/domain/usecase"
 	"websac3/app/port/in/usecase"
 	"websac3/app/port/out/message"
 	"websac3/app/port/out/notification"
@@ -12,6 +13,7 @@ import (
 	"websac3/app/port/out/persistence/db"
 	"websac3/app/port/out/persistence/enum"
 	"websac3/common/dependencies/container"
+	"websac3/common/validator"
 
 	"github.com/JorgeGorrito/anise-dependency-injection/andi"
 )
@@ -102,6 +104,19 @@ func (m *manager) registerDegreeProgramDependencies() {
 				container.Inject[persistence.GetProfessionalRolePort](),
 				container.Inject[message.Provider](),
 				container.Inject[db.Manager](),
+			)
+		},
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.BulkCreateDegreeProgramUseCase](),
+		func() any {
+			return domainusecase.NewBulkCreateDegreeProgramUseCaseImpl(
+				service.NewBulkCreateDegreeProgramService(
+					container.Inject[db.Manager](),
+					container.Inject[persistence.CreateDegreeProgramPort](),
+					container.Inject[validator.Validator](),
+				),
 			)
 		},
 	)

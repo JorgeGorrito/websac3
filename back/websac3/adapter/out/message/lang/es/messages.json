@@ -63,6 +63,9 @@
   "list_role": {
     "not_found": "No se encontraron roles del sistema."
   },
+  "list_professional_role": {
+    "not_found": "No se encontraron roles profesionales."
+  },
   "list_approved_access_request": {
     "not_found": "No se encontraron solicitudes de acceso aprobadas."
   },
@@ -127,6 +130,19 @@
   },
   "get_user_profile" : {
     "user_not_found" : "No se encontró el perfil del usuario."
+  },
+  "change_password" : {
+    "user_not_found" : "No se encontró el usuario.",
+    "user_not_active" : "El usuario no está activo.",
+    "current_password_incorrect" : "La contraseña actual es incorrecta.",
+    "passwords_mismatch" : "Las contraseñas no coinciden.",
+    "new_password_same_as_current" : "La nueva contraseña debe ser diferente de la actual.",
+    "password_changed_successfully" : "Contraseña cambiada exitosamente."
+  },
+  "get_user_statistics" : {
+    "user_not_found" : "No se encontró el usuario.",
+    "user_role_not_found" : "No se pudo determinar el rol del usuario.",
+    "invalid_role" : "El rol del usuario no es válido para obtener estadísticas."
   },
   "deactivate_user" : {
     "user_not_found" : "No se encontró el usuario especificado.",

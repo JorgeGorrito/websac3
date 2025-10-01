@@ -21,4 +21,6 @@ func RegisterMappers() {
 	registerTopicMappers()
 	registerUserMappers()
 	registerCreateUserMappers()
+	registerChangePasswordMappers()
+	registerStatisticsMappers()
 }

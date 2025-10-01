@@ -229,6 +229,15 @@ func registerDegreeProgramMappers() {
 			}, nil
 		},
 	)
+
+	// Bulk Create Degree Program mappers
+	RegisterMapFunc(
+		func(req *request.BulkCreateDegreeProgramRequest) (command.BulkCreateDegreeProgramCommand, error) {
+			return command.BulkCreateDegreeProgramCommand{
+				File: req.File,
+			}, nil
+		},
+	)
 }
 
 // GetDegreeProgramMapperWithLanguage returns a language-specific mapper for DegreeProgram
