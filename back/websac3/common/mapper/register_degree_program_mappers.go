@@ -238,6 +238,15 @@ func registerDegreeProgramMappers() {
 			}, nil
 		},
 	)
+
+	// Delete Degree Program mappers
+	RegisterMapFunc(
+		func(req *request.DeleteDegreeProgramRequest) (command.DeleteDegreeProgramCommand, error) {
+			return command.DeleteDegreeProgramCommand{
+				DegreeProgramID: req.DegreeProgramID,
+			}, nil
+		},
+	)
 }
 
 // GetDegreeProgramMapperWithLanguage returns a language-specific mapper for DegreeProgram

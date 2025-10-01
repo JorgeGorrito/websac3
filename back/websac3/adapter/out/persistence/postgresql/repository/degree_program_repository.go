@@ -4,6 +4,7 @@ import (
 	psqlfilter "websac3/adapter/out/persistence/postgresql/filter"
 	"websac3/adapter/out/persistence/postgresql/model"
 	"websac3/app/domain/entity"
+	"websac3/app/domain/errs"
 	_db "websac3/app/port/out/persistence/db"
 	"websac3/app/port/out/persistence/filter"
 	"websac3/common/mapper"
@@ -314,4 +315,29 @@ func (r *DegreeProgramRepository) GetByUserIDAndFilters(page, perPage uint, user
 	}
 
 	return degreePrograms, total, nil
+}
+
+func (r *DegreeProgramRepository) DeleteByID(degreeProgramID uint, ctx _db.Context) error {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	var degreeProgram model.DegreeProgram
+	// First check if the degree program exists (including soft deleted ones)
+	if err := dbCtx.DB().Unscoped().First(&degreeProgram, degreeProgramID).Error; err != nil {
+		return err
+	}
+
+	// Check if the degree program is already deleted
+	if degreeProgram.DeletedAt.Valid {
+		return errs.NewNotFoundError("degree program not found")
+	}
+
+	// Delete the degree program (GORM will handle soft delete due to DeletedAt field)
+	if err := dbCtx.DB().Delete(&degreeProgram).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

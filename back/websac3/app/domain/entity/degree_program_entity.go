@@ -1,5 +1,7 @@
 package entity
 
+import "time"
+
 type DegreeProgram struct {
 	ID                  uint
 	Snies               uint
@@ -19,6 +21,8 @@ type DegreeProgram struct {
 
 	Courses           []Course
 	ProfessionalRoles []ProfessionalRole
+
+	DeletedAt *time.Time
 }
 
 func (e *DegreeProgram) IsRegistered() bool {
@@ -31,4 +35,12 @@ func (e *DegreeProgram) GetCourseTopics() []CourseTopic {
 		courseTopics = append(courseTopics, course.GetCourseTopics()...)
 	}
 	return courseTopics
+}
+
+func (e *DegreeProgram) CanBeDeletedBy(userID uint) bool {
+	return e.CreatedBy == userID
+}
+
+func (e *DegreeProgram) CanBeUpdatedBy(userID uint) bool {
+	return e.CreatedBy == userID
 }

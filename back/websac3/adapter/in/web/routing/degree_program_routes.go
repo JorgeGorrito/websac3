@@ -46,6 +46,11 @@ func registerBulkCreateDegreeProgramRoute(routerGroup *gin.RouterGroup) {
 	routerGroup.POST("/degree-program/bulk", bulkCreateController.BulkCreateDegreeProgram)
 }
 
+func registerDeleteDegreeProgramRoute(routerGroup *gin.RouterGroup) {
+	var deleteController = controller.GetDeleteDegreeProgramController()
+	routerGroup.DELETE("/degree-program/:degree_program_id", deleteController.Handle)
+}
+
 func RegisterDegreeProgramRoutes(routerGroup *gin.RouterGroup) {
 	authGroup := getAuthRequiredGroup(routerGroup)
 	registerCreateDegreeProgramRoute(authGroup)
@@ -55,5 +60,6 @@ func RegisterDegreeProgramRoutes(routerGroup *gin.RouterGroup) {
 	registerUpdateDegreeProgramRoute(authGroup)
 	registerDownloadDegreeProgramTemplateRoute(authGroup)
 	registerBulkCreateDegreeProgramRoute(authGroup)
+	registerDeleteDegreeProgramRoute(authGroup)
 	registerGetDegreeProgramByIDRoute(routerGroup)
 }

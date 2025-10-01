@@ -29,6 +29,11 @@
   "update_degree_program" : {
     "degree_program_updated" : "Degree program updated successfully."
   },
+  "delete_degree_program": {
+    "degree_program_not_found": "Degree program not found.",
+    "insufficient_permissions": "You are not authorized to delete this degree program. Only the program creator or an admin can delete it.",
+    "degree_program_deleted_successfully": "Degree program deleted successfully."
+  },
   "create_course" : {
     "course_created" : "Course created successfully.",
     "course_already_exists" : "A course with this code already exists in the degree program."

@@ -61,6 +61,11 @@ func (m *manager) registerDegreeProgramDependencies() {
 	)
 
 	m.binder.Bind(
+		andi.GetAbstractType[persistence.DeleteDegreeProgramPort](),
+		func() any { return container.Inject[persistence.DegreeProgramPort]() },
+	)
+
+	m.binder.Bind(
 		andi.GetAbstractType[usecase.CreateDegreeProgramUseCase](),
 		func() any {
 			return service.NewCreateDegreeProgramService(
@@ -117,6 +122,19 @@ func (m *manager) registerDegreeProgramDependencies() {
 					container.Inject[persistence.CreateDegreeProgramPort](),
 					container.Inject[validator.Validator](),
 				),
+			)
+		},
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.DeleteDegreeProgramUseCase](),
+		func() any {
+			return service.NewDeleteDegreeProgramService(
+				container.Inject[db.Manager](),
+				container.Inject[persistence.DeleteDegreeProgramPort](),
+				container.Inject[persistence.GetDegreeProgramPort](),
+				container.Inject[persistence.GetUserPort](),
+				container.Inject[message.Provider](),
 			)
 		},
 	)

@@ -40,6 +40,11 @@
   "update_degree_program" : {
     "degree_program_updated" : "Programa de grado actualizado exitosamente."
   },
+  "delete_degree_program": {
+    "degree_program_not_found": "Programa de grado no encontrado.",
+    "insufficient_permissions": "No estás autorizado para eliminar este programa de grado. Solo el creador del programa o un administrador pueden eliminarlo.",
+    "degree_program_deleted_successfully": "Programa de grado eliminado exitosamente."
+  },
   "create_course" : {
     "course_created" : "Curso creado exitosamente.",
     "course_already_exists" : "Ya existe un curso con este código en el programa de grado."
