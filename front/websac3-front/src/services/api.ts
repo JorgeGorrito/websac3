@@ -897,6 +897,13 @@ export const api = createApi({
         { type: "DegreeProgram", id: "LIST" },
       ],
     }),
+    deleteDegreeProgram: builder.mutation<ApiResponse<string>, { degree_program_id: number }>({
+      query: ({ degree_program_id }) => ({ url: `/degree-program/${degree_program_id}`, method: "DELETE" }),
+      invalidatesTags: (result, error, { degree_program_id }) => [
+        { type: "DegreeProgram", id: degree_program_id },
+        { type: "DegreeProgram", id: "LIST" },
+      ],
+    }),
     // Topics
     listTopics: builder.query<
       PaginatedPage<TopicItem>,
@@ -1911,6 +1918,7 @@ export const {
   useListDegreeProgramsQuery,
   useCreateDegreeProgramMutation,
   useUpdateDegreeProgramMutation,
+  useDeleteDegreeProgramMutation,
   // topics
   useListTopicsQuery,
   // course types and natures

@@ -8,12 +8,22 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useListDegreeProgramsQuery } from "@/services/api";
-import { Plus, BookOpen, Calendar, Clock, GraduationCap, Target, Search, Settings } from "lucide-react";
+import { useListDegreeProgramsQuery, useDeleteDegreeProgramMutation } from "@/services/api";
+import { Plus, BookOpen, Calendar, Clock, GraduationCap, Target, Search, Settings, Trash2 } from "lucide-react";
 import { DegreeProgramCard, ActionButton } from "@/components/websac3/program/DegreeProgramCard";
 import { ProgramsPagination } from "@/components/websac3/program/ProgramsPagination";
 import { useDispatch } from "react-redux";
 import { showError } from "@/store/errorSlice";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function ProgramasPage() {
   const router = useRouter();
@@ -38,6 +48,13 @@ export default function ProgramasPage() {
   });
   
   const [showFilters, setShowFilters] = useState(false);
+  
+  // Delete confirmation modal state
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [programToDelete, setProgramToDelete] = useState<{ id: number; name: string } | null>(null);
+  
+  // Delete mutation
+  const [deleteDegreeProgram, { isLoading: isDeleting }] = useDeleteDegreeProgramMutation();
 
   // Build query parameters with proper filter format
   const buildFilters = () => {
@@ -122,6 +139,32 @@ export default function ProgramasPage() {
 
   const handleCreateProgram = () => {
     router.push("/director/registrar-programa");
+  };
+
+  // Handle delete program
+  const handleDeleteClick = (program: { id: number; name: string }) => {
+    setProgramToDelete(program);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!programToDelete) return;
+
+    try {
+      await deleteDegreeProgram({ degree_program_id: programToDelete.id }).unwrap();
+      dispatch(showError({ type: 'success', message: 'Programa eliminado exitosamente.' }));
+      setDeleteModalOpen(false);
+      setProgramToDelete(null);
+      // The list will automatically refresh due to cache invalidation
+    } catch (error: any) {
+      console.error("Error deleting program:", error);
+      dispatch(showError("No se pudo eliminar el programa. Intenta nuevamente."));
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setProgramToDelete(null);
   };
 
   // Note: Error handling is now done globally via ErrorHandler component
@@ -344,6 +387,13 @@ export default function ProgramasPage() {
                     variant: "outline",
                     className: "flex-1 border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 transition-all duration-200",
                     onClick: () => router.push(`/director/editar-programa/${program.id}`)
+                  },
+                  {
+                    label: "Eliminar",
+                    icon: Trash2,
+                    variant: "outline",
+                    className: "flex-1 border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400 transition-all duration-200",
+                    onClick: () => handleDeleteClick({ id: program.id, name: program.name })
                   }
                 ];
 
@@ -386,6 +436,35 @@ export default function ProgramasPage() {
           />
         )}
       </div>
+      
+      {/* Delete Confirmation Modal */}
+      <AlertDialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-red-600 flex items-center gap-2">
+              <Trash2 className="h-5 w-5" />
+              Confirmar Eliminación
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-600">
+              ¿Estás seguro de que deseas eliminar el programa <strong>"{programToDelete?.name}"</strong>?
+              <br />
+              <span className="text-red-600 font-medium">Esta acción no se puede deshacer.</span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleDeleteCancel} disabled={isDeleting}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {isDeleting ? "Eliminando..." : "Eliminar Programa"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
     </div>
   );
