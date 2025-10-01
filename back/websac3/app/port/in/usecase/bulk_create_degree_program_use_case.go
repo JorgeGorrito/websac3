@@ -8,3 +8,4 @@ import (
 type BulkCreateDegreeProgramUseCase interface {
 	Execute(command command.BulkCreateDegreeProgramCommand, lang string) (response.BulkCreateDegreeProgramResponse, error)
 }
+

@@ -7,3 +7,4 @@ import (
 type DeleteDegreeProgramPort interface {
 	DeleteByID(degreeProgramID uint, ctx db.Context) error
 }
+

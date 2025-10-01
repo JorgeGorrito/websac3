@@ -7,3 +7,4 @@ type BulkCreateDegreeProgramCommand struct {
 	CreatedBy   uint `validations:"required"`
 	Permissions []string
 }
+

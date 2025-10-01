@@ -71,3 +71,4 @@ func (c *DeleteDegreeProgramController) Handle(ctx *gin.Context) {
 	result, _ := mediator.Send[command.DeleteDegreeProgramCommand, response.ApiResponse[string]](cmd, lang)
 	ctx.JSON(result.HttpStatusCode, result.ToResponseFormat())
 }
+

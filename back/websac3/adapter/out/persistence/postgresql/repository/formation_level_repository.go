@@ -35,8 +35,7 @@ func (r *FormationLevelRepository) GetAll(
 	// Apply name filter if provided
 	if name != "" {
 		query = query.Joins("JOIN formation_level_names ON formation_levels.id = formation_level_names.formation_level_id").
-			Where("formation_level_names.name ILIKE ?", "%"+name+"%").
-			Group("formation_levels.id")
+			Where("formation_level_names.name ILIKE ?", "%"+name+"%")
 	}
 
 	// Get total count
@@ -52,7 +51,7 @@ func (r *FormationLevelRepository) GetAll(
 		Preload("Names").
 		Offset(int(offset)).
 		Limit(int(perPage)).
-		Order("formation_levels.id ASC").
+		Order("id ASC").
 		Find(&formationLevels).Error; err != nil {
 		return nil, 0, err
 	}
@@ -91,8 +90,7 @@ func (r *FormationLevelRepository) GetAllWithLang(
 	// Apply name filter if provided
 	if name != "" {
 		query = query.Joins("JOIN formation_level_names ON formation_levels.id = formation_level_names.formation_level_id").
-			Where("formation_level_names.name ILIKE ?", "%"+name+"%").
-			Group("formation_levels.id")
+			Where("formation_level_names.name ILIKE ?", "%"+name+"%")
 	}
 
 	// Get total count
@@ -108,7 +106,7 @@ func (r *FormationLevelRepository) GetAllWithLang(
 		Preload("Names").
 		Offset(int(offset)).
 		Limit(int(perPage)).
-		Order("formation_levels.id ASC").
+		Order("id ASC").
 		Find(&formationLevels).Error; err != nil {
 		return nil, 0, err
 	}

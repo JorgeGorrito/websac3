@@ -5,3 +5,4 @@ type DeleteDegreeProgramCommand struct {
 	UserID          uint
 	Permissions     []string
 }
+

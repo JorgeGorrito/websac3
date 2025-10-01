@@ -21,3 +21,4 @@ type DegreeProgramBulkError struct {
 	Name      *string  `json:"name,omitempty"`
 	Errors    []string `json:"errors"`
 }
+

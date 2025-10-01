@@ -9,6 +9,7 @@ import (
 	"websac3/app/port/out/persistence"
 	"websac3/app/port/out/persistence/db"
 	"websac3/common/dependencies/container"
+	"websac3/common/validator"
 
 	"github.com/JorgeGorrito/anise-dependency-injection/andi"
 )
@@ -127,6 +128,19 @@ func (m *manager) registerCourseDependencies() {
 					container.Inject[persistence.GetUserPort](),
 					container.Inject[db.Manager](),
 					container.Inject[message.Provider](),
+				),
+			)
+		},
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.BulkCreateCourseUseCase](),
+		func() any {
+			return domainusecase.NewBulkCreateCourseUseCaseImpl(
+				service.NewBulkCreateCourseService(
+					container.Inject[db.Manager](),
+					container.Inject[persistence.CreateCoursePort](),
+					container.Inject[validator.Validator](),
 				),
 			)
 		},

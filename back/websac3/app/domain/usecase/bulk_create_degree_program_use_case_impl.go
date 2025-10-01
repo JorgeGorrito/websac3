@@ -22,3 +22,4 @@ func NewBulkCreateDegreeProgramUseCaseImpl(
 func (u *bulkCreateDegreeProgramUseCaseImpl) Execute(command command.BulkCreateDegreeProgramCommand, lang string) (response.BulkCreateDegreeProgramResponse, error) {
 	return u.bulkCreateDegreeProgramService.Execute(command, lang)
 }
+

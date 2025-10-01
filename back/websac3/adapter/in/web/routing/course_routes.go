@@ -46,6 +46,16 @@ func registerUpdateCourseRoute(routerGroup *gin.RouterGroup) {
 	routerGroup.PUT("/course/:course_id", updateCourseController.Handle)
 }
 
+func registerDownloadCourseTemplateRoute(routerGroup *gin.RouterGroup) {
+	var downloadTemplateController = controller.GetDownloadCourseTemplateController()
+	routerGroup.GET("/course/template", downloadTemplateController.DownloadTemplate)
+}
+
+func registerBulkCreateCourseRoute(routerGroup *gin.RouterGroup) {
+	var bulkCreateController = controller.GetBulkCreateCourseController()
+	routerGroup.POST("/course/bulk", bulkCreateController.BulkCreateCourse)
+}
+
 func RegisterCourseRoutes(routerGroup *gin.RouterGroup) {
 	authGroup := getAuthRequiredGroup(routerGroup)
 	registerCreateCourseRoute(authGroup)
@@ -56,4 +66,6 @@ func RegisterCourseRoutes(routerGroup *gin.RouterGroup) {
 	registerDeleteCourseRoute(authGroup)
 	registerListCourseTypesRoute(authGroup)
 	registerListCourseNaturesRoute(authGroup)
+	registerDownloadCourseTemplateRoute(authGroup)
+	registerBulkCreateCourseRoute(authGroup)
 }
