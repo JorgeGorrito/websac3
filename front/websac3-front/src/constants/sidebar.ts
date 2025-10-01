@@ -95,6 +95,11 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
         icon: PlusSquare,
       },
       {
+        title: "Carga Masiva Programas",
+        url: "/director/carga-masiva-programas",
+        icon: Upload,
+      },
+      {
         title: "Cargar Datos",
         url: "/director/cargar-datos",
         icon: Upload,

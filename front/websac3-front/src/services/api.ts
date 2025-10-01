@@ -177,6 +177,52 @@ export type ChangePasswordRequest = {
   confirm_new_password: string;
 };
 
+// Bulk Import types
+export type BulkImportFailedItem = {
+  errors: string[];
+  name: string;
+  row_number: number;
+  snies: number;
+};
+
+export type BulkImportSuccessfulItem = {
+  message: string;
+  name: string;
+  row_number: number;
+  snies: number;
+};
+
+export type BulkImportResult = {
+  failed_count: number;
+  failed_items: BulkImportFailedItem[];
+  successful_count: number;
+  successful_items: BulkImportSuccessfulItem[];
+  total_processed: number;
+};
+
+// Reference Data types for CSV guidance
+export type DurationUnit = {
+  id: number;
+  name: string;
+};
+
+export type FormationLevel = {
+  id: number;
+  name: string;
+};
+
+export type ProfessionalRole = {
+  id: number;
+  name: string;
+};
+
+export type PaginatedResult<T> = {
+  current_page: number;
+  data: T[];
+  items_per_page: number;
+  total_count: number;
+};
+
 // Statistics types
 export type AdminStats = {
   active_users: number;
@@ -1253,6 +1299,138 @@ export const api = createApi({
       transformResponse: (response: ApiResponse<StatisticsData>) => response.result,
     }),
 
+    // Get Degree Program Template
+    getDegreeProgramTemplate: builder.query<Blob, { lang?: string }>({
+      query: ({ lang = 'es' } = {}) => ({ 
+        url: '/degree-program/template',
+        responseHandler: (response) => response.blob(),
+      }),
+    }),
+
+    // Bulk Import Degree Programs
+    bulkImportDegreePrograms: builder.mutation<ApiResponse<BulkImportResult>, { lang?: string; file: File }>({
+      query: ({ lang = 'es', file }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return {
+          url: '/degree-program/bulk',
+          method: 'POST',
+          body: formData,
+        };
+      },
+    }),
+
+    // Get Duration Units
+    getDurationUnits: builder.query<DurationUnit[], { lang?: string; name?: string }>({
+      query: ({ lang = 'es', name } = {}) => {
+        const params = new URLSearchParams();
+        if (name) {
+          const filters = new URLSearchParams();
+          filters.append('name[cont]', name);
+          params.append('filters', filters.toString());
+        }
+        return { url: `/duration-unit${params.toString() ? `?${params.toString()}` : ''}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedResult<DurationUnit>>) => {
+        // Handle empty or invalid responses gracefully
+        if (!response || !response.result) {
+          return [];
+        }
+        
+        // Check if there are error messages (like "No se encontraron...")
+        if (response.errors && response.errors.length > 0 && response.errors.some(err => err && err.trim() !== "")) {
+          // Return error object for "not found" cases that come as 200 with errors
+          throw new Error(response.errors.join(', '));
+        }
+        
+        // Handle null data or non-array data
+        if (!response.result.data || !Array.isArray(response.result.data)) {
+          return [];
+        }
+        
+        return response.result.data;
+      },
+      transformErrorResponse: (response) => {
+        // Return a special error indicator instead of empty array
+        // This allows the component to distinguish between real errors and empty results
+        return { isError: true, status: response.status, message: 'Error loading data' };
+      },
+    }),
+
+    // Get Formation Levels
+    getFormationLevels: builder.query<FormationLevel[], { lang?: string; name?: string }>({
+      query: ({ lang = 'es', name } = {}) => {
+        const params = new URLSearchParams();
+        if (name) {
+          const filters = new URLSearchParams();
+          filters.append('name[cont]', name);
+          params.append('filters', filters.toString());
+        }
+        return { url: `/formation-level${params.toString() ? `?${params.toString()}` : ''}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedResult<FormationLevel>>) => {
+        // Handle empty or invalid responses gracefully
+        if (!response || !response.result) {
+          return [];
+        }
+        
+        // Check if there are error messages (like "No se encontraron...")
+        if (response.errors && response.errors.length > 0 && response.errors.some(err => err && err.trim() !== "")) {
+          // Return error object for "not found" cases that come as 200 with errors
+          throw new Error(response.errors.join(', '));
+        }
+        
+        // Handle null data or non-array data
+        if (!response.result.data || !Array.isArray(response.result.data)) {
+          return [];
+        }
+        
+        return response.result.data;
+      },
+      transformErrorResponse: (response) => {
+        // Return a special error indicator instead of empty array
+        // This allows the component to distinguish between real errors and empty results
+        return { isError: true, status: response.status, message: 'Error loading data' };
+      },
+    }),
+
+    // Get Professional Roles
+    getProfessionalRoles: builder.query<ProfessionalRole[], { lang?: string; name?: string }>({
+      query: ({ lang = 'es', name } = {}) => {
+        const params = new URLSearchParams();
+        if (name) {
+          const filters = new URLSearchParams();
+          filters.append('name[cont]', name);
+          params.append('filters', filters.toString());
+        }
+        return { url: `/professional-roles${params.toString() ? `?${params.toString()}` : ''}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedResult<ProfessionalRole>>) => {
+        // Handle empty or invalid responses gracefully
+        if (!response || !response.result) {
+          return [];
+        }
+        
+        // Check if there are error messages (like "No se encontraron...")
+        if (response.errors && response.errors.length > 0 && response.errors.some(err => err && err.trim() !== "")) {
+          // Return error object for "not found" cases that come as 200 with errors
+          throw new Error(response.errors.join(', '));
+        }
+        
+        // Handle null data or non-array data
+        if (!response.result.data || !Array.isArray(response.result.data)) {
+          return [];
+        }
+        
+        return response.result.data;
+      },
+      transformErrorResponse: (response) => {
+        // Return a special error indicator instead of empty array
+        // This allows the component to distinguish between real errors and empty results
+        return { isError: true, status: response.status, message: 'Error loading data' };
+      },
+    }),
+
     // Get Degree Program Courses
     getDegreeProgramCourses: builder.query<{
       data: Array<{
@@ -1780,6 +1958,13 @@ export const {
   useChangePasswordMutation,
   // statistics
   useGetStatisticsQuery,
+  // bulk import
+  useGetDegreeProgramTemplateQuery,
+  useBulkImportDegreeProgramsMutation,
+  // reference data
+  useGetDurationUnitsQuery,
+  useGetFormationLevelsQuery,
+  useGetProfessionalRolesQuery,
 } = api;
 
 
