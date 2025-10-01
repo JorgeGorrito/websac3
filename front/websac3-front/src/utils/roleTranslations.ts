@@ -25,3 +25,4 @@ export function translateRole(roleName: string): string {
 export function getRoleTranslations(): Record<string, string> {
   return ROLE_TRANSLATIONS;
 }
+

@@ -12,14 +12,14 @@ import {
   FileCheck,
   TrendingUp
 } from "lucide-react";
-import type { BulkImportResult } from "@/services/api";
+import type { BulkImportCourseResult } from "@/services/api";
 
-interface BulkImportResultsProps {
-  result: BulkImportResult;
+interface BulkImportCourseResultsProps {
+  result: BulkImportCourseResult;
   onClose: () => void;
 }
 
-export function BulkImportResults({ result, onClose }: BulkImportResultsProps) {
+export function BulkImportCourseResults({ result, onClose }: BulkImportCourseResultsProps) {
   const successRate = result.total_processed > 0 
     ? Math.round((result.successful_count / result.total_processed) * 100) 
     : 0;
@@ -49,7 +49,7 @@ export function BulkImportResults({ result, onClose }: BulkImportResultsProps) {
             <FileCheck className={`h-6 w-6 ${successRate === 100 ? 'text-green-600' : successRate >= 50 ? 'text-yellow-600' : 'text-red-600'}`} />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Resultados de la Importación</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Resultados de la Importación de Cursos</h2>
             <p className="text-gray-600 text-sm">Procesamiento completado</p>
           </div>
         </div>
@@ -113,7 +113,7 @@ export function BulkImportResults({ result, onClose }: BulkImportResultsProps) {
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2 text-green-700">
                 <CheckCircle className="h-5 w-5" />
-                Programas Importados Exitosamente ({result.successful_count})
+                Cursos Importados Exitosamente ({result.successful_count})
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -122,7 +122,7 @@ export function BulkImportResults({ result, onClose }: BulkImportResultsProps) {
                   <div key={index} className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
                     <div>
                       <div className="font-medium text-green-900">{item.name}</div>
-                      <div className="text-sm text-green-700">SNIES: {item.snies} • Fila: {item.row_number}</div>
+                      <div className="text-sm text-green-700">Código: {item.code} • Fila: {item.row_number}</div>
                       <div className="text-xs text-green-600 mt-1">{item.message}</div>
                     </div>
                     <Badge variant="secondary" className="bg-green-100 text-green-800">
@@ -141,7 +141,7 @@ export function BulkImportResults({ result, onClose }: BulkImportResultsProps) {
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2 text-red-700">
                 <XCircle className="h-5 w-5" />
-                Programas con Errores ({result.failed_count})
+                Cursos con Errores ({result.failed_count})
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -151,7 +151,7 @@ export function BulkImportResults({ result, onClose }: BulkImportResultsProps) {
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <div className="font-medium text-red-900">{item.name}</div>
-                        <div className="text-sm text-red-700">SNIES: {item.snies} • Fila: {item.row_number}</div>
+                        <div className="text-sm text-red-700">Código: {item.code} • Fila: {item.row_number}</div>
                       </div>
                       <Badge variant="secondary" className="bg-red-100 text-red-800">
                         Error
@@ -191,7 +191,7 @@ export function BulkImportResults({ result, onClose }: BulkImportResultsProps) {
             </span>
           </div>
           <p className={`text-sm mt-1 ${successRate === 100 ? 'text-green-700' : successRate >= 50 ? 'text-yellow-700' : 'text-red-700'}`}>
-            {result.successful_count} de {result.total_processed} programas fueron importados correctamente.
+            {result.successful_count} de {result.total_processed} cursos fueron importados correctamente.
             {result.failed_count > 0 && " Revisa los errores para corregir los datos y volver a importar."}
           </p>
         </div>

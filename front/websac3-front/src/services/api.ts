@@ -200,6 +200,29 @@ export type BulkImportResult = {
   total_processed: number;
 };
 
+// Bulk Import Courses types
+export type BulkImportCourseFailedItem = {
+  errors: string[];
+  name: string;
+  row_number: number;
+  code: string;
+};
+
+export type BulkImportCourseSuccessfulItem = {
+  message: string;
+  name: string;
+  row_number: number;
+  code: string;
+};
+
+export type BulkImportCourseResult = {
+  failed_count: number;
+  failed_items: BulkImportCourseFailedItem[];
+  successful_count: number;
+  successful_items: BulkImportCourseSuccessfulItem[];
+  total_processed: number;
+};
+
 // Reference Data types for CSV guidance
 export type DurationUnit = {
   id: number;
@@ -212,6 +235,16 @@ export type FormationLevel = {
 };
 
 export type ProfessionalRole = {
+  id: number;
+  name: string;
+};
+
+export type CourseNature = {
+  id: number;
+  name: string;
+};
+
+export type CourseType = {
   id: number;
   name: string;
 };
@@ -248,11 +281,6 @@ export type StatisticsData = {
   cybersecurity_auditor_stats: CybersecurityAuditorStats;
   program_lead_stats: ProgramLeadStats;
   role: string;
-};
-
-export type ProfessionalRoleItem = {
-  id: number;
-  name: string;
 };
 
 export type EvaluateDegreeProgramRequest = {
@@ -371,24 +399,6 @@ export type ExpertConsultationResponseResponse = {
 export type ExpertConsultationStatus = {
   id: number;
   name: string;
-};
-
-// Access Request types
-export type AccessRequestItem = {
-  id: number;
-  name: string;
-  lastname: string;
-  email: string;
-  identification_number: string;
-  identification_type: string;
-  job_position: string;
-  department_name: string;
-  municipality_name: string;
-  higher_education_institution_name: string;
-  higher_education_institution_snies: number;
-  higher_education_institution_ownership: string;
-  status_id: number;
-  status_name: string;
 };
 
 // Role types
@@ -1038,7 +1048,7 @@ export const api = createApi({
                 filters?: Record<string, string>;
               }
             >({
-              query: ({ degree_program_id, current_page = 1, items_per_page = 50, filters } = {}) => {
+              query: ({ degree_program_id, current_page = 1, items_per_page = 50, filters }) => {
                 const params = new URLSearchParams();
                 params.set("current_page", String(current_page));
                 params.set("items_per_page", String(items_per_page));
@@ -1112,11 +1122,6 @@ export const api = createApi({
                 { type: "Course", id: "LIST" },
               ],
             }),
-    // Professional Roles
-    listProfessionalRoles: builder.query<PaginatedPage<ProfessionalRoleItem>, void>({
-      query: () => ({ url: "/professional-roles" }),
-      transformResponse: (response: ApiResponse<PaginatedPage<ProfessionalRoleItem>>) => response.result,
-    }),
     // System Roles
     listRoles: builder.query<PaginatedPage<RoleItem>, { current_page?: number; items_per_page?: number } | void>({
       query: (args) => {
@@ -1310,7 +1315,7 @@ export const api = createApi({
     getDegreeProgramTemplate: builder.query<Blob, { lang?: string }>({
       query: ({ lang = 'es' } = {}) => ({ 
         url: '/degree-program/template',
-        responseHandler: (response) => response.blob(),
+        responseHandler: (response: Response) => response.blob(),
       }),
     }),
 
@@ -1394,7 +1399,7 @@ export const api = createApi({
         
         return response.result.data;
       },
-      transformErrorResponse: (response) => {
+      transformErrorResponse: (response: any) => {
         // Return a special error indicator instead of empty array
         // This allows the component to distinguish between real errors and empty results
         return { isError: true, status: response.status, message: 'Error loading data' };
@@ -1435,6 +1440,90 @@ export const api = createApi({
         // Return a special error indicator instead of empty array
         // This allows the component to distinguish between real errors and empty results
         return { isError: true, status: response.status, message: 'Error loading data' };
+      },
+    }),
+
+    // Get Course Natures with filter
+    getCourseNatures: builder.query<CourseNature[], { lang?: string; name?: string }>({
+      query: ({ lang = 'es', name } = {}) => {
+        const params = new URLSearchParams();
+        if (name) {
+          const filters = new URLSearchParams();
+          filters.append('name[cont]', name);
+          params.append('filters', filters.toString());
+        }
+        return { url: `/course-natures${params.toString() ? `?${params.toString()}` : ''}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedResult<CourseNature>>) => {
+        if (!response || !response.result) {
+          return [];
+        }
+        
+        if (response.errors && response.errors.length > 0 && response.errors.some(err => err && err.trim() !== "")) {
+          throw new Error(response.errors.join(', '));
+        }
+        
+        if (!response.result.data || !Array.isArray(response.result.data)) {
+          return [];
+        }
+        
+        return response.result.data;
+      },
+      transformErrorResponse: (response) => {
+        return { isError: true, status: response.status, message: 'Error loading data' };
+      },
+    }),
+
+    // Get Course Types with filter
+    getCourseTypes: builder.query<CourseType[], { lang?: string; name?: string }>({
+      query: ({ lang = 'es', name } = {}) => {
+        const params = new URLSearchParams();
+        if (name) {
+          const filters = new URLSearchParams();
+          filters.append('name[cont]', name);
+          params.append('filters', filters.toString());
+        }
+        return { url: `/course-types${params.toString() ? `?${params.toString()}` : ''}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedResult<CourseType>>) => {
+        if (!response || !response.result) {
+          return [];
+        }
+        
+        if (response.errors && response.errors.length > 0 && response.errors.some(err => err && err.trim() !== "")) {
+          throw new Error(response.errors.join(', '));
+        }
+        
+        if (!response.result.data || !Array.isArray(response.result.data)) {
+          return [];
+        }
+        
+        return response.result.data;
+      },
+      transformErrorResponse: (response: any) => {
+        return { isError: true, status: response.status, message: 'Error loading data' };
+      },
+    }),
+
+    // Get Course Template
+    getCourseTemplate: builder.query<Blob, { lang?: string }>({
+      query: ({ lang = 'es' } = {}) => ({ 
+        url: '/course/template',
+        responseHandler: (response: Response) => response.blob(),
+      }),
+    }),
+
+    // Bulk Import Courses
+    bulkImportCourses: builder.mutation<ApiResponse<BulkImportCourseResult>, { lang?: string; file: File; program_id: number }>({
+      query: ({ lang = 'es', file, program_id }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('degree_program_id', program_id.toString());
+        return {
+          url: '/course/bulk',
+          method: 'POST',
+          body: formData,
+        };
       },
     }),
 
@@ -1973,6 +2062,11 @@ export const {
   useGetDurationUnitsQuery,
   useGetFormationLevelsQuery,
   useGetProfessionalRolesQuery,
+  // course bulk import
+  useGetCourseTemplateQuery,
+  useBulkImportCoursesMutation,
+  useGetCourseNaturesQuery,
+  useGetCourseTypesQuery,
 } = api;
 
 

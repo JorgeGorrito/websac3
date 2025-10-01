@@ -271,7 +271,7 @@ export default function FormularioCursosPage() {
     <div className="space-y-6">
       <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
         <div className="mb-6">
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center justify-between mb-4">
             <Button 
               variant="ghost" 
               onClick={() => router.push('/director/cargar-datos')}
@@ -279,6 +279,14 @@ export default function FormularioCursosPage() {
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Volver
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => router.push(`/director/carga-masiva-cursos?program_id=${programId}`)}
+              className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-300"
+            >
+              <Upload className="w-4 h-4" />
+              Carga Masiva
             </Button>
           </div>
           <h2 className="text-2xl font-semibold text-center">
