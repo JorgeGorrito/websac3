@@ -19,7 +19,7 @@ import {
   Layers
 } from "lucide-react";
 import { 
-  useGetCourseTemplateQuery,
+  useLazyGetCourseTemplateQuery,
   useBulkImportCoursesMutation,
   useGetCourseNaturesQuery,
   useGetCourseTypesQuery,
@@ -154,9 +154,7 @@ export default function CargaMasivaCursosPage() {
   const [courseTypeSearch, setCourseTypeSearch] = useState("");
 
   const [bulkImport, { isLoading: isImporting }] = useBulkImportCoursesMutation();
-  const { refetch: downloadTemplate, isLoading: isDownloading } = useGetCourseTemplateQuery({}, {
-    skip: true,
-  });
+  const [downloadTemplate, { isLoading: isDownloading }] = useLazyGetCourseTemplateQuery();
 
   // Memoize query parameters to prevent unnecessary re-renders
   const courseNatureQueryParams = useMemo(() => ({
@@ -200,13 +198,13 @@ export default function CargaMasivaCursosPage() {
 
   const handleDownloadTemplate = async () => {
     try {
-      const result = await downloadTemplate();
+      const result = await downloadTemplate({});
       if (result.data) {
         const blob = result.data as Blob;
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'plantilla-cursos.xlsx';
+        link.download = 'plantilla-cursos.csv';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -221,13 +219,16 @@ export default function CargaMasivaCursosPage() {
     const file = event.target.files?.[0];
     if (file) {
       const validTypes = [
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'application/vnd.ms-excel',
-        'text/csv'
+        'text/csv',
+        'application/csv',
+        'text/comma-separated-values',
+        'application/vnd.ms-excel'
       ];
       
-      if (!validTypes.includes(file.type)) {
-        alert('Por favor selecciona un archivo Excel (.xlsx, .xls) o CSV válido.');
+      const isValidType = validTypes.includes(file.type) || file.name.endsWith('.csv');
+      
+      if (!isValidType) {
+        alert('Por favor selecciona un archivo CSV válido.');
         return;
       }
       
@@ -352,7 +353,7 @@ export default function CargaMasivaCursosPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600 mb-4">
-                Descarga la plantilla de Excel para conocer el formato correcto de los datos.
+                Descarga la plantilla CSV para conocer el formato correcto de los datos.
               </p>
               <Button 
                 onClick={handleDownloadTemplate}
@@ -375,14 +376,14 @@ export default function CargaMasivaCursosPage() {
             <CardContent>
               <div className="space-y-4">
                 <p className="text-gray-600">
-                  Selecciona el archivo Excel (.xlsx, .xls) o CSV con los datos de los cursos.
+                  Selecciona el archivo CSV con los datos de los cursos.
                 </p>
                 
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                   <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <input
                     type="file"
-                    accept=".xlsx,.xls,.csv"
+                    accept=".csv,text/csv"
                     onChange={handleFileSelect}
                     className="hidden"
                     id="file-upload"
@@ -431,11 +432,12 @@ export default function CargaMasivaCursosPage() {
             </CardHeader>
             <CardContent>
               <ul className="text-sm text-yellow-700 space-y-2">
-                <li>• Utiliza la plantilla descargada para mantener el formato correcto</li>
+                <li>• Utiliza la plantilla CSV descargada para mantener el formato correcto</li>
                 <li>• Usa los IDs mostrados en la guía lateral para los campos requeridos</li>
                 <li>• Para is_cybersecurity usa solo &quot;si&quot; o &quot;no&quot; (sin IDs)</li>
                 <li>• Asegúrate de que todos los campos obligatorios estén completos</li>
                 <li>• Los códigos de curso deben ser únicos</li>
+                <li>• El archivo debe ser formato CSV (valores separados por comas)</li>
                 <li>• Revisa los datos antes de subir el archivo</li>
               </ul>
             </CardContent>

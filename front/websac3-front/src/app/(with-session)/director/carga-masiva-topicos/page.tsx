@@ -1,37 +1,29 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  useLazyGetDegreeProgramTemplateQuery,
-  useBulkImportDegreeProgramsMutation,
-  useGetDurationUnitsQuery,
-  useGetFormationLevelsQuery,
-  useGetProfessionalRolesQuery,
-  type BulkImportResult
-} from "@/services/api";
 import { 
   Upload, 
   Download, 
   FileText, 
   CheckCircle, 
-  XCircle, 
   AlertTriangle,
   ArrowLeft,
-  FileSpreadsheet,
-  Clock,
-  GraduationCap,
-  Users,
   Copy,
-  Check,
   Search,
-  X
+  X,
+  BookOpen
 } from "lucide-react";
-import { BulkImportResults } from "@/components/websac3/form/program/BulkImportResults";
+import { 
+  useLazyGetCourseTopicTemplateQuery,
+  useBulkImportCourseTopicsMutation,
+  useGetTopicsQuery,
+  type BulkImportTopicResult
+} from "@/services/api";
+import { BulkImportTopicResults } from "@/components/websac3/form/course/BulkImportTopicResults";
 
 // Separate component to prevent re-renders
 const ReferenceDataCard = ({ 
@@ -57,9 +49,7 @@ const ReferenceDataCard = ({
   searchPlaceholder: string;
   onCopy: (id: string, field: string) => void;
 }) => {
-  // Ensure data is an array and handle error states
   const safeData = Array.isArray(data) ? data : [];
-  // Only show error state if it's a real error object with isError flag
   const hasError = error && !isLoading && error.isError;
   const isEmpty = !hasError && !isLoading && safeData.length === 0;
   
@@ -118,18 +108,21 @@ const ReferenceDataCard = ({
             </p>
           </div>
         ) : (
-          <div className="space-y-2 max-h-48 overflow-y-auto">
+          <div className="space-y-2 max-h-96 overflow-y-auto">
             {safeData.map((item) => (
-              <div key={item.id} className="flex items-center justify-between p-2 bg-gray-50 rounded border">
+              <div key={item.id} className="flex items-start justify-between p-2 bg-gray-50 rounded border">
                 <div className="flex-1">
-                  <span className="font-mono text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                    {item.id}
-                  </span>
-                  <span className="ml-2 text-sm text-gray-700">{item.name}</span>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-mono text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                      {item.id}
+                    </span>
+                    <span className="text-sm font-medium text-gray-900">{item.name}</span>
+                  </div>
+                  <span className="text-xs text-gray-500 ml-1">Área: {item.knowledge_area_name}</span>
                 </div>
                 <button
                   onClick={() => onCopy(item.id.toString(), `${title}-${item.id}`)}
-                  className="ml-2 p-1 hover:bg-gray-200 rounded transition-colors"
+                  className="ml-2 p-1 hover:bg-gray-200 rounded transition-colors flex-shrink-0"
                   title="Copiar ID"
                 >
                   <Copy className="h-4 w-4 text-gray-500" />
@@ -143,71 +136,49 @@ const ReferenceDataCard = ({
   );
 };
 
-export default function CargaMasivaProgramasPage() {
+export default function CargaMasivaTopicosPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const courseId = searchParams.get('course_id');
+  
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [importResult, setImportResult] = useState<BulkImportResult | null>(null);
+  const [importResult, setImportResult] = useState<BulkImportTopicResult | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   
   // Search states (for input)
-  const [durationUnitSearchInput, setDurationUnitSearchInput] = useState("");
-  const [formationLevelSearchInput, setFormationLevelSearchInput] = useState("");
-  const [professionalRoleSearchInput, setProfessionalRoleSearchInput] = useState("");
+  const [topicSearchInput, setTopicSearchInput] = useState("");
   
   // Debounced search states (for API calls)
-  const [durationUnitSearch, setDurationUnitSearch] = useState("");
-  const [formationLevelSearch, setFormationLevelSearch] = useState("");
-  const [professionalRoleSearch, setProfessionalRoleSearch] = useState("");
+  const [topicSearch, setTopicSearch] = useState("");
 
-  const [bulkImport, { isLoading: isImporting }] = useBulkImportDegreeProgramsMutation();
-  const [downloadTemplate, { isLoading: isDownloading }] = useLazyGetDegreeProgramTemplateQuery();
+  const [bulkImport, { isLoading: isImporting }] = useBulkImportCourseTopicsMutation();
+  const [downloadTemplate, { isLoading: isDownloading }] = useLazyGetCourseTopicTemplateQuery();
 
   // Memoize query parameters to prevent unnecessary re-renders
-  const durationUnitQueryParams = useMemo(() => ({
-    name: durationUnitSearch || undefined,
-  }), [durationUnitSearch]);
-
-  const formationLevelQueryParams = useMemo(() => ({
-    name: formationLevelSearch || undefined,
-  }), [formationLevelSearch]);
-
-  const professionalRoleQueryParams = useMemo(() => ({
-    name: professionalRoleSearch || undefined,
-  }), [professionalRoleSearch]);
+  const topicQueryParams = useMemo(() => ({
+    name: topicSearch || undefined,
+  }), [topicSearch]);
 
   // Reference data queries with search filters
-  const { data: durationUnits, isLoading: isLoadingDurationUnits, error: durationUnitsError } = useGetDurationUnitsQuery(durationUnitQueryParams, {
-    skip: false,
-  });
-  const { data: formationLevels, isLoading: isLoadingFormationLevels, error: formationLevelsError } = useGetFormationLevelsQuery(formationLevelQueryParams, {
-    skip: false,
-  });
-  const { data: professionalRoles, isLoading: isLoadingProfessionalRoles, error: professionalRolesError } = useGetProfessionalRolesQuery(professionalRoleQueryParams, {
+  const { data: topics, isLoading: isLoadingTopics, error: topicsError } = useGetTopicsQuery(topicQueryParams, {
     skip: false,
   });
 
   // Debounce search inputs
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDurationUnitSearch(durationUnitSearchInput);
+      setTopicSearch(topicSearchInput);
     }, 300);
     return () => clearTimeout(timer);
-  }, [durationUnitSearchInput]);
+  }, [topicSearchInput]);
 
+  // Redirect if no course_id
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setFormationLevelSearch(formationLevelSearchInput);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [formationLevelSearchInput]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setProfessionalRoleSearch(professionalRoleSearchInput);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [professionalRoleSearchInput]);
+    if (!courseId) {
+      router.push('/director/cargar-datos');
+    }
+  }, [courseId, router]);
 
   const handleDownloadTemplate = async () => {
     try {
@@ -217,7 +188,7 @@ export default function CargaMasivaProgramasPage() {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'plantilla-programas-grado.csv';
+        link.download = 'plantilla-topicos-curso.csv';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -250,11 +221,14 @@ export default function CargaMasivaProgramasPage() {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || !courseId) return;
 
     setIsUploading(true);
     try {
-      const result = await bulkImport({ file: selectedFile }).unwrap();
+      const result = await bulkImport({ 
+        file: selectedFile, 
+        course_id: parseInt(courseId) 
+      }).unwrap();
       
       if (result.result) {
         setImportResult(result.result);
@@ -278,6 +252,9 @@ export default function CargaMasivaProgramasPage() {
     }
   }, []);
 
+  if (!courseId) {
+    return null;
+  }
 
   return (
     <div className="space-y-6">
@@ -294,8 +271,8 @@ export default function CargaMasivaProgramasPage() {
             Volver
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Carga Masiva de Programas</h1>
-            <p className="text-gray-600 text-sm">Importa múltiples programas de grado desde un archivo</p>
+            <h1 className="text-2xl font-semibold text-gray-900">Carga Masiva de Tópicos</h1>
+            <p className="text-gray-600 text-sm">Importa múltiples tópicos para el curso desde un archivo</p>
           </div>
         </div>
       </div>
@@ -312,47 +289,21 @@ export default function CargaMasivaProgramasPage() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-blue-700 mb-4">
-                Utiliza estos IDs en tu archivo CSV. Haz clic en el ícono de copiar para copiar el ID.
+                Utiliza estos IDs de tópicos en tu archivo CSV/Excel. Haz clic en el ícono de copiar para copiar el ID.
               </p>
             </CardContent>
           </Card>
 
           <ReferenceDataCard
-            title="Unidades de Duración (duration_unit_id)"
-            data={durationUnits}
-            isLoading={isLoadingDurationUnits}
-            error={durationUnitsError}
-            icon={Clock}
-            color="text-blue-600"
-            searchValue={durationUnitSearchInput}
-            onSearchChange={setDurationUnitSearchInput}
-            searchPlaceholder="Buscar unidad de duración..."
-            onCopy={copyToClipboard}
-          />
-
-          <ReferenceDataCard
-            title="Niveles de Formación (formation_level_id)"
-            data={formationLevels}
-            isLoading={isLoadingFormationLevels}
-            error={formationLevelsError}
-            icon={GraduationCap}
-            color="text-green-600"
-            searchValue={formationLevelSearchInput}
-            onSearchChange={setFormationLevelSearchInput}
-            searchPlaceholder="Buscar nivel de formación..."
-            onCopy={copyToClipboard}
-          />
-
-          <ReferenceDataCard
-            title="Roles Profesionales (professional_role_ids)"
-            data={professionalRoles}
-            isLoading={isLoadingProfessionalRoles}
-            error={professionalRolesError}
-            icon={Users}
+            title="Tópicos Disponibles (topic_id)"
+            data={topics}
+            isLoading={isLoadingTopics}
+            error={topicsError}
+            icon={BookOpen}
             color="text-purple-600"
-            searchValue={professionalRoleSearchInput}
-            onSearchChange={setProfessionalRoleSearchInput}
-            searchPlaceholder="Buscar rol profesional..."
+            searchValue={topicSearchInput}
+            onSearchChange={setTopicSearchInput}
+            searchPlaceholder="Buscar tópico..."
             onCopy={copyToClipboard}
           />
         </div>
@@ -392,7 +343,7 @@ export default function CargaMasivaProgramasPage() {
             <CardContent>
               <div className="space-y-4">
                 <p className="text-gray-600">
-                  Selecciona el archivo CSV con los datos de los programas.
+                  Selecciona el archivo CSV con los datos de los tópicos.
                 </p>
                 
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
@@ -449,10 +400,10 @@ export default function CargaMasivaProgramasPage() {
             <CardContent>
               <ul className="text-sm text-yellow-700 space-y-2">
                 <li>• Utiliza la plantilla CSV descargada para mantener el formato correcto</li>
-                <li>• Usa los IDs mostrados en la guía lateral para los campos requeridos</li>
+                <li>• Usa los IDs de tópicos mostrados en la guía lateral</li>
+                <li>• El campo topic_id es obligatorio y debe corresponder a un tópico existente</li>
+                <li>• El campo study_hours debe ser un número positivo</li>
                 <li>• Asegúrate de que todos los campos obligatorios estén completos</li>
-                <li>• Los códigos SNIES deben ser únicos</li>
-                <li>• Los roles profesionales se pueden separar por comas si hay múltiples</li>
                 <li>• El archivo debe ser formato CSV (valores separados por comas)</li>
                 <li>• Revisa los datos antes de subir el archivo</li>
               </ul>
@@ -463,7 +414,7 @@ export default function CargaMasivaProgramasPage() {
 
       {/* Results Modal */}
       {importResult && (
-        <BulkImportResults
+        <BulkImportTopicResults
           result={importResult}
           onClose={() => setImportResult(null)}
         />
@@ -471,3 +422,4 @@ export default function CargaMasivaProgramasPage() {
     </div>
   );
 }
+

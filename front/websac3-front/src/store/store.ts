@@ -10,7 +10,21 @@ export const store = configureStore({
     error: errorReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore these action types because they contain Blob data (CSV files)
+        ignoredActions: [
+          'api/executeQuery/fulfilled',
+          'api/executeQuery/pending',
+        ],
+        // Ignore these paths in the state because they contain Blob data
+        ignoredPaths: [
+          'api.queries.getDegreeProgramTemplate',
+          'api.queries.getCourseTemplate',
+          'api.queries.getCourseTopicTemplate',
+        ],
+      },
+    }).concat(api.middleware),
 });
 
 export type AppStore = typeof store;

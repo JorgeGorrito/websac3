@@ -18,7 +18,8 @@ import {
   ChevronLeft, 
   ChevronRight,
   Save,
-  X
+  X,
+  Upload
 } from "lucide-react";
 import { 
   useListTopicsQuery, 
@@ -30,6 +31,7 @@ import {
   TopicItem,
   CourseTopicItem
 } from "@/services/api";
+import { useRouter } from "next/navigation";
 
 interface CourseEditViewProps {
   course: CourseItem | undefined;
@@ -46,6 +48,7 @@ export function CourseEditView({
   onCancel, 
   isLoading = false 
 }: CourseEditViewProps) {
+  const router = useRouter();
   // Topics pagination and search state
   const [topicsCurrentPage, setTopicsCurrentPage] = useState(1);
   const [topicsItemsPerPage, setTopicsItemsPerPage] = useState(10);
@@ -275,6 +278,14 @@ export function CourseEditView({
             <p className="text-gray-600 mt-1">{programName}</p>
           </div>
         </div>
+        <Button
+          variant="outline"
+          onClick={() => router.push(`/director/carga-masiva-topicos?course_id=${course?.id}`)}
+          className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-300"
+        >
+          <Upload className="w-4 h-4" />
+          Carga Masiva de Tópicos
+        </Button>
       </div>
 
       {/* Course Info Card */}

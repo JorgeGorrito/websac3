@@ -223,6 +223,29 @@ export type BulkImportCourseResult = {
   total_processed: number;
 };
 
+// Bulk Import Topics types
+export type BulkImportTopicFailedItem = {
+  errors: string[];
+  name: string;
+  row_number: number;
+  topic_id: number;
+};
+
+export type BulkImportTopicSuccessfulItem = {
+  message: string;
+  name: string;
+  row_number: number;
+  topic_id: number;
+};
+
+export type BulkImportTopicResult = {
+  failed_count: number;
+  failed_items: BulkImportTopicFailedItem[];
+  successful_count: number;
+  successful_items: BulkImportTopicSuccessfulItem[];
+  total_processed: number;
+};
+
 // Reference Data types for CSV guidance
 export type DurationUnit = {
   id: number;
@@ -247,6 +270,13 @@ export type CourseNature = {
 export type CourseType = {
   id: number;
   name: string;
+};
+
+export type Topic = {
+  id: number;
+  name: string;
+  knowledge_area_id: number;
+  knowledge_area_name: string;
 };
 
 export type PaginatedResult<T> = {
@@ -1527,6 +1557,59 @@ export const api = createApi({
       },
     }),
 
+    // Get Topics with filter
+    getTopics: builder.query<Topic[], { lang?: string; name?: string }>({
+      query: ({ lang = 'es', name } = {}) => {
+        const params = new URLSearchParams();
+        if (name) {
+          const filters = new URLSearchParams();
+          filters.append('name[cont]', name);
+          params.append('filters', filters.toString());
+        }
+        return { url: `/topic${params.toString() ? `?${params.toString()}` : ''}` };
+      },
+      transformResponse: (response: ApiResponse<PaginatedResult<Topic>>) => {
+        if (!response || !response.result) {
+          return [];
+        }
+        
+        if (response.errors && response.errors.length > 0 && response.errors.some(err => err && err.trim() !== "")) {
+          throw new Error(response.errors.join(', '));
+        }
+        
+        if (!response.result.data || !Array.isArray(response.result.data)) {
+          return [];
+        }
+        
+        return response.result.data;
+      },
+      transformErrorResponse: (response: any) => {
+        return { isError: true, status: response.status, message: 'Error loading data' };
+      },
+    }),
+
+    // Get Course Topic Template
+    getCourseTopicTemplate: builder.query<Blob, { lang?: string }>({
+      query: ({ lang = 'es' } = {}) => ({ 
+        url: '/course/topic/template',
+        responseHandler: (response: Response) => response.blob(),
+      }),
+    }),
+
+    // Bulk Import Course Topics
+    bulkImportCourseTopics: builder.mutation<ApiResponse<BulkImportTopicResult>, { lang?: string; file: File; course_id: number }>({
+      query: ({ lang = 'es', file, course_id }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('course_id', course_id.toString());
+        return {
+          url: '/course/topic/bulk',
+          method: 'POST',
+          body: formData,
+        };
+      },
+    }),
+
     // Get Degree Program Courses
     getDegreeProgramCourses: builder.query<{
       data: Array<{
@@ -2067,6 +2150,15 @@ export const {
   useBulkImportCoursesMutation,
   useGetCourseNaturesQuery,
   useGetCourseTypesQuery,
+  // course topic bulk import
+  useGetCourseTopicTemplateQuery,
+  useBulkImportCourseTopicsMutation,
+  useGetTopicsQuery,
 } = api;
+
+// Export lazy query hooks for templates
+export const useLazyGetDegreeProgramTemplateQuery = api.endpoints.getDegreeProgramTemplate.useLazyQuery;
+export const useLazyGetCourseTemplateQuery = api.endpoints.getCourseTemplate.useLazyQuery;
+export const useLazyGetCourseTopicTemplateQuery = api.endpoints.getCourseTopicTemplate.useLazyQuery;
 
 
