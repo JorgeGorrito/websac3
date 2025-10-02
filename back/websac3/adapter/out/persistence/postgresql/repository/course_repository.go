@@ -544,3 +544,30 @@ func (r *CourseRepository) Update(courseToUpdate *entity.Course, ctx _db.Context
 
 	return nil
 }
+
+
+func (r *CourseRepository) CreateCourseTopic(courseTopic *entity.CourseTopic, ctx _db.Context) error {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	var courseTopicModel model.CourseTopic
+	if courseTopicModel, err = mapper.Map[entity.CourseTopic, model.CourseTopic](courseTopic); err != nil {
+		return err
+	}
+
+	if err := dbCtx.DB().Create(&courseTopicModel).Error; err != nil {
+		// Check if it's a unique constraint violation (duplicate topic for course)
+		if IsUniqueConstraintViolation(err) {
+			return errs.NewConflictError("This topic is already associated with the course")
+		}
+		// Check if it's a foreign key constraint violation
+		if IsForeignKeyViolation(err) {
+			return errs.NewValidationError("Invalid course ID or topic ID")
+		}
+		return err
+	}
+
+	return nil
+}

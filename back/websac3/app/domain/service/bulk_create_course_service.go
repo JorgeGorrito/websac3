@@ -251,5 +251,3 @@ func (s *BulkCreateCourseService) ensureUTF8(content []byte) ([]byte, error) {
 
 	return utf8Content, nil
 }
-
-

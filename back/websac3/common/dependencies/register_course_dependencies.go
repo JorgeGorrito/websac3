@@ -145,4 +145,24 @@ func (m *manager) registerCourseDependencies() {
 			)
 		},
 	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[persistence.CreateCourseTopicPort](),
+		func() any { return repository.NewCourseRepository() },
+	)
+
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.BulkCreateCourseTopicUseCase](),
+		func() any {
+			return domainusecase.NewBulkCreateCourseTopicUseCaseImpl(
+				service.NewBulkCreateCourseTopicService(
+					container.Inject[db.Manager](),
+					container.Inject[persistence.CreateCourseTopicPort](),
+					container.Inject[persistence.GetCoursePort](),
+					container.Inject[persistence.GetUserPort](),
+					container.Inject[validator.Validator](),
+				),
+			)
+		},
+	)
 }

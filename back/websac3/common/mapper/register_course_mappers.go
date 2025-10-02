@@ -116,6 +116,17 @@ func registerCourseMappers() {
 		},
 	)
 
+	// Mapper from entity.CourseTopic to model.CourseTopic
+	RegisterMapFunc(
+		func(ct *entity.CourseTopic) (model.CourseTopic, error) {
+			return model.CourseTopic{
+				CourseID:   ct.CourseID,
+				TopicID:    ct.TopicID,
+				StudyHours: uint(ct.StudyHours),
+			}, nil
+		},
+	)
+
 	RegisterMapFunc(
 		func(courseModel *model.Course) (entity.Course, error) {
 			var courseTopics []entity.CourseTopic

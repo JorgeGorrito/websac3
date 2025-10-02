@@ -56,6 +56,16 @@ func registerBulkCreateCourseRoute(routerGroup *gin.RouterGroup) {
 	routerGroup.POST("/course/bulk", bulkCreateController.BulkCreateCourse)
 }
 
+func registerDownloadCourseTopicTemplateRoute(routerGroup *gin.RouterGroup) {
+	var downloadTemplateController = controller.GetDownloadCourseTopicTemplateController()
+	routerGroup.GET("/course/topic/template", downloadTemplateController.DownloadTemplate)
+}
+
+func registerBulkCreateCourseTopicRoute(routerGroup *gin.RouterGroup) {
+	var bulkCreateController = controller.GetBulkCreateCourseTopicController()
+	routerGroup.POST("/course/topic/bulk", bulkCreateController.BulkCreateCourseTopic)
+}
+
 func RegisterCourseRoutes(routerGroup *gin.RouterGroup) {
 	authGroup := getAuthRequiredGroup(routerGroup)
 	registerCreateCourseRoute(authGroup)
@@ -68,4 +78,6 @@ func RegisterCourseRoutes(routerGroup *gin.RouterGroup) {
 	registerListCourseNaturesRoute(authGroup)
 	registerDownloadCourseTemplateRoute(authGroup)
 	registerBulkCreateCourseRoute(authGroup)
+	registerDownloadCourseTopicTemplateRoute(authGroup)
+	registerBulkCreateCourseTopicRoute(authGroup)
 }

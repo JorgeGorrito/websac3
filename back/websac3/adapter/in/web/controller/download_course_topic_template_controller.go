@@ -9,18 +9,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type DownloadCourseTemplateController struct {
+type DownloadCourseTopicTemplateController struct {
 	Authenticable
 }
 
-func GetDownloadCourseTemplateController() *DownloadCourseTemplateController {
-	return &DownloadCourseTemplateController{}
+func GetDownloadCourseTopicTemplateController() *DownloadCourseTopicTemplateController {
+	return &DownloadCourseTopicTemplateController{}
 }
 
-// DownloadCourseTemplate descarga una plantilla CSV para carga masiva de cursos
-// @Summary Descargar Plantilla CSV de Cursos
-// @Description Descarga un archivo CSV con las columnas requeridas y datos de ejemplo para la carga masiva de cursos.
-// @Description La plantilla incluye todas las columnas necesarias: nombre, código, créditos, período, naturaleza, tipo y si es de ciberseguridad.
+// DownloadCourseTopicTemplate descarga una plantilla CSV para carga masiva de tópicos de curso
+// @Summary Descargar Plantilla CSV de Tópicos de Curso
+// @Description Descarga un archivo CSV con las columnas requeridas y datos de ejemplo para la carga masiva de tópicos de curso.
+// @Description La plantilla incluye: ID del tópico y horas de estudio.
 // @Tags Course
 // @Accept json
 // @Produce text/csv
@@ -28,9 +28,9 @@ func GetDownloadCourseTemplateController() *DownloadCourseTemplateController {
 // @Success 200 {file} file "Archivo CSV con plantilla"
 // @Failure 401 {string} string "Usuario no autenticado"
 // @Failure 403 {string} string "No tiene permisos para realizar esta acción"
-// @Router /api/v1/{lang}/course/template [get]
+// @Router /api/v1/{lang}/course/topic/template [get]
 // @Security BearerAuth
-func (c *DownloadCourseTemplateController) DownloadTemplate(context *gin.Context) {
+func (c *DownloadCourseTopicTemplateController) DownloadTemplate(context *gin.Context) {
 	// Validar token de autenticación
 	token := c.GetToken(context)
 	if token == nil {
@@ -42,7 +42,7 @@ func (c *DownloadCourseTemplateController) DownloadTemplate(context *gin.Context
 	permissions := token.Permissions["courses"]
 	hasPermission := false
 	for _, permission := range permissions {
-		if permission == "create" || permission == "all" {
+		if permission == "create" || permission == "update" || permission == "all" {
 			hasPermission = true
 			break
 		}
@@ -58,16 +58,16 @@ func (c *DownloadCourseTemplateController) DownloadTemplate(context *gin.Context
 	}
 
 	// CSV template content with semicolon separator for Excel compatibility
-	csvContent := `name;code;credits;period_number;nature_id;type_id;is_cybersecurity
-Programación Avanzada;PROG301;3;3;1;1;no
-Bases de Datos;BD201;4;2;1;1;no
-Seguridad Informática;SEC401;3;4;1;2;si
-Redes de Computadores;RED301;3;3;1;1;no
-Desarrollo Web;WEB301;3;3;1;1;no`
+	csvContent := `topic_id;study_hours
+1;20
+2;15
+3;25
+4;10
+5;30`
 
 	// Set headers for file download
 	context.Header("Content-Type", "text/csv; charset=utf-8")
-	context.Header("Content-Disposition", "attachment; filename=course_template.csv")
+	context.Header("Content-Disposition", "attachment; filename=course_topic_template.csv")
 	context.Header("Content-Length", string(rune(len(csvContent))))
 
 	// Write CSV content
