@@ -9,6 +9,7 @@ const FCBILogo : React.FC = () => {
             height={0}
             width={150}
             draggable={false}
+            className="h-auto object-contain"
         />
     );
 };
