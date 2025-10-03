@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { SIDEBAR_BY_ROLE, type RoleKey } from "@/constants/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { WebSAC3DashboardLogo } from "@/components/websac3/logos/WebSAC3DashboardLogo";
 
@@ -37,7 +37,7 @@ export default function AppSidebar({
   const userData = user ? {
     name: user.username,
     email: user.email,
-    avatar: "https://github.com/shadcn.png" // You can customize this
+    avatar: "" // No avatar, will show initials instead
   } : data.user;
   return (
     <Sidebar variant="inset" {...props}>

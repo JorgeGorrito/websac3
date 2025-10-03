@@ -37,7 +37,7 @@ export type SidebarData = {
 const defaultUser = {
   name: "Pepito Perez",
   email: "pepito.perez@example.com",
-  avatar: "/dashboard/menu/user-circle-solid.png",
+  avatar: "", // No avatar, will show initials instead
 };
 
 export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {

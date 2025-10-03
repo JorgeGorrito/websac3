@@ -11,7 +11,6 @@ import {
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -66,7 +65,6 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 transition-colors h-auto py-4"
             >
               <Avatar className="h-12 w-12 rounded-xl border-2 border-primary/20">
-                <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-semibold">
                   {user.name
                     .split(" ")
@@ -95,7 +93,6 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-3 px-4 py-4 text-left">
                 <Avatar className="h-12 w-12 rounded-xl border-2 border-primary/20">
-                  <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-semibold">
                     {user.name
                       .split(" ")
