@@ -72,3 +72,4 @@ func (c *DeleteDegreeProgramController) Handle(ctx *gin.Context) {
 	ctx.JSON(result.HttpStatusCode, result.ToResponseFormat())
 }
 
+

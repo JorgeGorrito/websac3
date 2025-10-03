@@ -73,3 +73,4 @@ func (c *DownloadCourseTopicTemplateController) DownloadTemplate(context *gin.Co
 	// Write CSV content
 	context.String(http.StatusOK, csvContent)
 }
+

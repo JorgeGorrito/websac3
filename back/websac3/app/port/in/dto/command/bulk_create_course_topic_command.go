@@ -8,3 +8,4 @@ type BulkCreateCourseTopicCommand struct {
 	UserID      uint
 	Permissions []string
 }
+

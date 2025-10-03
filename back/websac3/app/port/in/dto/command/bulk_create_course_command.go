@@ -10,3 +10,4 @@ type BulkCreateCourseCommand struct {
 }
 
 
+

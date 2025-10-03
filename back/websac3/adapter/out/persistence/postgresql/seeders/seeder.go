@@ -14,8 +14,24 @@ type Seeder interface {
 type NewSeeder func() Seeder
 
 var registry map[string]NewSeeder = map[string]NewSeeder{
-	"essential_data": EssentialData,
-	"devsecops_role": DevSecOpsRole,
+	"essential_data":                                  EssentialData,
+	"devsecops_role":                                  DevSecOpsRole,
+	"ciso_role":                                       CISORole,
+	"security_architect_role":                         SecurityArchitectRole,
+	"security_engineer_role":                          SecurityEngineerRole,
+	"security_analyst_role":                           SecurityAnalystRole,
+	"incident_response_specialist_role":               IncidentResponseSpecialistRole,
+	"threat_hunter_role":                              ThreatHunterRole,
+	"malware_analyst_role":                            MalwareAnalystRole,
+	"forensic_investigator_role":                      ForensicInvestigatorRole,
+	"penetration_tester_role":                         PenetrationTesterRole,
+	"iam_specialist_role":                             IAMSpecialistRole,
+	"cloud_security_specialist_role":                  CloudSecuritySpecialistRole,
+	"application_security_engineer_role":              ApplicationSecurityEngineerRole,
+	"network_security_engineer_role":                  NetworkSecurityEngineerRole,
+	"compliance_risk_analyst_role":                    ComplianceRiskAnalystRole,
+	"cybersecurity_trainer_awareness_specialist_role": CybersecurityTrainerAwarenessSpecialistRole,
+	"professional_roles":                              ProfessionalRoles,
 }
 
 func GetSeederConstructorByName(name string) NewSeeder {

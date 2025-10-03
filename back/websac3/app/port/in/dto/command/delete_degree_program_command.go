@@ -6,3 +6,4 @@ type DeleteDegreeProgramCommand struct {
 	Permissions     []string
 }
 
+

@@ -92,3 +92,4 @@ func (h *BulkCreateCourseCommandHandler) Handle(
 }
 
 
+

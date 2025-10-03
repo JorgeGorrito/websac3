@@ -4,3 +4,4 @@ type DeleteDegreeProgramRequest struct {
 	DegreeProgramID uint
 }
 
+

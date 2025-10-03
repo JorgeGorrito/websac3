@@ -65,3 +65,4 @@ func (c *BulkCreateCourseTopicController) BulkCreateCourseTopic(context *gin.Con
 	result, _ := mediator.Send[command.BulkCreateCourseTopicCommand, response.ApiResponse[response.BulkCreateCourseTopicResponse]](bulkCreateCommand, lang)
 	context.JSON(result.HttpStatusCode, result.ToResponseFormat())
 }
+

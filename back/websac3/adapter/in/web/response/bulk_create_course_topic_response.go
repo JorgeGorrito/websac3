@@ -22,3 +22,4 @@ type BulkCreateCourseTopicResponse struct {
 	SuccessfulItems []CourseTopicBulkResult `json:"successful_items"`
 	FailedItems     []CourseTopicBulkError  `json:"failed_items"`
 }
+

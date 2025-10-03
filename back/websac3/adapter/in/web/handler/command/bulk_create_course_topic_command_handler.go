@@ -90,3 +90,4 @@ func (h *BulkCreateCourseTopicCommandHandler) Handle(
 		Result:         result,
 	}, nil
 }
+
