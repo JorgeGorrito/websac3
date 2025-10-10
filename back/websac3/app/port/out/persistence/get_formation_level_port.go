@@ -20,4 +20,6 @@ type GetFormationLevelPort interface {
 		lang string,
 		ctx db.Context,
 	) ([]entity.FormationLevel, int64, error)
+
+	GetByID(id uint, ctx db.Context) (entity.FormationLevel, error)
 }

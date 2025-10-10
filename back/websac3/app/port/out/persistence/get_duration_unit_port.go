@@ -7,4 +7,5 @@ import (
 
 type GetDurationUnitPort interface {
 	GetByNameAndLang(page, perPage uint, name string, lang string, db db.Context) ([]entity.DurationUnit, int64, error)
+	GetByID(id uint, db db.Context) (entity.DurationUnit, error)
 }

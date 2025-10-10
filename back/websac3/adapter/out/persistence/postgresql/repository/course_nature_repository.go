@@ -123,3 +123,22 @@ func (r *CourseNatureRepository) GetAllWithLang(
 
 	return courseNatureEntities, total, nil
 }
+
+func (r *CourseNatureRepository) GetByID(
+	id uint,
+	ctx _db.Context,
+) (entity.CourseNature, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return entity.CourseNature{}, err
+	}
+
+	var courseNature model.CourseNature
+	if err := dbCtx.DB().
+		Preload("Names").
+		First(&courseNature, id).Error; err != nil {
+		return entity.CourseNature{}, err
+	}
+
+	return mapper.Map[model.CourseNature, entity.CourseNature](&courseNature)
+}

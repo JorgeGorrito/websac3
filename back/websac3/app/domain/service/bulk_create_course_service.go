@@ -20,20 +20,29 @@ import (
 )
 
 type BulkCreateCourseService struct {
-	persistenceManager _db.Manager
-	createCoursePort   persistence.CreateCoursePort
-	validator          validator.Validator
+	persistenceManager   _db.Manager
+	createCoursePort     persistence.CreateCoursePort
+	getDegreeProgramPort persistence.GetDegreeProgramPort
+	getCourseNaturePort  persistence.GetCourseNaturePort
+	getCourseTypePort    persistence.GetCourseTypePort
+	validator            validator.Validator
 }
 
 func NewBulkCreateCourseService(
 	persistenceManager _db.Manager,
 	createCoursePort persistence.CreateCoursePort,
+	getDegreeProgramPort persistence.GetDegreeProgramPort,
+	getCourseNaturePort persistence.GetCourseNaturePort,
+	getCourseTypePort persistence.GetCourseTypePort,
 	validator validator.Validator,
 ) *BulkCreateCourseService {
 	return &BulkCreateCourseService{
-		persistenceManager: persistenceManager,
-		createCoursePort:   createCoursePort,
-		validator:          validator,
+		persistenceManager:   persistenceManager,
+		createCoursePort:     createCoursePort,
+		getDegreeProgramPort: getDegreeProgramPort,
+		getCourseNaturePort:  getCourseNaturePort,
+		getCourseTypePort:    getCourseTypePort,
+		validator:            validator,
 	}
 }
 
@@ -112,6 +121,27 @@ func (s *BulkCreateCourseService) Execute(
 		// Try to create the course
 		err := s.persistenceManager.ExecuteInTransaction(
 			func(ctx _db.Context) error {
+				// Validate that degree program ID exists
+				if course.DegreeProgramID > 0 {
+					if _, err := s.getDegreeProgramPort.GetByID(course.DegreeProgramID, ctx); err != nil {
+						return fmt.Errorf("degree program with ID %d not found", course.DegreeProgramID)
+					}
+				}
+
+				// Validate that course nature ID exists
+				if course.NatureID > 0 {
+					if _, err := s.getCourseNaturePort.GetByID(course.NatureID, ctx); err != nil {
+						return fmt.Errorf("course nature with ID %d not found", course.NatureID)
+					}
+				}
+
+				// Validate that course type ID exists
+				if course.TypeID > 0 {
+					if _, err := s.getCourseTypePort.GetByID(course.TypeID, ctx); err != nil {
+						return fmt.Errorf("course type with ID %d not found", course.TypeID)
+					}
+				}
+
 				return s.createCoursePort.Create(&course, ctx)
 			},
 		)
@@ -119,11 +149,22 @@ func (s *BulkCreateCourseService) Execute(
 		if err != nil {
 			code := course.Code
 			name := course.Name
+			errorMsg := err.Error()
+
+			// Handle duplicate key constraint violation more gracefully
+			if strings.Contains(errorMsg, "duplicate key") || strings.Contains(errorMsg, "unique constraint") {
+				if strings.Contains(errorMsg, "idx_courses_code_degree_program_unique") {
+					errorMsg = fmt.Sprintf("A course with code '%s' already exists in this degree program", code)
+				} else {
+					errorMsg = "A course with this code already exists"
+				}
+			}
+
 			result.FailedItems = append(result.FailedItems, response.CourseBulkError{
 				RowNumber: rowNumber,
 				Code:      &code,
 				Name:      &name,
-				Errors:    []string{err.Error()},
+				Errors:    []string{errorMsg},
 			})
 			result.FailedCount++
 		} else {

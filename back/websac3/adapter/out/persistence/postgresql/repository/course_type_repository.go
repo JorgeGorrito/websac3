@@ -123,3 +123,22 @@ func (r *CourseTypeRepository) GetAllWithLang(
 
 	return courseTypeEntities, total, nil
 }
+
+func (r *CourseTypeRepository) GetByID(
+	id uint,
+	ctx _db.Context,
+) (entity.CourseType, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return entity.CourseType{}, err
+	}
+
+	var courseType model.CourseType
+	if err := dbCtx.DB().
+		Preload("Names").
+		First(&courseType, id).Error; err != nil {
+		return entity.CourseType{}, err
+	}
+
+	return mapper.Map[model.CourseType, entity.CourseType](&courseType)
+}

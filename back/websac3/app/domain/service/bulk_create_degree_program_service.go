@@ -22,17 +22,26 @@ import (
 type BulkCreateDegreeProgramService struct {
 	persistenceManager      _db.Manager
 	createDegreeProgramPort persistence.CreateDegreeProgramPort
+	getProfessionalRolePort persistence.GetProfessionalRolePort
+	getDurationUnitPort     persistence.GetDurationUnitPort
+	getFormationLevelPort   persistence.GetFormationLevelPort
 	validator               validator.Validator
 }
 
 func NewBulkCreateDegreeProgramService(
 	persistenceManager _db.Manager,
 	createDegreeProgramPort persistence.CreateDegreeProgramPort,
+	getProfessionalRolePort persistence.GetProfessionalRolePort,
+	getDurationUnitPort persistence.GetDurationUnitPort,
+	getFormationLevelPort persistence.GetFormationLevelPort,
 	validator validator.Validator,
 ) *BulkCreateDegreeProgramService {
 	return &BulkCreateDegreeProgramService{
 		persistenceManager:      persistenceManager,
 		createDegreeProgramPort: createDegreeProgramPort,
+		getProfessionalRolePort: getProfessionalRolePort,
+		getDurationUnitPort:     getDurationUnitPort,
+		getFormationLevelPort:   getFormationLevelPort,
 		validator:               validator,
 	}
 }
@@ -97,7 +106,7 @@ func (s *BulkCreateDegreeProgramService) Execute(
 		}
 
 		// Parse and validate the row
-		degreeProgram, validationErrors := s.parseAndValidateRow(record, bulkCommand.CreatedBy, lang)
+		degreeProgram, validationErrors := s.parseAndValidateRow(record, bulkCommand.CreatedBy)
 		if len(validationErrors) > 0 {
 			var snies *uint
 			var name *string
@@ -120,6 +129,33 @@ func (s *BulkCreateDegreeProgramService) Execute(
 		// Try to create the degree program
 		err := s.persistenceManager.ExecuteInTransaction(
 			func(ctx _db.Context) error {
+				// Validate that duration unit ID exists
+				if degreeProgram.DurationUnitID > 0 {
+					if _, err := s.getDurationUnitPort.GetByID(degreeProgram.DurationUnitID, ctx); err != nil {
+						return fmt.Errorf("duration unit with ID %d not found", degreeProgram.DurationUnitID)
+					}
+				}
+
+				// Validate that formation level ID exists
+				if degreeProgram.FormationLevelID > 0 {
+					if _, err := s.getFormationLevelPort.GetByID(degreeProgram.FormationLevelID, ctx); err != nil {
+						return fmt.Errorf("formation level with ID %d not found", degreeProgram.FormationLevelID)
+					}
+				}
+
+				// Validate that all professional role IDs exist
+				if len(degreeProgram.ProfessionalRoles) > 0 {
+					var validatedRoles []entity.ProfessionalRole
+					for _, pr := range degreeProgram.ProfessionalRoles {
+						role, err := s.getProfessionalRolePort.GetByID(pr.ID, lang, ctx)
+						if err != nil {
+							return fmt.Errorf("professional role with ID %d not found", pr.ID)
+						}
+						validatedRoles = append(validatedRoles, role)
+					}
+					degreeProgram.ProfessionalRoles = validatedRoles
+				}
+
 				return s.createDegreeProgramPort.Create(&degreeProgram, ctx)
 			},
 		)
@@ -151,7 +187,6 @@ func (s *BulkCreateDegreeProgramService) Execute(
 func (s *BulkCreateDegreeProgramService) parseAndValidateRow(
 	record []string,
 	createdBy uint,
-	lang string,
 ) (entity.DegreeProgram, []string) {
 	var degreeProgram entity.DegreeProgram
 	var errors []string

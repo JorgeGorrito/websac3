@@ -44,6 +44,18 @@ func RegisterExpertConsultationDependencies(m *manager) {
 		},
 	)
 
+	// Get Expert Consultation By ID Use Case
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.GetExpertConsultationByIDUseCase](),
+		func() any {
+			return service.NewGetExpertConsultationByIDService(
+				container.Inject[persistence.GetExpertConsultationPort](),
+				container.Inject[db.Manager](),
+				container.Inject[message.Provider](),
+			)
+		},
+	)
+
 	// List User Expert Consultations Use Case
 	m.binder.Bind(
 		andi.GetAbstractType[usecase.ListUserExpertConsultationsUseCase](),

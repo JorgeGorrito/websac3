@@ -20,4 +20,6 @@ type GetCourseTypePort interface {
 		lang string,
 		ctx db.Context,
 	) ([]entity.CourseType, int64, error)
+
+	GetByID(id uint, ctx db.Context) (entity.CourseType, error)
 }

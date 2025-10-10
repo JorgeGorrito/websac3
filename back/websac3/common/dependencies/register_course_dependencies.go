@@ -140,6 +140,9 @@ func (m *manager) registerCourseDependencies() {
 				service.NewBulkCreateCourseService(
 					container.Inject[db.Manager](),
 					container.Inject[persistence.CreateCoursePort](),
+					container.Inject[persistence.GetDegreeProgramPort](),
+					container.Inject[persistence.GetCourseNaturePort](),
+					container.Inject[persistence.GetCourseTypePort](),
 					container.Inject[validator.Validator](),
 				),
 			)

@@ -123,3 +123,22 @@ func (r *FormationLevelRepository) GetAllWithLang(
 
 	return formationLevelEntities, total, nil
 }
+
+func (r *FormationLevelRepository) GetByID(
+	id uint,
+	ctx _db.Context,
+) (entity.FormationLevel, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return entity.FormationLevel{}, err
+	}
+
+	var formationLevel model.FormationLevel
+	if err := dbCtx.DB().
+		Preload("Names").
+		First(&formationLevel, id).Error; err != nil {
+		return entity.FormationLevel{}, err
+	}
+
+	return mapper.Map[model.FormationLevel, entity.FormationLevel](&formationLevel)
+}

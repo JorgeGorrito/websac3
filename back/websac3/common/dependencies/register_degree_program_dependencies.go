@@ -120,6 +120,9 @@ func (m *manager) registerDegreeProgramDependencies() {
 				service.NewBulkCreateDegreeProgramService(
 					container.Inject[db.Manager](),
 					container.Inject[persistence.CreateDegreeProgramPort](),
+					container.Inject[persistence.GetProfessionalRolePort](),
+					container.Inject[persistence.GetDurationUnitPort](),
+					container.Inject[persistence.GetFormationLevelPort](),
 					container.Inject[validator.Validator](),
 				),
 			)

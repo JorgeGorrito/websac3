@@ -67,3 +67,22 @@ func (r *DurationUnitRepository) GetByNameAndLang(
 
 	return results, count, nil
 }
+
+func (r *DurationUnitRepository) GetByID(
+	id uint,
+	ctx _db.Context,
+) (entity.DurationUnit, error) {
+	dbCtx, err := r.CastDbContext(ctx)
+	if err != nil {
+		return entity.DurationUnit{}, err
+	}
+
+	var durationUnit model.DurationUnit
+	if err := dbCtx.DB().
+		Preload("Names").
+		First(&durationUnit, id).Error; err != nil {
+		return entity.DurationUnit{}, err
+	}
+
+	return mapper.Map[model.DurationUnit, entity.DurationUnit](&durationUnit)
+}
