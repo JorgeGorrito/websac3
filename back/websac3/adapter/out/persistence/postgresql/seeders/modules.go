@@ -30,5 +30,8 @@ func (m *modules) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "modules")
+
 	return nil
 }

@@ -9,3 +9,4 @@ type CreateCourseTopicPort interface {
 	CreateCourseTopic(courseTopic *entity.CourseTopic, ctx db.Context) error
 }
 
+

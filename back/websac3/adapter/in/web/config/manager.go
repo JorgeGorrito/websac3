@@ -633,6 +633,18 @@ func (m *manager) ConfigureMediator(errorList *error) {
 	}
 
 	if err := iMediator.Register(
+		reflect.TypeOf(query.ListAnsweredExpertConsultationsQuery{}),
+		qhandler.NewListAnsweredExpertConsultationsQueryHandler(
+			container.Inject[validator.Validator](),
+			container.Inject[logging.Logger](),
+			container.Inject[usecase.ListAnsweredExpertConsultationsUseCase](),
+			container.Inject[message.Provider](),
+		),
+	); err != nil {
+		*errorList = errors.Join(*errorList, err)
+	}
+
+	if err := iMediator.Register(
 		reflect.TypeOf(command.AcceptExpertConsultationCommand{}),
 		chandler.NewAcceptExpertConsultationCommandHandler(
 			container.Inject[validator.Validator](),

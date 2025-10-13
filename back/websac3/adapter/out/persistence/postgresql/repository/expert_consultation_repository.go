@@ -319,6 +319,114 @@ func (e *ExpertConsultationRepository) GetPendingConsultations(paginationParams 
 	return results, uint(total), nil
 }
 
+// GetAnsweredConsultationsByExpertID obtiene las solicitudes de asesoría respondidas por un experto específico
+func (e *ExpertConsultationRepository) GetAnsweredConsultationsByExpertID(expertID uint, paginationParams paginator.PaginationParams, filters commonfilter.Params, ctx _db.Context) ([]entity.ExpertConsultation, uint, error) {
+	dbCtx, err := e.CastDbContext(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	// Query base para obtener solicitudes de asesoría respondidas por el experto (status_id IN (2, 3) y expert_id = expertID)
+	// status_id = 2 -> rejected, status_id = 3 -> accepted
+	query := dbCtx.DB().Model(&model.ExpertConsultation{}).
+		Where("expert_id = ? AND status_id IN (?, ?)", expertID, 2, 3) // 2 = rejected, 3 = accepted
+
+	// Aplicar filtros básicos
+	var needsUserJoin bool
+	var needsPersonJoin bool
+	var needsDegreeProgramJoin bool
+
+	// Primera pasada: determinar qué JOINs necesitamos
+	for field := range filters {
+		if field == "Requester.Person.name" || field == "Requester.Person.lastname" {
+			needsUserJoin = true
+			needsPersonJoin = true
+		} else if field == "DegreeProgram.name" {
+			needsDegreeProgramJoin = true
+		}
+	}
+
+	// Aplicar JOINs una sola vez si son necesarios
+	if needsUserJoin {
+		query = query.Joins("JOIN users ON expert_consultations.requester_id = users.id")
+	}
+	if needsPersonJoin {
+		query = query.Joins("JOIN people ON users.person_id = people.id")
+	}
+	if needsDegreeProgramJoin {
+		query = query.Joins("JOIN degree_programs ON expert_consultations.degree_program_id = degree_programs.id")
+	}
+
+	// Segunda pasada: aplicar los filtros WHERE
+	for field, filterData := range filters {
+		for operator, value := range filterData {
+			if value == "" {
+				continue
+			}
+
+			if field == "Requester.Person.name" {
+				if operator == "eq" {
+					query = query.Where("people.name = ?", value)
+				} else if operator == "cont" {
+					query = query.Where("people.name ILIKE ?", "%"+value+"%")
+				}
+			} else if field == "Requester.Person.lastname" {
+				if operator == "eq" {
+					query = query.Where("people.lastname = ?", value)
+				} else if operator == "cont" {
+					query = query.Where("people.lastname ILIKE ?", "%"+value+"%")
+				}
+			} else if field == "DegreeProgram.name" {
+				if operator == "eq" {
+					query = query.Where("degree_programs.name = ?", value)
+				} else if operator == "cont" {
+					query = query.Where("degree_programs.name ILIKE ?", "%"+value+"%")
+				}
+			}
+		}
+	}
+
+	// Añadir Preloads después de aplicar filtros
+	query = query.
+		Preload("Requester").
+		Preload("Requester.Person").
+		Preload("Requester.Person.HigherEducationInstitution").
+		Preload("Requester.Person.HigherEducationInstitution.Ownership").
+		Preload("DegreeProgram").
+		Preload("Report").
+		Preload("Status").
+		Preload("Status.Names")
+
+	// Contar total
+	var total int64
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Aplicar paginación y ordenamiento
+	var expertConsultations []model.ExpertConsultation
+	if err := query.
+		Order("answered_at DESC").
+		Offset(int((paginationParams.Currentpage - 1) * paginationParams.ItemsPerpage)).
+		Limit(int(paginationParams.ItemsPerpage)).
+		Find(&expertConsultations).
+		Error; err != nil {
+		return nil, 0, err
+	}
+
+	// Mapear a entidades
+	var results []entity.ExpertConsultation
+	for _, expertConsultation := range expertConsultations {
+		var expertConsultationEntity entity.ExpertConsultation
+		if expertConsultationEntity, err = mapper.Map[model.ExpertConsultation, entity.ExpertConsultation](&expertConsultation); err != nil {
+			return nil, 0, err
+		}
+		results = append(results, expertConsultationEntity)
+	}
+
+	return results, uint(total), nil
+}
+
 // AcceptConsultation acepta una solicitud de asesoría
 func (e *ExpertConsultationRepository) AcceptConsultation(consultationID uint, expertResponse string, expertID uint, ctx _db.Context) error {
 	dbCtx, err := e.CastDbContext(ctx)

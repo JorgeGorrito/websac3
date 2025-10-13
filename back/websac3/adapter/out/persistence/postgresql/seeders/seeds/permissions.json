@@ -128,5 +128,10 @@
         "id": 26,
         "module_id": 5,
         "action_id": 5
+    },
+    {
+        "id": 27,
+        "module_id": 5,
+        "action_id": 2
     }
 ]

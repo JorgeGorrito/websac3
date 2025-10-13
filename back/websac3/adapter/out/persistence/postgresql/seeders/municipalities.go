@@ -29,5 +29,8 @@ func (m *municipalities) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "municipalities")
+
 	return nil
 }

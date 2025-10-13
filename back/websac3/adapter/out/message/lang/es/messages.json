@@ -120,6 +120,9 @@
     "list_pending_expert_consultations" : {
         "not_found" : "No se encontraron solicitudes de asesoría pendientes."
     },
+    "list_answered_expert_consultations" : {
+        "not_found" : "No se encontraron solicitudes de asesoría respondidas."
+    },
     "accept_expert_consultation" : {
         "success" : "Solicitud de asesoría aceptada exitosamente.",
         "not_pending" : "La solicitud de asesoría no está en estado pendiente.",
@@ -198,7 +201,10 @@
     "field_must_be_email": "El campo %s debe ser una dirección de correo electrónico válida.",
     "field_min_length": "El campo %s debe tener al menos %d caracteres.",
     "field_max_length": "El campo %s debe tener como máximo %d caracteres.",
-    "field_must_be_string": "El campo %s debe ser una cadena de texto."
+    "field_must_be_string": "El campo %s debe ser una cadena de texto.",
+    "password_must_contain_letter": "La contraseña debe contener al menos una letra.",
+    "password_must_contain_number": "La contraseña debe contener al menos un número.",
+    "password_must_contain_symbol": "La contraseña debe contener al menos un símbolo especial."
   },
   "base_error": {
     "internal_error": "No fue posible procesar la petición.",

@@ -7,3 +7,4 @@ type BulkCreateCourseTopicRequest struct {
 	CourseID uint                  `form:"course_id" binding:"required"`
 }
 
+

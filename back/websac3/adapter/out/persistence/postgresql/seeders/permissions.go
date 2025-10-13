@@ -31,5 +31,8 @@ func (p *permissions) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "permissions")
+
 	return nil
 }

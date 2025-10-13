@@ -125,6 +125,9 @@
     "list_pending_expert_consultations": {
         "not_found": "No pending expert consultation requests found."
     },
+    "list_answered_expert_consultations": {
+        "not_found": "No answered expert consultation requests found."
+    },
     "accept_expert_consultation": {
         "success": "Expert consultation request accepted successfully.",
         "not_pending": "The expert consultation request is not in pending status.",
@@ -203,7 +206,10 @@
     "field_must_be_email": "Field %s must be a valid email address.",
     "field_min_length": "Field %s must have at least %d characters.",
     "field_max_length": "Field %s must have at most %d characters.",
-    "field_must_be_string": "Field %s must be a string."
+    "field_must_be_string": "Field %s must be a string.",
+    "password_must_contain_letter": "Password must contain at least one letter.",
+    "password_must_contain_number": "Password must contain at least one number.",
+    "password_must_contain_symbol": "Password must contain at least one special symbol."
   },
   "base_error": {
     "internal_error": "The request could not be processed.",

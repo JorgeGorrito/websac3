@@ -30,5 +30,8 @@ func (a *actions) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "actions")
+
 	return nil
 }

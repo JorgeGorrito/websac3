@@ -55,5 +55,8 @@ func (s *topics) Seed(ctx _db.Context) error {
 		}
 	}
 
+	ResetAutoIncrement(dbCtx, "topics")
+	ResetAutoIncrement(dbCtx, "topic_names")
+
 	return nil
 }

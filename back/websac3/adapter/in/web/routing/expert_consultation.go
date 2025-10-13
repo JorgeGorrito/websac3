@@ -24,6 +24,12 @@ func registerListPendingExpertConsultations(routerGroup *gin.RouterGroup) {
 	routerGroup.GET("/expert-consultations/pending", listPendingExpertConsultationsController.Handle)
 }
 
+func registerListAnsweredExpertConsultations(routerGroup *gin.RouterGroup) {
+	listAnsweredExpertConsultationsController := controller.NewListAnsweredExpertConsultationsController()
+
+	routerGroup.GET("/expert-consultations/answered", listAnsweredExpertConsultationsController.Handle)
+}
+
 func registerAcceptExpertConsultation(routerGroup *gin.RouterGroup) {
 	acceptExpertConsultationController := controller.NewAcceptExpertConsultationController()
 
@@ -54,6 +60,7 @@ func RegisterExpertConsultationRoutes(routerGroup *gin.RouterGroup) {
 	registerCreateExpertConsultation(authRequiredGroup)
 	registerListUserExpertConsultations(authRequiredGroup)
 	registerListPendingExpertConsultations(authRequiredGroup)
+	registerListAnsweredExpertConsultations(authRequiredGroup)
 	registerGetExpertConsultationByID(authRequiredGroup)
 	registerAcceptExpertConsultation(authRequiredGroup)
 	registerRejectExpertConsultation(authRequiredGroup)

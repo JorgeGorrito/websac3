@@ -26,13 +26,18 @@ func GetCreateUserFromTokenController() *CreateUserFromTokenController {
 // @Summary Crear Usuario desde Token
 // @Description Crea un usuario utilizando un token de creación válido y una contraseña.
 // @Description El token debe corresponder a una solicitud de acceso aprobada y verificada.
+// @Description La contraseña debe cumplir con los siguientes requisitos:
+// @Description - Tener un mínimo de 8 caracteres
+// @Description - Incluir al menos una letra
+// @Description - Incluir al menos un número
+// @Description - Incluir al menos un símbolo especial
 // @Tags User
 // @Accept json
 // @Produce json
 // @Param request body request.CreateUserFromTokenRequest true "CreateUserFromTokenRequest"
 // @Param lang path string true "Código de idioma" default(en) Enums(en, es)
 // @Success 201 {object} response.ApiResponse[string] "Usuario creado exitosamente"
-// @Failure 400 {object} response.ApiResponse[string] "Formato de solicitud inválido o contraseñas no coinciden"
+// @Failure 400 {object} response.ApiResponse[string] "Formato de solicitud inválido, contraseñas no coinciden o no cumple requisitos de complejidad"
 // @Failure 404 {object} response.ApiResponse[string] "Token de creación no encontrado"
 // @Failure 409 {object} response.ApiResponse[string] "Usuario ya existe"
 // @Failure 422 {object} response.ApiResponse[string] "Solicitud no aprobada o email no verificado"

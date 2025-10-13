@@ -29,5 +29,8 @@ func (a *accessRequestStatuses) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "statuses")
+
 	return nil
 }

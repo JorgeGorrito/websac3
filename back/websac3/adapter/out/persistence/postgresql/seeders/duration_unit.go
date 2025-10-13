@@ -55,5 +55,8 @@ func (s *durationUnits) Seed(ctx _db.Context) error {
 		}
 	}
 
+	ResetAutoIncrement(dbCtx, "duration_units")
+	ResetAutoIncrement(dbCtx, "duration_unit_names")
+
 	return nil
 }

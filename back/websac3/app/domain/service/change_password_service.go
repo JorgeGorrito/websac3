@@ -9,6 +9,7 @@ import (
 	"websac3/app/port/out/message"
 	"websac3/app/port/out/persistence"
 	"websac3/app/port/out/persistence/db"
+	"websac3/common/validator"
 )
 
 type ChangePasswordService struct {
@@ -88,11 +89,16 @@ func (s *ChangePasswordService) Execute(cmd command.ChangePasswordCommand, lang 
 				)
 			}
 
-			// 6. Generar el hash de la nueva contraseña
+			// 6. Validar complejidad de la nueva contraseña
+			if err := validator.ValidatePasswordComplexity(cmd.NewPassword, s.msgProvider, lang); err != nil {
+				return err
+			}
+
+			// 7. Generar el hash de la nueva contraseña
 			newPwdHash := sha256.Sum256([]byte(cmd.NewPassword))
 			newPwdHashHex := hex.EncodeToString(newPwdHash[:])
 
-			// 7. Actualizar la contraseña del usuario
+			// 8. Actualizar la contraseña del usuario
 			user.PasswordHash = newPwdHashHex
 			if err := s.updateUserPort.UpdateByID(&user, cmd.UserID, ctx); err != nil {
 				return err

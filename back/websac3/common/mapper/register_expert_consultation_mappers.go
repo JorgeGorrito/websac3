@@ -294,4 +294,67 @@ func registerExpertConsultationMappers() {
 			ExpertResponse: rejectRequest.ExpertResponse,
 		}, nil
 	})
+
+	RegisterMapFunc(func(expertConsultation *entity.ExpertConsultation) (response.AnsweredExpertConsultationResponse, error) {
+		var answeredExpertConsultationResponse response.AnsweredExpertConsultationResponse = response.AnsweredExpertConsultationResponse{
+			ID:          expertConsultation.ID,
+			RequesterID: expertConsultation.RequesterID,
+			CreatedAt:   expertConsultation.CreatedAt.Format("2006-01-02T15:04:05Z"),
+		}
+
+		// Mapear requester
+		if expertConsultation.Requester != nil {
+			answeredExpertConsultationResponse.RequesterEmail = expertConsultation.Requester.Email
+			if expertConsultation.Requester.Person != nil {
+				answeredExpertConsultationResponse.RequesterName = expertConsultation.Requester.Person.Name + " " + expertConsultation.Requester.Person.Lastname
+				answeredExpertConsultationResponse.RequesterJobPosition = expertConsultation.Requester.Person.JobPosition
+
+				// Mapear información de la institución educativa
+				if expertConsultation.Requester.Person.HigherEducationInstitution != nil {
+					answeredExpertConsultationResponse.RequesterInstitutionSnies = expertConsultation.Requester.Person.HigherEducationInstitution.Snies
+					answeredExpertConsultationResponse.RequesterInstitutionName = expertConsultation.Requester.Person.HigherEducationInstitution.Name
+
+					// Mapear ownership de la institución
+					if expertConsultation.Requester.Person.HigherEducationInstitution.Ownership != nil {
+						answeredExpertConsultationResponse.RequesterInstitutionOwnership = expertConsultation.Requester.Person.HigherEducationInstitution.Ownership.Name
+					}
+				}
+			}
+		}
+
+		// Mapear degree program
+		if expertConsultation.DegreeProgram != nil {
+			answeredExpertConsultationResponse.DegreeProgramID = expertConsultation.DegreeProgram.ID
+			answeredExpertConsultationResponse.DegreeProgramName = expertConsultation.DegreeProgram.Name
+			answeredExpertConsultationResponse.DegreeProgramSnies = expertConsultation.DegreeProgram.Snies
+		}
+
+		// Mapear report
+		if expertConsultation.Report != nil {
+			answeredExpertConsultationResponse.ReportID = expertConsultation.Report.ID
+			answeredExpertConsultationResponse.ReportScore = expertConsultation.Report.Score
+		}
+
+		// Mapear mensajes
+		answeredExpertConsultationResponse.RequestMessage = expertConsultation.RequestMessage
+		answeredExpertConsultationResponse.ExpertResponse = expertConsultation.ExpertResponse
+
+		// Mapear status
+		if expertConsultation.Status != nil {
+			answeredExpertConsultationResponse.StatusID = expertConsultation.Status.ID
+			answeredExpertConsultationResponse.StatusName = expertConsultation.Status.Name
+		}
+
+		// Mapear fechas
+		if expertConsultation.UpdatedAt != nil {
+			updatedAt := expertConsultation.UpdatedAt.Format("2006-01-02T15:04:05Z")
+			answeredExpertConsultationResponse.UpdatedAt = &updatedAt
+		}
+		if expertConsultation.AnsweredAt != nil {
+			answeredAt := expertConsultation.AnsweredAt.Format("2006-01-02T15:04:05Z")
+			answeredExpertConsultationResponse.AnsweredAt = &answeredAt
+		}
+
+		return answeredExpertConsultationResponse, nil
+	})
 }

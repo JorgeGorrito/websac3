@@ -56,5 +56,8 @@ func (s *knowledgeAreas) Seed(ctx _db.Context) error {
 		}
 	}
 
+	ResetAutoIncrement(dbCtx, "knowledge_areas")
+	ResetAutoIncrement(dbCtx, "knowledge_area_names")
+
 	return nil
 }

@@ -80,6 +80,18 @@ func RegisterExpertConsultationDependencies(m *manager) {
 		},
 	)
 
+	// List Answered Expert Consultations Use Case
+	m.binder.Bind(
+		andi.GetAbstractType[usecase.ListAnsweredExpertConsultationsUseCase](),
+		func() any {
+			return service.NewListAnsweredExpertConsultationsService(
+				container.Inject[persistence.GetExpertConsultationPort](),
+				container.Inject[db.Manager](),
+				container.Inject[message.Provider](),
+			)
+		},
+	)
+
 	// Update Expert Consultation Port
 	m.binder.Bind(
 		andi.GetAbstractType[persistence.UpdateExpertConsultationPort](),

@@ -29,5 +29,8 @@ func (d *departments) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "departments")
+
 	return nil
 }

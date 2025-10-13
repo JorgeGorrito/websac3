@@ -30,5 +30,8 @@ func (i *institutionalCategories) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "institutional_categories")
+
 	return nil
 }

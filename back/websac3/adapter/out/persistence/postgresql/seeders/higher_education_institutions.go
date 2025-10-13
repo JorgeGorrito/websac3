@@ -125,5 +125,8 @@ func (h *higherEducationInstitutions) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "higher_education_institutions")
+
 	return nil
 }

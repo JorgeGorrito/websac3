@@ -55,5 +55,8 @@ func (s *courseNatures) Seed(ctx _db.Context) error {
 		}
 	}
 
+	ResetAutoIncrement(dbCtx, "course_natures")
+	ResetAutoIncrement(dbCtx, "course_nature_names")
+
 	return nil
 }

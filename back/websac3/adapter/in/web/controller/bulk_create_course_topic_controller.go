@@ -66,3 +66,4 @@ func (c *BulkCreateCourseTopicController) BulkCreateCourseTopic(context *gin.Con
 	context.JSON(result.HttpStatusCode, result.ToResponseFormat())
 }
 
+

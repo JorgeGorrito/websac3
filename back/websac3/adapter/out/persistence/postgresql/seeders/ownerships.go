@@ -30,5 +30,8 @@ func (o *ownerships) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "ownerships")
+
 	return nil
 }

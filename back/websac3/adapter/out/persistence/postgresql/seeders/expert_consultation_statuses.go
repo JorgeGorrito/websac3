@@ -55,5 +55,8 @@ func (e *expertConsultationStatuses) Seed(ctx _db.Context) error {
 		}
 	}
 
+	ResetAutoIncrement(dbCtx, "expert_consultation_statuses")
+	ResetAutoIncrement(dbCtx, "expert_consultation_status_names")
+
 	return nil
 }

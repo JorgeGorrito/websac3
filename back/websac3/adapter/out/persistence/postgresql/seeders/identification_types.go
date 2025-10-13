@@ -29,5 +29,8 @@ func (r *identificationTypes) Seed(ctx _db.Context) error {
 			return err
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "identification_types")
+
 	return nil
 }

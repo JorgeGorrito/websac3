@@ -55,5 +55,8 @@ func (s *formationLevels) Seed(ctx _db.Context) error {
 		}
 	}
 
+	ResetAutoIncrement(dbCtx, "formation_levels")
+	ResetAutoIncrement(dbCtx, "formation_level_names")
+
 	return nil
 }

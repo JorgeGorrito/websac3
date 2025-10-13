@@ -11,6 +11,7 @@ type GetExpertConsultationPort interface {
 	GetByID(id uint, ctx db.Context) (entity.ExpertConsultation, error)
 	GetByUserID(userID uint, paginationParams paginator.PaginationParams, filters commonfilter.Params, ctx db.Context) ([]entity.ExpertConsultation, uint, error)
 	GetPendingConsultations(paginationParams paginator.PaginationParams, filters commonfilter.Params, ctx db.Context) ([]entity.ExpertConsultation, uint, error)
+	GetAnsweredConsultationsByExpertID(expertID uint, paginationParams paginator.PaginationParams, filters commonfilter.Params, ctx db.Context) ([]entity.ExpertConsultation, uint, error)
 }
 
 type UpdateExpertConsultationPort interface {

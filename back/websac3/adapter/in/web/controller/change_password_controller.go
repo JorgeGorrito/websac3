@@ -26,13 +26,19 @@ func GetChangePasswordController() *ChangePasswordController {
 // @Summary Cambiar Contraseña
 // @Description Permite al usuario autenticado cambiar su contraseña.
 // @Description Requiere la contraseña actual, la nueva contraseña y su confirmación.
+// @Description La nueva contraseña debe cumplir con los siguientes requisitos:
+// @Description - Tener un mínimo de 8 caracteres
+// @Description - Ser diferente a la contraseña actual
+// @Description - Incluir al menos una letra
+// @Description - Incluir al menos un número
+// @Description - Incluir al menos un símbolo especial
 // @Tags User
 // @Accept json
 // @Produce json
 // @Param request body request.ChangePasswordRequest true "ChangePasswordRequest"
 // @Param lang path string true "Código de idioma" default(en) Enums(en, es)
 // @Success 200 {object} response.ApiResponse[string] "Contraseña cambiada exitosamente"
-// @Failure 400 {object} response.ApiResponse[string] "Datos de entrada inválidos (contraseña actual incorrecta, contraseñas no coinciden, etc.)"
+// @Failure 400 {object} response.ApiResponse[string] "Datos de entrada inválidos (contraseña actual incorrecta, contraseñas no coinciden, no cumple requisitos de complejidad, etc.)"
 // @Failure 401 {object} response.ApiResponse[string] "Usuario no autenticado"
 // @Failure 404 {object} response.ApiResponse[string] "Usuario no encontrado"
 // @Failure 500 {object} response.ApiResponse[string] "Error interno del servidor"

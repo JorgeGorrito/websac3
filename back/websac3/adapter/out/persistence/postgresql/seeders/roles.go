@@ -60,5 +60,8 @@ func (r *roles) Seed(ctx _db.Context) error {
 			}
 		}
 	}
+
+	ResetAutoIncrement(dbCtx, "roles")
+
 	return nil
 }

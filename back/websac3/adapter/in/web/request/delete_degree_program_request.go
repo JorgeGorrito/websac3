@@ -5,3 +5,4 @@ type DeleteDegreeProgramRequest struct {
 }
 
 
+

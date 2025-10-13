@@ -26,3 +26,4 @@ func (u *BulkCreateCourseTopicUseCaseImpl) Execute(
 	return u.bulkCreateCourseTopicService.Execute(command, lang)
 }
 
+

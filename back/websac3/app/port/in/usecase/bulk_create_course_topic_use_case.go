@@ -9,3 +9,4 @@ type BulkCreateCourseTopicUseCase interface {
 	Execute(command command.BulkCreateCourseTopicCommand, lang string) (response.BulkCreateCourseTopicResponse, error)
 }
 
+

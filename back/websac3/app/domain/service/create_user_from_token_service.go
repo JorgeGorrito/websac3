@@ -9,6 +9,7 @@ import (
 	"websac3/app/port/out/persistence"
 	"websac3/app/port/out/persistence/db"
 	"websac3/app/port/out/persistence/enum"
+	"websac3/common/validator"
 )
 
 type CreateUserFromTokenService struct {
@@ -116,11 +117,16 @@ func (s *CreateUserFromTokenService) Execute(token string, password string, lang
 				}
 			}
 
-			// 8. Generar el hash de la contraseña
+			// 8. Validar complejidad de la contraseña
+			if err := validator.ValidatePasswordComplexity(password, s.msgProvider, lang); err != nil {
+				return err
+			}
+
+			// 9. Generar el hash de la contraseña
 			passwordHash := sha256.Sum256([]byte(password))
 			passwordHashHex := hex.EncodeToString(passwordHash[:])
 
-			// 9. Crear el usuario
+			// 10. Crear el usuario
 			user := &entity.User{
 				Password:     password,
 				PasswordHash: passwordHashHex,
