@@ -14,6 +14,7 @@ import {
   Cog,
   LifeBuoy,
   Send,
+  CheckCircle,
 } from "lucide-react";
 
 import type { LucideIcon } from "lucide-react";
@@ -57,9 +58,14 @@ export const SIDEBAR_BY_ROLE: Record<RoleKey, SidebarData> = {
         icon: AlertTriangle,
       },
       {
-        title: "Solicitudes De Asesoria",
+        title: "Solicitudes Pendientes",
         url: "/experto/asesoria/solicitudes",
         icon: Headphones,
+      },
+      {
+        title: "Solicitudes Respondidas",
+        url: "/experto/asesoria/respondidas",
+        icon: CheckCircle,
       },
       { title: "Perfil", url: "/experto/perfil", icon: UserCog },
     ],

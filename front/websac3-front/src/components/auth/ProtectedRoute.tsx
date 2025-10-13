@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
+import { hasRequiredRole, getDashboardRoute } from "@/utils/roleUtils";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -31,31 +32,10 @@ export const ProtectedRoute = ({
       }
 
       if (requiredRole) {
-        const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
-        const userRole = user?.role?.toLowerCase().trim() || "";
-        const hasRequiredRole = allowedRoles.some(role => 
-          role.toLowerCase().trim() === userRole
-        );
-        
-        if (!hasRequiredRole) {
-        // Redirect to appropriate dashboard based on user role
-        const getDashboardRoute = (role: string): string => {
-          const normalizedRole = role?.toLowerCase().trim();
-          switch (normalizedRole) {
-            case 'admin':
-              return "/admin/dashboard";
-            case 'guest':
-            case 'program lead':
-              return "/director/dashboard";
-            case 'cybersecurity_auditor':
-            case 'cybersecurity auditor':
-              return "/experto/dashboard";
-            default:
-              return "/admin/dashboard";
-          }
-        };
-        
-          const userDashboard = getDashboardRoute(user?.role || "");
+        if (!hasRequiredRole(user?.role, requiredRole)) {
+          // Redirect to appropriate dashboard based on user role
+          const userDashboard = getDashboardRoute(user?.role);
+          console.log(`🚫 ProtectedRoute: User role "${user?.role}" not authorized. Redirecting to: ${userDashboard}`);
           router.push(userDashboard);
           return;
         }
@@ -89,16 +69,8 @@ export const ProtectedRoute = ({
   }
 
   // Don't render children if role doesn't match
-  if (requiredRole) {
-    const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
-    const userRole = user?.role?.toLowerCase().trim() || "";
-    const hasRequiredRole = allowedRoles.some(role => 
-      role.toLowerCase().trim() === userRole
-    );
-    
-    if (!hasRequiredRole) {
-      return null;
-    }
+  if (requiredRole && !hasRequiredRole(user?.role, requiredRole)) {
+    return null;
   }
 
   return <>{children}</>;

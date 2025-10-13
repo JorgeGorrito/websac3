@@ -10,6 +10,7 @@ import { useLoginMutation } from "@/services/api";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loginStart, loginSuccess, loginFailure, clearError } from "@/store/authSlice";
 import { decodeJWT } from "@/lib/jwt";
+import { getDashboardRoute } from "@/utils/roleUtils";
 
 export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,21 +31,8 @@ export const LoginForm = () => {
   // Handle redirection after successful login
   useEffect(() => {
     if (isAuthenticated && user) {
-      const getDashboardRoute = (role: string): string => {
-        switch (role) {
-          case 'admin':
-            return "/admin/dashboard";
-          case 'guest':
-          case 'program lead':
-            return "/director/dashboard";
-          case 'cybersecurity_auditor':
-            return "/experto/dashboard";
-          default:
-            return "/admin/dashboard";
-        }
-      };
-      
       const dashboardRoute = getDashboardRoute(user.role);
+      console.log(`🔐 LoginForm: User "${user.username}" with role "${user.role}" redirecting to: ${dashboardRoute}`);
       
       // Use window.location.href for a hard redirect
       window.location.href = dashboardRoute;

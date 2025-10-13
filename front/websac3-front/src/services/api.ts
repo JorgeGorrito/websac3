@@ -345,6 +345,7 @@ export type KnowledgeAreaReport = {
 
 export type UnexpectedKnowledgeAreaReport = {
   id: number;
+  lang: string;
   name: string;
   total_learn_hours: number;
   topic_reports: UnexpectedTopicReport[];
@@ -354,11 +355,8 @@ export type UnexpectedTopicReport = {
   id: number;
   name: string;
   topic_id: number;
+  knowledge_area_id: number;
   learn_hours_actual: number;
-  topic: {
-    id: number;
-    name: string;
-  };
 };
 
 export type ReportDetail = {
@@ -1236,6 +1234,54 @@ export const api = createApi({
       transformResponse: (response: ApiResponse<ExpertConsultationResponseResponse>) => response.result,
     }),
 
+    // Get Expert Consultation Detail
+    getExpertConsultationDetail: builder.query<{
+      id: number;
+      requester_id: number;
+      requester_name: string;
+      requester_email: string;
+      expert_id: number;
+      expert_name: string;
+      expert_email: string;
+      degree_program_id: number;
+      degree_program_name: string;
+      degree_program_snies: number;
+      report_id: number;
+      report_score: number;
+      request_message: string;
+      expert_response: string;
+      status_id: number;
+      status_name: string;
+      created_at: string;
+      updated_at: string;
+      answered_at: string;
+      closed_at: string;
+    }, { consultation_id: number; lang?: string }>({
+      query: ({ consultation_id, lang = 'es' }) => ({ url: `/expert-consultations/${consultation_id}` }),
+      transformResponse: (response: ApiResponse<{
+        id: number;
+        requester_id: number;
+        requester_name: string;
+        requester_email: string;
+        expert_id: number;
+        expert_name: string;
+        expert_email: string;
+        degree_program_id: number;
+        degree_program_name: string;
+        degree_program_snies: number;
+        report_id: number;
+        report_score: number;
+        request_message: string;
+        expert_response: string;
+        status_id: number;
+        status_name: string;
+        created_at: string;
+        updated_at: string;
+        answered_at: string;
+        closed_at: string;
+      }>) => response.result,
+    }),
+
     // List Expert Consultation Statuses
     listExpertConsultationStatuses: builder.query<{
       data: ExpertConsultationStatus[];
@@ -1812,6 +1858,81 @@ export const api = createApi({
       }>) => response.result,
     }),
 
+    // List Answered Expert Consultations
+    listAnsweredExpertConsultations: builder.query<
+      {
+        data: Array<{
+          id: number;
+          requester_id: number;
+          requester_name: string;
+          requester_email: string;
+          requester_institution_snies: number;
+          requester_institution_name: string;
+          requester_institution_ownership: string;
+          requester_job_position: string;
+          degree_program_id: number;
+          degree_program_name: string;
+          degree_program_snies: number;
+          report_id: number;
+          report_score: number;
+          request_message: string;
+          expert_response: string;
+          status_id: number;
+          status_name: string;
+          created_at: string;
+          updated_at: string;
+          answered_at: string;
+        }>;
+        current_page: number;
+        items_per_page: number;
+        total_count: number;
+      },
+      { 
+        current_page?: number; 
+        items_per_page?: number; 
+        lang?: string;
+      }
+    >({
+      query: ({ 
+        current_page = 1, 
+        items_per_page = 10, 
+        lang = 'es'
+      } = {}) => {
+        const params = new URLSearchParams();
+        params.set("current_page", String(current_page));
+        params.set("items_per_page", String(items_per_page));
+        
+        return { url: `/expert-consultations/answered?${params.toString()}` };
+      },
+      transformResponse: (response: ApiResponse<{
+        data: Array<{
+          id: number;
+          requester_id: number;
+          requester_name: string;
+          requester_email: string;
+          requester_institution_snies: number;
+          requester_institution_name: string;
+          requester_institution_ownership: string;
+          requester_job_position: string;
+          degree_program_id: number;
+          degree_program_name: string;
+          degree_program_snies: number;
+          report_id: number;
+          report_score: number;
+          request_message: string;
+          expert_response: string;
+          status_id: number;
+          status_name: string;
+          created_at: string;
+          updated_at: string;
+          answered_at: string;
+        }>;
+        current_page: number;
+        items_per_page: number;
+        total_count: number;
+      }>) => response.result,
+    }),
+
     // Pending Reports for Expert
     listPendingReports: builder.query<
       {
@@ -2120,6 +2241,7 @@ export const {
   useCreateExpertConsultationMutation,
   useAcceptExpertConsultationMutation,
   useRejectExpertConsultationMutation,
+  useGetExpertConsultationDetailQuery,
   useListExpertConsultationStatusesQuery,
   // pending reports
   useListPendingReportsQuery,
@@ -2130,6 +2252,7 @@ export const {
   // expert consultation
   useListUserExpertConsultationsQuery,
   useListPendingExpertConsultationsQuery,
+  useListAnsweredExpertConsultationsQuery,
   // degree program detail
   useGetDegreeProgramQuery,
   useGetDegreeProgramCoursesQuery,

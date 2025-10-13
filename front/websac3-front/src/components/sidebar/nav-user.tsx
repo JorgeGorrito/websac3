@@ -2,10 +2,9 @@
 
 import {
   User,
-  Settings,
   ChevronsUpDown,
   LogOut,
-  Shield,
+  Key,
 } from "lucide-react"
 
 import {
@@ -29,6 +28,8 @@ import {
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/hooks/useAuth"
 import { Badge } from "@/components/ui/badge"
+import { translateRole } from "@/utils/roleTranslations"
+import { useRouter } from "next/navigation"
 
 export function NavUser({
   user,
@@ -43,17 +44,40 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const { logout, user: authUser } = useAuth()
+  const router = useRouter()
 
   const handleLogout = () => {
     logout()
   }
 
+  const handleProfile = () => {
+    if (authUser?.role) {
+      const normalizedRole = authUser.role.toLowerCase().trim()
+      if (normalizedRole === 'admin') {
+        router.push('/admin/perfil')
+      } else if (normalizedRole === 'guest' || normalizedRole === 'program lead') {
+        router.push('/director/perfil')
+      } else if (normalizedRole === 'cybersecurity_auditor') {
+        router.push('/experto/perfil')
+      }
+    }
+  }
+
+  const handleChangePassword = () => {
+    if (authUser?.role) {
+      const normalizedRole = authUser.role.toLowerCase().trim()
+      if (normalizedRole === 'admin') {
+        router.push('/admin/cambiar-contrasena')
+      } else if (normalizedRole === 'guest' || normalizedRole === 'program lead') {
+        router.push('/director/cambiar-contrasena')
+      } else if (normalizedRole === 'cybersecurity_auditor') {
+        router.push('/experto/cambiar-contrasena')
+      }
+    }
+  }
+
   // Get role label from auth user if available
-  const displayRole = roleLabel || (authUser?.role ? 
-    (authUser.role === 'admin' ? 'Administrador' :
-    authUser.role === 'program lead' ? 'Director de programa' :
-    authUser.role === 'cybersecurity_auditor' ? 'Experto en Ciberseguridad' :
-    authUser.role) : 'Usuario')
+  const displayRole = roleLabel || (authUser?.role ? translateRole(authUser.role) : 'Usuario')
 
   return (
     <SidebarMenu>
@@ -112,17 +136,19 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="gap-3 px-4 py-3">
+              <DropdownMenuItem 
+                onClick={handleProfile}
+                className="gap-3 px-4 py-3 cursor-pointer"
+              >
                 <User className="h-4 w-4" />
                 <span>Mi Perfil</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="gap-3 px-4 py-3">
-                <Settings className="h-4 w-4" />
-                <span>Configuración</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gap-3 px-4 py-3">
-                <Shield className="h-4 w-4" />
-                <span>Seguridad</span>
+              <DropdownMenuItem 
+                onClick={handleChangePassword}
+                className="gap-3 px-4 py-3 cursor-pointer"
+              >
+                <Key className="h-4 w-4" />
+                <span>Cambiar Contraseña</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

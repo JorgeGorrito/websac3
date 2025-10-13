@@ -53,7 +53,7 @@ export default function AppSidebar({
         {data.navSecondary ? (
           <NavSecondary items={data.navSecondary} />
         ) : null}
-        <NavUser user={userData} roleLabel={data.roleLabel} />
+        <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>
   );

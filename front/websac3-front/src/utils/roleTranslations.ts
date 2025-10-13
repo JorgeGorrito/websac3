@@ -5,8 +5,10 @@
 export const ROLE_TRANSLATIONS: Record<string, string> = {
   "program lead": "Director de programa",
   "guest": "Invitado", 
+  "guess": "Invitado", // Handle typo case
   "admin": "Administrador",
   "cybersecurity auditor": "Auditor Ciberseguridad",
+  "cybersecurity_auditor": "Auditor Ciberseguridad",
 };
 
 /**

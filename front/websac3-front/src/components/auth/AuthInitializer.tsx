@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { loginSuccess, setInitialized } from "@/store/authSlice";
 import { decodeJWT } from "@/lib/jwt";
+import { getDashboardRoute } from "@/utils/roleUtils";
 
 export const AuthInitializer = () => {
   const dispatch = useAppDispatch();
@@ -41,22 +42,6 @@ export const AuthInitializer = () => {
           }));
           
           // Handle redirection here to avoid multiple components competing
-          const getDashboardRoute = (role: string): string => {
-            const normalizedRole = role?.toLowerCase().trim();
-            switch (normalizedRole) {
-              case 'admin':
-                return "/admin/dashboard";
-              case 'guest':
-              case 'program lead':
-                return "/director/dashboard";
-              case 'cybersecurity_auditor':
-              case 'cybersecurity auditor':
-                return "/experto/dashboard";
-              default:
-                return "/admin/dashboard";
-            }
-          };
-          
           const dashboardRoute = getDashboardRoute(user.role);
           const currentPath = window.location.pathname;
           

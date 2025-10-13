@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
+import { getDashboardRoute } from "@/utils/roleUtils";
 
 export const AuthRedirector = () => {
   const router = useRouter();
@@ -14,22 +15,6 @@ export const AuthRedirector = () => {
     
     // Only redirect if we're not loading, have complete auth data, and haven't redirected yet
     if (!isLoading && isAuthenticated && user && !hasRedirected.current) {
-      const getDashboardRoute = (role: string): string => {
-        const normalizedRole = role?.toLowerCase().trim();
-        switch (normalizedRole) {
-          case 'admin':
-            return "/admin/dashboard";
-          case 'guest':
-          case 'program lead':
-            return "/director/dashboard";
-          case 'cybersecurity_auditor':
-          case 'cybersecurity auditor':
-            return "/experto/dashboard";
-          default:
-            return "/admin/dashboard";
-        }
-      };
-      
       const dashboardRoute = getDashboardRoute(user.role);
       const currentPath = window.location.pathname;
       

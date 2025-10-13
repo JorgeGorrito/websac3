@@ -111,6 +111,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#2c3e50',
+    textAlign: 'center',
+    lineHeight: 1.2,
+    fontFamily: 'Helvetica',
   },
   scoreStatus: {
     fontSize: 10,
@@ -170,6 +173,10 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: 'bold',
     color: '#333',
+    textAlign: 'center',
+    lineHeight: 1.2,
+    fontFamily: 'Helvetica',
+    transform: 'none',
   },
   smallScoreStatus: {
     fontSize: 8,

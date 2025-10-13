@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useGetReportDetailQuery } from '@/services/api';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, Download, FileText } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { showError } from '@/store/errorSlice';
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import ReportHTMLView from '@/components/websac3/report/ReportHTMLView';
 import ReportFeedbackView from '@/components/websac3/report/ReportFeedbackView';
@@ -19,126 +18,125 @@ export default function ReportDetailPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const reportId = parseInt(params.report_id as string);
-  const reportRef = useRef<HTMLDivElement>(null);
 
   // Fetch report detail
   const { data: reportDetail, isLoading, error } = useGetReportDetailQuery(reportId);
 
-  const downloadReportAsPDF = async () => {
-    if (!reportDetail || !reportRef.current) {
+  const downloadReportAsPDF = () => {
+    if (!reportDetail) {
       dispatch(showError('No hay datos del reporte disponibles.'));
       return;
     }
 
     try {
-      console.log('Starting PDF generation with html2canvas...');
-      console.log('Report detail:', reportDetail);
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let yPos = 20;
+
+      // Título
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Reporte de Evaluación', pageWidth / 2, yPos, { align: 'center' });
+      yPos += 10;
+
+      // Subtítulo
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Resultado de la evaluación del componente de ciberseguridad', pageWidth / 2, yPos, { align: 'center' });
+      yPos += 15;
+
+      // Información institucional
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Información Institucional', 20, yPos);
+      yPos += 7;
       
-      // Capture the report component as canvas
-      const canvas = await html2canvas(reportRef.current, {
-        scale: 1.5, // Reduced scale for better fit
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#f4f4f4',
-        width: reportRef.current.scrollWidth,
-        height: reportRef.current.scrollHeight,
-        onclone: (clonedDoc) => {
-          // Override any problematic styles in the cloned document
-          const style = clonedDoc.createElement('style');
-          style.textContent = `
-            * {
-              -webkit-print-color-adjust: exact !important;
-              color-adjust: exact !important;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Institución: ${reportDetail.degree_program?.higher_education_institution?.name || 'N/A'}`, 20, yPos);
+      yPos += 6;
+      doc.text(`SNIES Institución: ${reportDetail.degree_program?.higher_education_institution?.snies || 'N/A'}`, 20, yPos);
+      yPos += 6;
+      doc.text(`Fecha: ${new Date(reportDetail.created_at).toLocaleDateString('es-ES')}`, 20, yPos);
+      yPos += 10;
+
+      // Información del programa
+      doc.setFont('helvetica', 'bold');
+      doc.text('Información del Programa', 20, yPos);
+      yPos += 7;
+      
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Programa: ${reportDetail.degree_program?.name || 'N/A'}`, 20, yPos);
+      yPos += 6;
+      doc.text(`SNIES Programa: ${reportDetail.degree_program?.snies || 'N/A'}`, 20, yPos);
+      yPos += 6;
+      doc.text(`Rol Profesional: ${reportDetail.professional_role?.name || 'N/A'}`, 20, yPos);
+      yPos += 6;
+      
+      // Puntaje total - TEXTO HORIZONTAL
+      const percentage = Math.round(reportDetail.score * 100);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Puntaje Total: ${percentage}%`, 20, yPos);
+      yPos += 10;
+
+      // Áreas de conocimiento
+      reportDetail.knowledge_area_reports?.forEach((area, index) => {
+        if (yPos > pageHeight - 40) {
+          doc.addPage();
+          yPos = 20;
+        }
+
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Área ${index + 1}: ${area.name}`, 20, yPos);
+        yPos += 7;
+
+        const areaPercentage = Math.round((area.score_got / area.score_expected) * 100);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Porcentaje: ${areaPercentage}%`, 25, yPos);
+        yPos += 6;
+        doc.text(`Horas esperadas: ${area.total_learn_hours_expected.toFixed(2)}`, 25, yPos);
+        yPos += 6;
+        doc.text(`Horas alcanzadas: ${area.total_learn_hours_actual.toFixed(2)}`, 25, yPos);
+        yPos += 10;
+
+        // Tópicos
+        if (area.topic_reports && area.topic_reports.length > 0) {
+          doc.setFont('helvetica', 'bold');
+          doc.text('Temáticas:', 25, yPos);
+          yPos += 6;
+
+          area.topic_reports.forEach((topic) => {
+            if (yPos > pageHeight - 20) {
+              doc.addPage();
+              yPos = 20;
             }
-            [style*="oklch"] {
-              color: rgb(220, 53, 69) !important;
-              border-color: rgb(220, 53, 69) !important;
-              background-color: rgba(220, 53, 69, 0.1) !important;
-            }
-          `;
-          clonedDoc.head.appendChild(style);
-          
-          // Completely replace SVG text elements to ensure no transforms
-          const svgTexts = clonedDoc.querySelectorAll('svg text');
-          svgTexts.forEach((textElement) => {
-            const x = textElement.getAttribute('x');
-            const y = textElement.getAttribute('y');
-            const textContent = textElement.textContent;
-            
-            // Create a new text element without any transforms
-            const newTextElement = clonedDoc.createElementNS('http://www.w3.org/2000/svg', 'text');
-            newTextElement.setAttribute('x', x);
-            newTextElement.setAttribute('text-anchor', 'middle');
-            newTextElement.textContent = textContent;
-            
-            // Set appropriate positioning and styling
-            if (x === '70') {
-              // Main circle text - rotate 180 degrees for correct orientation
-              newTextElement.setAttribute('y', '75');
-              newTextElement.setAttribute('font-size', '20px');
-              newTextElement.setAttribute('font-weight', 'bold');
-              newTextElement.setAttribute('fill', '#2c3e50');
-              newTextElement.setAttribute('dominant-baseline', 'middle');
-              newTextElement.setAttribute('transform', 'rotate(180 70 75)');
-            } else if (x === '30') {
-              // Small circle text - rotate 180 degrees for correct orientation
-              newTextElement.setAttribute('y', '30');
-              newTextElement.setAttribute('font-size', '10px');
-              newTextElement.setAttribute('font-weight', 'bold');
-              newTextElement.setAttribute('fill', '#333');
-              newTextElement.setAttribute('dominant-baseline', 'middle');
-              newTextElement.setAttribute('transform', 'rotate(180 30 30)');
-            }
-            
-            // Replace the old element with the new one
-            textElement.parentNode.replaceChild(newTextElement, textElement);
+
+            doc.setFont('helvetica', 'normal');
+            const topicText = `• ${topic.name}: ${topic.learn_hours_expected.toFixed(2)}h esperadas, ${topic.learn_hours_actual.toFixed(2)}h alcanzadas`;
+            const splitText = doc.splitTextToSize(topicText, pageWidth - 50);
+            doc.text(splitText, 30, yPos);
+            yPos += 5 * splitText.length;
           });
         }
+
+        yPos += 5;
       });
-      
-      console.log('Canvas generated successfully');
-      
-      // Create PDF
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
-      
-      // Calculate dimensions to fit A4
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = pdfWidth - 10; // 5mm margin on each side
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-      let heightLeft = imgHeight;
-      let position = 5; // 5mm top margin
-      
-      // Add first page
-      pdf.addImage(imgData, 'PNG', 5, position, imgWidth, imgHeight);
-      heightLeft -= pdfHeight - 10; // Account for margins
-      
-      // Add additional pages if needed
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight + 5; // 5mm margin
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 5, position, imgWidth, imgHeight);
-        heightLeft -= pdfHeight - 10;
-      }
-      
-      // Generate filename
+
+      // Generar nombre de archivo
       const programName = reportDetail.degree_program?.name || 'Programa';
       const date = new Date(reportDetail.created_at).toLocaleDateString('es-ES');
       const filename = `Reporte_${programName.replace(/[^a-zA-Z0-9]/g, '_')}_${date.replace(/\//g, '-')}.pdf`;
-      
-      // Download PDF
-      pdf.save(filename);
-      
-      console.log('PDF download completed successfully');
+
+      // Descargar
+      doc.save(filename);
+      console.log('PDF generado exitosamente');
 
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error('Error generando PDF:', error);
       dispatch(showError(`Error al generar el PDF: ${error.message}`));
     }
   };
@@ -245,7 +243,7 @@ export default function ReportDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Report Content */}
           <div className="lg:col-span-2">
-            <div ref={reportRef} className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               <ReportHTMLView reportDetail={reportDetail} />
             </div>
           </div>

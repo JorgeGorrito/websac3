@@ -1,50 +1,34 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { 
   MessageSquare, 
-  BookOpen, 
-  Clock, 
   GraduationCap, 
   Calendar,
   User,
   FileText,
   CheckCircle,
   AlertTriangle,
-  Eye,
-  Mail,
   ArrowLeft,
-  Send,
-  X
+  Mail
 } from "lucide-react";
-import { useGetExpertConsultationDetailQuery, useAcceptExpertConsultationMutation, useRejectExpertConsultationMutation } from "@/services/api";
-import { useDispatch } from "react-redux";
-import { showError } from "@/store/errorSlice";
+import { useGetExpertConsultationDetailQuery } from "@/services/api";
 
 export default function ConsultationDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const dispatch = useDispatch();
   const consultationId = parseInt(params.consultation_id as string);
-  
-  const [expertResponse, setExpertResponse] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Get the consultation data
-  const { data: consultation, isLoading, error, refetch } = useGetExpertConsultationDetailQuery({
+  const { data: consultation, isLoading, error } = useGetExpertConsultationDetailQuery({
     consultation_id: consultationId,
     lang: 'es'
   });
-
-  const [acceptConsultation] = useAcceptExpertConsultationMutation();
-  const [rejectConsultation] = useRejectExpertConsultationMutation();
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("es-ES", {
@@ -61,51 +45,19 @@ export default function ConsultationDetailPage() {
     return percentage % 1 === 0 ? percentage.toFixed(0) : percentage.toFixed(2);
   };
 
-  const handleAccept = useCallback(async () => {
-    if (!expertResponse.trim()) {
-      dispatch(showError({ type: 'error', message: 'Por favor escribe una respuesta antes de aceptar la consulta.' }));
-      return;
+  const getStatusBadgeColor = (statusName: string) => {
+    const status = statusName.toLowerCase();
+    if (status.includes('pendiente') || status.includes('pending')) {
+      return 'bg-orange-100 text-orange-800';
+    } else if (status.includes('aceptada') || status.includes('accepted')) {
+      return 'bg-green-100 text-green-800';
+    } else if (status.includes('rechazada') || status.includes('rejected')) {
+      return 'bg-red-100 text-red-800';
+    } else if (status.includes('cerrada') || status.includes('closed')) {
+      return 'bg-gray-100 text-gray-800';
     }
-
-    setIsSubmitting(true);
-    try {
-      await acceptConsultation({
-        consultation_id: consultationId,
-        body: { expert_response: expertResponse.trim() }
-      }).unwrap();
-
-      dispatch(showError({ type: 'success', message: 'Consulta aceptada exitosamente.' }));
-      router.push('/experto/asesoria/solicitudes');
-    } catch (error: any) {
-      const errorMessage = error?.data?.errors?.[0] || 'Error al aceptar la consulta';
-      dispatch(showError({ type: 'error', message: errorMessage }));
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [consultationId, expertResponse, acceptConsultation, dispatch, router]);
-
-  const handleReject = useCallback(async () => {
-    if (!expertResponse.trim()) {
-      dispatch(showError({ type: 'error', message: 'Por favor escribe una respuesta antes de rechazar la consulta.' }));
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await rejectConsultation({
-        consultation_id: consultationId,
-        body: { expert_response: expertResponse.trim() }
-      }).unwrap();
-
-      dispatch(showError({ type: 'success', message: 'Consulta rechazada exitosamente.' }));
-      router.push('/experto/asesoria/solicitudes');
-    } catch (error: any) {
-      const errorMessage = error?.data?.errors?.[0] || 'Error al rechazar la consulta';
-      dispatch(showError({ type: 'error', message: errorMessage }));
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [consultationId, expertResponse, rejectConsultation, dispatch, router]);
+    return 'bg-blue-100 text-blue-800';
+  };
 
   if (isLoading) {
     return (
@@ -149,7 +101,7 @@ export default function ConsultationDetailPage() {
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
-            onClick={() => router.push('/experto/asesoria/solicitudes')}
+            onClick={() => router.push('/director/asesoria-experto')}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -166,8 +118,8 @@ export default function ConsultationDetailPage() {
               <p className="text-gray-600 mb-4">
                 {error ? 'Ocurrió un error al cargar los datos de la consulta.' : 'La consulta solicitada no fue encontrada.'}
               </p>
-              <Button onClick={() => router.push('/experto/asesoria/solicitudes')}>
-                Volver a Solicitudes
+              <Button onClick={() => router.push('/director/asesoria-experto')}>
+                Volver a Asesorías
               </Button>
             </div>
           </CardContent>
@@ -182,15 +134,15 @@ export default function ConsultationDetailPage() {
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
-          onClick={() => router.push('/experto/asesoria/solicitudes')}
+          onClick={() => router.push('/director/asesoria-experto')}
           className="flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
           Volver
         </Button>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Solicitud #{consultation.id}</h1>
-          <p className="text-gray-600 mt-1">Revisa y responde a la solicitud de asesoría</p>
+          <h1 className="text-3xl font-bold text-gray-900">Solicitud de Asesoría #{consultation.id}</h1>
+          <p className="text-gray-600 mt-1">Detalles de la consulta con el experto en ciberseguridad</p>
         </div>
       </div>
 
@@ -205,7 +157,7 @@ export default function ConsultationDetailPage() {
                   <MessageSquare className="h-5 w-5 text-blue-600" />
                   Detalles de la Solicitud
                 </CardTitle>
-                <Badge className="bg-orange-100 text-orange-800">
+                <Badge className={getStatusBadgeColor(consultation.status_name)}>
                   {consultation.status_name}
                 </Badge>
               </div>
@@ -230,76 +182,84 @@ export default function ConsultationDetailPage() {
                 
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-4 w-4 text-gray-500" />
-                  <p className="text-sm">{formatDate(consultation.created_at)}</p>
+                  <div>
+                    <p className="text-xs text-gray-500">Fecha de solicitud</p>
+                    <p className="text-sm">{formatDate(consultation.created_at)}</p>
+                  </div>
                 </div>
+
+                {consultation.updated_at && consultation.updated_at !== consultation.created_at && (
+                  <div className="flex items-center space-x-2">
+                    <Calendar className="h-4 w-4 text-gray-500" />
+                    <div>
+                      <p className="text-xs text-gray-500">Última actualización</p>
+                      <p className="text-sm">{formatDate(consultation.updated_at)}</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Request Message */}
               <div className="bg-gray-50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
                   <MessageSquare className="h-4 w-4" />
-                  Mensaje de Solicitud
+                  Tu Mensaje de Solicitud
                 </h4>
                 <p className="text-sm text-gray-600 whitespace-pre-wrap">
                   {consultation.request_message}
                 </p>
               </div>
+
+              {/* Expert Response */}
+              {consultation.expert_response && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-green-800 mb-2 flex items-center gap-1">
+                    <CheckCircle className="h-4 w-4" />
+                    Respuesta del Experto
+                  </h4>
+                  <p className="text-sm text-green-900 whitespace-pre-wrap">
+                    {consultation.expert_response}
+                  </p>
+                </div>
+              )}
+
+              {!consultation.expert_response && consultation.status_name.toLowerCase().includes('pendiente') && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <MessageSquare className="h-5 w-5 text-blue-600 mt-0.5" />
+                    <div className="text-sm text-blue-800">
+                      <p className="font-medium mb-1">En espera de respuesta</p>
+                      <p className="text-xs">El experto en ciberseguridad revisará tu solicitud y te responderá pronto.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
-          {/* Expert Response */}
+          {/* View Report Button */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Send className="h-5 w-5 text-green-600" />
-                Tu Respuesta
-              </CardTitle>
-              <CardDescription>
-                Escribe tu respuesta detallada a la solicitud de asesoría
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="expert-response" className="text-sm font-medium text-gray-700">
-                  Respuesta del Experto *
-                </Label>
-                <Textarea
-                  id="expert-response"
-                  placeholder="Escribe tu respuesta detallada aquí..."
-                  value={expertResponse}
-                  onChange={(e) => setExpertResponse(e.target.value)}
-                  rows={8}
-                  className="w-full"
-                />
-              </div>
-              
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <MessageSquare className="h-5 w-5 text-blue-600 mt-0.5" />
-                  <div className="text-sm text-blue-800">
-                    <p className="font-medium mb-2">Recomendaciones para tu respuesta:</p>
-                    <ul className="space-y-1 text-xs">
-                      <li>• Sé específico y detallado en tus recomendaciones</li>
-                      <li>• Incluye referencias a mejores prácticas de ciberseguridad</li>
-                      <li>• Proporciona ejemplos prácticos cuando sea posible</li>
-                      <li>• Sugiere recursos adicionales si es apropiado</li>
-                      <li>• Mantén un tono profesional y constructivo</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+            <CardContent className="p-4">
+              <Button
+                onClick={() => router.push(`/director/reportes/${consultation.report_id}`)}
+                className="w-full"
+                variant="outline"
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                Ver Reporte Completo
+              </Button>
             </CardContent>
           </Card>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Requester Information */}
+          {/* Requester Information (Tu información) */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5 text-blue-600" />
-                Información del Solicitante
+                Tu Información
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -320,54 +280,66 @@ export default function ConsultationDetailPage() {
             </CardContent>
           </Card>
 
-          {/* Actions */}
+          {/* Expert Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5 text-purple-600" />
+                Experto Asignado
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-700">Nombre</p>
+                  <p className="text-sm text-gray-600">{consultation.expert_name}</p>
+                </div>
+                
+                <div>
+                  <p className="text-sm font-medium text-gray-700">Email</p>
+                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                    <Mail className="h-3 w-3" />
+                    {consultation.expert_email}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Status Information */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-purple-600" />
-                Acciones
+                Estado de la Consulta
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <Button
-                onClick={handleAccept}
-                disabled={isSubmitting || !expertResponse.trim()}
-                className="w-full bg-green-600 hover:bg-green-700"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Procesando...
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Aceptar Consulta
-                  </>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Estado:</span>
+                  <Badge className={getStatusBadgeColor(consultation.status_name)}>
+                    {consultation.status_name}
+                  </Badge>
+                </div>
+                
+                {consultation.status_name.toLowerCase().includes('pendiente') && (
+                  <p className="text-xs text-gray-500">
+                    Tu consulta está siendo revisada por el experto en ciberseguridad.
+                  </p>
                 )}
-              </Button>
-              
-              <Button
-                onClick={handleReject}
-                disabled={isSubmitting || !expertResponse.trim()}
-                variant="outline"
-                className="w-full border-red-300 text-red-600 hover:bg-red-50"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600 mr-2"></div>
-                    Procesando...
-                  </>
-                ) : (
-                  <>
-                    <X className="h-4 w-4 mr-2" />
-                    Rechazar Consulta
-                  </>
+                
+                {consultation.status_name.toLowerCase().includes('aceptada') && (
+                  <p className="text-xs text-green-700 bg-green-50 p-2 rounded">
+                    ✓ Tu consulta ha sido respondida. Revisa la respuesta del experto arriba.
+                  </p>
                 )}
-              </Button>
-              
-              <div className="text-xs text-gray-500 text-center">
-                Ambas acciones requieren una respuesta escrita
+                
+                {consultation.status_name.toLowerCase().includes('rechazada') && (
+                  <p className="text-xs text-red-700 bg-red-50 p-2 rounded">
+                    El experto ha proporcionado una respuesta. Revisa los detalles arriba.
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>
