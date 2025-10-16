@@ -156,9 +156,18 @@ export default function CargaMasivaTopicosPage() {
   const [downloadTemplate, { isLoading: isDownloading }] = useLazyGetCourseTopicTemplateQuery();
 
   // Memoize query parameters to prevent unnecessary re-renders
-  const topicQueryParams = useMemo(() => ({
-    name: topicSearch || undefined,
-  }), [topicSearch]);
+  const topicQueryParams = useMemo(() => {
+    if (!topicSearch) return {};
+    
+    // Check if search is a number (ID search) or text (name search)
+    const isNumeric = /^\d+$/.test(topicSearch.trim());
+    
+    if (isNumeric) {
+      return { id: parseInt(topicSearch.trim()) };
+    } else {
+      return { name: topicSearch };
+    }
+  }, [topicSearch]);
 
   // Reference data queries with search filters
   const { data: topics, isLoading: isLoadingTopics, error: topicsError } = useGetTopicsQuery(topicQueryParams, {
@@ -303,7 +312,7 @@ export default function CargaMasivaTopicosPage() {
             color="text-purple-600"
             searchValue={topicSearchInput}
             onSearchChange={setTopicSearchInput}
-            searchPlaceholder="Buscar tópico..."
+            searchPlaceholder="Buscar por nombre o ID..."
             onCopy={copyToClipboard}
           />
         </div>

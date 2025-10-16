@@ -1604,12 +1604,17 @@ export const api = createApi({
     }),
 
     // Get Topics with filter
-    getTopics: builder.query<Topic[], { lang?: string; name?: string }>({
-      query: ({ lang = 'es', name } = {}) => {
+    getTopics: builder.query<Topic[], { lang?: string; name?: string; id?: number }>({
+      query: ({ lang = 'es', name, id } = {}) => {
         const params = new URLSearchParams();
-        if (name) {
+        if (name || id) {
           const filters = new URLSearchParams();
-          filters.append('name[cont]', name);
+          if (name) {
+            filters.append('name[cont]', name);
+          }
+          if (id) {
+            filters.append('id[eq]', id.toString());
+          }
           params.append('filters', filters.toString());
         }
         return { url: `/topic${params.toString() ? `?${params.toString()}` : ''}` };
