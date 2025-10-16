@@ -40,7 +40,7 @@ func NewListTopicQueryHandler(
 		logger:           logger,
 		validator:        validator,
 
-		validFilters: []string{"name"},
+		validFilters: []string{"name", "id"},
 	}
 }
 
@@ -75,10 +75,15 @@ func (h *ListTopicQueryHandler) Handle(request query.ListTopicQuery, lang string
 	filters := futil.Transform(request.Filters, []filter.Operator{filter.EqualOperator, filter.ContainsOperator})
 	filters.Purge(h.validFilters)
 	var name string = ""
-	if len(filters) > 0 {
-		name, _ = filters[0].Value.(string)
+	var id string = ""
+	for _, f := range filters {
+		if f.Field == "name" {
+			name, _ = f.Value.(string)
+		} else if f.Field == "id" {
+			id, _ = f.Value.(string)
+		}
 	}
-	results, total, err := h.listTopicUseCase.Execute(pagination.Currentpage, pagination.ItemsPerpage, name, lang)
+	results, total, err := h.listTopicUseCase.Execute(pagination.Currentpage, pagination.ItemsPerpage, name, id, lang)
 
 	var resultsMapped []response.ListTopicResponse
 	var errMap error

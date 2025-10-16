@@ -6,5 +6,5 @@ import (
 )
 
 type GetTopicPort interface {
-	GetByNameAndLang(page, perPage uint, name string, lang string, db db.Context) ([]entity.Topic, int64, error)
+	GetByNameAndLang(page, perPage uint, name string, id string, lang string, db db.Context) ([]entity.Topic, int64, error)
 }

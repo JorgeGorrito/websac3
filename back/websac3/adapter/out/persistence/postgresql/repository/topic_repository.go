@@ -19,6 +19,7 @@ func (r *TopicRepository) GetByNameAndLang(
 	page uint,
 	perPage uint,
 	name string,
+	id string,
 	lang string,
 	ctx _db.Context,
 ) ([]entity.Topic, int64, error) {
@@ -30,14 +31,32 @@ func (r *TopicRepository) GetByNameAndLang(
 	base := dbCtx.DB().
 		Model(&model.Topic{})
 
-	sub := dbCtx.DB().Table("topic_names tn").
-		Where("tn.topic_id = topics.id").
-		Where("tn.lang = ? AND tn.name ILIKE ?", lang, "%"+name+"%")
+	// Build the WHERE clause for name OR id search
+	if name != "" || id != "" {
+		sub := dbCtx.DB().Table("topic_names tn").
+			Where("tn.topic_id = topics.id")
 
-	base = base.
-		Where("EXISTS (?)", sub).
-		Preload("Names", "lang = ? AND name ILIKE ?", lang, "%"+name+"%").
-		Preload("KnowledgeArea.Names", "lang = ?", lang)
+		if name != "" && id != "" {
+			// Search by name OR id
+			sub = sub.Where("(tn.lang = ? AND tn.name ILIKE ?) OR CAST(topics.id AS TEXT) ILIKE ?", lang, "%"+name+"%", "%"+id+"%")
+		} else if name != "" {
+			// Search only by name
+			sub = sub.Where("tn.lang = ? AND tn.name ILIKE ?", lang, "%"+name+"%")
+		} else if id != "" {
+			// Search only by id
+			sub = sub.Where("CAST(topics.id AS TEXT) ILIKE ?", "%"+id+"%")
+		}
+
+		base = base.Where("EXISTS (?)", sub)
+	}
+
+	// Preload with appropriate filters
+	if name != "" {
+		base = base.Preload("Names", "lang = ? AND name ILIKE ?", lang, "%"+name+"%")
+	} else {
+		base = base.Preload("Names", "lang = ?", lang)
+	}
+	base = base.Preload("KnowledgeArea.Names", "lang = ?", lang)
 
 	dbCtx.DBSet(base)
 

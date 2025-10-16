@@ -32,7 +32,10 @@ func GetListTopicController() *ListTopicController {
 // @Description - `[cont]`: contiene (subcadena, case-insensitive)
 // @Description
 // @Description **Filtros válidos (ejemplos):**
-// @Description - `name[cont]`
+// @Description - `name[cont]` - busca por nombre del tema
+// @Description - `id[cont]` - busca por ID del tema
+// @Description
+// @Description **Nota:** Los filtros de name e id se aplican con operador OR, es decir, se devolverán los temas que coincidan con cualquiera de los dos criterios.
 // @Description
 // @Description Cualquier filtro no listado será ignorado automáticamente.
 // @Tags Topic
@@ -40,7 +43,7 @@ func GetListTopicController() *ListTopicController {
 // @Produce json
 // @Param current_page query int false "Número de página (por defecto: 1)" default(1)
 // @Param items_per_page query int false "Items por página (por defecto: 10)" default(10)
-// @Param filters query string false "Filtros dinámicos: formato campo[operador]=valor (ej: name[cont]=criptografía)"
+// @Param filters query string false "Filtros dinámicos: formato campo[operador]=valor (ej: name[cont]=criptografía, id[cont]=12)"
 // @Param lang path string true "Código de idioma" default(en) Enums(en, es)
 // @Success 200 {object} response.ApiResponse[paginator.Page[response.ListTopicResponse]] "Se obtuvieron los temas exitosamente"
 // @Failure 400 {object} response.ApiResponse[string] "Formato de solicitud inválido (ejemplo: JSON mal formado)"

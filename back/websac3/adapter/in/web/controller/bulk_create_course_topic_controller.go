@@ -67,3 +67,4 @@ func (c *BulkCreateCourseTopicController) BulkCreateCourseTopic(context *gin.Con
 }
 
 
+

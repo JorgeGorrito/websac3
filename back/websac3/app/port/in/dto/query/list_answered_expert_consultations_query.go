@@ -12,3 +12,4 @@ type ListAnsweredExpertConsultationsQuery struct {
 	Permissions      []string                   `json:"permissions"`
 }
 
+

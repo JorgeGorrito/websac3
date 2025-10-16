@@ -10,3 +10,4 @@ type ListAnsweredExpertConsultationsUseCase interface {
 	Execute(userID uint, paginationParams paginator.PaginationParams, filters commonfilter.Params, lang string) ([]entity.ExpertConsultation, uint, error)
 }
 
+

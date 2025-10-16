@@ -30,6 +30,7 @@ func (s *ListTopicService) Execute(
 	page uint,
 	perPage uint,
 	name string,
+	id string,
 	lang string,
 ) ([]entity.Topic, int64, error) {
 	var (
@@ -44,6 +45,7 @@ func (s *ListTopicService) Execute(
 				page,
 				perPage,
 				name,
+				id,
 				lang,
 				dbCtx,
 			)

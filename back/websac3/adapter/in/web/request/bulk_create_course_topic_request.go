@@ -8,3 +8,4 @@ type BulkCreateCourseTopicRequest struct {
 }
 
 
+

@@ -5,5 +5,5 @@ import (
 )
 
 type ListTopicUseCase interface {
-	Execute(page, perPage uint, name string, lang string) ([]entity.Topic, int64, error)
+	Execute(page, perPage uint, name string, id string, lang string) ([]entity.Topic, int64, error)
 }
