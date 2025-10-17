@@ -39,7 +39,7 @@ func (p *professionalRoles) Seed(ctx db.Context) error {
 	// Reset autoincrement for tables modified by professional role seeders
 	ResetAutoIncrement(ctx, "professional_roles")
 	ResetAutoIncrement(ctx, "professional_role_knowledge_areas")
-	ResetAutoIncrement(ctx, "professional_role_topics")
+	ResetAutoIncrement(ctx, "professional_role_knowledge_area_topics")
 	ResetAutoIncrement(ctx, "degree_program_professional_roles")
 
 	return nil
