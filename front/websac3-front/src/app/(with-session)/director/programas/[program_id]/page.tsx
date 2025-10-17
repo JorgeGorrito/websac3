@@ -35,12 +35,16 @@ export default function ProgramDetailPage() {
     error: programError 
   } = useGetDegreeProgramQuery({ degree_program_id: programId });
 
-  // Fetch program courses
+  // Fetch program courses (with high items_per_page to get all courses)
   const { 
     data: coursesData, 
     isLoading: coursesLoading, 
     error: coursesError 
-  } = useGetDegreeProgramCoursesQuery({ degree_program_id: programId });
+  } = useGetDegreeProgramCoursesQuery({ 
+    degree_program_id: programId,
+    current_page: 1,
+    items_per_page: 1000 // High limit to ensure all courses are fetched
+  });
 
   const handleBack = () => {
     router.push("/director/programas");

@@ -1682,8 +1682,14 @@ export const api = createApi({
       current_page: number;
       items_per_page: number;
       total_count: number;
-    }, { degree_program_id: number; lang?: string }>({
-      query: ({ degree_program_id, lang = 'es' }) => ({ url: `/degree-program/${degree_program_id}/courses` }),
+    }, { degree_program_id: number; lang?: string; current_page?: number; items_per_page?: number }>({
+      query: ({ degree_program_id, lang = 'es', current_page, items_per_page }) => {
+        const params = new URLSearchParams();
+        if (current_page) params.append('current_page', current_page.toString());
+        if (items_per_page) params.append('items_per_page', items_per_page.toString());
+        const queryString = params.toString();
+        return { url: `/degree-program/${degree_program_id}/courses${queryString ? `?${queryString}` : ''}` };
+      },
       transformResponse: (response: ApiResponse<{
         data: Array<{
           id: number;
