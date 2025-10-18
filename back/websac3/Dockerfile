@@ -39,5 +39,9 @@ COPY .mail-token.json .
 COPY adapter/out/message/lang/ adapter/out/message/lang/
 COPY adapter/out/notification/template/templates adapter/out/notification/template/templates
 COPY adapter/out/persistence/postgresql/seeders/seeds/ adapter/out/persistence/postgresql/seeders/seeds/
+COPY ensure-certs.sh /app/ensure-certs.sh
 
+RUN chmod +x /app/ensure-certs.sh
+
+ENTRYPOINT ["/app/ensure-certs.sh"]
 CMD ["./main"]

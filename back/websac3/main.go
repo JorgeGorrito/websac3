@@ -35,5 +35,5 @@ func main() {
 		SetConfigManager(container.Inject[config.Manager]()).
 		SetRoutesManager(container.Inject[routing.Manager]()).
 		SetCommandsManager(container.Inject[command.Manager]()).
-		RunTLS(":8110", "./localhost.crt", "./localhost.key")
+		RunTLS(":8110", "./certs/localhost.crt", "./certs/localhost.key")
 }
