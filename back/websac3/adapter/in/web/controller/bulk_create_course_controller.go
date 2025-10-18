@@ -70,3 +70,5 @@ func (c *BulkCreateCourseController) BulkCreateCourse(context *gin.Context) {
 
 
 
+
+

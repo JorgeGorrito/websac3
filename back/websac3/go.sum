@@ -6,8 +6,8 @@ cloud.google.com/go/compute/metadata v0.7.0 h1:PBWF+iiAerVNe8UCHxdOt6eHLVc3ydFeO
 cloud.google.com/go/compute/metadata v0.7.0/go.mod h1:j5MvL9PprKL39t166CoB1uVHfQMs4tFQZZcKwksXUjo=
 github.com/JorgeGorrito/anise-dependency-injection v0.1.0-alpha.1 h1:XeagcPcB/iBmZQih1EMNTa/sDmAt8iPWt9LOghXRqzE=
 github.com/JorgeGorrito/anise-dependency-injection v0.1.0-alpha.1/go.mod h1:gTNTQERUIJh9+zE6SZJvrNpsHK/nEMCNH/dkjBiQRzk=
-github.com/JorgeGorrito/anise-with-gin v0.1.0-alpha.15 h1:CRGiC3z3GlM+Og26IdopwPswzQob4hlpYbL/xr94bzY=
-github.com/JorgeGorrito/anise-with-gin v0.1.0-alpha.15/go.mod h1:YUT4lOyE/heb6LrUxyVWTCTFOTVudL+3EgTfSNsmYps=
+github.com/JorgeGorrito/anise-with-gin v0.1.0-alpha.16 h1:0JLZHhrhvb72GrFYLHn36lHmYoA59yJVhmugufaJ3eo=
+github.com/JorgeGorrito/anise-with-gin v0.1.0-alpha.16/go.mod h1:YUT4lOyE/heb6LrUxyVWTCTFOTVudL+3EgTfSNsmYps=
 github.com/KyleBanks/depth v1.2.1 h1:5h8fQADFrWtarTdtDudMmGsC7GPbOAu6RVB3ffsVFHc=
 github.com/KyleBanks/depth v1.2.1/go.mod h1:jzSb9d0L43HxTQfT+oSA1EEp2q+ne2uh6XgeJcm8brE=
 github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.3 h1:vrA6+R1BMLKMTbos8jAeuBrImHPGtY4gTlcue3OIej8=

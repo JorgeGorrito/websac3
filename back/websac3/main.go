@@ -18,7 +18,7 @@ import (
 // @version 1.0
 // @description API documentation for Websac3 backend
 // @host localhost:8110
-// @schemes http
+// @schemes https
 // @contact.name API Support
 // @contact.email j0rg3.4b3ll4@gmail.com
 // @securityDefinitions.apikey BearerAuth
@@ -35,5 +35,5 @@ func main() {
 		SetConfigManager(container.Inject[config.Manager]()).
 		SetRoutesManager(container.Inject[routing.Manager]()).
 		SetCommandsManager(container.Inject[command.Manager]()).
-		Run(":8110")
+		RunTLS(":8110", "./localhost.crt", "./localhost.key")
 }
