@@ -7,9 +7,12 @@
   },
   "scripts": {
     "dev": "next dev",
+    "dev:https": "node server.js",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "start:https": "NODE_ENV=production node server.js",
+    "lint": "next lint",
+    "generate-certs": "node generate-certificates.js"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.15",

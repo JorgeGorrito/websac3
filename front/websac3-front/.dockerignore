@@ -1,0 +1,55 @@
+# Dependencias
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+.next
+out
+dist
+
+# Certificados (se generan automáticamente en el contenedor)
+certificates/
+*.pem
+*.key
+*.crt
+*.csr
+
+# Ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+.nyc_output
+
+# Misc
+*.log
+README.md
+HTTPS-SETUP.md
+ENV-CONFIGURATION.md
+docker-compose*.yml
+
+# Build info
+tsconfig.tsbuildinfo
+

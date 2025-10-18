@@ -1,8 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
 import { RegisterUserForm } from "@/components/websac3/form/register-user/RegisterUserForm";
 
-export default function RegisterUserPage() {
+function RegisterUserContent() {
   return (
     <div className="absolute flex justify-center h-screen w-screen items-center">
       <div className="flex h-3/5 w-1/2 bg-white rounded-lg mt-12 shadow-2xl shadow-slate-800">
@@ -21,5 +22,17 @@ export default function RegisterUserPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterUserPage() {
+  return (
+    <Suspense fallback={
+      <div className="absolute flex justify-center h-screen w-screen items-center">
+        <div className="text-center">Cargando...</div>
+      </div>
+    }>
+      <RegisterUserContent />
+    </Suspense>
   );
 }

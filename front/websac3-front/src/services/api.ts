@@ -576,7 +576,7 @@ export const getCurrentLanguage = (): string => {
 // Custom base query with automatic token refresh
 const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
   const language = getLanguage();
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || `http://localhost:8110/api/v1/${language}`;
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || `https://localhost:8110/api/v1/${language}`;
   
   let result = await fetchBaseQuery({
     baseUrl,
