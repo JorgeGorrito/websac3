@@ -13,6 +13,11 @@ services:
     volumes:
       -  websac3-db-data:/var/lib/postgresql/data
     command: postgres -c timezone=America/Bogota
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U websac3 -d websac3"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   websac3-back:
     container_name: websac3-back
@@ -23,7 +28,8 @@ services:
     ports:
       - "8110:8110"
     depends_on:
-      - websac3-db
+      websac3-db:
+        condition: service_healthy
     networks:
       - websac3
 
@@ -32,6 +38,15 @@ services:
     build: ./front/websac3-front/
     ports:
       - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - CERT_DIR=/app/certificates
+      - CERT_CN=localhost
+      - KEY_BITS=2048
+      - CERT_DAYS=365
+      - NEXT_PUBLIC_API_BASE_URL=https://websac3-back:8110/api/v1
+    volumes:
+      - websac3-front-certs:/app/certificates
     depends_on:
       - websac3-back
     networks:
@@ -43,3 +58,4 @@ networks:
 
 volumes:
   websac3-db-data:
+  websac3-front-certs:
