@@ -217,6 +217,46 @@ go build -o websac3.exe .
 
 La aplicación estará disponible en: `https://localhost:8110`
 
+## 🗄️ Comandos de Base de Datos
+
+El proyecto incluye comandos CLI para gestionar la base de datos:
+
+### Inicializar la aplicación (Recomendado)
+
+Este comando ejecuta automáticamente las migraciones y seeders la primera vez. Si ya fueron ejecutados, no hace nada:
+
+```bash
+go run main.go init
+```
+
+**¿Qué hace?**
+- Crea la tabla de control de migraciones
+- Verifica si la base de datos ya fue inicializada
+- Si es la primera vez:
+  - Migra todas las tablas
+  - Ejecuta los seeders esenciales (roles, permisos, usuarios por defecto, etc.)
+  - Ejecuta el seeder de roles profesionales (16 roles de ciberseguridad con sus áreas de conocimiento)
+  - Registra la migración como completada
+- Si ya fue inicializada, muestra un mensaje y no hace cambios
+
+### Otros comandos disponibles
+
+```bash
+# Migrar todos los modelos
+go run main.go migrate:all
+
+# Migrar un modelo específico
+go run main.go migrate:model --model=users
+
+# Resetear la base de datos (⚠️ Elimina todos los datos)
+go run main.go migrate:reset
+
+# Ejecutar un seeder específico
+go run main.go seed:run --seed=essential_data
+```
+
+**Nota:** El comando `init` es idempotente, puedes ejecutarlo múltiples veces sin riesgo de duplicar datos.
+
 ## 📚 Documentación API
 
 La documentación Swagger está disponible en:

@@ -10,12 +10,19 @@ type manager struct {
 	factory command.Factory
 }
 
+func preloadCommands() {
+	var initApplicationCommand = NewInitApplicationCommand(nil, nil)
+	initApplicationCommand.Execute()
+}
+
 func (m *manager) RegisterCommands(registry command.Registry) error {
+	defer preloadCommands()
 	registry.Register("migrate:all", NewMigrateAllModels)
 	registry.Register("migrate:model", NewMigrateModel)
 	registry.Register("migrate:reset", NewDBReset)
 
 	registry.Register("seed:run", NewSeedRun)
+
 	return nil
 }
 

@@ -3,6 +3,7 @@ package model
 type NewBaseModel func() any
 
 var registry map[string]NewBaseModel = map[string]NewBaseModel{
+	"migrations":                        func() any { return &Migration{} },
 	"users":                             func() any { return &User{} },
 	"roles":                             func() any { return &Role{} },
 	"access_requests":                   func() any { return &AccessRequest{} },
