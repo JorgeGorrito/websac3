@@ -5,12 +5,14 @@ API backend para el sistema Websac3, construida con Go utilizando arquitectura h
 ## 📋 Tabla de Contenidos
 
 - [Descripción](#descripción)
+- [Inicio Rápido](#inicio-rápido)
 - [Arquitectura](#arquitectura)
 - [Tecnologías](#tecnologías)
 - [Requisitos Previos](#requisitos-previos)
 - [Instalación](#instalación)
 - [Configuración](#configuración)
 - [Ejecución](#ejecución)
+- [Comandos de Base de Datos](#-comandos-de-base-de-datos)
 - [Documentación API](#documentación-api)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Características](#características)
@@ -18,6 +20,33 @@ API backend para el sistema Websac3, construida con Go utilizando arquitectura h
 ## 📖 Descripción
 
 Websac3 es un sistema backend robusto para la gestión de instituciones de educación superior, cursos, consultas de expertos y solicitudes de acceso. Implementa una arquitectura limpia con separación clara de responsabilidades y utiliza patrones modernos de desarrollo.
+
+## ⚡ Inicio Rápido
+
+Para poner en marcha la aplicación rápidamente:
+
+```bash
+# 1. Instalar dependencias
+go mod download
+
+# 2. Configurar variables de entorno
+cp .env.example .env  # Edita el archivo .env con tus configuraciones
+
+# 3. Generar certificados SSL
+chmod +x ensure-certs.sh && ./ensure-certs.sh
+
+# 4. Generar documentación Swagger
+swag init --dir . --output ./docs --parseDependency --parseInternal
+
+# 5. Ejecutar la aplicación
+go run main.go
+```
+
+La aplicación estará disponible en: `https://localhost:8110`
+
+**Nota:** 
+- La base de datos se inicializa automáticamente la primera vez que ejecutas la aplicación
+- Asegúrate de tener configuradas las credenciales de Gmail API (`.mail-credentials.json` y `.mail-token.json`) antes de ejecutar. Ver [Credenciales de Gmail API](#2-credenciales-de-gmail-api-requerido).
 
 ## 🏗️ Arquitectura
 
@@ -221,23 +250,35 @@ La aplicación estará disponible en: `https://localhost:8110`
 
 El proyecto incluye comandos CLI para gestionar la base de datos:
 
-### Inicializar la aplicación (Recomendado)
+### Inicialización Automática
 
-Este comando ejecuta automáticamente las migraciones y seeders la primera vez. Si ya fueron ejecutados, no hace nada:
+🚀 **La aplicación se inicializa automáticamente al arrancar por primera vez.**
 
-```bash
-go run main.go init
-```
+Cada vez que ejecutas `go run main.go`, la aplicación verifica si la base de datos ha sido inicializada. Si es la primera vez, ejecuta automáticamente:
 
 **¿Qué hace?**
 - Crea la tabla de control de migraciones
 - Verifica si la base de datos ya fue inicializada
 - Si es la primera vez:
-  - Migra todas las tablas
+  - Migra todas las tablas (usuarios, roles, permisos, cursos, instituciones, etc.)
   - Ejecuta los seeders esenciales (roles, permisos, usuarios por defecto, etc.)
   - Ejecuta el seeder de roles profesionales (16 roles de ciberseguridad con sus áreas de conocimiento)
-  - Registra la migración como completada
-- Si ya fue inicializada, muestra un mensaje y no hace cambios
+  - Registra la migración como completada con timestamp
+- Si ya fue inicializada, muestra un mensaje informativo y continúa normalmente
+
+**Características:**
+- ✅ **Automático**: No necesitas ejecutar ningún comando adicional
+- ✅ **Idempotente**: Se ejecuta cada vez que arranca la app, pero solo inicializa una vez
+- ✅ **Seguro**: Verifica antes de hacer cambios
+- ✅ **Transaccional**: Todos los cambios se hacen en una transacción (si algo falla, se revierte todo)
+
+### Comando init manual (opcional)
+
+También puedes ejecutar la inicialización manualmente si lo prefieres:
+
+```bash
+go run main.go init
+```
 
 ### Otros comandos disponibles
 
@@ -254,8 +295,6 @@ go run main.go migrate:reset
 # Ejecutar un seeder específico
 go run main.go seed:run --seed=essential_data
 ```
-
-**Nota:** El comando `init` es idempotente, puedes ejecutarlo múltiples veces sin riesgo de duplicar datos.
 
 ## 📚 Documentación API
 
