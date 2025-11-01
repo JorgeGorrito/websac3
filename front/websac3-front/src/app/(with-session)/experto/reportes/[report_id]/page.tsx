@@ -176,17 +176,15 @@ export default function ExpertReportReviewPage() {
   };
 
   const getScoreColor = (score: number) => {
-    const percentage = score * 100;
-    if (percentage >= 80) return 'text-green-600';
-    if (percentage >= 60) return 'text-yellow-600';
+    if (score >= 0.9) return 'text-green-600';
+    if (score >= 0.8) return 'text-yellow-600';
     return 'text-red-600';
   };
 
   const getScoreLabel = (score: number) => {
-    const percentage = score * 100;
-    if (percentage >= 80) return 'Excelente';
-    if (percentage >= 60) return 'Bueno';
-    return 'Necesita Mejora';
+    if (score >= 0.9) return 'Excelente';
+    if (score >= 0.8) return 'Aceptable';
+    return 'Por mejorar';
   };
 
   const formatScore = (score: number) => {
