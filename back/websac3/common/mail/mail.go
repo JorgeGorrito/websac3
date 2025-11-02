@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"mime"
 	"os"
@@ -17,12 +18,16 @@ import (
 	"google.golang.org/api/option"
 )
 
-type ServerSMTP struct {
+type ServerSMTP interface {
+	Send(notification *entity.EmailNotification) error
+}
+
+type serverSMTP struct {
 	emailFrom string
 	srv       *gmail.Service
 }
 
-func (s *ServerSMTP) Send(notification *entity.EmailNotification) error {
+func (s *serverSMTP) Send(notification *entity.EmailNotification) error {
 	to := notification.To
 	subject := mime.BEncoding.Encode("UTF-8", notification.Subject)
 	body := notification.Content
@@ -53,7 +58,7 @@ func (s *ServerSMTP) Send(notification *entity.EmailNotification) error {
 	return err
 }
 
-func (s *ServerSMTP) createMultipartMessage(from, to, subject, body string, attachments []entity.EmailAttachment) ([]byte, error) {
+func (s *serverSMTP) createMultipartMessage(from, to, subject, body string, attachments []entity.EmailAttachment) ([]byte, error) {
 	var buf bytes.Buffer
 
 	// Crear boundary manualmente
@@ -100,12 +105,20 @@ func (s *ServerSMTP) createMultipartMessage(from, to, subject, body string, atta
 	return buf.Bytes(), nil
 }
 
-func NewServerSMTP(emailFrom string, credentialsJSONPath string, tokenPath string) *ServerSMTP {
+var ErrSMTPNotConfigured = errors.New("SMTP server not configured")
+
+type noOpServerSMTP struct{}
+
+func (s *noOpServerSMTP) Send(notification *entity.EmailNotification) error {
+	return ErrSMTPNotConfigured
+}
+
+func NewServerSMTP(emailFrom string, credentialsJSONPath string, tokenPath string) ServerSMTP {
 	ctx := context.Background()
 
 	credBytes, err := os.ReadFile(credentialsJSONPath)
 	if err != nil {
-		panic("No se pudo leer credentials.json: " + err.Error())
+		return &noOpServerSMTP{}
 	}
 
 	config, err := google.ConfigFromJSON(credBytes, gmail.GmailSendScope)
@@ -125,7 +138,7 @@ func NewServerSMTP(emailFrom string, credentialsJSONPath string, tokenPath strin
 		panic("Error al crear servicio Gmail: " + err.Error())
 	}
 
-	return &ServerSMTP{
+	return &serverSMTP{
 		emailFrom: emailFrom,
 		srv:       srv,
 	}

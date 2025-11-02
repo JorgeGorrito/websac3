@@ -10,7 +10,7 @@ import (
 )
 
 type NotificationAdapter struct {
-	emailSender          *mail.ServerSMTP
+	emailSender          mail.ServerSMTP
 	logger               logging.Logger
 	createEmailPort      persistence.CreateEmailPort
 	getEmailPort         persistence.GetEmailPort
@@ -105,14 +105,14 @@ func (n *NotificationAdapter) Send(notification *entity.EmailNotification, ctx d
 }
 
 func NewNotificationAdapter(
-	emailSender *mail.ServerSMTP,
+	emailSender mail.ServerSMTP,
 	createEmailPort persistence.CreateEmailPort,
 	updateEmailPort persistence.UpdateEmailPort,
 	getEmailPort persistence.GetEmailPort,
 	persistenceManager db.Manager,
 	logger logging.Logger,
 ) *NotificationAdapter {
-	return &NotificationAdapter{
+	na := &NotificationAdapter{
 		emailSender:          emailSender,
 		createEmailPort:      createEmailPort,
 		updateEmailPort:      updateEmailPort,
@@ -122,4 +122,6 @@ func NewNotificationAdapter(
 		pendingNotifications: []entity.EmailNotification{},
 		isSenderWorking:      false,
 	}
+	na.sendAsync()
+	return na
 }
