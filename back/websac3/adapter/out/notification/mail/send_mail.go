@@ -122,6 +122,7 @@ func NewNotificationAdapter(
 		pendingNotifications: []entity.EmailNotification{},
 		isSenderWorking:      false,
 	}
-	na.sendAsync()
+	go na.sendAsync()
+
 	return na
 }
