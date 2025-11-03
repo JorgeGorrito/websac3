@@ -21,7 +21,7 @@ RUN go build -o /bin/main .
 FROM debian:bookworm-slim
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends tzdata ca-certificates wkhtmltopdf fontconfig fonts-dejavu && \
+    apt-get install -y --no-install-recommends tzdata ca-certificates wkhtmltopdf fontconfig fonts-dejavu openssl bash && \
     ln -fs /usr/share/zoneinfo/America/Bogota /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata && \
     rm -rf /var/lib/apt/lists/*
@@ -42,7 +42,8 @@ COPY adapter/out/notification/template/templates adapter/out/notification/templa
 COPY adapter/out/persistence/postgresql/seeders/seeds/ adapter/out/persistence/postgresql/seeders/seeds/
 COPY ensure-certs.sh /app/ensure-certs.sh
 
-RUN chmod +x /app/ensure-certs.sh
+RUN sed -i 's/\r$//' /app/ensure-certs.sh && \
+    chmod +x /app/ensure-certs.sh
 
-ENTRYPOINT ["/app/ensure-certs.sh"]
+ENTRYPOINT ["/bin/bash", "/app/ensure-certs.sh"]
 CMD ["./main"]
