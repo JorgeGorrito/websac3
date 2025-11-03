@@ -30,11 +30,8 @@ WORKDIR /app
 
 COPY --from=builder /bin/main /app/main
 COPY --from=builder /bin/anise /app/anise
-#COPY --from=builder /app /app
 
 COPY .env .
-#COPY .mail-credentials.json .
-#COPY .mail-token.json .
 COPY ./.*.json .
 
 COPY adapter/out/message/lang/ adapter/out/message/lang/
