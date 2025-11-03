@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useGetReportDetailQuery } from '@/services/api';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, Download, FileText } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { showError } from '@/store/errorSlice';
+import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import ReportHTMLView from '@/components/websac3/report/ReportHTMLView';
 import ReportFeedbackView from '@/components/websac3/report/ReportFeedbackView';
@@ -18,126 +19,108 @@ export default function ReportDetailPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const reportId = parseInt(params.report_id as string);
+  const reportRef = useRef<HTMLDivElement>(null);
 
   // Fetch report detail
   const { data: reportDetail, isLoading, error } = useGetReportDetailQuery(reportId);
 
-  const downloadReportAsPDF = () => {
-    if (!reportDetail) {
+  const downloadReportAsPDF = async () => {
+    if (!reportDetail || !reportRef.current) {
       dispatch(showError('No hay datos del reporte disponibles.'));
       return;
     }
 
     try {
-      const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      let yPos = 20;
+      // Capturar el componente como canvas
+      const canvas = await html2canvas(reportRef.current, {
+        scale: 1.5,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff', // <- blanco para evitar el tono rosado
+        width: reportRef.current.scrollWidth,
+        height: reportRef.current.scrollHeight,
+        onclone: (clonedDoc) => {
+          // Reglas mínimas para impresión; sin el selector [style*="oklch"]
+          const style = clonedDoc.createElement('style');
+          style.textContent = `
+            * {
+              -webkit-print-color-adjust: exact !important;
+              color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+          `;
+          clonedDoc.head.appendChild(style);
 
-      // Título
-      doc.setFontSize(18);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Reporte de Evaluación', pageWidth / 2, yPos, { align: 'center' });
-      yPos += 10;
+          // Normalización opcional de <svg> <text> si la necesitas
+          const svgTexts = clonedDoc.querySelectorAll('svg text');
+          svgTexts.forEach((textElement) => {
+            const x = textElement.getAttribute('x');
+            const textContent = textElement.textContent || '';
+            const newTextElement = clonedDoc.createElementNS('http://www.w3.org/2000/svg', 'text');
+            if (x) newTextElement.setAttribute('x', x);
+            newTextElement.setAttribute('text-anchor', 'middle');
+            newTextElement.textContent = textContent;
 
-      // Subtítulo
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Resultado de la evaluación del componente de ciberseguridad', pageWidth / 2, yPos, { align: 'center' });
-      yPos += 15;
-
-      // Información institucional
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Información Institucional', 20, yPos);
-      yPos += 7;
-      
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Institución: ${reportDetail.degree_program?.higher_education_institution?.name || 'N/A'}`, 20, yPos);
-      yPos += 6;
-      doc.text(`SNIES Institución: ${reportDetail.degree_program?.higher_education_institution?.snies || 'N/A'}`, 20, yPos);
-      yPos += 6;
-      doc.text(`Fecha: ${new Date(reportDetail.created_at).toLocaleDateString('es-ES')}`, 20, yPos);
-      yPos += 10;
-
-      // Información del programa
-      doc.setFont('helvetica', 'bold');
-      doc.text('Información del Programa', 20, yPos);
-      yPos += 7;
-      
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Programa: ${reportDetail.degree_program?.name || 'N/A'}`, 20, yPos);
-      yPos += 6;
-      doc.text(`SNIES Programa: ${reportDetail.degree_program?.snies || 'N/A'}`, 20, yPos);
-      yPos += 6;
-      doc.text(`Rol Profesional: ${reportDetail.professional_role?.name || 'N/A'}`, 20, yPos);
-      yPos += 6;
-      
-      // Puntaje total - TEXTO HORIZONTAL
-      const percentage = Math.round(reportDetail.score * 100);
-      doc.setFontSize(14);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`Puntaje Total: ${percentage}%`, 20, yPos);
-      yPos += 10;
-
-      // Áreas de conocimiento
-      reportDetail.knowledge_area_reports?.forEach((area, index) => {
-        if (yPos > pageHeight - 40) {
-          doc.addPage();
-          yPos = 20;
-        }
-
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`Área ${index + 1}: ${area.name}`, 20, yPos);
-        yPos += 7;
-
-        const areaPercentage = Math.round((area.score_got / area.score_expected) * 100);
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`Porcentaje: ${areaPercentage}%`, 25, yPos);
-        yPos += 6;
-        doc.text(`Horas esperadas: ${area.total_learn_hours_expected.toFixed(2)}`, 25, yPos);
-        yPos += 6;
-        doc.text(`Horas alcanzadas: ${area.total_learn_hours_actual.toFixed(2)}`, 25, yPos);
-        yPos += 10;
-
-        // Tópicos
-        if (area.topic_reports && area.topic_reports.length > 0) {
-          doc.setFont('helvetica', 'bold');
-          doc.text('Temáticas:', 25, yPos);
-          yPos += 6;
-
-          area.topic_reports.forEach((topic) => {
-            if (yPos > pageHeight - 20) {
-              doc.addPage();
-              yPos = 20;
+            if (x === '70') {
+              newTextElement.setAttribute('y', '75');
+              newTextElement.setAttribute('font-size', '20px');
+              newTextElement.setAttribute('font-weight', 'bold');
+              newTextElement.setAttribute('fill', '#2c3e50');
+              newTextElement.setAttribute('dominant-baseline', 'middle');
+              newTextElement.setAttribute('transform', 'rotate(180 70 75)');
+            } else if (x === '30') {
+              newTextElement.setAttribute('y', '30');
+              newTextElement.setAttribute('font-size', '10px');
+              newTextElement.setAttribute('font-weight', 'bold');
+              newTextElement.setAttribute('fill', '#333');
+              newTextElement.setAttribute('dominant-baseline', 'middle');
+              newTextElement.setAttribute('transform', 'rotate(180 30 30)');
             }
 
-            doc.setFont('helvetica', 'normal');
-            const topicText = `• ${topic.name}: ${topic.learn_hours_expected.toFixed(2)}h esperadas, ${topic.learn_hours_actual.toFixed(2)}h alcanzadas`;
-            const splitText = doc.splitTextToSize(topicText, pageWidth - 50);
-            doc.text(splitText, 30, yPos);
-            yPos += 5 * splitText.length;
+            textElement.parentNode?.replaceChild(newTextElement, textElement);
           });
         }
-
-        yPos += 5;
       });
 
-      // Generar nombre de archivo
+      // Crear PDF
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      // Dimensiones para A4 con márgenes de 5mm
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const margin = 5;
+      const imgWidth = pdfWidth - margin * 2;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = margin;
+
+      // Primera página
+      pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+      heightLeft -= (pdfHeight - margin * 2);
+
+      // Páginas adicionales (si hace falta)
+      while (heightLeft > 0) {
+        pdf.addPage();
+        position = heightLeft - imgHeight + margin;
+        pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+        heightLeft -= (pdfHeight - margin * 2);
+      }
+
+      // Nombre del archivo
       const programName = reportDetail.degree_program?.name || 'Programa';
       const date = new Date(reportDetail.created_at).toLocaleDateString('es-ES');
       const filename = `Reporte_${programName.replace(/[^a-zA-Z0-9]/g, '_')}_${date.replace(/\//g, '-')}.pdf`;
 
-      // Descargar
-      doc.save(filename);
-      console.log('PDF generado exitosamente');
-
-    } catch (error) {
-      console.error('Error generando PDF:', error);
-      dispatch(showError(`Error al generar el PDF: ${error.message}`));
+      pdf.save(filename);
+    } catch (err: any) {
+      console.error('Error generating PDF:', err);
+      dispatch(showError(`Error al generar el PDF: ${err?.message || 'desconocido'}`));
     }
   };
 
@@ -146,11 +129,7 @@ export default function ReportDetailPage() {
       <div className="min-h-screen bg-gray-100 p-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6">
-            <Button
-              onClick={() => router.back()}
-              variant="outline"
-              className="mb-4"
-            >
+            <Button onClick={() => router.back()} variant="outline" className="mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver
             </Button>
@@ -178,11 +157,7 @@ export default function ReportDetailPage() {
       <div className="min-h-screen bg-gray-100 p-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6">
-            <Button
-              onClick={() => router.back()}
-              variant="outline"
-              className="mb-4"
-            >
+            <Button onClick={() => router.back()} variant="outline" className="mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver
             </Button>
@@ -197,9 +172,7 @@ export default function ReportDetailPage() {
                 <p className="text-gray-600 mb-4">
                   No se pudo cargar el reporte solicitado. Inténtalo de nuevo más tarde.
                 </p>
-                <Button onClick={() => router.back()}>
-                  Volver a la lista
-                </Button>
+                <Button onClick={() => router.back()}>Volver a la lista</Button>
               </div>
             </CardContent>
           </Card>
@@ -213,27 +186,18 @@ export default function ReportDetailPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header with Navigation */}
         <div className="mb-6">
-          <Button
-            onClick={() => router.back()}
-            variant="outline"
-            className="mb-4"
-          >
+          <Button onClick={() => router.back()} variant="outline" className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Volver a la lista de reportes
           </Button>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Reporte de Evaluación
-              </h1>
+              <h1 className="text-2xl font-bold text-gray-900">Reporte de Evaluación</h1>
               <p className="text-gray-600">
                 {reportDetail.degree_program?.name} - {reportDetail.professional_role?.name}
               </p>
             </div>
-            <Button
-              onClick={downloadReportAsPDF}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
+            <Button onClick={downloadReportAsPDF} className="bg-blue-600 hover:bg-blue-700">
               <Download className="h-4 w-4 mr-2" />
               Descargar PDF
             </Button>
@@ -243,7 +207,7 @@ export default function ReportDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Report Content */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div ref={reportRef} className="bg-white rounded-lg shadow-lg overflow-hidden">
               <ReportHTMLView reportDetail={reportDetail} />
             </div>
           </div>
@@ -257,3 +221,4 @@ export default function ReportDetailPage() {
     </div>
   );
 }
+
