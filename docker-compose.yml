@@ -11,7 +11,7 @@ services:
     networks:
       - websac3
     volumes:
-      -  websac3-db-data:/var/lib/postgresql/data
+      - websac3-db-data:/var/lib/postgresql/data
     command: postgres -c timezone=America/Bogota
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U websac3 -d websac3"]
