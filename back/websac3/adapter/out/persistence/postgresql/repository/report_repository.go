@@ -92,7 +92,15 @@ func (r *ReportRepository) GetByDegreeProgramID(degreeProgramID uint, page, perP
 	var reports []model.Report
 	if err := dbCtx.DB().
 		Model(&model.Report{}).
-		Select("id, degree_program_id, professional_role_id, score, created_at").
+		Joins("ProfessionalRole").
+		Select(`
+			reports.id,
+			reports.degree_program_id,
+			reports.professional_role_id,
+			reports.score,
+			reports.created_at,
+			"ProfessionalRole".name AS professional_role_name
+		`).
 		Where("degree_program_id = ?", degreeProgramID).
 		Order("created_at DESC").
 		Limit(int(perPage)).
@@ -108,6 +116,10 @@ func (r *ReportRepository) GetByDegreeProgramID(degreeProgramID uint, page, perP
 			ID:        reportModel.ID,
 			Score:     reportModel.Score,
 			CreatedAt: reportModel.CreatedAt,
+			ProfessionalRole: entity.ProfessionalRole{
+				ID:   reportModel.ProfessionalRoleID,
+				Name: reportModel.ProfessionalRole.Name,
+			},
 		}
 		reportEntities = append(reportEntities, reportEntity)
 	}

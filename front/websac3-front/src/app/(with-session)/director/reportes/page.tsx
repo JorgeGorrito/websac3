@@ -489,7 +489,7 @@ export default function ReportsPage() {
                                 </Badge>
                               </div>
                           <div className="space-y-1 text-sm text-gray-600">
-                            <p><strong>Rol profesional:</strong> {report.professional_role?.name || 'N/A'}</p>
+                            <p><strong>Rol profesional:</strong> {report.professional_role_name || 'N/A'}</p>
                             <p><strong>Puntaje:</strong> {formatScore(report.score)}</p>
                             <p><strong>Fecha:</strong> {new Date(report.created_at).toLocaleDateString('es-ES')}</p>
                                 </div>

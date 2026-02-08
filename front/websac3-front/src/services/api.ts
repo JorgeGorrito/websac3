@@ -323,6 +323,7 @@ export type ReportItem = {
   created_at: string;
   lang: string;
   score: number; // Can be decimal (0.0875) or integer (87)
+  professional_role_name: string;
 };
 
 export type TopicReport = {

@@ -65,10 +65,11 @@ func (h *ListReportsByDegreeProgramQueryHandler) Handle(request query.ListReport
 	var reportResponses []response.ListReportSummaryResponse
 	for _, report := range reports {
 		reportResponse := response.ListReportSummaryResponse{
-			ID:        report.ID,
-			Lang:      lang,
-			Score:     report.Score,
-			CreatedAt: report.CreatedAt,
+			ID:                   report.ID,
+			Lang:                 lang,
+			Score:                report.Score,
+			ProfessionalRoleName: report.ProfessionalRole.Name,
+			CreatedAt:            report.CreatedAt,
 		}
 		reportResponses = append(reportResponses, reportResponse)
 	}
